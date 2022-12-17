@@ -1,0 +1,82 @@
+@import url(//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&subset=latin,cyrillic-ext,greek-ext,vietnamese);
+
+body {	
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+	  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+	  sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	-ms-text-size-adjust: 100%;
+	-webkit-text-size-adjust: 100%;
+	
+	margin: auto;
+	padding: 0;
+	text-rendering: optimizeLegibility;	
+	font-size: 13px;
+}
+
+.full-screen {
+    min-height: 97.15vh;
+    min-width: 98.7vw;
+	height: 100%;
+    width: 100%;  
+}
+
+.form-signin {
+	width: 100%;
+	max-width: 330px;
+	padding: 15px;
+	margin: auto;
+}
+.form-signin .checkbox {
+	font-weight: 600;
+  }
+  .form-signin .form-control {
+	position: relative;
+	box-sizing: border-box;
+	height: auto;
+	padding: 10px;
+	font-size: 16px;
+  }
+  .form-signin .form-control:focus {
+	z-index: 2;
+  }
+
+header {
+	color: aquamarine;
+	background-color: #282c34;   			
+	font-size: 16px;
+}
+header a {
+	color: aquamarine;	
+}
+
+nav a {
+	color: aquamarine;	
+}
+.navbar-brand  {
+	color: aquamarine;	
+}
+
+navheader {
+	color: aquamarine;	
+}
+
+content a  {		
+	color: aquamarine;
+}
+
+footer {
+	color: aquamarine;
+	background-color: #282c34;	
+	text-align: center;		
+	justify-content: center;
+}
+
+footer a {
+	color: aquamarine;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+	margin-top: auto;
+}      

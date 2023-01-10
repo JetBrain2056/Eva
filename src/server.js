@@ -4,8 +4,8 @@ const express            = require('express');
 const sequelize          = require('./db');
 const { router }         = require('./routers/router.js');
 
-const port   = process.env.port || 3000;
-const host   = '0.0.0.0';
+const port   = 3000;
+const host   = '127.0.0.1';
 const server = express();
 
 //server.set('views', '../views');
@@ -37,4 +37,4 @@ const start = async () => {
   }
 }
 
-start()  
+start()

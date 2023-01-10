@@ -5,7 +5,6 @@ exports.Auth = (req,res) => {
     content.logged = false;       
     res.render("index.twig", content); 
 }  
-
 exports.Signin = (req,res) => {
 
     if(!req.body) return res.sendStatus(400);     
@@ -27,34 +26,37 @@ exports.Signin = (req,res) => {
 
     }).catch(err=>console.log(err));       
 } 
-
 exports.getAll = (req, res, next) => {
-
     User.findAll({raw:true}).then(Users => { 
-
         content.breadcrumbs = [{
             href : '#',
             text : 'root'
         }];
-        res.send(Users);  
-        //res.redirect('/users');       
-
+        res.send(Users);       
         next();
     }).catch(err=>console.log(err));       
 }
-
 exports.getOne = (req, res, next) => {
    
 }
+exports.Create = (req, res) => {
 
-exports.create= (req, res, next) => {
+    if(!req.body) return res.sendStatus(400);     
+    const {Name, Descr, RolesID, EAuth, Show} = req.body;       
+    //console.log(new Date(), 'body', req.body);    
     
-}
-
+    const user = User.create({        
+        Name    : Name, 
+        Descr   : Descr,   
+        RolesID : RolesID,           
+        EAuth   : EAuth,  
+        Show    : Show
+    });    
+    console.log(user);
+    return res.json("Succses");
+} 
 exports.update = (req, res, next) => {
   
 }
-
-exports.delete = (req, res, next) => {
-   
+exports.delete = (req, res, next) => {   
 }

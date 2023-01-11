@@ -8,24 +8,26 @@ const port   = 3000;
 const host   = '127.0.0.1';
 const server = express();
 
-//server.set('views', '../views');
 server.set('view engine', 'twig');
 server.set('view options', {layout: false});
-
-// This section is optional and used to configure twig.
 server.set("twig options", {
   allow_async: true, // Allow asynchronous compiling
   strict_variables: false
 });
 
+server.use("/css",express.static('./node_modules/bootstrap/dist/css'));
+server.use("/js",express.static('./node_modules/bootstrap/dist/js')); 
+server.use("/@popperjs",express.static('./node_modules/@popperjs')); 
+server.use("/font-awesome",express.static('./node_modules/font-awesome'));
+
 server.use(express.static('./views'));
 server.use(express.urlencoded({ extended: false }));
-server.use(router);
+server.use(router);  
 
 server.listen(port, host, () => {
   console.log(`Server is running on http://${host}:${port}`);
 });
-
+        
 //SQL ORM Sequelize
 const start = async () => {
   try {
@@ -35,6 +37,7 @@ const start = async () => {
   } catch (e) {
       console.log(e)
   }
-}
+}  
+  
+start()      
 
-start()

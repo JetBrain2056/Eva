@@ -1,18 +1,20 @@
-<div id="content" class= "border bg-light">
-  <div class="page-header">
-    <div class="container-fluid">
-      <div class="pull-right">
-        <button type="button" id="button-setting" title="{{ button_setting }}" data-loading-text="{{ text_loading }}" class="btn btn-info"><i class="fa fa-cog"></i></button>
+<div class="wrapper">
+  <div id="content flex-grow-1 h-100" class= "border bg-light">
+    <div class="page-header">
+      <div class="container-fluid">
+        <div class="pull-right">
+          <button type="button" id="button-setting" title="{{ button_setting }}" data-loading-text="{{ text_loading }}" class="btn btn-info"><i class="fa fa-cog"></i></button>
+        </div>
+        <h4>{{ heading_title }}</h4>
+        <ul class="breadcrumb bg-light">
+          {% for breadcrumb in breadcrumbs %}
+            <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+          {% endfor %}
+        </ul>
       </div>
-      <h4>{{ heading_title }}</h4>
-      <ul class="breadcrumb bg-light">
-        {% for breadcrumb in breadcrumbs %}
-        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
-        {% endfor %}
-      </ul>
     </div>
+    <table id = "user_table" class="table">
+    </table>
   </div>
-  <table id = "user_table" class="table">
-  </table>
+  {% include "./security.twig" %}
 </div>
-{% include "./security.twig" %}

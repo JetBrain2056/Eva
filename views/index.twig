@@ -12,20 +12,20 @@
         <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
         <link href="./stylesheet/stylesheet.css" rel="stylesheet">
     </head>
-    <body>
-        <div class="full-screen">
-        {% include "./template/common/header.twig" %}
-        {% if logged %}       
-            <div class="container-fluid border bg-light"> 
+    <body class="h-100">
+        <div class="wrapper d-flex flex-column h-100">
+            {% include "./template/common/header.twig" %}
+            {% if logged %}
+                <div class="container-fluid border bg-light content flex-grow-1">
                 <div class = "row">  
                     <div class="col-3">{% include "./template/common/column_left.twig" %}</div>
                     <div class="col">{% include "./template/common/dashboard.twig" %}</div>
                 </div>
             </div>
-        {% else %}             
-            {% include "./template/common/login.twig" %}                
-        {% endif %} 
-        {% include "./template/common/footer.twig" %}
+            {% else %}
+                {% include "./template/common/login.twig" %}
+            {% endif %}
+            {% include "./template/common/footer.twig" %}
         </div>
     </body>
 </html>

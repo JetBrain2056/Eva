@@ -1,38 +1,39 @@
-<div id="content">
-  <div class="container-fluid">                                           
+
+<div id="content flex-grow-1 h-100">
+    <div class="container-fluid">
         {% if success %}
-        <div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> {{ success }}
-          <button type="button" class="close" data-dismiss="alert">&times;</button>
-        </div>
+            <div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> {{ success }}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
         {% endif %}
         {% if error_warning %}
-        <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
-          <button type="button" class="close" data-dismiss="alert">&times;</button>
-        </div>
+            <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
         {% endif %}
         <form class="form-signin" action="{{ action }}" method="post" enctype="application/json">
-          <h2 class="h3 mb-3 font-weight-normal"><i class="fa fa-lock"></i> {{ text_login }}</h2>   
-          <div class="form-group">
-            <label for="input-username">{{ entry_username }}</label>
-            <div class="input-group"><span class="input-group-addon"><i class="fa fa-user"></i></span>
-              <input type="text" name="username" value="{{ username }}" placeholder="{{ entry_username }}" id="input-username" class="form-control" />
+            <h2 class="h3 mb-3 font-weight-normal"><i class="fa fa-lock"></i> {{ text_login }}</h2>
+            <div class="form-group">
+                <label for="input-username">{{ entry_username }}</label>
+                <div class="input-group"><span class="input-group-addon"><i class="fa fa-user"></i></span>
+                    <input type="text" name="username" value="{{ username }}" placeholder="{{ entry_username }}" id="input-username" class="form-control" />
+                </div>
             </div>
-          </div>
-          <div class="form-group">
-            <label for="input-password">{{ entry_password }}</label>
-            <div class="input-group"><span class="input-group-addon"><i class="fa fa-lock"></i></span>
-              <input type="password" name="password" value="{{ password }}" placeholder="{{ entry_password }}" id="input-password" class="form-control" />
+            <div class="form-group">
+                <label for="input-password">{{ entry_password }}</label>
+                <div class="input-group"><span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                    <input type="password" name="password" value="{{ password }}" placeholder="{{ entry_password }}" id="input-password" class="form-control" />
+                </div>
+                {% if forgotten %}
+                    <span class="help-block"><a href="{{ forgotten }}">{{ text_forgotten }}</a></span>
+                {% endif %}
             </div>
-            {% if forgotten %}
-            <span class="help-block"><a href="{{ forgotten }}">{{ text_forgotten }}</a></span>
+            <div class="text-right">
+                <button type="submit" class="btn btn-primary"><i class="fa fa-key"></i> {{ button_login }}</button>
+            </div>
+            {% if redirect %}
+                <input type="hidden" name="redirect" value="{{ redirect }}" />
             {% endif %}
-          </div>
-          <div class="text-right">
-            <button type="submit" class="btn btn-primary"><i class="fa fa-key"></i> {{ button_login }}</button>
-          </div>
-          {% if redirect %}
-          <input type="hidden" name="redirect" value="{{ redirect }}" />
-          {% endif %}
-        </form>                   
-  </div>
+        </form>
+    </div>
 </div>

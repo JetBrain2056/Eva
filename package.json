@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "EVA: developer server",
   "main": "./src/server.js",
-  
   "scripts": {
     "dev": "nodemon ./src/server.js --open"
   },
@@ -14,6 +13,7 @@
     "bootstrap": "^5.2.1",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
+    "font-awesome": "^4.7.0",
     "pg": "^8.7.3",
     "sequelize": "^6.21.2",
     "twig": "^1.15.4"

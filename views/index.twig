@@ -5,27 +5,27 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>EVA</title>    
-        <script src="./common.js"></script>
-        <script src="./@popperjs/core/dist/umd/popper.min.js"></script>    
-        <script src="./js/bootstrap.min.js"></script>      
+        <script defer src="./common.js"></script>
+        <script defer src="./@popperjs/core/dist/umd/popper.min.js"></script>
+        <script defer src="./js/bootstrap.min.js"></script>
         <link href="./css/bootstrap.min.css" rel="stylesheet">
         <link href="./font-awesome/css/font-awesome.min.css" rel="stylesheet">
         <link href="./stylesheet/stylesheet.css" rel="stylesheet">
     </head>
-    <body>
-        <div class="full-screen">
-        {% include "./template/common/header.twig" %}
-        {% if logged %}       
-            <div class="container-fluid border bg-light"> 
+    <body class="h-100">
+        <div class="wrapper d-flex flex-column h-100">
+            {% include "./template/common/header.twig" %}
+            {% if logged %}
+                <div class="bg-light content flex-grow-1">
                 <div class = "row">  
-                    <div class="col-3">{% include "./template/common/column_left.twig" %}</div>
+                    <div class="col-2 list">{% include "./template/common/column_left.twig" %}</div>
                     <div class="col">{% include "./template/common/dashboard.twig" %}</div>
                 </div>
             </div>
-        {% else %}             
-            {% include "./template/common/login.twig" %}                
-        {% endif %} 
-        {% include "./template/common/footer.twig" %}
+            {% else %}
+                {% include "./template/common/login.twig" %}
+            {% endif %}
+            {% include "./template/common/footer.twig" %}
         </div>
     </body>
 </html>

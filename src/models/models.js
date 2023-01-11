@@ -99,14 +99,14 @@ Brand.belongsToMany(Type, {through: TypeBrand })
 async function role_create() {
     const result =  await Role.count()
     console.log('Role_count',result);
- 
+
    if (result == 0) {
         try {
             Role.create({
-                Name: 'Admin',                           
+                Name: 'Admin',
                 })
-            } catch (err) {} 
-    }      
+            } catch (err) {}
+    }
 }
 
 role_create();
@@ -124,8 +124,8 @@ async function admin_create() {
                 EAuth: 1,
                 Show: 1
                 })
-            } catch (err) {} 
-    }       
+            } catch (err) {}
+    }
 }
 
 

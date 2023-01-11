@@ -18,20 +18,19 @@ body {
 	font-size: 13px;
 }
 
-a{
+a, .nav-link{
 	color: aquamarine;
 }
-
+.input-group{
+	align-items: center;
+}
 header {
 	background-color: #282c34;
 	font-size: 16px;
 }
 
 .form-signin {
-	width: 100%;
-	max-width: 330px;
-	padding: 15px;
-	margin: auto;
+	max-width: 400px;
 }
 .form-signin .checkbox {
 	font-weight: 600;
@@ -49,12 +48,12 @@ header {
 }
 
 footer {
-	background-color: #282c34;	
-	text-align: center;
-	flex: 0 0 auto;
+	color: aquamarine;
+	background-color: #282c34;
+	flex-wrap: wrap;
 }
 
 
 h1, h2, h3, h4, h5, h6, p {
 	margin-top: auto;
-}      
+}

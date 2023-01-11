@@ -1,4 +1,3 @@
-
 <div class="content flex-grow-1 h-100">
     <div class="container-fluid">
         {% if success %}
@@ -11,17 +10,19 @@
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
             </div>
         {% endif %}
-        <form class="form-signin" action="{{ action }}" method="post" enctype="application/json">
+        <form class="form-signin w-100 p-3 m-auto d-flex flex-column gap-3" action="{{ action }}" method="post" enctype="application/json">
             <h2 class="h3 mb-3 font-weight-normal"><i class="fa fa-lock"></i> {{ text_login }}</h2>
             <div class="form-group">
                 <label for="input-username">{{ entry_username }}</label>
-                <div class="input-group"><span class="input-group-addon"><i class="fa fa-user"></i></span>
+                <div class="input-group gap-2">
+                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
                     <input type="text" name="username" value="{{ username }}" placeholder="{{ entry_username }}" id="input-username" class="form-control" />
                 </div>
             </div>
             <div class="form-group">
                 <label for="input-password">{{ entry_password }}</label>
-                <div class="input-group"><span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                <div class="input-group gap-2">
+                    <span class="input-group-addon"><i class="fa fa-lock"></i></span>
                     <input type="password" name="password" value="{{ password }}" placeholder="{{ entry_password }}" id="input-password" class="form-control" />
                 </div>
                 {% if forgotten %}

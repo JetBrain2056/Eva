@@ -11,11 +11,12 @@
             </div>
         {% endif %}
         <form class="form-signin w-100 p-3 m-auto d-flex flex-column gap-3" action="{{ action }}" method="post" enctype="application/json">
-            <h2 class="h3 mb-3 font-weight-normal"><i class="fa fa-lock"></i> {{ text_login }}</h2>
+            <h2 class="h3 mb-3 font-weight-normal"><img src="{{ logo }}" alt="logo" width="30" height="30"/>{{ text_login }}</h2>
             <div class="form-group">
-                <input type='radio' id='Developer' name='operation_mode'> <label for='Developer'>Developer</label>                    
+                <input type='radio' id='Developer' name='operation_mode' checked = true> <label for='Developer'>Developer</label>                    
                 <input type='radio' id='Enterprise' name='operation_mode'> <label for='Enterprise'>Enterprise</label> 
-            </din>
+                <br>
+            </div>
             <div class="form-group">
                 <label for="input-username">{{ entry_username }}</label>
                 <div class="input-group gap-2">
@@ -34,7 +35,7 @@
                 {% endif %}
             </div>
             <div class="text-right">
-                <button type="submit" class="btn btn-primary"><i class="fa fa-key"></i> {{ button_login }}</button>
+                <button type="submit" class="btn btn-primary" style="background-color:DeepSkyBlue; border-color:black"><i class="fa fa-key"></i> {{ button_login }}</button>
             </div>
             {% if redirect %}
                 <input type="hidden" name="redirect" value="{{ redirect }}" />

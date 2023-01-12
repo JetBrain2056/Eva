@@ -4,7 +4,7 @@ const express            = require('express');
 const sequelize          = require('./db');
 const { router }         = require('./routers/router.js');
 
-const port   = 3000;
+const port   = process.env.PORT||3000;
 const host   = '0.0.0.0';
 const server = express();
 

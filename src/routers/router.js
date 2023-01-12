@@ -1,7 +1,7 @@
 
 const Router = require('express');
 const router = new Router();
-const controller = require('../public/controller.js');
+const controller = require('../controllers/controller.js');
 
 //Get index data  
 router.get('/', controller.Auth);

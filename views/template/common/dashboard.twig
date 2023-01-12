@@ -1,4 +1,3 @@
-
 <div class="content flex-grow-1 h-100 border bg-light">
   <div class="page-header">
     <div class="container-fluid">
@@ -13,7 +12,67 @@
       </ul>
     </div>
   </div>
-  <table id = "user_table" class="table">
+  <table onclick="row_select()" id = "user_table" class="table table-striped table-hover table-sm table-responsive" style="height: 300px; overflow-y: scroll;">
+     <nav>
+        <ul class="nav btn-group" align="right">
+          <li class="nav-item btn">
+            <a class="nav-link" aria-current="page" href="#" data-bs-toggle="modal" data-bs-target="#usersModal">Добавить</a>
+          </li>    
+          <li class="nav-item btn">
+            <a class="nav-link" aria-current="page" href="#" onclick="user_delete()">Удалить</a>
+          </li> 
+          <li class="nav-item btn">
+            <a class="nav-link" aria-current="page" href="#">
+              <img src="" alt="" width="10" height="10" id="user_update" class="img-circle" />Редактировать</img>
+            </a>                        
+          </li>      
+          <li class="nav-item dropdown btn">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="true"></a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="#">Обновить</a></li>
+              <li><a class="dropdown-item" href="#">Информация</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <!--<li>
+                <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#usersModal">...</a>      
+              </li>-->
+            </ul>
+          </li>         
+        </ul>
+      </nav>        
   </table>
 </div>
 {% include "./security.twig" %}
+<!-- Modal  -->
+<div class="modal fade" id="usersModal" tabindex="-1" aria-labelledby="usersModalLabel" aria-hidden="true" metod='post' >
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="usersModalLabel">Добавить пользователя</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+      </div>
+      <div class="modal-body">
+          <form class="form" id="create-form">              
+            <label for="input-username">Name:</label>            
+            <div class="input-group">
+              <input type="text" name="username" value="" placeholder="Name" id="input-username" class="form-control"/>            
+            </div>            
+            <label for="input-password">Password:</label>            
+            <div class="input-group">
+              <input type="password" name="password" value="" placeholder="Password" id="input-password" class="form-control"/>                            
+            </div>              
+            <label for="input-Descr">Descr:</label>                     
+            <div class="input-group">
+              <input type="text" name="Descr" value="" placeholder="Descr" id="input-descr" class="form-control"/>            
+            </div>             
+            <label for="input-email">E-mail:</label>
+            <div class="input-group">
+              <input type="text" name="email" value="" placeholder="email@example.com" id="input-email" class="form-control"/>            
+            </div>  
+          </form>  
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" onclick="user_create()">Сохранить</button>        
+      </div>
+    </div>
+  </div>
+</div>

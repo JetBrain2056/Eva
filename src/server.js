@@ -13,7 +13,7 @@ server.set('view options', {layout: false});
 server.set("twig options", {
   allow_async: true, // Allow asynchronous compiling
   strict_variables: false
-});
+}); 
 
 server.use("/css",express.static('./node_modules/bootstrap/dist/css'));
 server.use("/js",express.static('./node_modules/bootstrap/dist/js')); 

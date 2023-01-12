@@ -12,7 +12,7 @@ const { security }    = require('./language/'+lg_lg+'/common/security.js');
 var content = {
     home               : '/',
     loguot             : '/',
-    //logo               : './image/star.png',
+    logo               : './image/logo192.png',
     image              : './image/astronautSpace.png',
     name               : 'EVA',
     Ent                : 'Enterprise',

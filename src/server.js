@@ -5,7 +5,7 @@ const sequelize          = require('./db');
 const { router }         = require('./routers/router.js');
 
 const port   = 3000;
-const host   = '127.0.0.1';
+const host   = '0.0.0.0';
 const server = express();
 
 server.set('view engine', 'twig');

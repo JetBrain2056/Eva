@@ -5,7 +5,7 @@ var login = {
 
     // Text
     $_text_heading   : 'Авторизация',
-    $_text_login     : 'Введите логин и пароль',
+    $_text_login     : 'Вход в систему EVA',
     $_text_forgotten : 'Забыли пароль?',
 
     // Entry

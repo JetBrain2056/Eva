@@ -9,7 +9,7 @@ const user_table = () => {
     .then(res => res.json())
     .then(data => {
 
-      console.log(data[0]);
+      //console.log(data[0]);
 
       const table = document.getElementById('user_table');
       
@@ -73,3 +73,42 @@ const user_table = () => {
       }        
   });
 }
+function user_create()  {
+  var input_username = document.getElementById('input-username');
+  //var input_password = document.getElementById('input-password');
+  var input_descr    = document.getElementById('input-descr');
+  
+  let user =  {'Name'    : input_username.value,
+               'Descr'   : input_descr.value,
+               'RolesID' : '1',
+               'EAuth'   : '1',
+               'Show'    : '1'
+  };
+ 
+  console.log(user);
+
+  fetch('/create', { 
+    method  : 'post',  
+    headers : {"Content-type": "application/x-www-form-urlencoded; charset=UTF-8"},       
+    //headers: {"Content-Type": "application/json"},
+    //body: JSON.stringify(user)
+    body: new URLSearchParams(user),
+    //body    : 'Name=test&Descr=test' 
+  })
+  .then(res => res.json())  
+  .then(data => {  
+    console.log('Request succeeded with JSON response', data);  
+  })  
+  .catch(error => {
+    console.log('Request failed', error);
+  });      
+
+  user_table(); 
+}
+function user_delete() {
+
+}
+function row_select(evn) { 
+  //var table = document.getElementById('user_table');    
+  console.log(evn);
+}  

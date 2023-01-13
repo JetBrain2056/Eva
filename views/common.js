@@ -74,17 +74,16 @@ const user_table = () => {
   });
 }
 function user_create()  {
-  var input_username = document.getElementById('input-username');
-  //var input_password = document.getElementById('input-password');
-  var input_descr    = document.getElementById('input-descr');
+  const input_username = document.getElementById('input-username');
+  //const input_password = document.getElementById('input-password');
+  const input_descr    = document.getElementById('input-descr');
   
-  let user =  {'Name'    : input_username.value,
+  const user =  {'Name'    : input_username.value,
                'Descr'   : input_descr.value,
                'RolesID' : '1',
                'EAuth'   : '1',
                'Show'    : '1'
   };
- 
   console.log(user);
 
   fetch('/create', { 

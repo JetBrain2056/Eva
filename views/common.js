@@ -1,7 +1,7 @@
 //const { controller }  = require('../src/public/controller.js');
 //const { User }     = require('../src/models/models.js');
 
-function user_table() {
+const user_table = () => {
   //const response = await fetch('http://192.168.1.8:3000/users');
   //const data = await response.json();
   
@@ -11,47 +11,47 @@ function user_table() {
 
       console.log(data[0]);
 
-      var table = document.getElementById('user_table');    
+      const table = document.getElementById('user_table');
       
       table.innerHTML = "";
-      
-      var thead = document.createElement('thead');   
+
+      const thead = document.createElement('thead');
       table.appendChild(thead);
 
-      var tr = document.createElement('tr');
+      let tr = document.createElement('tr');
       thead.appendChild(tr);
 
-      var th1 = document.createElement('th');
-      var th2 = document.createElement('th');
-      var th3 = document.createElement('th');
-      var th4 = document.createElement('th');
+      const th1 = document.createElement('th');
+      const th2 = document.createElement('th');
+      const th3 = document.createElement('th');
+      const th4 = document.createElement('th');
 
       tr.appendChild(th1);
       tr.appendChild(th2);
       tr.appendChild(th3);
       tr.appendChild(th4);
 
-      var text1 = document.createTextNode('#');
-      var text2 = document.createTextNode('id');
-      var text3 = document.createTextNode('Name');
-      var text4 = document.createTextNode('Descr');      
+      const text1 = document.createTextNode('#');
+      const text2 = document.createTextNode('id');
+      const text3 = document.createTextNode('Name');
+      const text4 = document.createTextNode('Descr');
 
       th1.appendChild(text1);
       th2.appendChild(text2);
       th3.appendChild(text3);
       th4.appendChild(text4);
 
-      var tbody = document.createElement("tbody");
+      const tbody = document.createElement("tbody");
       table.appendChild(tbody);
       
-      for (var i = 0; i < data.length; i++) {
-        var tr = document.createElement("tr");
+      for (let i = 0; i < data.length; i++) {
+        tr = document.createElement("tr");
         tbody.appendChild(tr);
 
-        var td1 = document.createElement('td');
-        var td2 = document.createElement('td');
-        var td3 = document.createElement('td');
-        var td4 = document.createElement('td');
+        const td1 = document.createElement('td');
+        const td2 = document.createElement('td');
+        const td3 = document.createElement('td');
+        const td4 = document.createElement('td');
   
         tr.appendChild(td1);
         tr.appendChild(td2);
@@ -61,10 +61,10 @@ function user_table() {
         //console.log(data[i].id);  
         //console.log(data[i].Name);  
 
-        var n     = document.createTextNode(i+1);          
-        var id    = document.createTextNode(data[i].id);
-        var Name  = document.createTextNode(data[i].Name);
-        var Descr = document.createTextNode(data[i].Descr);
+        const n     = document.createTextNode(i+1);
+        const id    = document.createTextNode(data[i].id);
+        const Name  = document.createTextNode(data[i].Name);
+        const Descr = document.createTextNode(data[i].Descr);
 
         td1.appendChild(n);
         td2.appendChild(id);

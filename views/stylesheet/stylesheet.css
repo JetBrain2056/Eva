@@ -20,13 +20,13 @@ body {
 }
 
 a, .nav-link{
-	color: aquamarine;
+	color: aquamarine;	
 }
 .input-group{
 	align-items: center;
 }
 header {
-	background-color: #282c34;
+	background-color: #282c34;	
 	font-size: 16px;
 }
 
@@ -61,6 +61,7 @@ h1, h2, h3, h4, h5, h6, p {
 }
 .sidebar{
 	background: #282c34;
+	outline-color: aquamarine;
 }
 .row{
 	--bs-gutter-x: 0;

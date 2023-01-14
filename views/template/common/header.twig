@@ -1,44 +1,51 @@
 <header id="header" class="navbar navbar-dark" >
   <div class="container-fluid">
-    <a class="navbar-brand" href="{{ home }}" >{{ name }}</a>        
-    {% if logged %}        
-      <nav>
-        <ul class="nav btn-group align-items-center">
-          <li class="nav-item btn">
-            <a class="nav-link" aria-current="page" href="#">Конфигурация</a>
-          </li>    
-          <li class="nav-item btn">
-            <a class="nav-link" aria-current="page" href="#" onclick="user_table()">Пользователи</a>
-          </li> 
-          <li class="nav-item btn">
-            <a class="nav-link d-flex gap-1" aria-current="page" href="#">
-              <img src="{{ image }}" alt="logo" width="30" height="30" id="user-profile" class="img-circle" />
-              <span>{{ username }}</span>
-            </a>
-          </li>      
-          <li class="nav-item dropdown btn">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="true"></a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li>
-                <a class="dropdown-item" href="#">Справка</a>
+    <a class="navbar-brand" href="{{ home }}" >{{ name }}</a>
+    {% if logged %}
+      <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav   align-items-center">
+              <li class="nav-item btn">
+                <a class="nav-link" aria-current="page" href="#">Конфигурация</a>
               </li>
-              <li>
-                <a class="dropdown-item" href="#">Информация</a>
+              <li class="nav-item btn">
+                <a class="nav-link" aria-current="page" href="#" onclick="user_table()">Пользователи</a>
               </li>
-              <li><hr class="dropdown-divider"></li>
-              <li>
-                <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal">О программе...</a>      
+              <li class="nav-item btn">
+                <a class="nav-link d-flex gap-1 align-items-center" aria-current="page" href="#">
+                  <img src="{{ image }}" alt="logo" width="30" height="30" id="user-profile" class="img-circle" />
+                  <span>{{ username }}</span>
+                </a>
+              </li>
+              <li class="nav-item dropdown btn">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="true"></a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li>
+                    <a class="dropdown-item" href="#">Справка</a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="#">Информация</a>
+                  </li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li>
+                    <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal">О программе...</a>
+                  </li>
+                </ul>
+              </li>
+              <li class="nav-item btn">
+                <a class="nav-link" aria-current="page" href="#"><i class="fa fa-cog"></i></a>
+              </li>
+              <li class="nav-item btn">
+                <a class="nav-link" aria-current="page" href="{{ logout }}"><i class="fa fa-sign-out"></i></a>
               </li>
             </ul>
-          </li>          
-          <li class="nav-item btn">
-            <a class="nav-link" aria-current="page" href="#"><i class="fa fa-cog"></i></a>                       
-          </li>    
-          <li class="nav-item btn">
-            <a class="nav-link" aria-current="page" href="{{ logout }}"><i class="fa fa-sign-out"></i></a>  
-          </li>  
-        </ul>
-      </nav>  
+          </div>
+        </div>
+      </nav>
     {% endif %}    
   </div>       
 </header>

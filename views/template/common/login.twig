@@ -12,7 +12,7 @@
         {% endif %}
         <form class="form-signin w-100 p-3 m-auto d-flex flex-column gap-3" action="{{ action }}" method="post" enctype="application/json">
             <h2 class="h3 mb-3 font-weight-normal"><img class="fa-spin" src="{{ logo }}" alt="logo" width="45" height="45"/>{{ text_login }}</h2>
-            <div class="form-group" style=" font-size: 16px;border-color:DeepSkyBlue">
+            <div class="form-group" style=" font-size: 18px">
                 <input type='radio' id='Developer' name='operation_mode' checked = true> <label for='Developer'>Developer</label>                    
                 <input type='radio' id='Enterprise' name='operation_mode'> <label for='Enterprise'>Enterprise</label> 
                 <br>
@@ -20,14 +20,14 @@
             <div class="form-group">
                 <label for="input-username">{{ entry_username }}</label>
                 <div class="input-group gap-2">
-                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                    <div class="input-group-text"><i class="fa fa-user"></i></div>
                     <input type="text" name="username" value="{{ username }}" placeholder="{{ entry_username }}" id="input-username" class="form-control" />
                 </div>
             </div>
             <div class="form-group">
                 <label for="input-password">{{ entry_password }}</label>
                 <div class="input-group gap-2">
-                    <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                    <div class="input-group-text"><i class="fa fa-lock"></i></div>
                     <input type="password" name="password" value="{{ password }}" placeholder="{{ entry_password }}" id="input-password" class="form-control" />
                 </div>
                 {% if forgotten %}

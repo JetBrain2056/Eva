@@ -11,7 +11,9 @@
             </div>
         {% endif %}
         <form class="form-signin w-100 p-3 m-auto d-flex flex-column gap-3" action="{{ action }}" method="post" enctype="application/json">
-            <h2 class="h3 mb-3 font-weight-normal"><img class="fa-spin" src="{{ logo }}" alt="logo" width="45" height="45"/>{{ text_login }}</h2>
+            <h2 class="h3 mb-3 font-weight-normal" style="color:#282c34; text-shadow:0px 4px 3px rgba(0,0,0,0.4),0px 8px 13px rgba(0,0,0,0.1),0px 18px 23px rgba(0,0,0,0.1);">
+                <img class="fa-spin" src="{{ logo }}" alt="logo" width="45" height="45">{{ text_login }}
+            </h2>
             <div class="form-group" style=" font-size: 18px">
                 <input type='radio' id='Developer' name='operation_mode' checked = true> <label for='Developer'>Developer</label>                    
                 <input type='radio' id='Enterprise' name='operation_mode'> <label for='Enterprise'>Enterprise</label> 
@@ -19,14 +21,14 @@
             </div>
             <div class="form-group">
                 <label for="input-username">{{ entry_username }}</label>
-                <div class="input-group gap-2">
-                    <div class="input-group-text" id="btnGroupAddon"><i class="fa fa-user"></i></div>
+                <div class="input-group  gap-2">
+                    <span class="input-group-text" id="btnGroupAddon"><i class="fa fa-user"></i></span>
                     <input type="text" name="username" value="{{ username }}" placeholder="{{ entry_username }}" id="input-username" class="form-control" aria-describedby="btnGroupAddon">
                 </div>
             </div>
             <div>
                 <label for="input-password">{{ entry_password }}</label>
-                <div class="input-group gap-2">
+                <div class="input-group  gap-2">
                     <span class="input-group-text" id="btnGroupAddon2"><i class="fa fa-lock"></i></span>
                     <input type="password" name="password" value="{{ password }}" placeholder="{{ entry_password }}" id="input-password" class="form-control" aria-describedby="btnGroupAddon2">
                 </div>

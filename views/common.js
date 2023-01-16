@@ -107,7 +107,9 @@ function user_create()  {
 function user_delete() {
 
 }
-function row_select(evn) { 
-  //var table = document.getElementById('user_table');    
-  console.log(evn);
+function row_select(event) { 
+  var target = event;    
+  console.log(target);
 }  
+
+user_table();

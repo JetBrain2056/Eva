@@ -62,8 +62,7 @@ footer {
 
 h1, h2, h3, h4, h5, h6, p {
 	margin-top: auto;
-	margin-bottom: unset;
-	color: #282c34;
+	margin-bottom: unset;	
 }
 .sidebar{
 	background: #282c34;
@@ -77,4 +76,8 @@ h1, h2, h3, h4, h5, h6, p {
 }
 .menu-title{
 	color: aquamarine;
+}
+
+button:hover {
+	color: black;
 }

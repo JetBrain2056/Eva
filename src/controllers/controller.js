@@ -15,12 +15,12 @@ exports.Signin = (req,res) => {
         var objuser = Users[0];           
         console.log('controller: ', objuser.Name);          
 
-        if(username == objuser.Name) {            
+        if(username === objuser.Name) {
             content.logged    = true;
             content.username  = objuser.Name;
             content.firstname = objuser.Descr;
             content.lastname  = '';
-        };
+        }
                 
         res.render("index.twig", content);  
 
@@ -53,7 +53,7 @@ exports.Create = (req, res) => {
         Show    : Show
     });    
     console.log(user);
-    return res.json("Succses");
+    return res.json("Succes");
 } 
 exports.update = (req, res, next) => {
   

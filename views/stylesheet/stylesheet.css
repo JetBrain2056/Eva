@@ -78,17 +78,19 @@ h1, h2, h3, h4, h5, h6, p {
 	color: aquamarine;
 }
 .btn:hover{
-	/* color: LightSlateGray !important; */
-	/* background-color: #282c34  !important; */
-	border-color: aquamarine !important;
+	color: #00ff93 !important;
+	border-color: #00ff92 !important;
 }
 .btn-primary:hover{
-	color: LightSlateGray !important;
+	color: #58fcb8 !important;
 	background-color: #282c34  !important;
 	border-color: aquamarine !important;
 }
 .btn-primary{
 	color: aquamarine !important;
-	background-color: LightSlateGray;
-	border-color: LightSlateGray;
+	background-color: #282c34;
+	border-color: #282c34;
+}
+.sidebar{
+	background-color: #282c34  !important;
 }

@@ -1,4 +1,4 @@
-var header = {
+let header = {
     // Heading
     $_heading_title : 'Администрирование',
 

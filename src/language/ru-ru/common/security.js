@@ -1,5 +1,5 @@
 
-var security = {
+let security = {
     // Heading
     $_heading_title    : 'Важное сообщение безопасности!',
 

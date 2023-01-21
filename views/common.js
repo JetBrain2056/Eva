@@ -75,14 +75,19 @@ const user_table = () => {
 }
 function user_create()  {
   const input_username = document.getElementById('input-username');
-  //const input_password = document.getElementById('input-password');
+  const input_password = document.getElementById('input-password');
   const input_descr    = document.getElementById('input-descr');
+  const input_eauth    = document.getElementById('input-eauth');
+
+  if (input_username.value === "")
+  {alert("Не заполнено имя пользователя!"); return "";}
   
-  const user =  {'Name'    : input_username.value,
-               'Descr'   : input_descr.value,
-               'RolesID' : '1',
-               'EAuth'   : '1',
-               'Show'    : '1'
+  const user =  { 'Name'    : input_username.value,
+                  'Descr'   : input_descr.value,
+                  'Password': input_password.value,
+                  'RolesID' : '1',
+                  'EAuth'   : input_eauth.value,
+                  'Show'    : '1'
   };
   console.log(user);
 

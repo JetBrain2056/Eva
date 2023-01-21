@@ -18,35 +18,17 @@ const user_table = () => {
       const tr = document.createElement('tr');
       thead.appendChild(tr);
 
-      //const th1 = document.createElement('th');
-      const th2 = document.createElement('th');
-      const th3 = document.createElement('th');
-      const th4 = document.createElement('th');
-
-      //tr.appendChild(th1);
-      tr.appendChild(th2);
-      tr.appendChild(th3);
-      tr.appendChild(th4);
-
-      th2.textContent = 'id';                  
-      th3.textContent = 'Name';                  
-      th4.textContent = 'Descr';                  
-
-      //const text1 = document.createTextNode('#');
-      //const text2 = document.createTextNode('id');
-      //const text3 = document.createTextNode('Name');
-      //const text4 = document.createTextNode('Descr');
-
-      //th1.appendChild(text1);
-      //th2.appendChild(th2);
-      //th3.appendChild(th3);
-      //th4.appendChild(th4);
+      const h = {col1:'id',col2:'Name',col3:'Descr'};
+      for (element of Object.keys(h)) {      
+        const th = document.createElement('th');                
+        tr.appendChild(th);        
+        th.textContent = h[element];                                  
+      };
 
       const tbody = document.createElement("tbody");
       user_tab.appendChild(tbody);
       
-      for (const rows of data) {
-      
+      for (const rows of data) {      
         const tr = document.createElement("tr");
         tbody.appendChild(tr);
 

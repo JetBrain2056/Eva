@@ -1,4 +1,4 @@
-var dashboard = {
+let dashboard = {
     // Heading
     $_heading_title : 'Панель состояния',
 

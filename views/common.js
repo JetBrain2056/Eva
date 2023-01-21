@@ -15,7 +15,7 @@ const user_table = () => {
       const thead = document.createElement('thead');
       user_tab.appendChild(thead);
 
-      let tr = document.createElement('tr');
+      const tr = document.createElement('tr');
       thead.appendChild(tr);
 
       //const th1 = document.createElement('th');
@@ -28,22 +28,26 @@ const user_table = () => {
       tr.appendChild(th3);
       tr.appendChild(th4);
 
+      th2.textContent = 'id';                  
+      th3.textContent = 'Name';                  
+      th4.textContent = 'Descr';                  
+
       //const text1 = document.createTextNode('#');
-      const text2 = document.createTextNode('id');
-      const text3 = document.createTextNode('Name');
-      const text4 = document.createTextNode('Descr');
+      //const text2 = document.createTextNode('id');
+      //const text3 = document.createTextNode('Name');
+      //const text4 = document.createTextNode('Descr');
 
       //th1.appendChild(text1);
-      th2.appendChild(text2);
-      th3.appendChild(text3);
-      th4.appendChild(text4);
+      //th2.appendChild(th2);
+      //th3.appendChild(th3);
+      //th4.appendChild(th4);
 
       const tbody = document.createElement("tbody");
       user_tab.appendChild(tbody);
       
       for (const rows of data) {
       
-        tr = document.createElement("tr");
+        const tr = document.createElement("tr");
         tbody.appendChild(tr);
 
         const p = {id:rows.id, Name:rows.Name, Descr:rows.Descr};

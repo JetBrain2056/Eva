@@ -41,23 +41,17 @@ const user_table = () => {
       const tbody = document.createElement("tbody");
       user_tab.appendChild(tbody);
       
-      for (const element of data) {
+      for (const rows of data) {
       
         tr = document.createElement("tr");
         tbody.appendChild(tr);
-        
-        const td2 = document.createElement('td');
-        const td3 = document.createElement('td');
-        const td4 = document.createElement('td');
 
-        td2.textContent = element.id;
-        td3.textContent = element.Name;
-        td4.textContent = element.Descr;
-  
-        //tr.appendChild(td);
-        tr.appendChild(td2);
-        tr.appendChild(td3);
-        tr.appendChild(td4);      
+        const p = {id:rows.id, Name:rows.Name, Descr:rows.Descr};
+        for (const element of Object.keys(p) ) {        
+          const td = document.createElement('td');
+          td.textContent = p[element];            
+          tr.appendChild(td);                    
+        };
       };     
     });
 }

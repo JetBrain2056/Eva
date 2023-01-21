@@ -1,4 +1,4 @@
-var footer = {
+let footer = {
     // Text    
     $_text_version : 'Version'
 }

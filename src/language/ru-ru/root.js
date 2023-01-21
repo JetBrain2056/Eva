@@ -1,5 +1,5 @@
 
-var root = {
+let root = {
     // Locale
     $_code				    : 'ru',
     $_direction				: 'ltr',

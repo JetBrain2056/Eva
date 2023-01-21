@@ -1,5 +1,6 @@
-//const { controller }  = require('../src/public/controller.js');
-//const { User }     = require('../src/models/models.js');
+
+const user_tab = document.getElementById('user_table');
+user_tab.addEventListener('click', row_select);   
 
 const user_table = () => {
   //const response = await fetch('http://192.168.1.8:3000/users');
@@ -113,8 +114,8 @@ function user_delete() {
 
 }
 function row_select(event) { 
-  var target = event;    
-  console.log(target);
+     
+  console.log(event);
 }  
 
 user_table();

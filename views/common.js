@@ -9,69 +9,56 @@ const user_table = () => {
   fetch('/users')    
     .then(res => res.json())
     .then(data => {
-
-      //console.log(data[0]);
-
-      const table = document.getElementById('user_table');
       
-      table.innerHTML = "";
+      user_tab.innerHTML = "";
 
       const thead = document.createElement('thead');
-      table.appendChild(thead);
+      user_tab.appendChild(thead);
 
       let tr = document.createElement('tr');
       thead.appendChild(tr);
 
-      const th1 = document.createElement('th');
+      //const th1 = document.createElement('th');
       const th2 = document.createElement('th');
       const th3 = document.createElement('th');
       const th4 = document.createElement('th');
 
-      tr.appendChild(th1);
+      //tr.appendChild(th1);
       tr.appendChild(th2);
       tr.appendChild(th3);
       tr.appendChild(th4);
 
-      const text1 = document.createTextNode('#');
+      //const text1 = document.createTextNode('#');
       const text2 = document.createTextNode('id');
       const text3 = document.createTextNode('Name');
       const text4 = document.createTextNode('Descr');
 
-      th1.appendChild(text1);
+      //th1.appendChild(text1);
       th2.appendChild(text2);
       th3.appendChild(text3);
       th4.appendChild(text4);
 
       const tbody = document.createElement("tbody");
-      table.appendChild(tbody);
+      user_tab.appendChild(tbody);
       
-      for (let i = 0; i < data.length; i++) {
+      for (const element of data) {
+      
         tr = document.createElement("tr");
         tbody.appendChild(tr);
-
-        const td1 = document.createElement('td');
+        
         const td2 = document.createElement('td');
         const td3 = document.createElement('td');
         const td4 = document.createElement('td');
+
+        td2.textContent = element.id;
+        td3.textContent = element.Name;
+        td4.textContent = element.Descr;
   
-        tr.appendChild(td1);
+        //tr.appendChild(td);
         tr.appendChild(td2);
         tr.appendChild(td3);
-        tr.appendChild(td4);
-
-        //console.log(data[i].id);  
-        //console.log(data[i].Name);  
-
-        const n     = document.createTextNode(i+1);
-        const id    = document.createTextNode(data[i].id);
-        const Name  = document.createTextNode(data[i].Name);
-        const Descr = document.createTextNode(data[i].Descr);
-
-        td1.appendChild(n);
-        td2.appendChild(id);
-        td3.appendChild(Name);                          
-        td4.appendChild(Descr);    
-      }        
+        tr.appendChild(td4);      
+      };     
   });
 }
 function user_create()  {
@@ -111,10 +98,8 @@ function user_create()  {
   user_table(); 
 }
 function user_delete() {
-
 }
-function row_select(event) { 
-     
+function row_select(event) {      
   console.log(event);
 }  
 

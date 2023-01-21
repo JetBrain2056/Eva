@@ -12,7 +12,7 @@ exports.Signin = (req,res) => {
     const username = req.body.username;
 
     User.findAll({raw:true}).then(Users => { 
-        var objuser = Users[0];           
+        let objuser = Users[0];           
         console.log('controller: ', objuser.Name);          
 
         if(username === objuser.Name) {
@@ -28,10 +28,10 @@ exports.Signin = (req,res) => {
 } 
 exports.getAll = (req, res, next) => {
     User.findAll({raw:true}).then(Users => { 
-        content.breadcrumbs = [{
-            href : '#',
-            text : 'root'
-        }];
+        // content.breadcrumbs = [{
+        //     href : '#',
+        //     text : 'root'
+        // }];
         res.send(Users);       
         next();
     }).catch(err=>console.log(err));       
@@ -59,5 +59,5 @@ exports.update = (req, res, next) => {
   
 }
 exports.delete = (req, res, next) => {   
-    
+
 }

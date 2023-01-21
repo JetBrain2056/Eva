@@ -59,7 +59,7 @@ const user_table = () => {
         tr.appendChild(td3);
         tr.appendChild(td4);      
       };     
-  });
+    });
 }
 function user_create()  {
   const input_username = document.getElementById('input-username');
@@ -100,7 +100,13 @@ function user_create()  {
 function user_delete() {
 }
 function row_select(event) {      
-  console.log(event);
+  
+    for (const row of user_tab.rows) {
+        
+        row.onclick = function () {
+        console.log(this);        
+      }
+    }  
 }  
 
 user_table();

@@ -34,7 +34,7 @@ async function role_create() {
     const result =  await Role.count()
     console.log('Role_count',result);
 
-   if (result == 0) {
+   if (result === 0) {
         try {
             Role.create({
                 Name: 'Admin',
@@ -48,7 +48,7 @@ async function admin_create() {
     const result =  await User.count()
     console.log('User_count',result);
 
-   if (result == 0) {
+   if (result === 0) {
         try {
             User.create({
                 Name: 'Admin',

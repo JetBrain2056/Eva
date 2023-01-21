@@ -9,7 +9,7 @@ const { dashboard }   = require('./language/'+lg_lg+'/common/dashboard.js');
 const { footer }      = require('./language/'+lg_lg+'/common/footer.js');
 const { security }    = require('./language/'+lg_lg+'/common/security.js');
  
-var content = {
+let content = {
     home               : '/',
     loguot             : '/',
     logo               : './image/logo192.png',

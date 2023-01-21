@@ -1,4 +1,4 @@
-var column_left = {
+let column_left = {
     // Text
     $_text_api                  : 'API',
     $_text_attribute            : 'Атрибуты',

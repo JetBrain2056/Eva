@@ -1,4 +1,3 @@
-
 let select_rows = [];
 
 const user_tbl = document.getElementById('user_table');
@@ -25,7 +24,7 @@ const user_table = () => {
         const th = document.createElement('th');                
         tr.appendChild(th);        
         th.textContent = h[element];                                  
-      };
+      }
 
       const tbody = document.createElement("tbody");
       user_tbl.appendChild(tbody);
@@ -41,8 +40,8 @@ const user_table = () => {
           const td = document.createElement('td');                   
           tr.appendChild(td);                    
           td.textContent = p[element];   
-        };
-      };     
+        }
+      }
     });
 }
 function user_create()  {
@@ -90,21 +89,22 @@ function user_delete() {
 function row_select(event) {      
 
     console.log(event.path[1]);                
-    console.log(event.target);      
+    console.log(event.target);
 
+    let text;
     if (event.ctrlKey) {
-      text = "The CTRL key was pressed!";
-      select_rows.push(event.path[1]);
-      event.path[1].style.background = "aquamarine";  
-      console.log("select_rows count: ",select_rows.length);  
+        text = "The CTRL key was pressed!";
+        select_rows.push(event.path[1]);
+        event.path[1].style.background = "aquamarine";
+        console.log("select_rows count: ", select_rows.length);
     } else {
-      text = "The CTRL key was NOT pressed!";     
-      for (const rows of select_rows){
-        rows.style.background = "";       
-       }      
-      select_rows.splice(0,select_rows.length);
-      event.path[1].style.background = "aquamarine";  
-      select_rows.push(event.path[1]);
+        text = "The CTRL key was NOT pressed!";
+        for (const rows of select_rows) {
+            rows.style.background = "";
+        }
+        select_rows.splice(0, select_rows.length);
+        event.path[1].style.background = "aquamarine";
+        select_rows.push(event.path[1]);
     }
     console.log(text);
 }  

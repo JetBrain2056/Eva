@@ -82,19 +82,29 @@ function user_create()  {
 function user_delete() {
 }
 function row_select(event) {      
-  
-    for (const row of user_tbl.rows) {        
-        row.onclick = function () {
-          row.style.border = "red";
-        }
-    }   
-        console.log(event.path[1]);        
-        console.log(event.path[0]);  
-        console.log(event.target);  
-        //console.log(event.composedPath()); 
+    
+    console.log(event.path[1]);                
+    console.log(event.target);      
 
-        //event.onclick = function () 
-            
+    //const element = event.type;
+    //console.log(element);
+    let select_rows = [];
+    let select_ctrl_rows = [];
+
+    //event.target.style.border = "black";
+    for (const rows of select_rows){event.path[1].style.background = ""; }
+
+    event.path[1].style.background = "grey";  
+    select_rows.push( event.path[1]);                    
+
+    if (event.ctrlKey) {
+      text = "The CTRL key was pressed!";
+      select_ctrl_rows.push(event.target);
+      event.path[1].style.background = "aquamarine";  
+    } else {
+      text = "The CTRL key was NOT pressed!";
+    }
+    console.log(text);
 }  
 
 user_table();

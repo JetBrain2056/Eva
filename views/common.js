@@ -82,6 +82,10 @@ function user_create()  {
   user_table(); 
 }
 function user_delete() {
+
+  for (const rows of select_rows){
+    console.log('Сейчас удалим строки!!!', select_rows.length);
+   } 
 }
 function row_select(event) {      
 

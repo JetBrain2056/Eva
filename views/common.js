@@ -56,7 +56,7 @@ function user_create()  {
   
   const user =  { 'Name'    : input_username.value,
                   'Descr'   : input_descr.value,
-                  'Password': input_password.value,
+                 // 'Password': input_password.value,
                   'RolesID' : '1',
                   'EAuth'   : input_eauth.value,
                   'Show'    : '1'
@@ -85,7 +85,32 @@ function user_delete() {
 
   for (const rows of select_rows){
     console.log('Сейчас удалим строки!!!', select_rows.length);
-   } 
+    console.log(rows);    
+    
+    let tdList = Array.prototype.slice.call(rows.getElementsByTagName('td'));
+    //for (const element  of tdList ) {
+      console.log(tdList[0].innerText);
+  
+      const user = { 'id': tdList[0].innerText};
+
+      fetch('/delete', { 
+        method  : 'post',  
+        headers : {"Content-type": "application/x-www-form-urlencoded; charset=UTF-8"},        
+        //headers: {"Content-Type": "application/json"},
+        //body: JSON.stringify(user)
+        body: new URLSearchParams(user),
+        //body    : 'id=13' 
+        })
+        .then(res => res.json())  
+        .then(data => {  
+          console.log('Request succeeded with JSON response', data);  
+        })  
+        .catch(error => {
+          console.log('Request failed', error);
+      });      
+    //}
+  }
+  user_table(); 
 }
 function row_select(event) {      
 

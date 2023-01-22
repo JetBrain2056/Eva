@@ -80,11 +80,12 @@ function user_create()  {
 
   user_table(); 
 }
+
 function user_delete() {
 
   for (const rows of select_rows){
-    console.log('Сейчас удалим строки!!!', select_rows.length);
-    console.log(rows);    
+    //console.log('Сейчас удалим строки!!!', select_rows.length);
+    //console.log(rows);    
     
     let tdList = Array.prototype.slice.call(rows.getElementsByTagName('td'));
     //for (const element  of tdList ) {
@@ -111,16 +112,18 @@ function user_delete() {
   }
   user_table(); 
 }
-function row_select(event) {      
+function row_select(e) {      
 
-    console.log(event.path[1]);                
-    console.log(event.target);
+    //console.log(e.path[1]);                
+    //console.log(e.target);
 
+    const path = e.path || (e.composedPath && e.composedPath());
+    const row  = path[1];
     let text;
-    if (event.ctrlKey) {
+    if (e.ctrlKey) {
         text = "The CTRL key was pressed!";
-        select_rows.push(event.path[1]);
-        event.path[1].style.background = "aquamarine";
+        select_rows.push(row);
+        row.style.background = "aquamarine";
         console.log("select_rows count: ", select_rows.length);
     } else {
         text = "The CTRL key was NOT pressed!";
@@ -128,8 +131,8 @@ function row_select(event) {
             rows.style.background = "";
         }
         select_rows.splice(0, select_rows.length);
-        event.path[1].style.background = "aquamarine";
-        select_rows.push(event.path[1]);
+        row.style.background = "aquamarine";
+        select_rows.push(row);
     }
     console.log(text);
 }  

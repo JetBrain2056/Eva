@@ -58,6 +58,20 @@ exports.Create = (req, res) => {
 exports.update = (req, res, next) => {
   
 }
-exports.delete = (req, res, next) => {   
+exports.Delete = (req, res) => {   
+
+    if(!req.body) return res.sendStatus(400);     
+
+    console.log('delete: ', req.body);
+
+    const {id} = req.body;       
+     
+    const user = User.destroy({
+        where: {
+          id: id
+        }
+    })    
+    //console.log(user);
+    //return res.json("Succes");
 
 }

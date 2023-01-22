@@ -1,4 +1,6 @@
 
+let select_rows = [];
+
 const user_tbl = document.getElementById('user_table');
 user_tbl.addEventListener('click', row_select);   
 
@@ -82,27 +84,25 @@ function user_create()  {
 function user_delete() {
 }
 function row_select(event) {      
-    
+
+  let select_ctrl_rows = [];
+
     console.log(event.path[1]);                
     console.log(event.target);      
 
-    //const element = event.type;
-    //console.log(element);
-    let select_rows = [];
-    let select_ctrl_rows = [];
-
-    //event.target.style.border = "black";
-    for (const rows of select_rows){event.path[1].style.background = ""; }
-
-    event.path[1].style.background = "grey";  
-    select_rows.push( event.path[1]);                    
-
     if (event.ctrlKey) {
       text = "The CTRL key was pressed!";
-      select_ctrl_rows.push(event.target);
+      select_rows.push(event.path[1]);
       event.path[1].style.background = "aquamarine";  
+      console.log("select_rows count: ",select_rows.length);  
     } else {
-      text = "The CTRL key was NOT pressed!";
+      text = "The CTRL key was NOT pressed!";     
+      for (const rows of select_rows){
+        rows.style.background = "";       
+       }      
+      select_rows.splice(0,select_rows.length);
+      event.path[1].style.background = "aquamarine";  
+      select_rows.push(event.path[1]);
     }
     console.log(text);
 }  

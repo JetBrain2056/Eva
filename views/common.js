@@ -85,8 +85,6 @@ function user_delete() {
 }
 function row_select(event) {      
 
-  let select_ctrl_rows = [];
-
     console.log(event.path[1]);                
     console.log(event.target);      
 

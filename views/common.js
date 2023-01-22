@@ -1,6 +1,6 @@
 
-const user_tab = document.getElementById('user_table');
-user_tab.addEventListener('click', row_select);   
+const user_tbl = document.getElementById('user_table');
+user_tbl.addEventListener('click', row_select);   
 
 const user_table = () => {
   //const response = await fetch('http://192.168.1.8:3000/users');
@@ -10,10 +10,10 @@ const user_table = () => {
     .then(res => res.json())
     .then(data => {
       
-      user_tab.innerHTML = "";
+      user_tbl.innerHTML = "";
 
       const thead = document.createElement('thead');
-      user_tab.appendChild(thead);
+      user_tbl.appendChild(thead);
 
       const tr = document.createElement('tr');
       thead.appendChild(tr);
@@ -26,17 +26,19 @@ const user_table = () => {
       };
 
       const tbody = document.createElement("tbody");
-      user_tab.appendChild(tbody);
+      user_tbl.appendChild(tbody);
       
       for (const rows of data) {      
         const tr = document.createElement("tr");
         tbody.appendChild(tr);
 
+        console.log(rows);
+
         const p = {id:rows.id, Name:rows.Name, Descr:rows.Descr};
         for (const element of Object.keys(p) ) {        
-          const td = document.createElement('td');
-          td.textContent = p[element];            
+          const td = document.createElement('td');                   
           tr.appendChild(td);                    
+          td.textContent = p[element];   
         };
       };     
     });
@@ -81,12 +83,18 @@ function user_delete() {
 }
 function row_select(event) {      
   
-    for (const row of user_tab.rows) {
-        
+    for (const row of user_tbl.rows) {        
         row.onclick = function () {
-        console.log(this);        
-      }
-    }  
+          row.style.border = "red";
+        }
+    }   
+        console.log(event.path[1]);        
+        console.log(event.path[0]);  
+        console.log(event.target);  
+        //console.log(event.composedPath()); 
+
+        //event.onclick = function () 
+            
 }  
 
 user_table();

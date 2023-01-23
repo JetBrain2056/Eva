@@ -43,16 +43,25 @@ exports.Create = (req, res) => {
 
     if(!req.body) return res.sendStatus(400);     
     const {Name, Descr, RolesID, EAuth, Show} = req.body;       
-    //console.log(new Date(), 'body', req.body);    
+    //console.log(new Date(), 'body', req.body);   
     
-    const user = User.create({        
+    User.findOne({where: {Name: Name}})
+    .then(objuser => { 
+        //let objuser = Users;          
+        if(Name === objuser.Name) {
+            //return 
+            res.json("error");
+        }                                    
+    }).catch(err=>console.log(err));  
+    
+    User.create({        
         Name    : Name, 
         Descr   : Descr,   
         RolesID : RolesID,           
         EAuth   : EAuth,  
         Show    : Show
-    });    
-    console.log(user);
+    }).catch(err=>console.log(err));  
+    
     return res.json("Succes");
 } 
 exports.update = (req, res, next) => {

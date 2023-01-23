@@ -11,8 +11,8 @@ exports.Signin = (req,res) => {
 
     const username = req.body.username;
 
-    User.findAll({raw:true}).then(Users => { 
-        let objuser = Users[0];           
+    User.findOne({where: {Name: username}}).then(Users => { 
+        let objuser = Users;           
         console.log('controller: ', objuser.Name);          
 
         if(username === objuser.Name) {
@@ -61,16 +61,20 @@ exports.update = (req, res, next) => {
 exports.Delete = (req, res) => {   
 
     if(!req.body) return res.sendStatus(400);     
-
-    console.log('delete: ', req.body);
-
+    
     const {id} = req.body;       
-     
-    const user = User.destroy({
-        where: {
-          id: id
-        }
-    })    
+
+    console.log('delete: ', id);
+
+    if (id === '1' ) {
+        return res.json("error");
+    }  else {
+        const user = User.destroy({
+            where: {
+            id: id
+            }
+        }) 
+    }    
     //console.log(user);
     //return res.json("Succes");
 

@@ -55,7 +55,8 @@ async function admin_create() {
                 Descr: 'Admin',
                 RolesID: 1,
                 EAuth: 1,
-                Show: 1
+                Show: 1,
+                AdmRole : 1
                 })
             } catch (err) {}
     }

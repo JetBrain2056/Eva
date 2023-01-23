@@ -3,7 +3,7 @@ let select_rows = [];
 const user_tbl = document.getElementById('user_table');
 user_tbl.addEventListener('click', row_select);   
 
-const user_table = () => {
+async function user_table() {
   //const response = await fetch('http://192.168.1.8:3000/users');
   //const data = await response.json();
   
@@ -16,6 +16,9 @@ const user_table = () => {
       const thead = document.createElement('thead');
       user_tbl.appendChild(thead);
 
+      const tbody = document.createElement("tbody");
+      user_tbl.appendChild(tbody);
+
       const tr = document.createElement('tr');
       thead.appendChild(tr);
 
@@ -24,10 +27,7 @@ const user_table = () => {
         const th = document.createElement('th');                
         tr.appendChild(th);        
         th.textContent = h[element];                                  
-      }
-
-      const tbody = document.createElement("tbody");
-      user_tbl.appendChild(tbody);
+      }   
       
       for (const rows of data) {      
         const tr = document.createElement("tr");
@@ -81,7 +81,7 @@ function user_create()  {
   user_table(); 
 }
 
-function user_delete() {
+async function user_delete() {
 
   for (const rows of select_rows){
     //console.log('Сейчас удалим строки!!!', select_rows.length);
@@ -112,6 +112,7 @@ function user_delete() {
   }
   user_table(); 
 }
+
 function row_select(e) {      
 
     //console.log(e.path[1]);                
@@ -135,6 +136,36 @@ function row_select(e) {
         select_rows.push(row);
     }
     console.log(text);
-}  
+}
+
+const allTables = document.querySelectorAll("table");
+
+// function row_select(e) {  
+  for (const table of user_tbl.tBodies ) {
+    
+    console.log(table);
+  }
+    //const tBody = allTables.tBodies[0];
+    //let arr = Array.from( user_tbl.rows); // преобразуем коллекцию в массив
+    //arr.sort(); 
+    //const rows = Array.from(tBody.rows);
+    //console.log(arr);
+    // const headerCells = table.tHead.rows[0].cells;
+
+    // for (const th of headerCells) {
+    //   const cellIndex = th.cellIndex;
+
+    //   th.addEventListener("click", () => {
+    //     rows.sort((tr1, tr2) => {
+    //       const tr1Text = tr1.cells[cellIndex].textContent;
+    //       const tr2Text = tr2.cells[cellIndex].textContent;
+    //       return tr1Text.localeCompare(tr2Text);
+    //     });
+
+    //     tBody.append(...rows);
+    //   });
+    // }
+ // }
+// } 
 
 user_table();

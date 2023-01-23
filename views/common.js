@@ -44,7 +44,7 @@ async function user_table() {
       }
     });
 }
-function user_create()  {
+async function user_create()  {
   const input_username = document.getElementById('input-username');
   const input_password = document.getElementById('input-password');
   const input_descr    = document.getElementById('input-descr');
@@ -80,7 +80,6 @@ function user_create()  {
 
   user_table(); 
 }
-
 async function user_delete() {
 
   for (const rows of select_rows){
@@ -141,8 +140,7 @@ function row_select(e) {
 const allTables = document.querySelectorAll("table");
 
 // function row_select(e) {  
-  for (const table of user_tbl.tBodies ) {
-    
+  for (const table of user_tbl.tBodies ) {    
     console.log(table);
   }
     //const tBody = allTables.tBodies[0];

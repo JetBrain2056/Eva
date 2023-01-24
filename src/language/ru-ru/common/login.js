@@ -1,4 +1,3 @@
-
 let login = {
     // Heading
     $_heading_title  : 'Авторизация',

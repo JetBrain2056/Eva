@@ -17,7 +17,7 @@ async function user_table() {
       thead.style.border = '#00ff92';
       user_tbl.appendChild(thead);
 
-      const tbody = document.createElement("tbody");
+      const tbody = document.createElement('tbody');
       user_tbl.appendChild(tbody);
 
       const tr = document.createElement('tr');
@@ -127,10 +127,10 @@ function row_select(e) {
   const path = e.path || (e.composedPath && e.composedPath());
   const row  = path[1];
   //console.log(row.cells[0].innerText);
-  //console.log(e.target.nodeName );
+  // console.log(row.cells[0].nodeName );
   
   //if (row.cells[0].innerText === 'id') { return;
-  if (e.target.nodeName === "TH" ){
+  if (row.cells[0].nodeName  === "TH" ){ return
   }else{
       let text;
       if (e.ctrlKey) {

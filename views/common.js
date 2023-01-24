@@ -18,7 +18,6 @@ async function user_table() {
       user_tbl.appendChild(thead);
 
       const tbody = document.createElement("tbody");
-      tbody.sc;
       user_tbl.appendChild(tbody);
 
       const tr = document.createElement('tr');
@@ -122,28 +121,34 @@ async function user_delete() {
 }
 
 function row_select(e) {      
+  //console.log(e.path[1]);                
+  //console.log(e.target);
 
-    //console.log(e.path[1]);                
-    //console.log(e.target);
-
-    const path = e.path || (e.composedPath && e.composedPath());
-    const row  = path[1];
-    let text;
-    if (e.ctrlKey) {
-        text = "The CTRL key was pressed!";
-        select_rows.push(row);
-        row.style.background = "aquamarine";
-        console.log("select_rows count: ", select_rows.length);
-    } else {
-        text = "The CTRL key was NOT pressed!";
-        for (const rows of select_rows) {
-            rows.style.background = "";
-        }
-        select_rows.splice(0, select_rows.length);
-        row.style.background = "aquamarine";
-        select_rows.push(row);
-    }
-    console.log(text);
+  const path = e.path || (e.composedPath && e.composedPath());
+  const row  = path[1];
+  //console.log(row.cells[0].innerText);
+  //console.log(e.target.nodeName );
+  
+  //if (row.cells[0].innerText === 'id') { return;
+  if (e.target.nodeName === "TH" ){
+  }else{
+      let text;
+      if (e.ctrlKey) {
+          text = "The CTRL key was pressed!";
+          select_rows.push(row);
+          row.style.background = "aquamarine";
+          console.log("select_rows count: ", select_rows.length);
+      } else {
+          text = "The CTRL key was NOT pressed!";
+          for (const rows of select_rows) {
+              rows.style.background = "";
+          }
+          select_rows.splice(0, select_rows.length);
+          row.style.background = "aquamarine";
+          select_rows.push(row);
+      }
+      console.log(text);
+  }
 }
 
 const allTables = document.querySelectorAll("table");

@@ -14,9 +14,11 @@ async function user_table() {
       user_tbl.innerHTML = "";
 
       const thead = document.createElement('thead');
+      thead.style.border = '#00ff92';
       user_tbl.appendChild(thead);
 
       const tbody = document.createElement("tbody");
+      tbody.sc;
       user_tbl.appendChild(tbody);
 
       const tr = document.createElement('tr');
@@ -28,20 +30,27 @@ async function user_table() {
         tr.appendChild(th);        
         th.textContent = h[element];                                  
       }   
+
+      // let i =0;
+      //  while (i < 30) {     
+      //   data.push({'id':'.'}); 
+      //   i++;
+      //  }
       
       for (const rows of data) {      
         const tr = document.createElement("tr");
         tbody.appendChild(tr);
 
-        console.log(rows);
+        //console.log(rows);
 
         const p = {id:rows.id, Name:rows.Name, Descr:rows.Descr};
         for (const element of Object.keys(p) ) {        
           const td = document.createElement('td');                   
           tr.appendChild(td);                    
           td.textContent = p[element];   
-        }
+        }    
       }
+             
     });
 }
 async function user_create()  {

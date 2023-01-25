@@ -127,10 +127,30 @@ function row_select(e) {
   const path = e.path || (e.composedPath && e.composedPath());
   const row  = path[1];
   //console.log(row.cells[0].innerText);
-  // console.log(row.cells[0].nodeName );
+  //console.log(row.cells[0].nodeName );
   
   //if (row.cells[0].innerText === 'id') { return;
-  if (row.cells[0].nodeName  === "TH" ){ return
+  if (row.cells[0].nodeName  === "TH" ){ 
+    console.log(row.cells[0].parentNode.parentNode);
+    //for (const table of allTables) {
+      const tBody = user_tbl.tBodies[0];
+      const rows = Array.from(tBody.rows);
+      const headerCells = row.cells;
+    
+      for (const th of headerCells) {
+        const cellIndex = th.cellIndex;
+    
+        th.addEventListener("click", () => {
+          rows.sort((tr1, tr2) => {
+            const tr1Text = tr1.cells[cellIndex].textContent;
+            const tr2Text = tr2.cells[cellIndex].textContent;
+            return tr1Text.localeCompare(tr2Text);
+          });
+    
+          tBody.append(...rows);
+        });
+      }
+    //return;
   }else{
       let text;
       if (e.ctrlKey) {

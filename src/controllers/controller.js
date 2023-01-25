@@ -46,7 +46,7 @@ exports.Create = (req, res) => {
     //console.log(new Date(), 'body', req.body);   
     let AdmRole;
     User.findAll({raw:true}).then(Users => { 
-        if(typeof Users === 'object'&&Users!==null) {
+        if(Users) {
             AdmRole = false;  
         }else{
             AdmRole = true;                              
@@ -56,7 +56,7 @@ exports.Create = (req, res) => {
     User.findOne({where: {Name: Name}})
     .then(Users => {    
         //console.log('Users', Users);    
-         if(typeof Users === 'object'&&Users !==null) {
+         if(Users) {
             console.log('duble user ',Users.Name); 
             console.log('Name ',Name); 
             if(Users.Name===Name) {       
@@ -87,20 +87,23 @@ exports.Delete = (req, res) => {
     if(!req.body) return res.sendStatus(400);     
 
     const {id} = req.body; 
-    let AdmRole;
     User.findOne({where: {id: id}})
     .then(Users => {  
-        if(typeof Users === 'object'&&Users!==null) {
-            AdmRole = Users.AdmRole;         
-            console.log('AdmRole user: ', AdmRole);  
-            if (AdmRole===true) {                
-                return res.json("error");
+        if(!Users) {
+            return AdmRole = false;
+        }else{    
+            AdmRole = Users.AdmRole;  
+            
+             if (AdmRole === false) {  
+                User.destroy({
+                    where: {id: id}
+                }) 
+                console.log('delete user id: ', id);
+            //     return res.json("error");
             }  
         }
     }).catch(err=>console.log(err))
 
-    User.destroy({
-        where: {id: id}
-    }) 
-    console.log('delete user id: ', id);
+    console.log('AdmRole user: ', AdmRole);  
+
 }

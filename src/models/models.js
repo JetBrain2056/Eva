@@ -13,7 +13,7 @@ const User = sequelize.define('User', {
     Show: {type: DataTypes.BOOLEAN},        
     Password: {type: DataTypes.STRING},
     email: {type: DataTypes.STRING},
-    AdmRole: {type: DataTypes.BOOLEAN}
+    AdmRole: {type: DataTypes.BOOLEAN, defaultValue: 'false'}
 })
 
 const Role = sequelize.define('Role', {
@@ -54,9 +54,9 @@ async function admin_create() {
                 Name: 'Admin',
                 Descr: 'Admin',
                 RolesID: 1,
-                EAuth: 1,
-                Show: 1,
-                AdmRole : 1
+                EAuth: 'true',
+                Show: 'true',
+                AdmRole : 'true'
                 })
             } catch (err) {}
     }

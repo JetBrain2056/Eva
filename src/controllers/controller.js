@@ -46,7 +46,7 @@ exports.Create = (req, res) => {
     //console.log(new Date(), 'body', req.body);   
     let AdmRole;
     User.findAll({raw:true}).then(Users => { 
-        if(Array.isArray(Users)) {
+        if(typeof Users === 'object') {
             AdmRole = false;  
         }else{
             AdmRole = true;                              
@@ -55,7 +55,8 @@ exports.Create = (req, res) => {
         
     User.findOne({where: {Name: Name}})
     .then(Users => {    
-         if(Array.isArray(Users)) {
+        //console.log('Users', Users);    
+         if(typeof Users === 'object') {
             console.log('duble user ',Users.Name); 
             console.log('Name ',Name); 
             if(Users.Name===Name) {       

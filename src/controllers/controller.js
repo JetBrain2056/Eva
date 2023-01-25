@@ -50,24 +50,31 @@ exports.Create = (req, res) => {
             AdmRole = true;          
         }            
     }).catch(err=>console.log(err));   
-    
+        
     User.findOne({where: {Name: Name}})
-    .then(Users => {      
-        if(Name === Users.Name) {        
-            res.json("error");
-        }                                    
-    }).catch(err=>console.log(err));  
-    
-    User.create({        
-        Name    : Name, 
-        Descr   : Descr,   
-        RolesID : RolesID,           
-        EAuth   : EAuth,  
-        Show    : Show,
-        AdmRole : AdmRole
-    }).catch(err=>console.log(err));  
-    
-    return res.json("Success");
+    .then(Users => {    
+         if(Array.isArray(Users)) {
+            console.log('duble user ',Users.Name); 
+            console.log('Name ',Name); 
+            if(Users.Name===Name) {       
+                return   res.json("error");
+            }
+         }else{
+            User.create({        
+                Name    : Name, 
+                Descr   : Descr,   
+                RolesID : RolesID,           
+                EAuth   : EAuth,  
+                Show    : Show,
+                AdmRole : AdmRole
+            }).catch(err=>console.log(err));  
+            
+            return res.json("Success");
+         }   
+        
+    })                                     
+    .catch(err=>console.log(err));  
+
 } 
 exports.update = (req, res, next) => {
   

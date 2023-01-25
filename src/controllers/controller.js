@@ -46,7 +46,7 @@ exports.Create = (req, res) => {
     //console.log(new Date(), 'body', req.body);   
     let AdmRole;
     User.findAll({raw:true}).then(Users => { 
-        if(typeof Users === 'object') {
+        if(typeof Users === 'object'&&Users!==null) {
             AdmRole = false;  
         }else{
             AdmRole = true;                              
@@ -56,27 +56,27 @@ exports.Create = (req, res) => {
     User.findOne({where: {Name: Name}})
     .then(Users => {    
         //console.log('Users', Users);    
-         if(typeof Users === 'object') {
+         if(typeof Users === 'object'&&Users !==null) {
             console.log('duble user ',Users.Name); 
             console.log('Name ',Name); 
             if(Users.Name===Name) {       
                 return   res.json("error");
-            }
-         }else{
-            User.create({        
-                Name    : Name, 
-                Descr   : Descr,   
-                RolesID : RolesID,           
-                EAuth   : EAuth,  
-                Show    : Show,
-                AdmRole : AdmRole
-            }).catch(err=>console.log(err));  
-            
-            return res.json("Success");
+            }        
          }   
         
     })                                     
     .catch(err=>console.log(err));  
+
+    User.create({        
+        Name    : Name, 
+        Descr   : Descr,   
+        RolesID : RolesID,           
+        EAuth   : EAuth,  
+        Show    : Show,
+        AdmRole : AdmRole
+    }).catch(err=>console.log(err));  
+    
+    return res.json("Success");
 
 } 
 exports.update = (req, res, next) => {
@@ -90,18 +90,17 @@ exports.Delete = (req, res) => {
     let AdmRole;
     User.findOne({where: {id: id}})
     .then(Users => {  
-        AdmRole = Users.AdmRole;         
-        console.log('AdmRole user: ', AdmRole);  
-
-        if (AdmRole) {                
-            return res.json("error");
-        }  else {
-            User.destroy({
-                where: {id: id}
-            }) 
-            console.log('delete user id: ', id);
-        }  
-
-
+        if(typeof Users === 'object'&&Users!==null) {
+            AdmRole = Users.AdmRole;         
+            console.log('AdmRole user: ', AdmRole);  
+            if (AdmRole===true) {                
+                return res.json("error");
+            }  
+        }
     }).catch(err=>console.log(err))
+
+    User.destroy({
+        where: {id: id}
+    }) 
+    console.log('delete user id: ', id);
 }

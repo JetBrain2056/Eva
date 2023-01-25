@@ -87,23 +87,11 @@ exports.Delete = (req, res) => {
     if(!req.body) return res.sendStatus(400);     
 
     const {id} = req.body; 
-    User.findOne({where: {id: id}})
-    .then(Users => {  
-        if(!Users) {
-            return AdmRole = false;
-        }else{    
-            AdmRole = Users.AdmRole;  
-            
-             if (AdmRole === false) {  
-                User.destroy({
-                    where: {id: id}
-                }) 
-                console.log('delete user id: ', id);
-            //     return res.json("error");
-            }  
-        }
-    }).catch(err=>console.log(err))
 
-    console.log('AdmRole user: ', AdmRole);  
+    User.destroy({
+        where: {id: id, AdmRole: false}
+    }) 
+    console.log('delete user id: ', id);
 
+    // console.log('AdmRole user: ', AdmRole);  
 }

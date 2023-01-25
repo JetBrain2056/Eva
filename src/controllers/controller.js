@@ -62,7 +62,7 @@ exports.Create = (req, res) => {
         Show    : Show
     }).catch(err=>console.log(err));  
     
-    return res.json("Succes");
+    return res.json("Success");
 } 
 exports.update = (req, res, next) => {
   
@@ -85,6 +85,6 @@ exports.Delete = (req, res) => {
         }) 
     }    
     //console.log(user);
-    //return res.json("Succes");
+    //return res.json("Success");
 
 }

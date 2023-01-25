@@ -24,7 +24,7 @@ async function user_table() {
       thead.appendChild(tr);
 
       const h = {col1:'id',col2:'Name',col3:'Descr'};
-      for (element of Object.keys(h)) {      
+      for (const element of Object.keys(h)) {
         const th = document.createElement('th');                
         tr.appendChild(th);        
         th.textContent = h[element];                                  
@@ -54,7 +54,7 @@ async function user_table() {
 }
 async function user_create()  {
   const input_username = document.getElementById('input-username');
-  const input_password = document.getElementById('input-password');
+  const input_password = document.getElementById('input-password'); // ?
   const input_descr    = document.getElementById('input-descr');
   const input_eauth    = document.getElementById('input-eauth');
 
@@ -86,7 +86,7 @@ async function user_create()  {
     console.log('Request failed', error);
   });      
 
-  user_table(); 
+  await user_table();
 }
 async function user_delete() {
 
@@ -117,7 +117,7 @@ async function user_delete() {
       });      
     //}
   }
-  user_table(); 
+  await user_table();
 }
 
 function row_select(e) {      
@@ -171,7 +171,7 @@ function row_select(e) {
   }
 }
 
-const allTables = document.querySelectorAll("table");
+const allTables = document.querySelectorAll("table"); // ?
 
 // function row_select(e) {  
   for (const table of user_tbl.tBodies ) {    

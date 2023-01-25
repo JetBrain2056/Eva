@@ -1,4 +1,3 @@
-
 let root = {
     // Locale
     $_code				    : 'ru',

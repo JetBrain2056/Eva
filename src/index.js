@@ -11,7 +11,7 @@ const { security }    = require('./language/'+lg_lg+'/common/security.js');
  
 let content = {
     home               : '/',
-    loguot             : '/',
+    logout             : '/',
     logo               : './image/logo192.png',
     image              : './image/astronautSpace.png',
     name               : 'EVA',

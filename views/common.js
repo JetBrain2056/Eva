@@ -91,11 +91,11 @@ function user_create()  {
 
 function user_delete() {
 
-  for (const rows of select_rows){
+  for (const row of select_rows){
     
-    let tdList = rows.cells[0];
-     // console.log(tdList[0].innerText);
-      const user = { 'id': tdList[0].innerText};
+      console.log(row.cells[0].innerText);
+  
+      const user = { 'id': row.cells[0].innerText};
 
       fetch('/delete', { 
         method  : 'post',  
@@ -107,14 +107,13 @@ function user_delete() {
         })
         .then(res => res.json())  
         .then(data => {  
-          console.log('Request succeeded with JSON response', data);  
+          console.log('Request succeeded with JSON response', data);            
         })  
         .catch(error => {
           console.log('Request failed', error);
-      });      
-    //}
-  }
-   user_table();
+      });          
+  }   
+  user_table();
 }
 
 function row_select(e) {      

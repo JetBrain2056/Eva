@@ -46,9 +46,11 @@ exports.Create = (req, res) => {
     //console.log(new Date(), 'body', req.body);   
     let AdmRole;
     User.findAll({raw:true}).then(Users => { 
-        if(Users.length === 0){
-            AdmRole = true;          
-        }            
+        if(Array.isArray(Users)) {
+            AdmRole = false;  
+        }else{
+            AdmRole = true;                              
+        }
     }).catch(err=>console.log(err));   
         
     User.findOne({where: {Name: Name}})

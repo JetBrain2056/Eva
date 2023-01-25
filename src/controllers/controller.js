@@ -12,13 +12,13 @@ exports.Signin = (req,res) => {
     const username = req.body.username;
 
     User.findOne({where: {Name: username}}).then(Users => { 
-        let objuser = Users;           
-        console.log('controller: ', objuser.Name);          
+              
+        console.log('controller: ', Users.Name);          
 
-        if(username === objuser.Name) {
+        if(username === Users.Name) {
             content.logged    = true;
-            content.username  = objuser.Name;
-            content.firstname = objuser.Descr;
+            content.username  = Users.Name;
+            content.firstname = Users.Descr;
             content.lastname  = '';
         }
                 
@@ -44,12 +44,16 @@ exports.Create = (req, res) => {
     if(!req.body) return res.sendStatus(400);     
     const {Name, Descr, RolesID, EAuth, Show} = req.body;       
     //console.log(new Date(), 'body', req.body);   
+    let AdmRole;
+    User.findAll({raw:true}).then(Users => { 
+        if(Users.length === 0){
+            AdmRole = true;          
+        }            
+    }).catch(err=>console.log(err));   
     
     User.findOne({where: {Name: Name}})
-    .then(objuser => { 
-        //let objuser = Users;          
-        if(Name === objuser.Name) {
-            //return 
+    .then(Users => {      
+        if(Name === Users.Name) {        
             res.json("error");
         }                                    
     }).catch(err=>console.log(err));  
@@ -59,7 +63,8 @@ exports.Create = (req, res) => {
         Descr   : Descr,   
         RolesID : RolesID,           
         EAuth   : EAuth,  
-        Show    : Show
+        Show    : Show,
+        AdmRole : AdmRole
     }).catch(err=>console.log(err));  
     
     return res.json("Success");
@@ -70,21 +75,23 @@ exports.update = (req, res, next) => {
 exports.Delete = (req, res) => {   
 
     if(!req.body) return res.sendStatus(400);     
-    
-    const {id} = req.body;       
 
-    console.log('delete: ', id);
+    const {id} = req.body; 
+    let AdmRole;
+    User.findOne({where: {id: id}})
+    .then(Users => {  
+        AdmRole = Users.AdmRole;         
+        console.log('AdmRole user: ', AdmRole);  
 
-    if (id === '1' ) {
-        return res.json("error");
-    }  else {
-        const user = User.destroy({
-            where: {
-            id: id
-            }
-        }) 
-    }    
-    //console.log(user);
-    //return res.json("Success");
+        if (AdmRole) {                
+            return res.json("error");
+        }  else {
+            User.destroy({
+                where: {id: id}
+            }) 
+            console.log('delete user id: ', id);
+        }  
 
+
+    }).catch(err=>console.log(err))
 }

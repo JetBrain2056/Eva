@@ -42,7 +42,7 @@ exports.getOne = (req, res, next) => {
 exports.Create = (req, res) => {
 
     if(!req.body) return res.sendStatus(400);     
-    const {Name, Descr, RolesID, EAuth, Show} = req.body;       
+    const {Name, Descr, Password, RolesID, EAuth, Show} = req.body;       
       
     // let AdmRole;
     // User.findAll({raw:true}).then(Users=>{ 
@@ -55,24 +55,25 @@ exports.Create = (req, res) => {
    
     // console.log(new Date(), ' AdmRole ', AdmRole);
 
-    User.findOne({where: {Name: Name}})
-    .then(Users => {    
-        //console.log('Users', Users);    
-         if(Users) {
-            console.log('duble user ',Users.Name); 
-            console.log('Name ',Name); 
-            if(Users.Name===Name) {       
-                return   
-                //res.json("error");
-            }        
-         }   
+    // User.findOne({where: {Name: Name}})
+    // .then(Users => {    
+    //     //console.log('Users', Users);    
+    //      if(Users) {
+    //         console.log('duble user ',Users.Name); 
+    //         console.log('Name ',Name); 
+    //         if(Users.Name===Name) {       
+    //             return   
+    //             res.json("error");
+    //         }        
+    //      }   
         
-    })                                     
-    .catch(err=>console.log(err));  
+    // })                                     
+    // .catch(err=>console.log(err));  
 
     User.create({        
         Name    : Name, 
-        Descr   : Descr,   
+        Descr   : Descr,  
+        Password : Password, 
         RolesID : RolesID,           
         EAuth   : EAuth,  
         Show    : Show,
@@ -91,10 +92,7 @@ exports.Delete = (req, res) => {
 
     const {id} = req.body; 
 
-    User.destroy({
-        where: {id: id, AdmRole: false}
-    }) 
-    console.log('delete user id: ', id);
-
-    // console.log('AdmRole user: ', AdmRole);  
+    User.destroy({where: {id: id, AdmRole: false}})
+    .then(res=>console.log(res))
+    .catch(err=>console.log(err));  
 }

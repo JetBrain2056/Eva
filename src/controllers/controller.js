@@ -43,16 +43,18 @@ exports.Create = (req, res) => {
 
     if(!req.body) return res.sendStatus(400);     
     const {Name, Descr, RolesID, EAuth, Show} = req.body;       
-    //console.log(new Date(), 'body', req.body);   
-    let AdmRole;
-    User.findAll({raw:true}).then(Users => { 
-        if(Users) {
-            AdmRole = false;  
-        }else{
-            AdmRole = true;                              
-        }
-    }).catch(err=>console.log(err));   
-        
+      
+    // let AdmRole;
+    // User.findAll({raw:true}).then(Users=>{ 
+    //     if(Users) {
+    //         AdmRole = false;  
+    //     }else{
+    //         AdmRole = true;                              
+    //     }
+    // }).catch(err=>console.log(err));   
+   
+    // console.log(new Date(), ' AdmRole ', AdmRole);
+
     User.findOne({where: {Name: Name}})
     .then(Users => {    
         //console.log('Users', Users);    
@@ -60,7 +62,8 @@ exports.Create = (req, res) => {
             console.log('duble user ',Users.Name); 
             console.log('Name ',Name); 
             if(Users.Name===Name) {       
-                return   res.json("error");
+                return   
+                //res.json("error");
             }        
          }   
         
@@ -73,7 +76,7 @@ exports.Create = (req, res) => {
         RolesID : RolesID,           
         EAuth   : EAuth,  
         Show    : Show,
-        AdmRole : AdmRole
+        AdmRole : false
     }).catch(err=>console.log(err));  
     
     return res.json("Success");

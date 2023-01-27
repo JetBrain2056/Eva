@@ -1,5 +1,5 @@
-const { User }     = require('../models/models.js');
-const { content }  = require('../index.js');
+const { User, Role } = require('../models/models.js');
+const { content }    = require('../index.js');
 
 exports.Auth = (req,res) => {
     content.logged = false;       
@@ -9,33 +9,39 @@ exports.Signin = (req,res) => {
 
     if(!req.body) return res.sendStatus(400);     
 
-    const username = req.body.username;
+    User.count().then(result => {console.log('User count: ',result)
 
-    User.findOne({where: {Name: username}}).then(Users => { 
-              
-        console.log('controller: ', Users.Name);          
-
-        if(username === Users.Name) {
+        if (result === 0) { 
             content.logged    = true;
-            content.username  = Users.Name;
-            content.firstname = Users.Descr;
-            content.lastname  = '';
-        }
-                
-        res.render("index.twig", content);  
+            content.username  = '';
+            content.firstname = '';
+            res.render("index.twig", content);  
+        }else{
+            const username = req.body.username;
+            User.findOne({where: {Name: username}}).then(Users => { 
+                    
+                console.log('controller user: ', Users.Name);          
 
-    }).catch(err=>console.log(err));       
+                if(username === Users.Name) {
+                    content.logged    = true;
+                    content.username  = Users.Name;
+                    content.firstname = Users.Descr;
+                    content.lastname  = '';
+                }
+                        
+                res.render("index.twig", content);  
+
+            }).catch(err=>console.log(err));   
+        }    
+    })        
 } 
 exports.getAll = (req, res, next) => {
     User.findAll({raw:true}).then(Users => { 
-        // content.breadcrumbs = [{
-        //     href : '#',
-        //     text : 'root'
-        // }];
         res.send(Users);       
         next();
     }).catch(err=>console.log(err));       
 }
+
 exports.getOne = (req, res, next) => {
    
 }
@@ -44,44 +50,30 @@ exports.Create = (req, res) => {
     if(!req.body) return res.sendStatus(400);     
     const {Name, Descr, Password, RolesID, EAuth, Show} = req.body;       
       
-    // let AdmRole;
-    // User.findAll({raw:true}).then(Users=>{ 
-    //     if(Users) {
-    //         AdmRole = false;  
-    //     }else{
-    //         AdmRole = true;                              
-    //     }
-    // }).catch(err=>console.log(err));   
-   
-    // console.log(new Date(), ' AdmRole ', AdmRole);
-
-    // User.findOne({where: {Name: Name}})
-    // .then(Users => {    
-    //     //console.log('Users', Users);    
-    //      if(Users) {
-    //         console.log('duble user ',Users.Name); 
-    //         console.log('Name ',Name); 
-    //         if(Users.Name===Name) {       
-    //             return   
-    //             res.json("error");
-    //         }        
-    //      }   
-        
-    // })                                     
-    // .catch(err=>console.log(err));  
-
-    User.create({        
-        Name    : Name, 
-        Descr   : Descr,  
-        Password : Password, 
-        RolesID : RolesID,           
-        EAuth   : EAuth,  
-        Show    : Show,
-        AdmRole : false
-    }).catch(err=>console.log(err));  
-    
-    return res.json("Success");
-
+    User.count().then(result => {console.log('User count: ',result)        
+        if (result === 0) {                                
+            Role.create({Name: 'Administrator'}).catch(err=>console.log(err));              
+            User.create({
+                Name    : 'Admin',
+                Descr   : 'Admin',
+                RolesID : 1,
+                EAuth   : true,
+                Show    : true,
+                AdmRole : true
+                }).catch(err=>console.log(err));              
+        }else{
+            User.create({        
+                Name    : Name, 
+                Descr   : Descr,  
+                Password : Password, 
+                RolesID : RolesID,           
+                EAuth   : EAuth,  
+                Show    : Show,
+                AdmRole : false
+            }).catch(err=>console.log(err));  
+        }           
+        return res.json("Success");
+    })    
 } 
 exports.update = (req, res, next) => {
   

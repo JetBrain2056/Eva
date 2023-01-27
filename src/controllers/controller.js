@@ -1,5 +1,20 @@
 const { User, Role } = require('../models/models.js');
 const { content }    = require('../index.js');
+const bcrypt         = require('bcrypt');
+//const jwt            = require('jsonwebtoken');
+
+// const generateJwt = (id, login, role) => {
+//     return jwt.sign(
+//         {id, login, role},
+//         process.env.SECRET_KEY,
+//         {expiresIn: '24h'}
+//     )
+// }
+
+// exports.check = (req, res, next) => {
+//     const token = generateJwt(req.user.id, req.user.login, req.user.role)
+//     return res.json({token})
+// }
 
 exports.Auth = (req,res) => {
     content.logged = false;       
@@ -18,6 +33,7 @@ exports.Signin = (req,res) => {
             res.render("index.twig", content);  
         }else{
             const username = req.body.username;
+            const password = req.body.password;
             if (username === ''){
                 content.logged    = false;
                 res.render("index.twig", content);  
@@ -26,6 +42,13 @@ exports.Signin = (req,res) => {
                     if(!Users) {
                         content.logged    = false;; 
                     }else{
+                        if (Users.Password !== null){
+                            console.log('user password: ', Users.Password);
+                            let comparePassword = bcrypt.compareSync(password, Users.password)
+                            if (!comparePassword) {
+                                return next(res.send('Wrong password!'))
+                            }
+                        }
                         console.log('controller user: ', Users.Name);
                         if(username === Users.Name) {
                             content.logged    = true;

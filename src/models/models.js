@@ -1,7 +1,7 @@
-const sequelize = require('../db')
-const {DataTypes} = require('sequelize')
+const sequelize     = require('../db')
+const { DataTypes } = require('sequelize')
 
-//sequelize.sync({ force: true })
+sequelize.sync({ force: true })
 //console.log('Все модели были успешно синхронизированы.')
 
 const User = sequelize.define('User', {
@@ -27,43 +27,6 @@ const Config = sequelize.define('Config', {
 
 Role.hasOne(User)
 User.belongsTo(Role)
-
-//////////////////////////////////////////////////////////////////////////
-  
-async function role_create() {
-    const result =  await Role.count()
-    console.log('Role_count',result);
-
-   if (result === 0) {
-        try {
-            Role.create({
-                Name: 'Admin',
-                })
-            } catch (err) {}
-    }
-}
-//role_create();
-
-async function admin_create() {
-    const result =  await User.count()
-    console.log('User_count',result);
-
-   if (result === 0) {
-        try {
-            User.create({
-                Name: 'Admin',
-                Descr: 'Admin',
-                RolesID: 1,
-                EAuth: 'true',
-                Show: 'true',
-                AdmRole : 'true'
-                })
-            } catch (err) {}
-    }
-}
-admin_create();
-
-//////////////////////////////////////////////////////////////////////////
 
 module.exports = {
     User,

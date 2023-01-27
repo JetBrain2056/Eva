@@ -2,7 +2,7 @@ const sequelize     = require('../db')
 const { DataTypes } = require('sequelize')
 
 //sequelize.sync({ force: true })
-//console.log('Все модели были успешно синхронизированы.')
+//console.log('DB DROP and CREATE all tables!')
 
 const User = sequelize.define('User', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},    
@@ -27,6 +27,8 @@ const Config = sequelize.define('Config', {
 
 Role.hasOne(User)
 User.belongsTo(Role)
+
+sequelize.sync()
 
 module.exports = {
     User,

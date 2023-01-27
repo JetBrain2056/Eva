@@ -35,12 +35,12 @@ exports.Signin = (req,res) => {
             const username = req.body.username;
             const password = req.body.password;
             if (username === ''){
-                content.logged    = false;
+                content.logged = false;
                 res.render("index.twig", content);  
             }else{
-                User.findOne({where: {Name: username}}).then(Users => { 
+                User.findOne({where: {Name: username}}).then(Users => {
                     if(!Users) {
-                        content.logged    = false;; 
+                        content.logged = false;
                     }else{
                         if (Users.Password !== null&&Users.Password !== ''){
                             console.log('user password: ', Users.Password);
@@ -57,7 +57,7 @@ exports.Signin = (req,res) => {
                             content.lastname  = '';
                         }                                
                     }
-                    res.render("index.twig", content);  
+                    res.render('index.twig', content);
                 }).catch(err=>console.log(err)); 
             } 
         }    

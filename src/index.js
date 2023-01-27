@@ -1,4 +1,4 @@
-var lg_lg  = 'ru-ru';
+let lg_lg  = 'ru-ru';
 
 //language
 const { root }        = require('./language/'+lg_lg+'/root.js');

@@ -42,7 +42,7 @@ exports.Signin = (req,res) => {
                     if(!Users) {
                         content.logged    = false;; 
                     }else{
-                        if (Users.Password !== null){
+                        if (Users.Password !== null&&Users.Password !== ''){
                             console.log('user password: ', Users.Password);
                             let comparePassword = bcrypt.compareSync(password, Users.password)
                             if (!comparePassword) {

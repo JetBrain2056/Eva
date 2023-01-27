@@ -16,6 +16,23 @@ const bcrypt         = require('bcrypt');
 //     return res.json({token})
 // }
 
+ async function hashPassword(password, saltRounds = 10) {
+    try {
+      // Generate a salt
+      const salt =  await bcrypt.genSalt(saltRounds)
+  
+      // Hash password
+      const hash =  await bcrypt.hash(password, salt)
+      console.log('hash: ', hash)
+      return hash
+    } catch (error) {
+      console.log(error)
+    }
+  
+    // Return null if error
+    return null
+  }
+
 exports.Auth = (req,res) => {
     content.logged = false;       
     res.render("index.twig", content); 
@@ -40,22 +57,37 @@ exports.Signin = (req,res) => {
             }else{
                 User.findOne({where: {Name: username}}).then(Users => { 
                     if(!Users) {
-                        content.logged    = false;; 
+                        content.logged    = false;
                     }else{
-                        if (Users.Password !== null&&Users.Password !== ''){
-                            console.log('user password: ', Users.Password);
-                            let comparePassword = bcrypt.compareSync(password, Users.password)
-                            if (!comparePassword) {
-                                return next(res.send('Wrong password!'))
-                            }
-                        }
                         console.log('controller user: ', Users.Name);
-                        if(username === Users.Name) {
-                            content.logged    = true;
-                            content.username  = Users.Name;
-                            content.firstname = Users.Descr;
-                            content.lastname  = '';
-                        }                                
+                        if(username === Users.Name) {                          
+                            if (Users.Password !== null&&Users.Password !== ''){
+                                console.log('user password: ', password);
+                                console.log('hash password: ', Users.Password);
+                                bcrypt.compare(password, Users.Password).then(comparePassword => {                                
+                                    console.log(comparePassword)                                
+                                    if (comparePassword===false) {                                    
+                                        content.logged    = false;  
+                                        console.log('Wrong password');                                    
+                                    }else{    
+                                        console.log('User login true: ', Users.Name);
+                                        if(username === Users.Name) {
+                                            content.logged    = true;
+                                            content.username  = Users.Name;
+                                            content.firstname = Users.Descr;
+                                            content.lastname  = '';
+                                        }  
+                                    }    
+                                }) 
+                            }else{                                                                                                                                                                                                                                              
+                                content.logged    = true;
+                                content.username  = Users.Name;
+                                content.firstname = Users.Descr;
+                                content.lastname  = '';
+                            }
+                        }else{
+                            content.logged    = false;
+                        }                        
                     }
                     res.render("index.twig", content);  
                 }).catch(err=>console.log(err)); 
@@ -73,17 +105,23 @@ exports.getAll = (req, res, next) => {
 exports.getOne = (req, res, next) => {
    
 }
-exports.Create = (req, res) => {
+exports.Create = async (req, res) => {
 
     if(!req.body) return res.sendStatus(400);     
-    const {Name, Descr, Password, RolesID, EAuth, Show} = req.body;       
-      
-    User.count().then(result => {console.log('User count: ',result)        
-        if (result === 0) {                                
+    const {Name, Descr, Password, RolesID, EAuth, Show} = req.body;  
+
+    //const hash = {};
+    if(Password !==''){        
+        //hash = await hashPassword(Password,10)
+    }       
+    const hash = await hashPassword(Password,10)
+    User.count().then(result => {console.log('User count: ',result)   
+        if (result === 0) {                                        
             Role.create({Name: 'Administrator'}).catch(err=>console.log(err));              
             User.create({
-                Name    : 'Admin',
-                Descr   : 'Admin',
+                Name    : Name, //'Admin',
+                Descr   : Descr,//'Admin',
+                Password : hash,
                 RolesID : 1,
                 EAuth   : true,
                 Show    : true,
@@ -93,7 +131,7 @@ exports.Create = (req, res) => {
             User.create({        
                 Name    : Name, 
                 Descr   : Descr,  
-                Password : Password, 
+                Password : hash,
                 RolesID : RolesID,           
                 EAuth   : EAuth,  
                 Show    : Show,

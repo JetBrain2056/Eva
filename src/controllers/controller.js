@@ -23,18 +23,18 @@ exports.Signin = (req,res) => {
                 res.render("index.twig", content);  
             }else{
                 User.findOne({where: {Name: username}}).then(Users => { 
-                        
-                    console.log('controller user: ', Users.Name);          
-
-                    if(username === Users.Name) {
-                        content.logged    = true;
-                        content.username  = Users.Name;
-                        content.firstname = Users.Descr;
-                        content.lastname  = '';
+                    if(!Users) {
+                        content.logged    = false;; 
+                    }else{
+                        console.log('controller user: ', Users.Name);
+                        if(username === Users.Name) {
+                            content.logged    = true;
+                            content.username  = Users.Name;
+                            content.firstname = Users.Descr;
+                            content.lastname  = '';
+                        }                                
                     }
-                            
                     res.render("index.twig", content);  
-
                 }).catch(err=>console.log(err)); 
             } 
         }    

@@ -1,7 +1,7 @@
 const sequelize     = require('../db')
 const { DataTypes } = require('sequelize')
 
-sequelize.sync({ force: true })
+//sequelize.sync({ force: true })
 //console.log('Все модели были успешно синхронизированы.')
 
 const User = sequelize.define('User', {

@@ -66,7 +66,8 @@ exports.Signin = (req,res,next) => {
         User.findOne({where: {Name: username}}).then(Users => { 
             if(!Users) {
                 content.logged    = false;
-                console.log(Users);                        
+                console.log(Users);   
+                res.render("index.twig", content);                                    
             }else{                        
                 if(username === Users.Name) {                          
                     console.log('true user name : ', Users.Name);
@@ -77,14 +78,14 @@ exports.Signin = (req,res,next) => {
                             console.log(comparePassword)                                
                             if (comparePassword===false) {                                    
                                 content.logged    = false;  
-                                console.log('Wrong password');                                                                 
+                                console.log('Wrong password');                                                                                             
                             }else{                                                                          
                                 content.logged    = true;
                                 content.username  = Users.Name;
                                 content.firstname = Users.Descr;      
-                                console.log('Good password');                                                                                                       
+                                console.log('Good password');                                                                                                                                       
                             }    
-                            res.render("index.twig", content);  
+                            res.render("index.twig", content);                              
                         }) 
                     }else{                                                                                                                                                                                                                                              
                         content.logged    = true;
@@ -96,7 +97,7 @@ exports.Signin = (req,res,next) => {
                 }else{
                     content.logged    = false;                            
                 }                        
-            }                    
+            }                                              
         }).catch(err=>console.log(err));                   
     }         
 } 

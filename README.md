@@ -1,14 +1,16 @@
 # Eva
-<p>Business application development platform.</p>
-<p>Demo platform with MVC architecture and CRUD API.</p>
-/////////////////////////////////////////////////////////////
-<p>Example of the .env root file:<br>
-  PORT=3000<br>
-  HOST=0.0.0.0<br>
-  DB_NAME=eva<br>
-  DB_USER=postgres<br>
-  DB_PASSWORD=postgres<br>
-  DB_HOST=localhost<br>
-  DB_PORT=5432<br>
-  SECRET_KEY=random_secret_key123<br>
-</p>
+Business application development platform.
+Demo platform with MVC architecture and CRUD API.
+
+### Usage
+#### Example of the .env root file:
+```
+  PORT=3000
+  HOST=0.0.0.0
+  DB_NAME=eva
+  DB_USER=postgres
+  DB_PASSWORD=postgres
+  DB_HOST=localhost
+  DB_PORT=5432
+  SECRET_KEY=random_secret_key123
+```

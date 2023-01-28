@@ -3,7 +3,7 @@ let select_rows = [];
 const user_tbl = document.getElementById('user_table');
 user_tbl.addEventListener('click', row_select);   
 
-function user_table() {
+async function user_table() {
   //const response = await fetch('http://192.168.1.8:3000/users');
   //const data = await response.json();
   
@@ -52,7 +52,7 @@ function user_table() {
              
     });
 }
-function user_create()  {
+async function user_create()  {
   const input_username = document.getElementById('input-username');
   const input_password = document.getElementById('input-password');
   const input_Cpassword = document.getElementById('input-Cpassword'); 
@@ -85,15 +85,15 @@ function user_create()  {
   .then(res => res.json())  
   .then(data => {  
     console.log('Request succeeded with JSON response', data);  
+    user_table();
   })  
   .catch(error => {
     console.log('Request failed', error);
   });      
-
-  user_table();
+  
 }
 
-function user_delete() {
+async function user_delete() {
 
   for (const row of select_rows){
     

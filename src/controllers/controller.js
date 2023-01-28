@@ -16,7 +16,7 @@ const bcrypt         = require('bcrypt');
 //     return res.json({token})
 // }
 
- async function hashPassword(password, saltRounds = 10) {
+async function hashPassword(password, saltRounds = 10) {
     try {
       // Generate a salt
       const salt =  await bcrypt.genSalt(saltRounds)
@@ -31,11 +31,10 @@ const bcrypt         = require('bcrypt');
   
     // Return null if error
     return null
-  }
-
+}
 exports.Auth = (req,res) => {
     content.logged = false;       
-    res.render("index.twig", content); 
+    res.render('index.twig', content); 
 }  
 exports.Signin = (req,res,next) => {
 
@@ -52,22 +51,21 @@ exports.Signin = (req,res,next) => {
             content.logged    = true;
             content.username  = '';
             content.firstname = '';  
-            res.render("index.twig", content);    
-            return;  
+            res.render('index.twig', content);             
         }else{
-            content.logged    = false;
+            content.logged = false;
         }            
     })
 
     if (username === ''){
-        content.logged    = false;                              
-        res.render("index.twig", content);            
+        content.logged = false;                              
+        res.render('index.twig', content);            
     }else{
         User.findOne({where: {Name: username}}).then(Users => { 
             if(!Users) {
-                content.logged    = false;
+                content.logged = false;
                 console.log(Users);   
-                res.render("index.twig", content);                                    
+                res.render('index.twig', content);                                    
             }else{                        
                 if(username === Users.Name) {                          
                     console.log('true user name : ', Users.Name);
@@ -76,26 +74,26 @@ exports.Signin = (req,res,next) => {
                         console.log('hash password: ', Users.Password);
                         bcrypt.compare(password, Users.Password).then(comparePassword => {                                
                             console.log(comparePassword)                                
-                            if (comparePassword===false) {                                    
-                                content.logged    = false;  
-                                console.log('Wrong password');                                                                                             
+                            if (comparePassword === false) {                                    
+                                content.logged = false;  
+                                console.log('Wrong password!');                                                                                             
                             }else{                                                                          
                                 content.logged    = true;
                                 content.username  = Users.Name;
                                 content.firstname = Users.Descr;      
-                                console.log('Good password');                                                                                                                                       
+                                console.log('Good password!');                                                                                                                                       
                             }    
-                            res.render("index.twig", content);                              
+                            res.render('index.twig', content);                              
                         }) 
                     }else{                                                                                                                                                                                                                                              
                         content.logged    = true;
                         content.username  = Users.Name;
                         content.firstname = Users.Descr;   
                         console.log('Empty password');                                                                                                           
-                        res.render("index.twig", content);  
+                        res.render('index.twig', content);  
                     }                   
                 }else{
-                    content.logged    = false;                            
+                    content.logged = false;                            
                 }                        
             }                                              
         }).catch(err=>console.log(err));                   
@@ -107,50 +105,46 @@ exports.getAll = (req, res, next) => {
         next();
     }).catch(err=>console.log(err));       
 }
-
-exports.getOne = async (req, res, next) => {
-   
+exports.getOne = (req, res, next) => {   
 }
-exports.Create = async (req, res) => {
+exports.Create = (req, res) => {
 
     if(!req.body) return res.sendStatus(400);     
     const {Name, Descr, Password, RolesID, EAuth, Show} = req.body;  
-
-    //const hash = {};
-    if(Password !==''){        
-        //hash = await hashPassword(Password,10)
-    }       
-    const hash = await hashPassword(Password,10)
-    User.count().then(result => {console.log('User count: ',result)   
-        if (result === 0) {                                        
-            Role.create({Name: 'Administrator'}).catch(err=>console.log(err));              
-            User.create({
-                Name    : Name, //'Admin',
-                Descr   : Descr,//'Admin',
-                Password : hash,
-                RolesID : 1,
-                EAuth   : true,
-                Show    : true,
-                AdmRole : true
-                }).catch(err=>console.log(err));              
-        }else{
-            User.create({        
-                Name    : Name, 
-                Descr   : Descr,  
-                Password : hash,
-                RolesID : RolesID,           
-                EAuth   : EAuth,  
-                Show    : Show,
-                AdmRole : false
-            }).catch(err=>console.log(err));  
-        }           
-        return res.json("Success");
-    })    
+     
+    hashPassword(Password,10).then(
+        hash => {
+        console.log(hash)
+        User.count().then(result => {console.log('User count: ',result)               
+            if (result === 0) {                                        
+                Role.create({Name: 'Administrator'}).catch(err=>console.log(err));              
+                User.create({
+                    Name    : Name, //'Admin',
+                    Descr   : Descr,//'Admin',
+                    Password : hash,
+                    RolesID : 1,
+                    EAuth   : true,
+                    Show    : true,
+                    AdmRole : true
+                    }).catch(err=>console.log(err));              
+            }else{
+                User.create({        
+                    Name    : Name, 
+                    Descr   : Descr,  
+                    Password : hash,
+                    RolesID : RolesID,           
+                    EAuth   : EAuth,  
+                    Show    : Show,
+                    AdmRole : false
+                }).catch(err=>console.log(err));  
+            }           
+            return res.json("Success");
+        })  
+    })      
 } 
-exports.update = (req, res, next) => {
-  
+exports.update = (req, res, next) => {  
 }
-exports.Delete = async (req, res) => {   
+exports.Delete = (req, res) => {   
 
     if(!req.body) return res.sendStatus(400);     
 

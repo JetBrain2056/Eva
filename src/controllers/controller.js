@@ -151,6 +151,6 @@ exports.Delete = (req, res) => {
     const {id} = req.body; 
 
     User.destroy({where: {id: id, AdmRole: false}})
-    .then(res=>console.log(res))
-    .catch(err=>console.log(err));  
+        .then(res=>console.log(res))
+        .catch(err=>console.log(err));  
 }

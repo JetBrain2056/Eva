@@ -37,63 +37,69 @@ exports.Auth = (req,res) => {
     content.logged = false;       
     res.render("index.twig", content); 
 }  
-exports.Signin = (req,res) => {
+exports.Signin = (req,res,next) => {
 
     if(!req.body) return res.sendStatus(400);     
 
-    User.count().then(result => {console.log('User count: ',result)
+    const username = req.body.username;
+    const password = req.body.password;
+
+    User.count().then(result => {
+        
+        console.log('User count: ',result)
 
         if (result === 0) { 
             content.logged    = true;
             content.username  = '';
-            content.firstname = '';
-            res.render("index.twig", content);  
+            content.firstname = '';  
+            res.render("index.twig", content);    
+            return;  
         }else{
-            const username = req.body.username;
-            const password = req.body.password;
-            if (username === ''){
-                content.logged = false;
-                res.render("index.twig", content);  
-            }else{
-                User.findOne({where: {Name: username}}).then(Users => {
-                    if(!Users) {
-                    content.logged    = false;
-                    }else{
-                        console.log('controller user: ', Users.Name);
-                        if(username === Users.Name) {                          
-                            if (Users.Password !== null&&Users.Password !== ''){
-                                console.log('user password: ', password);
-                                console.log('hash password: ', Users.Password);
-                                bcrypt.compare(password, Users.Password).then(comparePassword => {                                
-                                    console.log(comparePassword)                                
-                                    if (comparePassword===false) {                                    
-                                        content.logged    = false;  
-                                        console.log('Wrong password');                                    
-                                    }else{    
-                                        console.log('User login true: ', Users.Name);
-                                        if(username === Users.Name) {
-                                            content.logged    = true;
-                                            content.username  = Users.Name;
-                                            content.firstname = Users.Descr;
-                                            content.lastname  = '';
-                                        }  
-                                    }    
-                                }) 
-                            }else{                                                                                                                                                                                                                                              
+            content.logged    = false;
+        }            
+    })
+
+    if (username === ''){
+        content.logged    = false;                              
+        res.render("index.twig", content);            
+    }else{
+        User.findOne({where: {Name: username}}).then(Users => { 
+            if(!Users) {
+                content.logged    = false;
+                console.log(Users);   
+                res.render("index.twig", content);                                    
+            }else{                        
+                if(username === Users.Name) {                          
+                    console.log('true user name : ', Users.Name);
+                    if (Users.Password !== null&&Users.Password !== ''){
+                        console.log('user password: ', password);
+                        console.log('hash password: ', Users.Password);
+                        bcrypt.compare(password, Users.Password).then(comparePassword => {                                
+                            console.log(comparePassword)                                
+                            if (comparePassword===false) {                                    
+                                content.logged    = false;  
+                                console.log('Wrong password');                                                                                             
+                            }else{                                                                          
                                 content.logged    = true;
                                 content.username  = Users.Name;
-                                content.firstname = Users.Descr;
-                                content.lastname  = '';
-                            }
-                        }else{
-                            content.logged    = false;
-                        }                        
-                    }
-                    res.render('index.twig', content);
-                }).catch(err=>console.log(err)); 
-            } 
-        }    
-    })        
+                                content.firstname = Users.Descr;      
+                                console.log('Good password');                                                                                                                                       
+                            }    
+                            res.render("index.twig", content);                              
+                        }) 
+                    }else{                                                                                                                                                                                                                                              
+                        content.logged    = true;
+                        content.username  = Users.Name;
+                        content.firstname = Users.Descr;   
+                        console.log('Empty password');                                                                                                           
+                        res.render("index.twig", content);  
+                    }                   
+                }else{
+                    content.logged    = false;                            
+                }                        
+            }                                              
+        }).catch(err=>console.log(err));                   
+    }         
 } 
 exports.getAll = (req, res, next) => {
     User.findAll({raw:true}).then(Users => { 
@@ -102,7 +108,7 @@ exports.getAll = (req, res, next) => {
     }).catch(err=>console.log(err));       
 }
 
-exports.getOne = (req, res, next) => {
+exports.getOne = async (req, res, next) => {
    
 }
 exports.Create = async (req, res) => {
@@ -144,7 +150,7 @@ exports.Create = async (req, res) => {
 exports.update = (req, res, next) => {
   
 }
-exports.Delete = (req, res) => {   
+exports.Delete = async (req, res) => {   
 
     if(!req.body) return res.sendStatus(400);     
 

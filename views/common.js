@@ -2,7 +2,7 @@ let select_rows = [];
 
 const user_tbl = document.getElementById('user_table');
 user_tbl.addEventListener('click', row_select); 
-  
+
 function row_select(e) {      
   //console.log(e.path[1]);                
   //console.log(e.target);
@@ -103,7 +103,7 @@ async function user_table() {
              
     });
 }
-async function user_create()  {
+async function user_create() {
   const input_username = document.getElementById('input-username');
   const input_password = document.getElementById('input-password');
   const input_Cpassword = document.getElementById('input-Cpassword'); 

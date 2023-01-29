@@ -113,18 +113,17 @@ async function user_create() {
   const input_descr    = document.getElementById('input-descr');
   const input_eauth    = document.getElementById('input-eauth');
 
-  if (input_password.value !== input_confirmpass.value)
-  {alert("Не верное подтверждение пароля!"); return "";}
+  if (input_password.value !== input_confirmpass.value) alert("Неверное подтверждение пароля!");
 
-  if (input_username.value === "")
-  {alert("Не заполнено имя пользователя!"); return "";}
+  if (!input_username.value) alert("Не заполнено имя пользователя!");
   
-  const user =  { 'Name'    : input_username.value,
-                  'Descr'   : input_descr.value,
-                  'Password': input_password.value,
-                  'RolesID' : '1',
-                  'EAuth'   : input_eauth.value,
-                  'Show'    : '1'
+  const user =  {
+      'Name'    : input_username.value,
+      'Descr'   : input_descr.value,
+      'Password': input_password.value,
+      'RolesID' : '1',
+      'EAuth'   : input_eauth.value,
+      'Show'    : '1'
   };
   console.log(user);
 

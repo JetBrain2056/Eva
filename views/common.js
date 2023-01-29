@@ -106,11 +106,11 @@ async function user_table() {
 async function user_create() {
   const input_username = document.getElementById('input-username');
   const input_password = document.getElementById('input-password');
-  const input_Cpassword = document.getElementById('input-Cpassword'); 
+  const input_confirmpass = document.getElementById('input-confirmpass'); 
   const input_descr    = document.getElementById('input-descr');
   const input_eauth    = document.getElementById('input-eauth');
 
-  if (input_password.value !== input_Cpassword.value)
+  if (input_password.value !== input_confirmpass.value)
   {alert("Не верное подтверждение пароля!"); return "";}
 
   if (input_username.value === "")
@@ -161,11 +161,11 @@ async function user_delete() {
         .then(res => res.json())  
         .then(data => {  
           console.log('Request succeeded with JSON response', data);            
+          user_table();
         })  
         .catch(error => {
           console.log('Request failed', error);
       });          
-  }   
-  user_table();
+  }    
 }
 user_table();

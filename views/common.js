@@ -58,11 +58,11 @@ async function user_table() {
   //const response = await fetch('http://192.168.1.8:3000/users');
   //const data = await response.json();
   
+  user_tbl.innerHTML = "";
+
   fetch('/users')    
     .then(res => res.json())
     .then(data => {
-      
-      user_tbl.innerHTML = "";
 
       const thead = document.createElement('thead');
       thead.style.border = '#00ff92';
@@ -104,6 +104,9 @@ async function user_table() {
     });
 }
 async function user_create() {
+
+  user_table();
+  
   const input_username = document.getElementById('input-username');
   const input_password = document.getElementById('input-password');
   const input_confirmpass = document.getElementById('input-confirmpass'); 
@@ -143,6 +146,8 @@ async function user_create() {
   });        
 }
 async function user_delete() {
+
+  user_table();
 
   for (const row of select_rows){
     

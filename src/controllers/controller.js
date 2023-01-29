@@ -107,7 +107,7 @@ exports.getAll = (req, res, next) => {
 }
 exports.getOne = (req, res, next) => {   
 }
-exports.Create = async (req, res) => {
+exports.Create = (req, res) => {
 
     if(!req.body) return res.sendStatus(400);     
     const {Name, Descr, Password, RolesID, EAuth, Show} = req.body;  

@@ -77,9 +77,15 @@ h1, h2, h3, h4, h5, h6, p {
 .menu-title{
 	color: aquamarine;
 }
-.btn:hover, .btn:focus{
+.nav-link{
+	border: 1px solid transparent !important;
+}
+.nav-link:hover,
+.btn:hover,
+.btn:focus{
 	color: #00ff93 !important;
-	border-color: #00ff92 !important;
+	border: 1px solid #00ff92 !important;
+	border-radius: 8px;
 }
 .btn-primary:hover{
 	color: #58fcb8 !important;
@@ -91,7 +97,15 @@ h1, h2, h3, h4, h5, h6, p {
 	color: aquamarine !important;
 	background-color: #282c34;
 	border-color: #282c34;
+	--bs-btn-active-bg: #282c34;
 }
 .sidebar{
-	background-color: #282c34  !important;
+	background-color: #282c34;
+}
+.dropdown-menu{
+	background-color: #282c34;
+	color: #58fcb8 !important;
+}
+.dropdown-item{
+	color: #58fcb8;
 }

@@ -1,11 +1,7 @@
 let select_rows = [];
 
 const user_tbl = document.getElementById('user_table');
-user_tbl.addEventListener('click', row_select); 
-
-async function clear_tbl(){  
-  user_tbl.innerHTML = "";
-}
+if(user_tbl){user_tbl.addEventListener('click', row_select)}
 
 function row_select(e) {      
   //console.log(e.path[1]);                
@@ -57,17 +53,20 @@ function row_select(e) {
       console.log(text);
   }
 }
-/////////////////////////////////////////////////////////////////////////////
-async function getUsers(){
-  return fetch('/users')    
-  .then(res => res.json())
-  .then(data => { return  data });
-}
 async function user_table() {
+
+  let data = await getUsers();
+  //show_user_table(data) 
+  setTimeout(show_user_table(data),2000)
+  user_tbl.Show;  
+
+}
+ function show_user_table(data) {
   //const response = await fetch('http://192.168.1.8:3000/users');
   //const data = await response.json();
 
-  await clear_tbl();  
+  //if(user_tbl){return}
+  user_tbl.innerHTML = "";
 
   const thead = document.createElement('thead');
   thead.style.border = '#00ff92';
@@ -84,15 +83,12 @@ async function user_table() {
     const th = document.createElement('th');            
     tr.appendChild(th);        
     th.textContent = h[element];                                  
-  }  
-
-    // let i =0; 
-    //  while (i < 30) {     
-    //   data.push({'id':'.'}); 
-    //   i++;
-    //  }   
-
-  const data = await this.getUsers();
+  }   
+  // let i =0; 
+  //  while (i < 30) {     
+  //   data.push({'id':'.'}); 
+  //   i++;
+  //  }      
   for (const rows of data) {              
     const tr = document.createElement("tr");
     tbody.appendChild(tr);                
@@ -102,7 +98,16 @@ async function user_table() {
       tr.appendChild(td);                    
       td.textContent = p[element];   
     }    
-  }  
+  }    
+  user_tbl.Show;   
+  console.log(new Date()); 
+}
+/////////////////////////////////////////////////////////////////////////////
+
+async function getUsers(){
+  return fetch('/users')    
+  .then(res => res.json())
+  .then(data => { return  data });
 }
 async function create_user(user){
   return fetch('/create', { 
@@ -144,14 +149,16 @@ async function user_create() {
       'Show'    : '1'
   };
   console.log(user);
-
-   
-  result = await create_user(user)
+ 
+  let result = await create_user(user)
    
   console.log(result); 
 
   if(result){
-    user_table();
+    // let data = await getUsers();    
+    // console.log(data);
+    // show_user_table(data); 
+    await user_table();
     console.log('user_table');
   }
 }
@@ -185,10 +192,13 @@ async function user_delete() {
   }
 
   if(result){
-    user_table();
+    //let data = await getUsers();
+    //console.log(data);
+    //show_user_table(data); 
+    await user_table();
     console.log('user_table');
   }
 }
 window.onload = function() { 
   user_table();
-}
+}         

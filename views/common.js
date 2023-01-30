@@ -133,8 +133,7 @@ async function user_create() {
   if (input_password.value !== input_confirmpass.value)
   {alert("Не верное подтверждение пароля!"); return "";}
 
-  if (input_username.value === "")
-  {alert("Не заполнено имя пользователя!"); return "";}
+  if (!input_username.value){alert("Не заполнено имя пользователя!"); return "";}
   
   const user =  {
       'Name'    : input_username.value,

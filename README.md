@@ -2,8 +2,8 @@
 Business application development platform.
 Demo platform with MVC architecture and CRUD API.
 
-### Usage
-Instalation
+
+## Instalation
 
 ### SSH
 ```
@@ -21,8 +21,8 @@ To install dependencies use `npm i`
 > If errors occur, delete `.node_modules` and write `npm i -s`
 
 
-### Usage
-#### Example of the .env root file:
+## Usage
+### Example of the .env root file:
 ```
   PORT=3000
   HOST=0.0.0.0
@@ -33,3 +33,4 @@ To install dependencies use `npm i`
   DB_PORT=5432
   SECRET_KEY=random_secret_key123
 ```
+> HOST can also be 127.0.0.1

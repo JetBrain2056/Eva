@@ -3,6 +3,10 @@ let select_rows = [];
 const user_tbl = document.getElementById('user_table');
 user_tbl.addEventListener('click', row_select); 
 
+async function clear_tbl(){  
+  user_tbl.innerHTML = "";
+}
+
 function row_select(e) {      
   //console.log(e.path[1]);                
   //console.log(e.target);
@@ -54,68 +58,80 @@ function row_select(e) {
   }
 }
 /////////////////////////////////////////////////////////////////////////////
+async function getUsers(){
+  return fetch('/users')    
+  .then(res => res.json())
+  .then(data => { return  data });
+}
 async function user_table() {
   //const response = await fetch('http://192.168.1.8:3000/users');
   //const data = await response.json();
-  
-  user_tbl.innerHTML = "";
 
-  fetch('/users')    
-    .then(res => res.json())
-    .then(data => {
+  await clear_tbl();  
 
-      const thead = document.createElement('thead');
-      thead.style.border = '#00ff92';
-      user_tbl.appendChild(thead);
+  const thead = document.createElement('thead');
+  thead.style.border = '#00ff92';
+  user_tbl.appendChild(thead);
 
-      const tbody = document.createElement('tbody');
-      user_tbl.appendChild(tbody);
+  const tbody = document.createElement('tbody');
+  user_tbl.appendChild(tbody);
 
-      const tr = document.createElement('tr');
-      thead.appendChild(tr);
+  const tr = document.createElement('tr');
+  thead.appendChild(tr);
 
-      const h = {col1:'id',col2:'Name',col3:'Descr'};
-      for (const element of Object.keys(h)) {
-        const th = document.createElement('th');                
-        tr.appendChild(th);        
-        th.textContent = h[element];                                  
-      }   
+  const h = {col1:'id',col2:'Name',col3:'Descr'};  
+  for (const element of Object.keys(h)) {        
+    const th = document.createElement('th');            
+    tr.appendChild(th);        
+    th.textContent = h[element];                                  
+  }  
 
-      // let i =0;
-      //  while (i < 30) {     
-      //   data.push({'id':'.'}); 
-      //   i++;
-      //  }
-      
-      for (const rows of data) {      
-        const tr = document.createElement("tr");
-        tbody.appendChild(tr);
+    // let i =0; 
+    //  while (i < 30) {     
+    //   data.push({'id':'.'}); 
+    //   i++;
+    //  }   
 
-        //console.log(rows);
-
-        const p = {id:rows.id, Name:rows.Name, Descr:rows.Descr};
-        for (const element of Object.keys(p) ) {        
-          const td = document.createElement('td');                   
-          tr.appendChild(td);                    
-          td.textContent = p[element];   
-        }    
-      }
-             
-    });
+  const data = await this.getUsers();
+  for (const rows of data) {              
+    const tr = document.createElement("tr");
+    tbody.appendChild(tr);                
+    const p = {id:rows.id, Name:rows.Name, Descr:rows.Descr};
+    for (const element of Object.keys(p) ) {                                 
+      const td = document.createElement('td');    
+      tr.appendChild(td);                    
+      td.textContent = p[element];   
+    }    
+  }  
 }
+async function create_user(user){
+  return fetch('/create', { 
+    method  : 'post',  
+    headers : {"Content-type": "application/x-www-form-urlencoded; charset=UTF-8"},       
+    //headers: {"Content-Type": "application/json"},
+    //body: JSON.stringify(user)
+    body: new URLSearchParams(user),
+    //body    : 'Name=test&Descr=test' 
+  })
+  .then(res => res.json())  
+  .then(data => {  
+    console.log('Request succeeded with JSON response', data);  
+    return true;     
+  })  
+  .catch(error => {
+    console.log('Request failed', error);
+  }); 
+}   
 async function user_create() {
 
-  user_table();
-  
-  const input_username = document.getElementById('input-username');
-  const input_password = document.getElementById('input-password');
+  const input_username    = document.getElementById('input-username');
+  const input_password    = document.getElementById('input-password');
   const input_confirmpass = document.getElementById('input-confirmpass'); 
-  const input_descr    = document.getElementById('input-descr');
-  const input_eauth    = document.getElementById('input-eauth');
+  const input_descr       = document.getElementById('input-descr');
+  const input_eauth       = document.getElementById('input-eauth');
 
   if (input_password.value !== input_confirmpass.value)
   {alert("Не верное подтверждение пароля!"); return "";}
-
   if (input_username.value === "")
   {alert("Не заполнено имя пользователя!"); return "";}
   
@@ -128,49 +144,50 @@ async function user_create() {
   };
   console.log(user);
 
-  fetch('/create', { 
+   
+  result = await create_user(user)
+   
+  console.log(result); 
+
+  if(result){
+    user_table();
+    console.log('user_table');
+  }
+}
+async function delete_user(user){
+  return  fetch('/delete', { 
     method  : 'post',  
-    headers : {"Content-type": "application/x-www-form-urlencoded; charset=UTF-8"},       
+    headers : {"Content-type": "application/x-www-form-urlencoded; charset=UTF-8"},        
     //headers: {"Content-Type": "application/json"},
     //body: JSON.stringify(user)
     body: new URLSearchParams(user),
-    //body    : 'Name=test&Descr=test' 
-  })
-  .then(res => res.json())  
-  .then(data => {  
-    console.log('Request succeeded with JSON response', data);  
-    user_table();
-  })  
-  .catch(error => {
-    console.log('Request failed', error);
-  });        
+    //body    : 'id=13' 
+    })
+    .then(res =>res.json())  
+    .then(data => {  
+      console.log('Request succeeded with JSON response', data);  
+      return true;     
+    })  
+    .catch(error => {console.log('Request failed', error)})  
 }
 async function user_delete() {
 
-  user_table();
-
+  let result = {};
   for (const row of select_rows){
     
-      console.log(row.cells[0].innerText);
-  
-      const user = { 'id': row.cells[0].innerText};
+    console.log(row.cells[0].innerText);
 
-      fetch('/delete', { 
-        method  : 'post',  
-        headers : {"Content-type": "application/x-www-form-urlencoded; charset=UTF-8"},        
-        //headers: {"Content-Type": "application/json"},
-        //body: JSON.stringify(user)
-        body: new URLSearchParams(user),
-        //body    : 'id=13' 
-        })
-        .then(res => res.json())  
-        .then(data => {  
-          console.log('Request succeeded with JSON response', data);            
-          user_table();
-        })  
-        .catch(error => {
-          console.log('Request failed', error);
-      });          
-  }    
+    const user = { 'id': row.cells[0].innerText};
+
+    result = await delete_user(user);
+    console.log(result);
+  }
+
+  if(result){
+    user_table();
+    console.log('user_table');
+  }
 }
-user_table();
+window.onload = function() { 
+  user_table();
+}

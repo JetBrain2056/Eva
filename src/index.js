@@ -14,6 +14,7 @@ let content = {
     logout             : '/',
     logo               : './image/logo192.png',
     image              : './image/astronautSpace.png',
+    shortIcon              : './image/astronautSpace.ico',
     name               : 'EVA',
     Ent                : 'Enterprise',
     Dev                : 'Developer',

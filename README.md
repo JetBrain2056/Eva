@@ -3,6 +3,25 @@ Business application development platform.
 Demo platform with MVC architecture and CRUD API.
 
 ### Usage
+Instalation
+
+### SSH
+```
+git@github.com:JetBrain2056/Eva.git
+```
+### HTTPS
+```
+https://github.com/JetBrain2056/Eva.git
+```
+### GitHub CLI
+```
+gh repo clone JetBrain2056/Eva
+```
+To install dependencies use `npm i`
+> If errors occur, delete `.node_modules` and write `npm i -s`
+
+
+### Usage
 #### Example of the .env root file:
 ```
   PORT=3000

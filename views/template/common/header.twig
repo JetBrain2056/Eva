@@ -3,25 +3,25 @@
     <a class="navbar-brand" href="{{ home }}" >{{ name }}</a>
     {% if logged %}
       {# <nav class="navbar navbar-expand-lg bg-body-tertiary"> #}
-        <form class="d-flex">
+        <nav class="d-flex me-lg-5">
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse" id="navbarNavDropdown">
-            <ul class="navbar-nav align-items-center">
-              <li class="nav-item btn">
+            <ul class="navbar-nav align-items-center gap-2">
+              <li class="nav-item">
                 <a class="nav-link" aria-current="page" href="#">Конфигурация</a>
               </li>
-              <li class="nav-item btn">
+              <li class="nav-item">
                 <a class="nav-link" aria-current="page" href="#" onclick="user_table()">Пользователи</a>
               </li>
-              <li class="nav-item btn">
+              <li class="nav-item">
                 <a class="nav-link d-flex gap-1 align-items-center" aria-current="page" href="#">
                   <img src="{{ image }}" alt="logo" width="30" height="30" id="user-profile" class="img-circle" />
                   <span>{{ username }}</span>
                 </a>
               </li>
-              <li class="nav-item dropdown btn">
+              <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="true"></a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                   <li>
@@ -36,15 +36,15 @@
                   </li>
                 </ul>
               </li>
-              <li class="nav-item btn">
+              <li class="nav-item">
                 <a class="nav-link" aria-current="page" href="#"><i class="fa fa-cog"></i></a>
               </li>
-              <li class="nav-item btn">
+              <li class="nav-item">
                 <a class="nav-link" aria-current="page" href="{{ logout }}"><i class="fa fa-sign-out"></i></a>
               </li>
             </ul>
           </div>
-        </form>
+        </nav>
       {# </nav> #}
     {% endif %}    
   </div>

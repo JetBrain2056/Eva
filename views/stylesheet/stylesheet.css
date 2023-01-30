@@ -58,7 +58,10 @@ footer {
 	background-color: #282c34;
 	flex-wrap: wrap;
 }
-
+a:hover{
+	color: #00ff93;
+	transition: color .3s linear;
+}
 
 h1, h2, h3, h4, h5, h6, p {
 	margin-top: auto;
@@ -86,6 +89,7 @@ h1, h2, h3, h4, h5, h6, p {
 	color: #00ff93 !important;
 	border: 1px solid #00ff92 !important;
 	border-radius: 8px;
+	transition: all .2s linear;
 }
 .btn-primary:hover{
 	color: #58fcb8 !important;

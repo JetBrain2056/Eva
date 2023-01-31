@@ -134,7 +134,6 @@ async function create_user(user) {
   }
   return res;
 }   
-
 async function user_create() {
   console.log("user_create"); 
 
@@ -173,8 +172,8 @@ async function user_create() {
         await show_user_table();
       }, 100);
     }
-  } catch (ex) {
-    console.log(ex);
+  } catch (e) {
+    console.log(e);
   }
 }
 async function delete_user(user){
@@ -209,10 +208,9 @@ async function user_delete() {
   }
 
   if(result){
-    //let data = await getUsers();
-    //console.log(data);
-    //show_user_table(data); 
-    await show_user_table();
+    setTimeout(async () => {
+      await show_user_table()
+    },100);
     console.log('user_table');
   }
 }

@@ -142,18 +142,18 @@ exports.Create = (req, res) => {
         })  
     })      
 } 
-exports.update = (req, res, next) => {  
+exports.Update = (req, res, next) => {  
 }
-exports.Delete = (req, res) => {   
+exports.Delete = async (req, res) => {   
     console.log("Delete", req.body);
+    try{    
+        if(!req.body) return res.sendStatus(400);     
 
-    if(!req.body) return res.sendStatus(400);     
-
-    const {id} = req.body; 
-
-    User.destroy({where: {id: id, AdmRole: false}})
-        .then(res=>console.log(res))
-        .catch(err=>console.log(err))
-    
-    return res.json("Success");    
+        const {id} = req.body; 
+        const user = User.destroy({where: {id: id, AdmRole: false}});                      
+        
+        return res.json(user);  
+    }catch(e){
+        console.log(e);
+    }
 } 

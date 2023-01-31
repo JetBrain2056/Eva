@@ -145,6 +145,7 @@ exports.Create = (req, res) => {
 exports.update = (req, res, next) => {  
 }
 exports.Delete = (req, res) => {   
+    console.log("Delete", req.body);
 
     if(!req.body) return res.sendStatus(400);     
 

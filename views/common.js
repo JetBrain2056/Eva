@@ -1,9 +1,11 @@
 let select_rows = [];
+let data = {};
 
 const user_tbl = document.getElementById('user_table');
-if(user_tbl){user_tbl.addEventListener('click', row_select)}
+if (user_tbl) {user_tbl.addEventListener('click', row_select)}
 
 function row_select(e) {      
+  console.log("row_select"); 
   //console.log(e.path[1]);                
   //console.log(e.target);
 
@@ -54,18 +56,16 @@ function row_select(e) {
   }
 }
 async function user_table() {
-
-  let data = await getUsers();
-  //show_user_table(data) 
-  setTimeout(show_user_table(data),2000)
-  user_tbl.Show;  
-
+  console.log("user_table"); 
+  return data = await getUsers();
+  //show_user_table(data)  
+  //let result=  await show_user_table(data)
+  //console.log(result);
+  //user_tbl.Show;   
 }
- function show_user_table(data) {
-  //const response = await fetch('http://192.168.1.8:3000/users');
-  //const data = await response.json();
-
-  //if(user_tbl){return}
+ async function show_user_table() {
+  console.log("show_user_table"); 
+  let data = await getUsers();
   user_tbl.innerHTML = "";
 
   const thead = document.createElement('thead');
@@ -99,35 +99,44 @@ async function user_table() {
       td.textContent = p[element];   
     }    
   }    
-  user_tbl.Show;   
+  //user_tbl.Show;   
   console.log(new Date()); 
 }
 /////////////////////////////////////////////////////////////////////////////
 
-async function getUsers(){
-  return fetch('/users')    
-  .then(res => res.json())
-  .then(data => { return  data });
+async function getUsers() {
+  console.log("getUsers"); 
+  let res;
+  try{
+    const response = await fetch('/users'); 
+    res = await response.json();
+  } catch (err) {
+    console.log(err)
+  }
+  return res;
 }
-async function create_user(user){
-  return fetch('/create', { 
-    method  : 'post',  
-    headers : {"Content-type": "application/x-www-form-urlencoded; charset=UTF-8"},       
-    //headers: {"Content-Type": "application/json"},
-    //body: JSON.stringify(user)
-    body: new URLSearchParams(user),
-    //body    : 'Name=test&Descr=test' 
-  })
-  .then(res => res.json())  
-  .then(data => {  
-    console.log('Request succeeded with JSON response', data);  
-    return true;     
-  })  
-  .catch(error => {
-    console.log('Request failed', error);
-  }); 
+
+async function create_user(user) {
+  console.log("create_user", user); 
+  let res;
+  try {
+    let response = await fetch('/create', { 
+      method  : 'post',  
+      headers : { "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" },       
+      //headers: {"Content-Type": "application/json"},
+      //body: JSON.stringify(user)
+      body: new URLSearchParams(user),
+      //body    : 'Name=test&Descr=test' 
+    });
+    res = await response.json();
+  } catch(ex) {
+    console.log(ex);
+  }
+  return res;
 }   
+
 async function user_create() {
+  console.log("user_create"); 
 
   const input_username    = document.getElementById('input-username');
   const input_password    = document.getElementById('input-password');
@@ -135,10 +144,12 @@ async function user_create() {
   const input_descr       = document.getElementById('input-descr');
   const input_eauth       = document.getElementById('input-eauth');
 
-  if (input_password.value !== input_confirmpass.value)
-  {alert("Не верное подтверждение пароля!"); return "";}
+  if (input_password.value !== input_confirmpass.value) {
+    alert("Не верное подтверждение пароля!"); 
+    return "";
+  }
 
-  if (!input_username.value){alert("Не заполнено имя пользователя!"); return "";}
+  if (!input_username.value) {alert("Не заполнено имя пользователя!"); return "";}
   
   const user =  {
       'Name'    : input_username.value,
@@ -150,33 +161,39 @@ async function user_create() {
   };
   console.log(user);
  
-  let result = await create_user(user)
-   
-  console.log(result); 
+  try {
+    let result = await create_user(user)
+    console.log(result); 
 
-  if(result){
-    // let data = await getUsers();    
-    // console.log(data);
-    // show_user_table(data); 
-    await user_table();
-    console.log('user_table');
+    if (result) {
+      // let data = await getUsers();    
+      // console.log(data);
+      // show_user_table(data);
+      setTimeout(async () => {
+        await show_user_table();
+      }, 100);
+    }
+  } catch (ex) {
+    console.log(ex);
   }
 }
 async function delete_user(user){
-  return  fetch('/delete', { 
-    method  : 'post',  
-    headers : {"Content-type": "application/x-www-form-urlencoded; charset=UTF-8"},        
-    //headers: {"Content-Type": "application/json"},
-    //body: JSON.stringify(user)
-    body: new URLSearchParams(user),
-    //body    : 'id=13' 
-    })
-    .then(res =>res.json())  
-    .then(data => {  
-      console.log('Request succeeded with JSON response', data);  
-      return true;     
-    })  
-    .catch(error => {console.log('Request failed', error)})  
+  console.log("delete_user", user);
+  let res;
+  try {
+    let response = await fetch('/delete', { 
+      method  : 'post',  
+      //headers : {"Content-type": "application/x-www-form-urlencoded; charset=UTF-8"},        
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(user)
+      //body: new URLSearchParams(user),
+      //body    : 'id=13' 
+    });
+    res = await response.json();
+  } catch (ex) {
+    console.log(ex);
+  }
+  return res;
 }
 async function user_delete() {
 
@@ -195,10 +212,10 @@ async function user_delete() {
     //let data = await getUsers();
     //console.log(data);
     //show_user_table(data); 
-    await user_table();
+    await show_user_table();
     console.log('user_table');
   }
 }
-window.onload = function() { 
-  user_table();
+window.onload = () => { 
+  show_user_table();
 }         

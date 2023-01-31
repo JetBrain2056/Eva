@@ -1,6 +1,7 @@
 // requirements
 require('dotenv').config();
 const express            = require('express');
+const bodyParser         = require('body-parser');
 const sequelize          = require('./db');
 const { router }         = require('./routers/router.js');
 
@@ -8,6 +9,7 @@ const port   = process.env.PORT||3000;
 const host   = process.env.HOST||'0.0.0.0'||'127.0.0.1';
 const server = express();
 
+server.use(bodyParser.json());
 server.set('view engine', 'twig');
 server.set('view options', {layout: false});
 server.set("twig options", {

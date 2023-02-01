@@ -8,18 +8,6 @@ const { column_left } = require('./language/'+lg_lg+'/common/column_left.js');
 const { dashboard }   = require('./language/'+lg_lg+'/common/dashboard.js');
 const { footer }      = require('./language/'+lg_lg+'/common/footer.js');
 const { security }    = require('./language/'+lg_lg+'/common/security.js');
-
-let $_asideList = [
-    {href: '#',title: 'Подсистемы' },
-    {href: '#',title: 'Справочники'},
-    {href: '#',title: 'Константы'  },
-    {href: '#',title: 'Документы'  },
-    {href: '#',title: 'Обработки'  },
-    {href: '#',title: 'Регистры'   },
-    {href: '#',title: 'Модули'     },
-    {href: '#',title: 'Отчеты'     },
-    {href: '#',title: 'Роли'       },
-]
  
 let content = {
     home               : '/',
@@ -64,7 +52,15 @@ let content = {
     text_logout            : header.$_text_logout,
 
     //column_left
-    asideList              : $_asideList,
+    asideList              : [{href : '#', title : column_left.$_title_1 },
+                              {href : '#', title : column_left.$_title_2 },
+                              {href : '#', title : column_left.$_title_3 },
+                              {href : '#', title : column_left.$_title_4 },
+                              {href : '#', title : column_left.$_title_5 },    
+                              {href : '#', title : column_left.$_title_6 },
+                              {href : '#', title : column_left.$_title_7 },
+                              {href : '#', title : column_left.$_title_8 },   
+                              {href : '#', title : column_left.$_title_9 }],
     text_api               : column_left.$_text_api,
     text_attribute         : column_left.$_text_attribute,
     text_attribute_group   : column_left.$_text_attribute_group,

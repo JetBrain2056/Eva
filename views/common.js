@@ -54,15 +54,7 @@ function row_select(e) {
       console.log(text);
   }
 }
-async function user_table() {
-  console.log("user_table"); 
-  return data = await getUsers();
-  //show_user_table(data)  
-  //let result=  await show_user_table(data)
-  //console.log(result);
-  //user_tbl.Show;   
-}
- async function show_user_table() {
+async function show_user_table() {
   console.log("show_user_table"); 
   let data = await getUsers();
   user_tbl.innerHTML = "";
@@ -97,9 +89,7 @@ async function user_table() {
       tr.appendChild(td);                    
       td.textContent = p[element];   
     }    
-  }    
-  //user_tbl.Show;   
-  console.log(new Date()); 
+  }   
 }
 /////////////////////////////////////////////////////////////////////////////
 
@@ -124,13 +114,13 @@ async function create_user(user) {
       body: JSON.stringify(user)            
     });
     res = await response.json();
-  } catch(ex) {
-    console.log(ex);
+  } catch(e) {
+    console.log(e);
   }
   return res;
 }   
 async function user_create() {
-  console.log("user_create"); 
+  console.log('user_create'); 
 
   const input_username    = document.getElementById('input-username');
   const input_password    = document.getElementById('input-password');
@@ -139,11 +129,11 @@ async function user_create() {
   const input_eauth       = document.getElementById('input-eauth');
 
   if (input_password.value !== input_confirmpass.value) {
-    alert("Не верное подтверждение пароля!"); 
-    return "";
+    alert('Не верное подтверждение пароля!'); 
+    return '';
   }
 
-  if (!input_username.value) {alert("Не заполнено имя пользователя!"); return "";}
+  if (!input_username.value) {alert('Не заполнено имя пользователя!'); return '';}
   
   const user =  {
       'Name'    : input_username.value,
@@ -160,9 +150,9 @@ async function user_create() {
     console.log(result); 
 
     if (result) {
-      setTimeout(async () => {
+      //setTimeout(async () => {
         await show_user_table();
-      }, 100);
+     // }, 100);
     }
   } catch (e) {
     console.log(e);
@@ -197,9 +187,9 @@ async function user_delete() {
   }
 
   if(result){
-    setTimeout(async () => {
+    //setTimeout(async () => {
       await show_user_table()
-    },100);     
+    //},100);     
   }
 }
 window.onload = () => { 

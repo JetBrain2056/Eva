@@ -103,7 +103,9 @@ exports.getAll = (req, res, next) => {
     User.findAll({raw:true}).then(Users => { 
         res.send(Users);       
         next();
-    }).catch(err=>console.log(err));       
+    })
+    //.then(user=>console.log(user))
+    .catch(err=>console.log(err));       
 }
 exports.getOne = (req, res, next) => {   
 }
@@ -111,24 +113,25 @@ exports.Create = async (req, res) => {
     
     if(!req.body) return res.sendStatus(400);     
     const {Name, Descr, Password, RolesID, EAuth, Show} = req.body;  
-     
-    hashPassword(Password,10).then(
-        hash => {
-        console.log(hash)
-        User.count().then(result => {console.log('User count: ',result)               
-            if (result === 0) {                                        
-                Role.create({Name: 'Administrator'}).catch(err=>console.log(err));              
-                User.create({
-                    Name    : Name, //'Admin',
-                    Descr   : Descr,//'Admin',
-                    Password : hash,
-                    RolesID : 1,
-                    EAuth   : true,
-                    Show    : true,
-                    AdmRole : true
-                    }).catch(err=>console.log(err));              
-            }else{
-                User.create({        
+    try{
+        const hash = await hashPassword(Password,10);   
+        console.log(hash);
+        const result = await User.count();
+        console.log('User count: ',result);              
+        if (result === 0) {                                        
+            await Role.create({Name: 'Administrator'});              
+            await User.create({
+                Name    : Name, //'Admin',
+                Descr   : Descr,//'Admin',
+                Password : hash,
+                RolesID : 1,
+                EAuth   : true,
+                Show    : true,
+                AdmRole : true
+                });              
+        }else{
+            try {
+                const user = await User.create({        
                     Name    : Name, 
                     Descr   : Descr,  
                     Password : hash,
@@ -136,11 +139,15 @@ exports.Create = async (req, res) => {
                     EAuth   : EAuth,  
                     Show    : Show,
                     AdmRole : false
-                }).catch(err=>console.log(err));  
-            }           
-            return res.json("Success");
-        })  
-    })      
+                })
+                return res.json("Success"); 
+            }catch(e){
+                console.log(e); 
+            } 
+        }                           
+    }catch(e){
+        console.log(e);
+    }     
 } 
 exports.Update = (req, res, next) => {  
 }
@@ -150,10 +157,10 @@ exports.Delete = async (req, res) => {
         if(!req.body) return res.sendStatus(400);     
 
         const {id} = req.body; 
-        const user = User.destroy({where: {id: id, AdmRole: false}});                      
+        const user = await User.destroy({where: {id: id, AdmRole: false}});                      
         
         return res.json(user);  
     }catch(e){
         console.log(e);
     }
-} 
+}  

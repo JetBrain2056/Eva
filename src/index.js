@@ -1,4 +1,10 @@
-let lg_lg  = 'ru-ru';
+// let Lang = '';
+ let lg_lg = '';
+// if (Lang === 'rus') {
+    lg_lg  = 'ru-ru';
+// } else {
+//     lg_lg  = 'en-en';
+// }
 
 //language
 const { root }        = require('./language/'+lg_lg+'/root.js');

@@ -140,7 +140,8 @@ exports.Create = async (req, res) => {
                     Show    : Show,
                     AdmRole : false
                 })
-                return res.json("Success"); 
+                console.log(user);
+                return await res.json("Success"); 
             }catch(e){
                 console.log(e); 
             } 
@@ -159,7 +160,7 @@ exports.Delete = async (req, res) => {
         const {id} = req.body; 
         const user = await User.destroy({where: {id: id, AdmRole: false}});                      
         
-        return res.json(user);  
+        return await res.json(user);  
     }catch(e){
         console.log(e);
     }

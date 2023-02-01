@@ -99,13 +99,14 @@ exports.Signin = (req,res,next) => {
         }).catch(err=>console.log(err));                   
     }         
 } 
-exports.getAll = (req, res, next) => {
-    User.findAll({raw:true}).then(Users => { 
-        res.send(Users);       
+exports.getAll = async (req, res, next) => {
+    try {
+        const users = await User.findAll({raw:true})
+        await res.send(users);       
         next();
-    })
-    //.then(user=>console.log(user))
-    .catch(err=>console.log(err));       
+    } catch(e) {
+        console.log(e); 
+    }     
 }
 exports.getOne = (req, res, next) => {   
 }
@@ -121,15 +122,15 @@ exports.Create = async (req, res) => {
         if (result === 0) {                                        
             await Role.create({Name: 'Administrator'});              
             await User.create({
-                Name    : Name, //'Admin',
-                Descr   : Descr,//'Admin',
+                Name    : Name, 
+                Descr   : Descr,
                 Password : hash,
                 RolesID : 1,
                 EAuth   : true,
                 Show    : true,
                 AdmRole : true
                 });              
-        }else{
+        } else {
             try {
                 const user = await User.create({        
                     Name    : Name, 

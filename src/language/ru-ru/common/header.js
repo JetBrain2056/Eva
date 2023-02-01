@@ -4,7 +4,6 @@ let header = {
 
     // Text
     $_text_profile  : 'Ваш профиль',
-    $_text_store    : 'Магазин',
     $_text_help     : 'Помощь',
     $_text_homepage : 'Сайт ',
     $_text_support  : 'Форум',

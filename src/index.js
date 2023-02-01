@@ -14,7 +14,7 @@ let content = {
     logout             : '/',
     logo               : './image/logo192.png',
     image              : './image/astronautSpace.png',
-    shortIcon              : './image/astronautSpace.ico',
+    shortIcon          : './image/astronautSpace.ico',
     name               : 'EVA',
     Ent                : 'Enterprise',
     Dev                : 'Developer',
@@ -24,6 +24,13 @@ let content = {
     //root
     lang               : root.$_code,
     button_close       : root.$_button_close,
+    button_add         : root.$_button_add,
+    button_delete      : root.$_button_delete,
+    button_edit        : root.$_button_edit,
+    button_copy        : root.$_button_copy,
+    button_update      : root.$_button_update,
+    button_etc         : root.$_button_etc,
+    button_save        : root.$_button_save,
 
     //login    
     text_heading           : login.$_text_heading,
@@ -113,6 +120,7 @@ let content = {
     //dashboard
     heading_title  : dashboard.$_heading_title,    
     error_install  : dashboard.$_error_install,
+    text_addusers  : dashboard.$_text_addusers,
 
     //footer
     text_footer    : footer.$_text_footer,

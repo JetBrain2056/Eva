@@ -186,6 +186,6 @@ async function user_delete() {
     //},100);     
   }
 }
-window.onload = () => { 
-  show_user_table();
+window.onload = async () => { 
+  await show_user_table();
 }         

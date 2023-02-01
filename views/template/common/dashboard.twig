@@ -8,29 +8,29 @@
   </nav>
   <div class="tab-content" id="nav-tabContent">
     <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-      <div class="btn-toolbar" role="toolbar" aria-label="Панель инструментов c группами кнопок">
+      <div class="btn-toolbar" role="toolbar" aria-label="toolbar group">
         <div class="btn-group btn-group-sm" role="group">
           <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" data-bs-toggle="modal" data-bs-target="#usersModal">
             <i class="fa fa-user-plus"></i>
-            <span>Добавить</span>
+            <span>{{ button_add }}</span>
           </button> 
           <button type="button" class="btn btn-primary d-flex gap-2 align-items-center">
             <i class="fa fa-edit"></i>
-            <span>Редактировать</span>
+            <span>{{ button_edit }}</span>
           </button>
           <button type="button" class="btn btn-primary d-flex gap-2 align-items-center">
             <i class="fa fa-clone" aria-hidden="true"></i>
-            <span>Копировать</span>
+            <span>{{ button_copy }}</span>
           </button>
           <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" onclick="user_delete()">
             <i class="fa fa-user-times"></i>
-            <span>Удалить</span>
+            <span>{{ button_delete }}</span>
           </button>
           <div class="btn-group btn-group-sm" role="group">              
             <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></button>
             <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-              <li><a class="dropdown-item d-flex gap-2 align-items-center"><i class="fa fa-refresh"></i>Обновить</a></li>
-              <li><a class="dropdown-item">Дополнительно</a></li>
+              <li><a class="dropdown-item d-flex gap-2 align-items-center"><i class="fa fa-refresh"></i>{{ button_update }}</a></li>
+              <li><a class="dropdown-item">{{ button_etc}}</a></li>
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item">...</a></li>
             </ul>                
@@ -49,7 +49,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="usersModalLabel">Добавить пользователя</h5>
+        <h5 class="modal-title" id="usersModalLabel">{{ text_addusers }}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
       </div>
       <div class="modal-body">
@@ -82,7 +82,7 @@
           </form>  
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" onclick="user_create()">Сохранить</button>        
+        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" onclick="user_create()">{{ button_save }}</button>        
       </div>
     </div>
   </div>

@@ -1,6 +1,6 @@
-const { User, Role } = require('../models/models.js');
-const { content }    = require('../index.js');
-const bcrypt         = require('bcrypt');
+const { User, Role }    = require('../models/models.js');
+const { content, Lang } = require('../index.js');
+const bcrypt            = require('bcrypt');
 //const jwt            = require('jsonwebtoken');
 
 // const generateJwt = (id, login, role) => {
@@ -32,6 +32,11 @@ async function hashPassword(password, saltRounds = 10) {
     // Return null if error
     return null;
 }
+exports.Lang = (req,res) => {
+    if (!req.body) return res.sendStatus(400); 
+    const {lang} = req.body;      
+    Lang = 'rus';
+}    
 exports.Auth = (req,res) => {
     content.logged = false;       
     res.render('index.twig', content); 

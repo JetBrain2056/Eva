@@ -9,7 +9,7 @@ router.get('/', controller.Auth);
 router.post('/', controller.Signin);
 
 //Post index data    
-//router.get('/common/dashboard', controller.Signin);
+router.post('/lang', controller.Lang);
 
 //router.post('/signup', UserController.signup)
 //router.post('/login', UserController.login)

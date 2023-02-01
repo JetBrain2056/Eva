@@ -1,6 +1,6 @@
 # Eva
 Business application development platform.
-Demo platform with MVC architecture and CRUD API.
+Demo platform with MVC architecture, CRUD Rest API and Server-Side Rendering (SSR).
 
 
 ## Instalation

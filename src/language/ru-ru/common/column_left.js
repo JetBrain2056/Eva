@@ -75,19 +75,16 @@ let column_left = {
     $_text_openbay_dashboard    : 'Dashboard',
     $_text_openbay_orders       : 'Bulk order update',
     $_text_openbay_items        : 'Manage items',
-    $_text_openbay_ebay         : 'eBay',
-    $_text_openbay_amazon       : 'Amazon (EU)',
-    $_text_openbay_amazonus     : 'Amazon (US)',
     $_text_openbay_etsy         : 'Etsy',
     $_text_openbay_settings     : 'Settings',
     $_text_openbay_links        : 'Item links',
     $_text_openbay_report_price : 'Pricing report',
     $_text_openbay_order_import : 'Order import',
-    $_text_paypal               : 'PayPal',
     $_text_paypal_search        : 'Поиск транзакции',
     $_text_complete_status      : 'Заказы завершенные',
     $_text_processing_status    : 'Заказы в процессе',
-    $_text_other_status         : 'Остальные заказы'
+    $_text_other_status         : 'Остальные заказы',
+    $_text_configmenu           : 'Конфигурация'
 }
 
 module.exports =   { column_left }

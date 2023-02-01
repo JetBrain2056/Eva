@@ -1,5 +1,4 @@
 let select_rows = [];
-let data = {};
 
 const user_tbl = document.getElementById('user_table');
 if (user_tbl) {user_tbl.addEventListener('click', row_select)}
@@ -115,18 +114,14 @@ async function getUsers() {
   }
   return res;
 }
-
 async function create_user(user) {
   console.log("create_user", user); 
   let res;
   try {
     let response = await fetch('/create', { 
-      method  : 'post',  
-      headers : { "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" },       
-      //headers: {"Content-Type": "application/json"},
-      //body: JSON.stringify(user)
-      body: new URLSearchParams(user),
-      //body    : 'Name=test&Descr=test' 
+      method  : 'post',    
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(user)            
     });
     res = await response.json();
   } catch(ex) {
@@ -165,9 +160,6 @@ async function user_create() {
     console.log(result); 
 
     if (result) {
-      // let data = await getUsers();    
-      // console.log(data);
-      // show_user_table(data);
       setTimeout(async () => {
         await show_user_table();
       }, 100);
@@ -181,12 +173,9 @@ async function delete_user(user){
   let res;
   try {
     let response = await fetch('/delete', { 
-      method  : 'post',  
-      //headers : {"Content-type": "application/x-www-form-urlencoded; charset=UTF-8"},        
+      method  : 'post',        
       headers: {"Content-Type": "application/json"},
-      body: JSON.stringify(user)
-      //body: new URLSearchParams(user),
-      //body    : 'id=13' 
+      body: JSON.stringify(user)            
     });
     res = await response.json();
   } catch (ex) {
@@ -195,13 +184,13 @@ async function delete_user(user){
   return res;
 }
 async function user_delete() {
-
+  console.log('user_delete');
   let result = {};
   for (const row of select_rows){
     
     console.log(row.cells[0].innerText);
 
-    const user = { 'id': row.cells[0].innerText};
+    const user = {'id': row.cells[0].innerText};
 
     result = await delete_user(user);
     console.log(result);
@@ -210,8 +199,7 @@ async function user_delete() {
   if(result){
     setTimeout(async () => {
       await show_user_table()
-    },100);
-    console.log('user_table');
+    },100);     
   }
 }
 window.onload = () => { 

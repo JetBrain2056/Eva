@@ -1,10 +1,4 @@
-// let Lang = '';
- let lg_lg = '';
-// if (Lang === 'rus') {
-    lg_lg  = 'ru-ru';
-// } else {
-//     lg_lg  = 'en-en';
-// }
+const lg_lg = process.env.LANG;
 
 //language
 const { root }        = require('./language/'+lg_lg+'/root.js');

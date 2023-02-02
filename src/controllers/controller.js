@@ -35,7 +35,7 @@ async function hashPassword(password, saltRounds = 10) {
 exports.Lang = (req,res) => {
     if (!req.body) return res.sendStatus(400); 
     const {lang} = req.body;      
-    Lang = 'rus';
+    //Lang = 'rus';
 }    
 exports.Auth = (req,res) => {
     content.logged = false;       

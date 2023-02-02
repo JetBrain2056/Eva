@@ -1,4 +1,4 @@
-const lg_lg = process.env.LANG;
+const lg_lg = process.env.LANGUAGE||'ru-ru'; 
 
 //language
 const { root }        = require('./language/'+lg_lg+'/root.js');

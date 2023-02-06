@@ -144,9 +144,7 @@ async function user_create() {
     console.log(result); 
 
     if (result) {
-      //setTimeout(async () => {
         await show_user_table();
-     // }, 100);
     }
   } catch (e) {
     console.log(e);
@@ -181,9 +179,7 @@ async function user_delete() {
   }
 
   if(result){
-    //setTimeout(async () => {
       await show_user_table()
-    //},100);     
   }
 }
 window.onload = async () => { 

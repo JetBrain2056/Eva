@@ -60,7 +60,7 @@ exports.Signin = async (req,res,next) => {
         content.logged = false;
     }            
 
-    if (username === '') {
+    if (!username) {
         content.logged = false;                              
         res.render('index.twig', content);            
     } else {
@@ -72,12 +72,12 @@ exports.Signin = async (req,res,next) => {
         } else {                        
             if (username === Users.Name) {                          
                 console.log('true user name : ', Users.Name);
-                if (Users.Password !== null&&Users.Password !== '') {
+                if (Users.Password && Users.Password) {
                     console.log('user password: ', password);
                     console.log('hash password: ', Users.Password);
                     const comparePassword = await bcrypt.compare(password, Users.Password)                               
                     console.log(comparePassword)                                
-                    if (comparePassword === false) {                                    
+                    if (!comparePassword) {
                         content.logged = false;  
                         console.log('Wrong password!');                                                                                             
                     } else {                                                                          

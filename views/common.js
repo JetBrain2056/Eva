@@ -1,7 +1,7 @@
 let select_rows = [];
 
 const user_tbl = document.getElementById('user_table');
-if (user_tbl) {user_tbl.addEventListener('click', row_select)}
+if (user_tbl) user_tbl.addEventListener('click', row_select);
 
 function row_select(e) {      
   console.log('row_select'); 
@@ -122,12 +122,9 @@ async function user_create() {
   const input_descr       = document.getElementById('input-descr');
   const input_eauth       = document.getElementById('input-eauth');
 
-  if (input_password.value !== input_confirmpass.value) {
-    alert('Не верное подтверждение пароля!'); 
-    return '';
-  }
+  if (input_password.value !== input_confirmpass.value) alert('Неверное подтверждение пароля!');
 
-  if (!input_username.value) {alert('Не заполнено имя пользователя!'); return '';}
+    if (!input_username.value) alert('Не заполнено имя пользователя!');
   
   const user =  {
       'Name'    : input_username.value,
@@ -144,9 +141,7 @@ async function user_create() {
     console.log(result); 
 
     if (result) {
-      //setTimeout(async () => {
         await show_user_table();
-     // }, 100);
     }
   } catch (e) {
     console.log(e);
@@ -181,9 +176,7 @@ async function user_delete() {
   }
 
   if(result){
-    //setTimeout(async () => {
       await show_user_table()
-    //},100);     
   }
 }
 window.onload = async () => { 

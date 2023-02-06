@@ -31,6 +31,6 @@ To install dependencies use `npm i`
   DB_PASSWORD=postgres
   DB_HOST=localhost
   DB_PORT=5432
-  SECRET_KEY=random_secret_key123
+  LANGUAGE=ru-ru
 ```
 > HOST can also be 127.0.0.1

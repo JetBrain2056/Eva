@@ -13,7 +13,7 @@
           <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" data-bs-toggle="modal" data-bs-target="#usersModal">
             <i class="fa fa-user-plus"></i>
             <span>{{ button_add }}</span>
-          </button> 
+          </button>
           <button type="button" class="btn btn-primary d-flex gap-2 align-items-center">
             <i class="fa fa-edit"></i>
             <span>{{ button_edit }}</span>
@@ -26,22 +26,22 @@
             <i class="fa fa-user-times"></i>
             <span>{{ button_delete }}</span>
           </button>
-          <div class="btn-group btn-group-sm" role="group">              
+          <div class="btn-group btn-group-sm" role="group">
             <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></button>
             <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
               <li><a class="dropdown-item d-flex gap-2 align-items-center"><i class="fa fa-refresh"></i>{{ button_update }}</a></li>
               <li><a class="dropdown-item">{{ button_etc}}</a></li>
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item">...</a></li>
-            </ul>                
-          </div>    
-        </div>       
-      </div>        
-      <div class="h-100 overflow-scroll"> 
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="h-100 overflow-scroll">
         <table id="user_table"  class="h-100 table table-striped table-hover table-sm table-responsive"></table>
       </div>
     </div>
-  </div>       
+  </div>
 </div>
 {# {% include "./security.twig" %} #}
 {# Modal #}
@@ -53,35 +53,35 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
       </div>
       <div class="modal-body">
-          <form class="form" id="create-form">              
-            <label for="input-username">Name:</label>            
-            <div class="input-group">
-              <input type="text" name="username" value="" placeholder="Name" id="input-username" class="form-control"/>            
-            </div>            
-            <label for="input-descr">Descr:</label>
-            <div class="input-group">
-              <input type="text" name="Descr" value="" placeholder="Full name" id="input-descr" class="form-control"/>            
-            </div>  
-            <label for="input-email">E-mail:</label>
-            <div class="input-group">
-              <input type="text" name="email" value="" placeholder="email@example.com" id="input-email" class="form-control"/>            
-            </div>
-            <label for="input-password">Password:</label>            
-            <div class="input-group">
-              <input type="password" name="password" value="" placeholder="Password" id="input-password" class="form-control"/>                            
-            </div>                                     
-            <label for="input-confirmpass">Confirm password:</label>
-            <div class="input-group">
-             <input type="password" name="confirmpass" value="" placeholder="Password" id="input-confirmpass" class="form-control"/>
-            </div>  
-            <label for="input-eauth">Enterprise authentication:</label>            
-            <div class="form-group">
-              <input type="checkbox" class="form-check-input" name="eauth" id="input-eauth"  checked/>
-            </div>  
-          </form>  
+        <form class="form" id="create-form">
+          <label for="input-username">Name:</label>
+          <div class="input-group">
+            <input type="text" name="username" value="" placeholder="Name" id="input-username" class="form-control"/>
+          </div>
+          <label for="input-descr">Descr:</label>
+          <div class="input-group">
+            <input type="text" name="Descr" value="" placeholder="Full name" id="input-descr" class="form-control"/>
+          </div>
+          <label for="input-email">E-mail:</label>
+          <div class="input-group">
+            <input type="text" name="email" value="" placeholder="email@example.com" id="input-email" class="form-control"/>
+          </div>
+          <label for="input-password">Password:</label>
+          <div class="input-group">
+            <input type="password" name="password" value="" placeholder="Password" id="input-password" class="form-control"/>
+          </div>
+          <label for="input-confirmpass">Confirm password:</label>
+          <div class="input-group">
+            <input type="password" name="confirmpass" value="" placeholder="Password" id="input-confirmpass" class="form-control"/>
+          </div>
+          <label for="input-eauth">Enterprise authentication:</label>
+          <div class="form-group">
+            <input type="checkbox" class="form-check-input" name="eauth" id="input-eauth" checked/>
+          </div>
+        </form>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" onclick="user_create()">{{ button_save }}</button>        
+        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" onclick="user_create()">{{ button_save }}</button>
       </div>
     </div>
   </div>

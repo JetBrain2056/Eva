@@ -5,12 +5,12 @@ const { DataTypes } = require('sequelize')
 //console.log('DB DROP and CREATE all tables!')
 
 const User = sequelize.define('User', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},    
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     Name: {type: DataTypes.STRING, unique: true},
     Descr: {type: DataTypes.STRING},
     RolesID: {type: DataTypes.INTEGER, defaultValue: 1},
     EAuth: {type: DataTypes.BOOLEAN},
-    Show: {type: DataTypes.BOOLEAN},        
+    Show: {type: DataTypes.BOOLEAN},
     Password: {type: DataTypes.STRING},
     email: {type: DataTypes.STRING},
     AdmRole: {type: DataTypes.BOOLEAN, defaultValue: 'false'}
@@ -22,7 +22,7 @@ const Role = sequelize.define('Role', {
 })
 
 const Config = sequelize.define('Config', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true}    
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true}
 })
 
 Role.hasOne(User)

@@ -28,142 +28,142 @@ async function hashPassword(password, saltRounds = 10) {
     } catch(err) {
         console.log(err);
     }
-  
+
     // Return null if error
     return null;
 }
 exports.Lang = (req,res) => {
-    if (!req.body) return res.sendStatus(400); 
-    const {lang} = req.body;      
+    if (!req.body) return res.sendStatus(400);
+    const {lang} = req.body;
     //Lang = 'rus';
-}    
+}
 exports.Auth = (req,res) => {
-    content.logged = false;       
-    res.render('index.twig', content); 
-}  
+    content.logged = false;
+    res.render('index.twig', content);
+}
 exports.Signin = async (req,res,next) => {
 
-    if (!req.body) return res.sendStatus(400);     
+    if (!req.body) return res.sendStatus(400);
 
     const username = req.body.username;
     const password = req.body.password;
 
-    const result = await User.count()        
+    const result = await User.count()
     console.log('User count: ',result);
 
-    if (result === 0) { 
+    if (result === 0) {
         content.logged    = true;
         content.username  = '';
-        content.firstname = '';  
-        res.render('index.twig', content);             
+        content.firstname = '';
+        res.render('index.twig', content);
     } else {
         content.logged = false;
-    }            
+    }
 
     if (!username) {
-        content.logged = false;                              
-        res.render('index.twig', content);            
+        content.logged = false;
+        res.render('index.twig', content);
     } else {
         const Users = await User.findOne({where: {Name: username}})
         if (!Users) {
             content.logged = false;
-            console.log(Users);   
-            res.render('index.twig', content);                                    
-        } else {                        
-            if (username === Users.Name) {                          
+            console.log(Users);
+            res.render('index.twig', content);
+        } else {
+            if (username === Users.Name) {
                 console.log('true user name : ', Users.Name);
                 if (Users.Password && Users.Password) {
                     console.log('user password: ', password);
                     console.log('hash password: ', Users.Password);
-                    const comparePassword = await bcrypt.compare(password, Users.Password)                               
-                    console.log(comparePassword)                                
+                    const comparePassword = await bcrypt.compare(password, Users.Password)
+                    console.log(comparePassword)
                     if (!comparePassword) {
-                        content.logged = false;  
-                        console.log('Wrong password!');                                                                                             
-                    } else {                                                                          
+                        content.logged = false;
+                        console.log('Wrong password!');
+                    } else {
                         content.logged    = true;
                         content.username  = Users.Name;
-                        content.firstname = Users.Descr;      
-                        console.log('Good password!');                                                                                                                                       
-                    }    
-                    res.render('index.twig', content);                    
-                } else {                                                                                                                                                                                                                                              
+                        content.firstname = Users.Descr;
+                        console.log('Good password!');
+                    }
+                    res.render('index.twig', content);
+                } else {
                     content.logged    = true;
                     content.username  = Users.Name;
-                    content.firstname = Users.Descr;   
-                    console.log('Empty password');                                                                                                           
-                    res.render('index.twig', content);  
-                }                   
+                    content.firstname = Users.Descr;
+                    console.log('Empty password');
+                    res.render('index.twig', content);
+                }
             } else {
-                content.logged = false;                            
-            }                        
-        }                                                                        
-    }         
-} 
+                content.logged = false;
+            }
+        }
+    }
+}
 exports.getAll = async (req, res, next) => {
     try {
         const users = await User.findAll({raw:true})
-        await res.send(users);       
+        await res.send(users);
         next();
     } catch(err) {
-        console.log(err); 
-    }     
+        console.log(err);
+    }
 }
-exports.getOne = (req, res, next) => {   
+exports.getOne = (req, res, next) => {
 }
 exports.Create = async (req, res) => {
-    
-    if (!req.body) return res.sendStatus(400);     
-    const {Name, Descr, Password, RolesID, EAuth, Show} = req.body;  
+
+    if (!req.body) return res.sendStatus(400);
+    const {Name, Descr, Password, RolesID, EAuth, Show} = req.body;
     try {
-        const hash = await hashPassword(Password,10);   
+        const hash = await hashPassword(Password,10);
         console.log(hash);
         const result = await User.count();
-        console.log('User count: ',result);              
-        if (result === 0) {                                        
-            await Role.create({Name: 'Administrator'});              
+        console.log('User count: ',result);
+        if (result === 0) {
+            await Role.create({Name: 'Administrator'});
             await User.create({
-                Name    : Name, 
+                Name    : Name,
                 Descr   : Descr,
                 Password : hash,
                 RolesID : 1,
                 EAuth   : true,
                 Show    : true,
                 AdmRole : true
-                });              
+            });
         } else {
             try {
-                const user = await User.create({        
-                    Name    : Name, 
-                    Descr   : Descr,  
+                const user = await User.create({
+                    Name    : Name,
+                    Descr   : Descr,
                     Password : hash,
-                    RolesID : RolesID,           
-                    EAuth   : EAuth,  
+                    RolesID : RolesID,
+                    EAuth   : EAuth,
                     Show    : Show,
                     AdmRole : false
                 })
                 console.log(user);
-                return await res.json("Success"); 
+                return await res.json("Success");
             } catch(err) {
-                console.log(err); 
-            } 
-        }                           
+                console.log(err);
+            }
+        }
     } catch (err){
         console.log(err);
-    }     
-} 
-exports.Update = (req, res, next) => {  
+    }
 }
-exports.Delete = async (req, res) => {   
+exports.Update = (req, res, next) => {
+}
+exports.Delete = async (req, res) => {
     console.log('Delete', req.body);
-    try {    
-        if (!req.body) return res.sendStatus(400);     
+    try {
+        if (!req.body) return res.sendStatus(400);
 
-        const {id} = req.body; 
-        const user = await User.destroy({where: {id: id, AdmRole: false}});                      
-        
-        return await res.json(user);  
+        const {id} = req.body;
+        const user = await User.destroy({where: {id: id, AdmRole: false}});
+
+        return await res.json(user);
     } catch(err) {
         console.log(err);
     }
-}  
+}

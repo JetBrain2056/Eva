@@ -28,9 +28,6 @@ async function hashPassword(password, saltRounds = 10) {
     } catch(err) {
         console.log(err);
     }
-
-    // Return null if error
-    return null;
 }
 exports.Lang = (req,res) => {
     if (!req.body) return res.sendStatus(400);

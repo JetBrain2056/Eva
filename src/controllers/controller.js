@@ -49,7 +49,7 @@ exports.Signin = async (req,res,next) => {
     const password = req.body.password;
 
     const result = await User.count()
-    console.log('User count: ',result);
+    console.log('User count: ', result);
 
     if (result === 0) {
         content.logged    = true;

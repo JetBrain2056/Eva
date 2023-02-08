@@ -34,11 +34,10 @@ const start = async () => {
   try {
       await sequelize.authenticate()
       await sequelize.sync()
-      
   } catch (e) {
       console.log(e)
   }
 }  
-  
-start()      
+
+start()
 

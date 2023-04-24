@@ -15,10 +15,10 @@ server.set("twig options", {
   strict_variables: false
 });   
 
-server.use("/css"         ,express.static('./node_modules/bootstrap/dist/css'));
-server.use("/js"          ,express.static('./node_modules/bootstrap/dist/js')); 
 server.use("/@popperjs"   ,express.static('./node_modules/@popperjs')); 
+server.use("/js"          ,express.static('./node_modules/bootstrap/dist/js')); 
 server.use("/font-awesome",express.static('./node_modules/font-awesome'));
+server.use("/css"         ,express.static('./node_modules/bootstrap/dist/css'));
 
 server.use(express.static('./views'));
 server.use(express.json());

@@ -34,6 +34,16 @@ header {
 	font-size: 16px;
 }
 
+.content {	
+	height:calc(100vh - 100px)
+}
+
+footer {
+	color: aquamarine;
+	background-color: #282c34;
+	/* flex-wrap: wrap; */
+}
+
 .form-signin {
 	max-width: 400px;
 }
@@ -56,11 +66,6 @@ header {
 	z-index: 2;
 }
 
-footer {
-	color: aquamarine;
-	background-color: #282c34;
-	flex-wrap: wrap;
-}
 a:hover{
 	color: #00ff93;
 	transition: all .3s linear;

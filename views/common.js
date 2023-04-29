@@ -139,6 +139,77 @@ async function user_create() {
         console.log(e);
     }
 }
+async function edit_user(obj) {
+    console.log('edit_user', obj); 
+  
+    let data =  {   
+        'id'      : obj.id,   
+        'name'    : obj.name,
+        'descr'   : obj.descr
+      };   
+  
+    let res;
+    try {
+      let response = await fetch('/updateuser', { 
+          method  : 'post',    
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(data)            
+        });  
+        res = await response.json();                      
+    } catch (e) {
+      console.log(e);
+    }
+
+    return res;
+  }
+async function user_edit_modal() {
+    console.log('user_modal'); 
+  
+    const row = select_rows[0];  
+  
+    const input_name        = document.getElementById('input-edit-username');  
+    const input_descr       = document.getElementById('input-edit-descr');    
+    const input_email       = document.getElementById('input-edit-email');    
+    const input_password    = document.getElementById('input-edit-password');    
+    const input_confirmpass = document.getElementById('input-edit-confirmpass'); 
+    const input_eauth       =  document.getElementById('input-edit-eauth');
+  
+    input_name.value  = row.cells[1].innerText;
+    input_descr.value = row.cells[2].innerText;   
+    input_email.value = '';   
+    input_password.value    = '';   
+    input_confirmpass.value = '';                
+    input_eauth.value       = '';                
+
+}
+async function user_edit() {
+    console.log('user_edit'); 
+  
+    const row = select_rows[0];  
+  
+    const input_name        = document.getElementById('input-edit-username');  
+    const input_descr       = document.getElementById('input-edit-descr');     
+    //const input_email       = document.getElementById('input-edit-email');    
+    //const input_password    = document.getElementById('input-edit-password');    
+    //const input_confirmpass = document.getElementById('input-edit-confirmpass'); 
+    //const input_eauth       =  document.getElementById('input-edit-eauth');   
+    
+    const data =  {
+        'id'      : row.cells[0].innerText,
+        'name'    : input_name.value,
+        'descr'   : input_descr.value
+    };
+  
+    let result;
+    try {
+      result = await edit_user(data)     
+    } catch (e) {
+      console.log(e);
+    }
+    //if (result) {      
+      await show_user_table();     
+    //}
+}
 async function delete_user(user){
     console.log('delete_user', user);
     let res;
@@ -169,6 +240,7 @@ async function user_delete() {
 
     if(result) await show_user_table();
 }
+
 window.onload = async () => {
     await show_user_table();
 }

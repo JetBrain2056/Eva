@@ -149,7 +149,25 @@ exports.Create = async (req, res) => {
         console.log(err);
     }
 }
-exports.Update = (req, res, next) => {
+exports.Update = async (req, res, next) => {
+    console.log('Update', req.body);
+    
+    if (!req.body) return res.sendStatus(400);     
+
+    let { id, name, descr}  = req.body;  
+
+    try {
+        const data = await User.update({ 
+            Name: name, 
+            Descr: descr
+        }, {
+            where: {id: id}
+        })
+        console.log(data);
+        return await res.json("Success"); 
+    } catch(err) {
+        console.log(err); 
+    }   
 }
 exports.Delete = async (req, res) => {
     console.log('Delete', req.body);

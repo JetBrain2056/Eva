@@ -18,7 +18,7 @@ router.post('/lang', controller.Lang);
 router.get('/users', controller.getAll);
 //router.get('/getone/:id([0-9]+)', UserController.getOne)
 router.post('/create', controller.Create)
-//router.put('/update/:id([0-9]+)', UserController.update)
+router.post('/updateuser', controller.Update)
 //router.delete('/delete/:id([0-9]+)', controller.delete)
 router.post('/delete', controller.Delete)
 

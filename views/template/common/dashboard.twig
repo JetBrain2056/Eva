@@ -14,7 +14,7 @@
             <i class="fa fa-user-plus"></i>
             <span>{{ button_add }}</span>
           </button>
-          <button type="button" class="btn btn-primary d-flex gap-2 align-items-center">
+          <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" data-bs-toggle="modal" data-bs-target="#userEditModal" onclick="user_edit_modal()">
             <i class="fa fa-edit"></i>
             <span>{{ button_edit }}</span>
           </button>
@@ -44,7 +44,7 @@
   </div>
 </div>
 {# {% include "./security.twig" %} #}
-{# Modal #}
+{# Modal User #}
 <div class="modal fade" id="usersModal" tabindex="-1" aria-labelledby="usersModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -82,6 +82,48 @@
       </div>
       <div class="modal-footer">
         <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" onclick="user_create()">{{ button_save }}</button>
+      </div>
+    </div>
+  </div>
+</div>
+{# Modal User Edit #}
+<div class="modal fade" id="userEditModal" tabindex="-1" aria-labelledby="userEditModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="userEditModalLabel">Редактирровать пользователя</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+      </div>
+      <div class="modal-body">
+        <form class="form" id="create-edit-form">
+          <label for="input-username">Name:</label>
+          <div class="input-group">
+            <input type="text" name="username" value="" placeholder="Name" id="input-edit-username" class="form-control"/>
+          </div>
+          <label for="input-descr">Descr:</label>
+          <div class="input-group">
+            <input type="text" name="Descr" value="" placeholder="Full name" id="input-edit-descr" class="form-control"/>
+          </div>
+          <label for="input-email">E-mail:</label>
+          <div class="input-group">
+            <input type="text" name="email" value="" placeholder="email@example.com" id="input-edit-email" class="form-control"/>
+          </div>
+          <label for="input-password">Password:</label>
+          <div class="input-group">
+            <input type="password" name="password" value="" placeholder="Password" id="input-edit-password" class="form-control"/>
+          </div>
+          <label for="input-confirmpass">Confirm password:</label>
+          <div class="input-group">
+            <input type="password" name="confirmpass" value="" placeholder="Password" id="input-edit-confirmpass" class="form-control"/>
+          </div>
+          <label for="input-eauth">Enterprise authentication:</label>
+          <div class="form-group">
+            <input type="checkbox" class="form-check-input" name="eauth" id="input-edit-eauth" checked/>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" onclick="user_edit()">{{ button_save }}</button>
       </div>
     </div>
   </div>

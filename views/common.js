@@ -47,42 +47,52 @@ function row_select(e) {
         console.log(text);
     }
 }
+
 async function show_user_table() {
-    console.log('show_user_table');
+    
     let data = await getUsers();
-    user_tbl.innerHTML = '';
-
-    const thead = document.createElement('thead');
-    thead.style.border = '#00ff92';
-    thead.style.position = 'sticky';  
-    thead.style.top      = '0px';    
-    thead.style.background = 'white';    
-    user_tbl.appendChild(thead);
-
-    const tbody = document.createElement('tbody');
-    user_tbl.appendChild(tbody);
-
-    const tr = document.createElement('tr');
-    thead.appendChild(tr);
-
-    const h = {col1:'id',col2:'Name',col3:'Descr'};
-    for (const element of Object.keys(h)) {
-        const th = document.createElement('th');
-        tr.appendChild(th);
-        th.textContent = h[element];
-    }
-
-    for (const rows of data) {
-        const tr = document.createElement('tr');
-        tbody.appendChild(tr);
-        const p = {id:rows.id, Name:rows.Name, Descr:rows.Descr};
-        for (const element of Object.keys(p) ) {
-            const td = document.createElement('td');
-            tr.appendChild(td);
-            td.textContent = p[element];
-        }
-    }
+  
+    let show_tbl = user_tbl;
+  
+    const h   = { col1:'id', col2:'Name', col3:'Descr' };  
+    const col = ['id', 'Name', 'Descr'];
+  
+    show_table(show_tbl, h, col, data);
 }
+async function show_table(show_tbl , h, col, data) {
+    console.log('show_table'); 
+  
+    show_tbl.innerHTML = '';
+  
+    const thead = document.createElement('thead');
+    thead.style.position = 'sticky';  
+    thead.style.top      = '0px';
+    thead.style.border   = '#00ff92';
+    thead.style.background = 'White';  
+    show_tbl.appendChild(thead);
+  
+    const tbody = document.createElement('tbody');
+    show_tbl.appendChild(tbody);
+  
+    const tr = document.createElement('tr'); 
+    thead.appendChild(tr);
+    
+    for (const element of Object.keys(h)) {        
+      const th = document.createElement('th');                      
+      tr.appendChild(th);        
+      th.textContent = h[element];                                  
+    }   
+  
+    for (const rows of data) {                  
+      const tr = document.createElement('tr');
+      tbody.appendChild(tr);             
+      for (let p of col) {            
+        const td = document.createElement('td');    
+        tr.appendChild(td);              
+        td.textContent = rows[p];        
+      }
+    }   
+  }
 /////////////////////////////////////////////////////////////////////////////
 
 async function getUsers() {

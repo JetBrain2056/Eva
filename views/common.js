@@ -14,33 +14,28 @@ function row_select(e) {
         const tBody = user_tbl.tBodies[0];
         const rows = Array.from(tBody.rows);
         const headerCells = row.cells;
-
-        let reverse = 0;
-
-        for (const th of headerCells) {
-            const cellIndex = th.cellIndex;
-
-            th.addEventListener('click', (evt) => {
-
-                console.log(th.getAttribute("sort-attr"));
-
-                if (evt.target.getAttribute("sort-attr") === "desc" || evt.target.getAttribute("sort-attr") === "") {
-                    reverse = -1;
-                    evt.target.setAttribute("sort-attr", "asc");
-                } else {
-                    reverse = 1;
-                    evt.target.setAttribute("sort-attr", "desc");
-                }
-
-                rows.sort((tr1, tr2) => {
-                    const tr1Text = tr1.cells[cellIndex].textContent;
-                    const tr2Text = tr2.cells[cellIndex].textContent;
-                    return reverse*(tr1Text.localeCompare(tr2Text));
-                });
-
-                tBody.append(...rows);
-            });
+    
+        let reverse = 1;
+        
+        const cellIndex = e.target.cellIndex;                
+                    
+        if (e.target.getAttribute("sort-attr") === "desc" ) {
+          reverse = -1;
+          e.target.setAttribute("sort-attr", "asc");
+        } else {
+          reverse = 1;
+          e.target.setAttribute("sort-attr", "desc");        
         }
+        
+        rows.sort((tr1, tr2) => {
+    
+          const tr1Text = tr1.cells[cellIndex].textContent;
+          const tr2Text = tr2.cells[cellIndex].textContent;   
+    
+          return reverse * (tr1Text.localeCompare(tr2Text));
+        });
+    
+        tBody.append(...rows);
     } else {
         let text;
         if (e.ctrlKey) {

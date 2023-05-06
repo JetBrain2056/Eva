@@ -10,11 +10,10 @@ function row_select(e) {
     const row  = path[1];
 
     if (row.cells[0].nodeName  === 'TH') {
-        console.log(row.cells[0].parentNode.parentNode);
+        
         const tBody = user_tbl.tBodies[0];
         const rows = Array.from(tBody.rows);
-        const headerCells = row.cells;
-    
+        
         let reverse = 1;
         
         const cellIndex = e.target.cellIndex;                

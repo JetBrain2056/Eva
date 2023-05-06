@@ -26,15 +26,19 @@ function row_select(e) {
           e.target.setAttribute("sort-attr", "desc");        
         }
         
-        rows.sort((tr1, tr2) => {
-    
+        rows.sort((tr1, tr2) => {    
           const tr1Text = tr1.cells[cellIndex].textContent;
-          const tr2Text = tr2.cells[cellIndex].textContent;   
-    
+          const tr2Text = tr2.cells[cellIndex].textContent;       
           return reverse * (tr1Text.localeCompare(tr2Text));
         });
     
         tBody.append(...rows);
+
+        for (cell of row.cells) {
+            cell.style.color = 'black';
+        }
+        e.target.style.color = 'aquamarine';
+
     } else {
         let text;
         if (e.ctrlKey) {

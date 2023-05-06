@@ -53,7 +53,12 @@ async function show_user_table() {
     user_tbl.innerHTML = '';
 
     const thead = document.createElement('thead');
-    thead.style.border = '#00ff92';
+    //thead.style.border = '#00ff92';
+    thead.style.position = 'sticky';  
+    thead.style.top      = '0px';
+    thead.style.border   = 1;
+    thead.style.background = '#282c34';
+    thead.style.color      = '#58fcb8';
     user_tbl.appendChild(thead);
 
     const tbody = document.createElement('tbody');

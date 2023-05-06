@@ -24,7 +24,7 @@ function row_select(e) {
 
                 console.log(th.getAttribute("sort-attr"));
 
-                if (evt.target.getAttribute("sort-attr") === "desc" || th.getAttribute("sort-attr") === "") {
+                if (evt.target.getAttribute("sort-attr") === "desc" || evt.target.getAttribute("sort-attr") === "") {
                     reverse = -1;
                     evt.target.setAttribute("sort-attr", "asc");
                 } else {
@@ -92,7 +92,7 @@ async function show_table(show_tbl , h, col, data) {
     
     for (const element of Object.keys(h)) {        
       const th = document.createElement('th');    
-      th.setAttribute("sort-attr", "desc");                  
+      th.setAttribute("sort-attr", "");                  
       tr.appendChild(th);        
       th.textContent = h[element];                                  
     }   

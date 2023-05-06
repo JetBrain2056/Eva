@@ -15,14 +15,27 @@ function row_select(e) {
         const rows = Array.from(tBody.rows);
         const headerCells = row.cells;
 
+        let reverse = 0;
+
         for (const th of headerCells) {
             const cellIndex = th.cellIndex;
 
-            th.addEventListener('click', () => {
+            th.addEventListener('click', (evt) => {
+
+                console.log(th.getAttribute("sort-attr"));
+
+                if (evt.target.getAttribute("sort-attr") === "desc" || th.getAttribute("sort-attr") === "") {
+                    reverse = -1;
+                    evt.target.setAttribute("sort-attr", "asc");
+                } else {
+                    reverse = 1;
+                    evt.target.setAttribute("sort-attr", "desc");
+                }
+
                 rows.sort((tr1, tr2) => {
                     const tr1Text = tr1.cells[cellIndex].textContent;
                     const tr2Text = tr2.cells[cellIndex].textContent;
-                    return tr1Text.localeCompare(tr2Text);
+                    return reverse*(tr1Text.localeCompare(tr2Text));
                 });
 
                 tBody.append(...rows);
@@ -78,7 +91,8 @@ async function show_table(show_tbl , h, col, data) {
     thead.appendChild(tr);
     
     for (const element of Object.keys(h)) {        
-      const th = document.createElement('th');                      
+      const th = document.createElement('th');    
+      th.setAttribute("sort-attr", "desc");                  
       tr.appendChild(th);        
       th.textContent = h[element];                                  
     }   

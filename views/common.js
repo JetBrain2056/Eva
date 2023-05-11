@@ -10,7 +10,6 @@ for (const div of forms) {
   if ( tbl[n])  tbl[n].addEventListener('click', row_select);
   n = n + 1;
 }
-
 function row_select(e) {
     console.log('row_select');
 
@@ -66,17 +65,6 @@ function row_select(e) {
         console.log(text);
     }
 }
-
-async function show_user_table() {
-    
-    let data = await getUsers();   
-  
-    const h   = { col1:'id', col2:'Name', col3:'Descr' };  
-    const col = ['id', 'Name', 'Descr'];
-  
-    await show_table(tbl[0], h, col, data);
-
-}
 async function show_table(show_tbl , h, col, data) {
     console.log('show_table'); 
   
@@ -111,7 +99,17 @@ async function show_table(show_tbl , h, col, data) {
         td.textContent = rows[p];        
       }
     }   
-  }
+}
+async function show_user_table() {
+    
+    let data = await getUsers();   
+  
+    const h   = { col1:'id', col2:'Name', col3:'Descr' };  
+    const col = ['id', 'Name', 'Descr'];
+  
+    await show_table(tbl[0], h, col, data);
+
+}
 /////////////////////////////////////////////////////////////////////////////
 
 async function getUsers() {
@@ -193,7 +191,7 @@ async function edit_user(obj) {
     }
 
     return res;
-  }
+}
 async function user_edit_modal() {
     console.log('user_modal'); 
   

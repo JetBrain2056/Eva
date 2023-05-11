@@ -1,14 +1,15 @@
 let select_rows = [];
-
-const table = document.createElement('table'); 
-const forms = document.getElementsByClassName('eva-form');
-for (const div of forms) {          
-    div.setAttribute("style", "overflow-y: scroll; height:calc(100vh - 171px)");              
-    table.setAttribute("class", "table table-striped table-hover table-sm table-responsive");            
-    div.appendChild(table);
+let forms = document.getElementsByClassName('eva-form');
+let n = 0;
+let tbl = [];
+for (const div of forms) {              
+  tbl[n] = document.createElement('table');
+  div.setAttribute("style", "overflow-y: scroll; height:calc(100vh - 171px)");              
+  tbl[n].setAttribute("class", "table table-striped table-hover table-sm table-responsive");            
+  div.appendChild( tbl[n]);
+  if ( tbl[n])  tbl[n].addEventListener('click', row_select);
+  n = n + 1;
 }
-
-if (table) table.addEventListener('click', row_select);
 
 function row_select(e) {
     console.log('row_select');
@@ -18,7 +19,7 @@ function row_select(e) {
 
     if (row.cells[0].nodeName  === 'TH') {
         
-        const tBody = table.tBodies[0];
+        const tBody = e.currentTarget.tBodies[0];
         const rows = Array.from(tBody.rows);
         
         let reverse = 1;
@@ -73,7 +74,7 @@ async function show_user_table() {
     const h   = { col1:'id', col2:'Name', col3:'Descr' };  
     const col = ['id', 'Name', 'Descr'];
   
-    await show_table(table, h, col, data);
+    await show_table(tbl[0], h, col, data);
 
 }
 async function show_table(show_tbl , h, col, data) {

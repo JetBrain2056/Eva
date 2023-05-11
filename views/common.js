@@ -6,8 +6,7 @@ for (const div of forms) {
   tbl[n] = document.createElement('table');
   div.setAttribute("style", "overflow-y: scroll; height:calc(100vh - 171px)");              
   tbl[n].setAttribute("class", "table table-striped table-hover table-sm table-responsive");            
-  div.appendChild( tbl[n]);
-  if ( tbl[n])  tbl[n].addEventListener('click', row_select);
+  div.appendChild(tbl[n]); 
   n = n + 1;
 }
 function row_select(e) {
@@ -68,6 +67,8 @@ function row_select(e) {
 async function show_table(show_tbl , h, col, data) {
     console.log('show_table'); 
   
+    if (show_tbl) show_tbl.addEventListener('click', row_select);
+
     show_tbl.innerHTML = '';
   
     const thead = document.createElement('thead');

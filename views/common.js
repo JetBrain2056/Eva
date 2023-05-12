@@ -2,13 +2,14 @@ let select_rows = [];
 let forms = document.getElementsByClassName('eva-form');
 let n = 0;
 let tbl = [];
-for (const div of forms) {              
+for (const div of forms) {                
+  div.setAttribute("style", "overflow-y: scroll; height: calc(100vh - 171px)");
   tbl[n] = document.createElement('table');
-  div.setAttribute("style", "overflow-y: scroll; height:calc(100vh - 171px)");              
   tbl[n].setAttribute("class", "table table-striped table-hover table-sm table-responsive");            
   div.appendChild(tbl[n]); 
   n = n + 1;
 }
+
 function row_select(e) {
     console.log('row_select');
 

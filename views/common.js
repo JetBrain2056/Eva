@@ -101,18 +101,17 @@ async function show_table(show_tbl , h, col, data) {
       }
     }   
 }
+/////////////////////////////////////////////////////////////////////////////
 async function show_user_table() {
     
     let data = await getUsers();   
-  
+
     const h   = { col1:'id', col2:'Name', col3:'Descr' };  
     const col = ['id', 'Name', 'Descr'];
-  
+
     await show_table(tbl[0], h, col, data);
 
 }
-/////////////////////////////////////////////////////////////////////////////
-
 async function getUsers() {
     console.log('getUsers');
     let res;

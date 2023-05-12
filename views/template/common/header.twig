@@ -10,10 +10,18 @@
           <ul class="navbar-nav align-items-center gap-2">
             <li class="nav-item">
               <a class="nav-link" aria-current="page" href="#">Конфигурация</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" aria-current="page" href="#" onclick="show_user_table()">{{ text_users }}</a>
-            </li>
+            </li>            
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-bs-toggle="dropdown" aria-expanded="true">
+                Администрирование
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown2">    
+                <div class="nav-item flex-column" aria-orientation="vertical">
+                  <button class="dropdown-item" id="nav-users-tab" data-bs-toggle="tab" data-bs-target="#nav-users" type="button" role="tab" aria-controls="nav-users" aria-selected="false" onclick="show_user_table()">{{ text_users }}</button>                    
+                  <button class="dropdown-item">Настройки подключеня БД</button>                  
+                </div>
+              </ul>
+            </li>  
             <li class="nav-item">
               <a class="nav-link d-flex gap-1 align-items-center" aria-current="page" href="#">
                 <img src="{{ image }}" alt="logo" width="30" height="30" id="user-profile" class="img-circle" />

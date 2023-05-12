@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0">
-        <title>EVA</title>        
+        <title>EVA</title>            
         <script defer src="./common.js"></script>
         <script defer src="./@popperjs/core/dist/umd/popper.min.js"></script>
         <script defer src="./js/bootstrap.min.js"></script>
@@ -13,18 +13,22 @@
         <link href="./font-awesome/css/font-awesome.min.css" rel="stylesheet">
         <link href="./stylesheet/stylesheet.css" rel="stylesheet">
     </head>
-    <body>        
-        {% include "./template/common/header.twig" %}
-        {% if logged %}
-            <div class="content flex-grow-1 d-flex flex-row bg-light">                    
-                <div class="col-2 list" style="overflow-y: scroll">
-                    {% include "./template/common/column_left.twig" %}
-                </div>
-                <div class="col">{% include "./template/common/dashboard.twig" %}</div>                                        
-            </div>
-        {% else %}            
-            {% include "./template/common/login.twig" %}            
-        {% endif %}
-        {% include "./template/common/footer.twig" %}        
+    <body>             
+        <div class="content d-flex flex-column"> 
+            {% include "./template/common/header.twig" %}  
+            {% if logged %}                             
+                <div class="d-flex flex-row flex-grow-1">                    
+                    <div class="col-2 list" style="overflow-y: scroll">
+                        {% include "./template/common/column_left.twig" %}
+                    </div>
+                    <div class="col" style=";">
+                        {% include "./template/common/dashboard.twig" %}
+                    </div>                    
+                </div>                             
+            {% else %}                            
+                {% include "./template/common/login.twig" %}                            
+            {% endif %}   
+            {% include "./template/common/footer.twig" %}  
+        </div>
     </body>
 </html>

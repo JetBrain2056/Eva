@@ -1,12 +1,10 @@
-<div id="column-left" class="sidebar h-100">
-  <div id="sidebarMenu">
-    <h6 class="d-flex justify-content-between text-muted">
-      <span class="m-auto d-block menu-title mt-3">{{ text_configmenu }}</span>
+<div id="column-left" style="height:calc(100vh - 99.5px);">  
+    <h6 class="justify-content-between">
+      <span class="p-3 menu-title">{{ text_configmenu }}</span>
     </h6>
-    <ul class="p-2 sidebar-list nav btn-group-vertical columnLeft">
+    <ul class="p-2 sidebar-list nav btn-group-vertical">
       {% for element in asideList %}
         <li class="nav-item"><a class="nav-link btn" href="{{element.href}}">{{ element.title }}</a></li>
       {% endfor %}
-    </ul>
-  </div>
+    </ul>  
 </div>

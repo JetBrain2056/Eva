@@ -15,11 +15,12 @@ router.post('/lang', controller.Lang);
 //router.post('/login', UserController.login)
 //router.get('/check', UserController.check)
 
-router.get('/users', controller.getAll);
+router.get('/users', controller.getUsers);
 //router.get('/getone/:id([0-9]+)', UserController.getOne)
 router.post('/create', controller.Create)
 router.post('/updateuser', controller.Update)
 //router.delete('/delete/:id([0-9]+)', controller.delete)
 router.post('/delete', controller.Delete)
+router.get('/roles', controller.getRoles);
 
 module.exports = { router }                                                  

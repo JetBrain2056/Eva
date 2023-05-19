@@ -2,7 +2,7 @@ const { User, Role }    = require('../models/models.js');
 const { content, Lang } = require('../index.js');
 const bcrypt            = require('bcrypt');
 // const { Op, Sequelize, QueryTypes} = require("sequelize");
-// const sequelize         = require('../db');
+const sequelize         = require('../db');
 //const jwt            = require('jsonwebtoken');
 
 // const generateJwt = (id, login, role) => {
@@ -110,15 +110,15 @@ exports.Signin = async (req,res,next) => {
 }
 exports.getUsers = async (req, res, next) => {
     try {
-        const data = await User.findAll({raw:true})
-        await res.send(data);
-        // const data = await sequelize.query(
-        //     'SELECT "Users"."*", "N"."Name" as "Role" '
-        //     +'FROM "Users"'
-        //     +'LEFT JOIN "Roles" as "N"'
-        //     +'on "Users"."roleId" = "N"."id";'
-        // );
-        // await res.send(data[0]); 
+        // const data = await User.findAll({raw:true})
+        // await res.send(data);
+        const data = await sequelize.query(
+            'SELECT "Users"."id", "Users"."Name", "Users"."Descr", "Users"."EAuth", "Users"."Show", "Users"."Password", "Users"."email", "Users"."AdmRole", "Users"."RoleId", "N"."Name" as "Role" '
+            +'FROM "Users"'
+            +'LEFT JOIN "Roles" as "N"'
+            +'on "Users"."RoleId" = "N"."id";'
+        );
+        await res.send(data[0]); 
         next();
     } catch(err) {
         console.log(err);

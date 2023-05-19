@@ -124,7 +124,28 @@ exports.getUsers = async (req, res, next) => {
         console.log(err);
     }
 }
-exports.getOne = (req, res, next) => {
+exports.getOne = async (req, res, next) => {
+
+    if (!req.body) return res.sendStatus(400);
+
+    console.log(req);
+
+    const {id} = req.body;
+    try {
+        // const data = await User.findAll({raw:true})
+        // await res.send(data);
+        const data = await sequelize.query(
+            'SELECT "Users"."id", "Users"."Name", "Users"."Descr", "Users"."EAuth", "Users"."Show", "Users"."Password", "Users"."email", "Users"."AdmRole", "Users"."RoleId", "N"."id" as "RoleId", "N"."Name" as "Role" '
+            +'FROM "Users"'
+            +'LEFT JOIN "Roles" as "N"'
+            +'on "Users"."RoleId" = "N"."id"'
+            +'where "Users"."id" = '+ id +';'
+        );
+        return await res.send(data[0]); 
+        next();
+    } catch(err) {
+        console.log(err);
+    }
 }
 exports.Create = async (req, res) => {
 
@@ -172,17 +193,22 @@ exports.Update = async (req, res, next) => {
     
     if (!req.body) return res.sendStatus(400);     
 
-    let { id, name, descr}  = req.body;  
+    let { id, Name, Descr, email, Password, EAuth, Show, RoleId}  = req.body;  
 
     try {
         const data = await User.update({ 
-            Name: name, 
-            Descr: descr
+            Name     : Name, 
+            Descr    : Descr,
+            email    : email,
+            Password : Password,
+            EAuth    : EAuth,
+            Show     : Show,
+            RoleId   : RoleId
         }, {
             where: {id: id}
         })
-        console.log(data);
-        return await res.json("Success"); 
+        // console.log(data);
+        return await res.json(data); 
     } catch(err) {
         console.log(err); 
     }   

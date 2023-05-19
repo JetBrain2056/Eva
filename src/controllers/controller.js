@@ -1,6 +1,8 @@
 const { User, Role }    = require('../models/models.js');
 const { content, Lang } = require('../index.js');
 const bcrypt            = require('bcrypt');
+// const { Op, Sequelize, QueryTypes} = require("sequelize");
+// const sequelize         = require('../db');
 //const jwt            = require('jsonwebtoken');
 
 // const generateJwt = (id, login, role) => {
@@ -48,11 +50,17 @@ exports.Signin = async (req,res,next) => {
     const result = await User.count()
     console.log('User count: ', result);
 
-    if (result === 0) {
-        content.logged    = true;
-        content.username  = '';
-        content.firstname = '';
-        res.render('index.twig', content);
+    if (result === 0) { 
+        await Role.create({Name: 'Administrator'}); 
+        if (!username) {
+            content.logged    = true;            
+            content.username  = '';
+            content.firstname = '';
+            await res.render('index.twig', content);     
+        } else {       
+            content.logged = false; 
+        }
+        
     } else {
         content.logged = false;
     }
@@ -101,6 +109,13 @@ exports.getUsers = async (req, res, next) => {
     try {
         const data = await User.findAll({raw:true})
         await res.send(data);
+        // const data = await sequelize.query(
+        //     'SELECT "Users"."*", "N"."Name" as "Role" '
+        //     +'FROM "Users"'
+        //     +'LEFT JOIN "Roles" as "N"'
+        //     +'on "Users"."roleId" = "N"."id";'
+        // );
+        // await res.send(data[0]); 
         next();
     } catch(err) {
         console.log(err);
@@ -111,19 +126,19 @@ exports.getOne = (req, res, next) => {
 exports.Create = async (req, res) => {
 
     if (!req.body) return res.sendStatus(400);
-    const {Name, Descr, Password, RolesID, EAuth, Show} = req.body;
+    const {Name, Descr, Password, RoleId, EAuth, Show} = req.body;
     try {
         const hash = await hashPassword(Password,10);
         console.log(hash);
         const result = await User.count();
         console.log('User count: ',result);
         if (result === 0) {
-            await Role.create({Name: 'Administrator'});
+            // await Role.create({Name: 'Administrator'});
             await User.create({
                 Name    : Name,
                 Descr   : Descr,
                 Password : hash,
-                RolesID : 1,
+                RoleId  : 1,
                 EAuth   : true,
                 Show    : true,
                 AdmRole : true
@@ -134,7 +149,7 @@ exports.Create = async (req, res) => {
                     Name    : Name,
                     Descr   : Descr,
                     Password : hash,
-                    RolesID : RolesID,
+                    RoleId  : RoleId,
                     EAuth   : EAuth,
                     Show    : Show,
                     AdmRole : false

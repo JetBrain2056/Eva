@@ -97,10 +97,10 @@ exports.Signin = async (req,res,next) => {
         }
     }
 }
-exports.getAll = async (req, res, next) => {
+exports.getUsers = async (req, res, next) => {
     try {
-        const users = await User.findAll({raw:true})
-        await res.send(users);
+        const data = await User.findAll({raw:true})
+        await res.send(data);
         next();
     } catch(err) {
         console.log(err);
@@ -178,6 +178,15 @@ exports.Delete = async (req, res) => {
         const user = await User.destroy({where: {id: id, AdmRole: false}});
 
         return await res.json(user);
+    } catch(err) {
+        console.log(err);
+    }
+}
+exports.getRoles = async (req, res, next) => {
+    try {
+        const data = await Role.findAll({raw:true})
+        await res.send(data);
+        next();
     } catch(err) {
         console.log(err);
     }

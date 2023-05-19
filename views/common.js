@@ -116,7 +116,7 @@ async function show_user_table() {
     
     let data = await getUsers();   
 
-    const col  = { 'id':'Id', 'Name':'Name', 'Descr':'Descr', 'email':'E-mail', 'Show':'Show',  'EAuth':'EAuth' };  
+    const col  = { 'id':'Id', 'Name':'Name', 'Descr':'Descr', 'Role':'Role','email':'E-mail', 'Show':'Show',  'EAuth':'EAuth' };  
     const hide = ['id'];  
 
     await show_table(tbl[0], hide, col, data);
@@ -178,7 +178,7 @@ async function user_create() {
     }
 
     if (result) await show_user_table();
-    
+
 }
 async function edit_user(obj) {
     console.log('edit_user', obj); 

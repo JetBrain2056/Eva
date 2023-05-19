@@ -160,18 +160,18 @@ async function user_create() {
     if (input_password.value !== input_confirmpass.value) alert('Неверное подтверждение пароля!');
     if (!input_username.value) alert('Не заполнено имя пользователя!');
 
-    const user =  {
+    const data =  {
         'Name'    : input_username.value,
         'Descr'   : input_descr.value,
         'Password': input_password.value,
-        'RolesID' : '1',
+        'RoleId'  : '1',
         'EAuth'   : input_eauth.value,
         'Show'    : '1'
     };
-    console.log(user);
+    //console.log(data);
 
     try {
-        let result = await create_user(user)
+        let result = await create_user(data)
         console.log(result);
 
         if (result) await show_user_table();
@@ -305,7 +305,7 @@ async function user_edit_role() {
 
   let data = await getUsersRoles();  
 
-  const col = {'id':'id', 'name':'Наименование'};  
+  const col = {'id':'Id', 'Name':'Name'};  
   const hide = ['id'];
   
   await show_table(tbl[1], hide, col, data);
@@ -316,14 +316,16 @@ async function role_select() {
 
   const row = select_rows[0];  
 
-  const input_parentId    = document.getElementById('input-unit-edit-parentId'); 
-  const input_parentKod   = document.getElementById('input-unit-edit-parentKod');
-  const input_parent      = document.getElementById('input-unit-edit-parent');   
+  const input_roleId      = document.getElementById('input-roleId');   
+  const input_role        = document.getElementById('input-role');   
+  const input_edit_roleId = document.getElementById('input-edit-roleId');   
+  const input_edit_role   = document.getElementById('input-edit-role');   
 
 
-  input_parentId.value  = row.cells[0].innerText;
-  input_parentKod.value = row.cells[1].innerText;;
-  input_parent.value    = row.cells[3].innerText;
+  input_roleId.value      = row.cells[0].innerText;
+  input_role.value        = row.cells[1].innerText;
+  input_edit_roleId.value = row.cells[0].innerText;  
+  input_edit_role.value   = row.cells[1].innerText;
 
   currentModal.hide();
            

@@ -180,14 +180,8 @@ async function user_create() {
     if (result) await show_user_table();
 
 }
-async function edit_user(obj) {
-    console.log('edit_user', obj); 
-  
-    let data =  {   
-        'id'      : obj.id,   
-        'name'    : obj.name,
-        'descr'   : obj.descr
-      };   
+async function edit_user(data) {
+    console.log('>>edit_user..'); 
   
     let res;
     try {
@@ -207,20 +201,45 @@ async function user_edit_modal() {
     console.log('user_modal'); 
   
     const row = select_rows[0];  
-  
+          
     const input_name        = document.getElementById('input-edit-username');  
     const input_descr       = document.getElementById('input-edit-descr');    
     const input_email       = document.getElementById('input-edit-email');    
+    const input_role        = document.getElementById('input-edit-role');    
+    const input_roleId      = document.getElementById('input-edit-roleId');    
     const input_password    = document.getElementById('input-edit-password');    
     const input_confirmpass = document.getElementById('input-edit-confirmpass'); 
-    const input_eauth       =  document.getElementById('input-edit-eauth');
+    const input_show        = document.getElementById('input-edit-show');
+    const input_eauth       = document.getElementById('input-edit-eauth');
+
+    let data = { 'id': row.cells[0].innerText };
+
+    let res;
+    try {
+    //   let response = await fetch('/getone?[id='+id+']');
+        let response = await fetch('/getone', {
+            method  : 'post',    
+            headers : {'Content-Type': 'application/json'},
+            body    : JSON.stringify(data)            
+        });  
+        res = await response.json();     
+       
+    } catch (err) {
+      console.log(err);
+    }
   
-    input_name.value  = row.cells[1].innerText;
-    input_descr.value = row.cells[2].innerText;   
-    input_email.value = '';   
-    input_password.value    = '';   
-    input_confirmpass.value = '';                
-    input_eauth.value       = '';                
+    if (res) {
+        
+        input_name.value        = res[0].Name;
+        input_descr.value       = res[0].Descr;   
+        input_email.value       = res[0].email;   
+        input_role.value        = res[0].Role;   
+        input_roleId.value      = res[0].RoleId;   
+        input_password.value    = '';   
+        input_confirmpass.value = '';                
+        input_show.value        = res[0].Show;  
+        input_eauth.value       = res[0].EAuth;       
+    }         
 
 }
 async function user_edit() {
@@ -230,15 +249,24 @@ async function user_edit() {
   
     const input_name        = document.getElementById('input-edit-username');  
     const input_descr       = document.getElementById('input-edit-descr');     
-    //const input_email       = document.getElementById('input-edit-email');    
-    //const input_password    = document.getElementById('input-edit-password');    
-    //const input_confirmpass = document.getElementById('input-edit-confirmpass'); 
-    //const input_eauth       =  document.getElementById('input-edit-eauth');   
+    const input_email       = document.getElementById('input-edit-email');    
+    const input_password    = document.getElementById('input-edit-password');    
+    const input_confirmpass = document.getElementById('input-edit-confirmpass'); 
+    const input_eauth       = document.getElementById('input-edit-eauth');   
+    const input_show        = document.getElementById('input-edit-show');   
+    const input_roleId      = document.getElementById('input-edit-roleId'); 
+
+    if (!input_password.value === input_confirmpass.value) return;
     
     const data =  {
-        'id'      : row.cells[0].innerText,
-        'name'    : input_name.value,
-        'descr'   : input_descr.value
+        'id'          : row.cells[0].innerText,
+        'Name'        : input_name.value,
+        'Descr'       : input_descr.value,
+        'email'       : input_email.value,
+        'Password'    : input_password.value,
+        'EAuth'       : input_eauth.value,
+        'Show'        : input_show.value,
+        'RoleId'      : input_roleId.value
     };
   
     let result;

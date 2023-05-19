@@ -8,7 +8,7 @@ const User = sequelize.define('User', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     Name: {type: DataTypes.STRING, unique: true},
     Descr: {type: DataTypes.STRING},
-    RolesID: {type: DataTypes.INTEGER, defaultValue: 1},
+    // roleId: {type: DataTypes.INTEGER, defaultValue: 1},
     EAuth: {type: DataTypes.BOOLEAN},
     Show: {type: DataTypes.BOOLEAN},
     Password: {type: DataTypes.STRING},

@@ -47,11 +47,14 @@ exports.Signin = async (req,res,next) => {
     const username = req.body.username;
     const password = req.body.password;
 
-    const result = await User.count()
+    const result    = await User.count();
+    const roleCount = await Role.count();
     console.log('User count: ', result);
 
     if (result === 0) { 
-        await Role.create({Name: 'Administrator'}); 
+        if (roleCount === 0) {
+            await Role.create({Name: 'Administrator'}); 
+        }
         if (!username) {
             content.logged    = true;            
             content.username  = '';

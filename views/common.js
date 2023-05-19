@@ -293,40 +293,37 @@ async function getUsersRoles() {
 }
 let currentModal;
 async function user_edit_role() {
-  console.log('>>unit_edit_parent...'); 
+  console.log('>>user_edit_role...'); 
 
-  let editUnitParentModal = document.getElementById("editUserRoleModal");
+  let editUserRoleModal = document.getElementById("editUserRoleModal");
   let options =  {
     focus: true
   };
 
-  currentModal = new bootstrap.Modal(editUnitParentModal, options);
+  currentModal = new bootstrap.Modal(editUserRoleModal, options);
   currentModal.show();
 
   let data = await getUsersRoles();  
 
-  const col = {'id':'id', 'kod':'Код',  'parent':'Родитель', 'name':'Наименование','classes':'Тип' , 'descr':'Описание'};  
-  const hide = ['id', 'parent'];
+  const col = {'id':'id', 'name':'Наименование'};  
+  const hide = ['id'];
   
-  await show_table(tbl[7], hide, col, data);
+  await show_table(tbl[1], hide, col, data);
  
 }
-async function user_select() {
-  console.log('>>unit_select...'); 
+async function role_select() {
+  console.log('>>role_select...'); 
 
   const row = select_rows[0];  
 
   const input_parentId    = document.getElementById('input-unit-edit-parentId'); 
   const input_parentKod   = document.getElementById('input-unit-edit-parentKod');
   const input_parent      = document.getElementById('input-unit-edit-parent');   
-  const node_parent       = document.getElementById('node_parent');   
-  const node_parentId     = document.getElementById('node_parentId');   
+
 
   input_parentId.value  = row.cells[0].innerText;
-  node_parentId.value   = row.cells[0].innerText;
   input_parentKod.value = row.cells[1].innerText;;
   input_parent.value    = row.cells[3].innerText;
-  node_parent.value     = row.cells[3].innerText;
 
   currentModal.hide();
            

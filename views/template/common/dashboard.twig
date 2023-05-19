@@ -60,6 +60,11 @@
           <div class="input-group">
             <input type="text" name="Descr" value="" placeholder="Full name" id="input-descr" class="form-control"/>
           </div>
+          <label for="input-role">Role:</label>
+          <div class="input-group">
+            <input type="text" id="input-role" class="form-control"/>
+            <button class="btn btn-outline-secondary" type="button" id="input-role" onclick="user_edit_role()">...</button>
+          </div>
           <label for="input-email">E-mail:</label>
           <div class="input-group">
             <input type="text" name="email" value="" placeholder="email@example.com" id="input-email" class="form-control"/>
@@ -106,10 +111,10 @@
           <div class="input-group">
             <input type="text" name="Descr" value="" placeholder="Full name" id="input-edit-descr" class="form-control"/>
           </div>
-          <label for="input-role">Role:</label>
+          <label for="input-edit-role">Role:</label>
           <div class="input-group">
             <input type="text" id="input-edit-role" class="form-control"/>
-             <button class="btn btn-outline-secondary" type="button" id="input-edit-role" onclick="unit_edit_role()">...</button>
+             <button class="btn btn-outline-secondary" type="button" id="input-edit-role" onclick="user_edit_role()">...</button>
           </div>
           <label for="input-email">E-mail:</label>
           <div class="input-group">
@@ -123,9 +128,9 @@
           <div class="input-group">
             <input type="password" name="confirmpass" value="" placeholder="Password" id="input-edit-confirmpass" class="form-control"/>
           </div>
-          <label for="input-show">Show user:</label>
+          <label for="input-edit-show">Show user:</label>
           <div class="form-group">
-            <input type="checkbox" class="form-check-input" name="swow" id="input-show" checked/>
+            <input type="checkbox" class="form-check-input" name="swow" id="input-edit-show" checked/>
           </div>
           <label for="input-eauth">Enterprise auth:</label>
           <div class="form-group">
@@ -139,3 +144,28 @@
     </div>
   </div>
 </div>
+{# Modal Edit User Role [1] #}
+<div class="modal modal-lg fade" id="editUserRoleModal" aria-hidden="true">
+  <div class="modal-dialog  modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Выбор роли пользователя</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+      </div>
+      <div class="modal-body">          
+        <div class="btn-toolbar" role="toolbar" aria-label="toolbar group">          
+          <div class="btn-group btn-group-sm" role="group">
+            <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" onclick="role_select()">
+              <i class=""></i>
+              <span>Выбрать</span>
+            </button>    
+          </div>
+        </div>
+        <div class="eva-form"></div>          
+      </div>
+      <div class="modal-footer">        
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+      </div>
+    </div>
+  </div>
+</div> 

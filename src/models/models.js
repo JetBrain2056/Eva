@@ -7,8 +7,7 @@ const { DataTypes } = require('sequelize')
 const User = sequelize.define('User', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     Name: {type: DataTypes.STRING, unique: true},
-    Descr: {type: DataTypes.STRING},
-    // roleId: {type: DataTypes.INTEGER, defaultValue: 1},
+    Descr: {type: DataTypes.STRING},    
     EAuth: {type: DataTypes.BOOLEAN},
     Show: {type: DataTypes.BOOLEAN},
     Password: {type: DataTypes.STRING},
@@ -18,7 +17,7 @@ const User = sequelize.define('User', {
 
 const Role = sequelize.define('Role', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    Name: {type: DataTypes.STRING}
+    Name: {type: DataTypes.STRING, unique: true}
 })
 
 const Config = sequelize.define('Config', {

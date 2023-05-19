@@ -116,8 +116,8 @@ async function show_user_table() {
     
     let data = await getUsers();   
 
-    const col  = { 'id':'ID', 'Name':'Name', 'Descr':'Descr' };  
-    const hide = [];  
+    const col  = { 'id':'Id', 'Name':'Name', 'Descr':'Descr', 'email':'E-mail', 'Show':'Show',  'EAuth':'EAuth' };  
+    const hide = ['id'];  
 
     await show_table(tbl[0], hide, col, data);
 

@@ -168,16 +168,17 @@ async function user_create() {
         'EAuth'   : input_eauth.value,
         'Show'    : '1'
     };
-    //console.log(data);
-
+    
+    let result;
     try {
-        let result = await create_user(data)
-        console.log(result);
-
-        if (result) await show_user_table();
+        result = await create_user(data)
+        //console.log(result);        
     } catch (e) {
         console.log(e);
     }
+
+    if (result) await show_user_table();
+    
 }
 async function edit_user(obj) {
     console.log('edit_user', obj); 

@@ -133,14 +133,14 @@ async function getUsers() {
     }
     return res;
 }
-async function create_user(user) {
+async function create_user(data) {
     console.log('>>create_user...');
     let res;
     try {
         let response = await fetch('/create', {
             method  : 'post',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(user)
+            body: JSON.stringify(data)
         });
         res = await response.json();
     } catch(err) {
@@ -204,6 +204,7 @@ async function user_edit_modal() {
   
     const row = select_rows[0];  
           
+    const input_form        = document.getElementById('create-user-form');  
     const input_name        = document.getElementById('input-edit-username');  
     const input_descr       = document.getElementById('input-edit-descr');    
     const input_email       = document.getElementById('input-edit-email');    
@@ -229,7 +230,8 @@ async function user_edit_modal() {
     }
   
     if (res) {
-        
+       
+        input_form.setAttribute("eva-id", res[0].id);
         input_name.value        = res[0].Name;
         input_descr.value       = res[0].Descr;   
         input_email.value       = res[0].email;   
@@ -244,9 +246,8 @@ async function user_edit_modal() {
 }
 async function user_edit() {
     console.log('user_edit'); 
-  
-    const row = select_rows[0];  
-  
+      
+    const input_form        = document.getElementById('create-user-form');  
     const input_name        = document.getElementById('input-edit-username');  
     const input_descr       = document.getElementById('input-edit-descr');     
     const input_email       = document.getElementById('input-edit-email');    
@@ -259,7 +260,7 @@ async function user_edit() {
     if (!input_password.value === input_confirmpass.value) return;
     
     const data =  {
-        'id'          : row.cells[0].innerText,
+        'id'          : input_form.getAttribute("eva-id"),
         'Name'        : input_name.value,
         'Descr'       : input_descr.value,
         'email'       : input_email.value,
@@ -269,6 +270,8 @@ async function user_edit() {
         'RoleId'      : input_role.getAttribute("eva-id")
     };
   
+    console.log(data);
+
     let result;
     try {
       result = await edit_user(data)     
@@ -330,6 +333,43 @@ async function getUsersRoles() {
         console.log(err)
     }
     return res;
+}
+async function create_role(data) {
+    console.log('>>create_role...');
+    let res;
+    try {
+        let response = await fetch('/createrole', {
+            method  : 'post',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        });
+        res = await response.json();
+    } catch(err) {
+        console.log(err);
+    }
+    return res;
+}
+async function role_create() {
+    console.log('>>role_create...');
+
+    const input_rolename    = document.getElementById('input-rolename')
+    
+    if (!input_rolename.value) alert('Не заполнено наименование!');
+
+    const data =  {
+        'Name'    : input_rolename.value,
+    };
+    
+    let result;
+    try {
+        result = await create_role(data)
+        //console.log(result);        
+    } catch (e) {
+        console.log(e);
+    }
+
+    if (result) await show_role_table();
+
 }
 let currentModal;
 async function user_edit_role() {

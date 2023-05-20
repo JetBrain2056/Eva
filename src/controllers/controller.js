@@ -153,7 +153,7 @@ exports.Create = async (req, res) => {
     const {Name, Descr, Password, RoleId, EAuth, Show} = req.body;
     try {
         const hash = await hashPassword(Password,10);
-        console.log(hash);
+        // console.log(hash);
         const result = await User.count();
         console.log('User count: ',result);
         if (result === 0) {
@@ -195,12 +195,14 @@ exports.Update = async (req, res, next) => {
 
     let { id, Name, Descr, email, Password, EAuth, Show, RoleId}  = req.body;  
 
+    const hash = await hashPassword(Password,10);
+
     try {
         const data = await User.update({ 
             Name     : Name, 
             Descr    : Descr,
             email    : email,
-            Password : Password,
+            Password : hash,
             EAuth    : EAuth,
             Show     : Show,
             RoleId   : RoleId

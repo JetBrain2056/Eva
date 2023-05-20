@@ -309,6 +309,17 @@ async function user_delete() {
 
     if(result) await show_user_table();
 }
+/////////////////////////////////////////////////////////////////////////////
+async function show_role_table() {
+    
+    let data = await getUsersRoles();   
+
+    const col  = { 'id':'Id', 'Name':'Name' };  
+    const hide = ['id'];  
+
+    await show_table(tbl[1], hide, col, data);
+
+}
 async function getUsersRoles() {
     console.log('getUsersRoles...');
     let res;
@@ -337,7 +348,7 @@ async function user_edit_role() {
   const col = {'id':'Id', 'Name':'Name'};  
   const hide = ['id'];
   
-  await show_table(tbl[1], hide, col, data);
+  await show_table(tbl[2], hide, col, data);
  
 }
 async function role_select() {

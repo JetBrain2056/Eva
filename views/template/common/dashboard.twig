@@ -7,8 +7,8 @@
     {# </div> #}
   {# </nav> #}  
   <div class="tab-content" id="nav-tabContent">
-   {# Users [0] #}
-    <div class="tab-pane fade show active" id="nav-users" role="tabpanel" aria-labelledby="nav-users-tab">
+    {# Users [0] #}
+    <div class="tab-pane fade" id="nav-users" role="tabpanel" aria-labelledby="nav-users-tab">
       <div class="btn-toolbar" role="toolbar" aria-label="toolbar group">
         <div class="btn-group btn-group-sm" role="group">
           <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" data-bs-toggle="modal" data-bs-target="#usersModal">
@@ -44,20 +44,12 @@
     <div class="tab-pane fade" id="nav-roles" role="tabpanel" aria-labelledby="nav-roles-tab">
       <div class="btn-toolbar" role="toolbar" aria-label="toolbar group">
         <div class="btn-group btn-group-sm" role="group">
-          <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" data-bs-toggle="modal" data-bs-target="#rolesModal">
-            <i class="fa fa-user-plus"></i>
+          <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" data-bs-toggle="modal" data-bs-target="#roleModal">
+            <i class="fa fa-plus-square"></i>
             <span>{{ button_add }}</span>
           </button>
-          <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" data-bs-toggle="modal" data-bs-target="#rolesEditModal" onclick="roles_edit_modal()">
-            <i class="fa fa-edit"></i>
-            <span>{{ button_edit }}</span>
-          </button>
-          <button type="button" class="btn btn-primary d-flex gap-2 align-items-center">
-            <i class="fa fa-clone" aria-hidden="true"></i>
-            <span>{{ button_copy }}</span>
-          </button>
           <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" onclick="role_delete()">
-            <i class="fa fa-user-times"></i>
+            <i class="fa fa-minus-square"></i>
             <span>{{ button_delete }}</span>
           </button>
         </div>
@@ -76,7 +68,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
       </div>
       <div class="modal-body">
-        <form class="form" id="create-form">
+        <form class="form" id="create-user-form">
           <label for="input-username">Name:</label>
           <div class="input-group">
             <input type="text" placeholder="Name" id="input-username" class="form-control"/>
@@ -194,3 +186,26 @@
     </div>
   </div>
 </div> 
+{# Modal Role #}
+<div class="modal fade" id="roleModal" tabindex="-1" aria-labelledby="roleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="roleModalLabel">Добавить роль</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+      </div>
+      <div class="modal-body">
+        <form class="form" id="create-role-form">
+          <label for="input-rolename">Name:</label>
+          <div class="input-group">
+            <input type="text" placeholder="Name" id="input-rolename" class="form-control"/>
+          </div>                  
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" onclick="role_create()">{{ button_save }}</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -147,17 +147,18 @@ exports.getOne = async (req, res, next) => {
         console.log(err);
     }
 }
-exports.Create = async (req, res) => {
+exports.createUser = async (req, res) => {
+    console.log('>>CreateUser...');
 
     if (!req.body) return res.sendStatus(400);
     const {Name, Descr, Password, RoleId, EAuth, Show} = req.body;
-    try {
-        const hash = await hashPassword(Password,10);
-        // console.log(hash);
+
+    const hash = await hashPassword(Password,10);
+
+    try {                
         const result = await User.count();
         console.log('User count: ',result);
-        if (result === 0) {
-            // await Role.create({Name: 'Administrator'});
+        if (result === 0) {            
             await User.create({
                 Name    : Name,
                 Descr   : Descr,
@@ -188,8 +189,8 @@ exports.Create = async (req, res) => {
         console.log(err);
     }
 }
-exports.Update = async (req, res, next) => {
-    console.log('Update', req.body);
+exports.updateUser = async (req, res, next) => {
+    console.log('>>Update...');
     
     if (!req.body) return res.sendStatus(400);     
 
@@ -215,7 +216,7 @@ exports.Update = async (req, res, next) => {
         console.log(err); 
     }   
 }
-exports.Delete = async (req, res) => {
+exports.deleteUser = async (req, res) => {
     console.log('Delete', req.body);
     try {
         if (!req.body) return res.sendStatus(400);
@@ -234,6 +235,23 @@ exports.getRoles = async (req, res, next) => {
         await res.send(data);
         next();
     } catch(err) {
+        console.log(err);
+    }
+}
+exports.createRole = async (req, res) => {
+    console.log('>>CreateRole...');
+
+    if (!req.body) return res.sendStatus(400);
+    const { Name } = req.body;
+    
+    try {                     
+        let data =           
+            await Role.create({
+                Name    : Name 
+            });
+
+        return await res.json(data);   
+    } catch (err){
         console.log(err);
     }
 }

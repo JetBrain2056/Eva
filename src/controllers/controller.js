@@ -128,7 +128,7 @@ exports.getOne = async (req, res, next) => {
 
     if (!req.body) return res.sendStatus(400);
 
-    console.log(req);
+    // console.log(req);
 
     const {id} = req.body;
     try {

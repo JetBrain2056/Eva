@@ -134,7 +134,7 @@ async function getUsers() {
     return res;
 }
 async function create_user(user) {
-    console.log('create_user', user);
+    console.log('>>create_user...');
     let res;
     try {
         let response = await fetch('/create', {
@@ -149,13 +149,15 @@ async function create_user(user) {
     return res;
 }
 async function user_create() {
-    console.log('user_create');
+    console.log('>>user_create...');
 
     const input_username    = document.getElementById('input-username');
     const input_password    = document.getElementById('input-password');
     const input_confirmpass = document.getElementById('input-confirmpass');
     const input_descr       = document.getElementById('input-descr');
     const input_eauth       = document.getElementById('input-eauth');
+    const input_show        = document.getElementById('input-show');
+    const input_role        = document.getElementById('input-role');
 
     if (input_password.value !== input_confirmpass.value) alert('Неверное подтверждение пароля!');
     if (!input_username.value) alert('Не заполнено имя пользователя!');
@@ -164,9 +166,9 @@ async function user_create() {
         'Name'    : input_username.value,
         'Descr'   : input_descr.value,
         'Password': input_password.value,
-        'RoleId'  : '1',
+        'RoleId'  : input_role.getAttribute("eva-id"),
         'EAuth'   : input_eauth.value,
-        'Show'    : '1'
+        'Show'    : input_show.value
     };
     
     let result;
@@ -205,8 +207,7 @@ async function user_edit_modal() {
     const input_name        = document.getElementById('input-edit-username');  
     const input_descr       = document.getElementById('input-edit-descr');    
     const input_email       = document.getElementById('input-edit-email');    
-    const input_role        = document.getElementById('input-edit-role');    
-    const input_roleId      = document.getElementById('input-edit-roleId');    
+    const input_role        = document.getElementById('input-edit-role');           
     const input_password    = document.getElementById('input-edit-password');    
     const input_confirmpass = document.getElementById('input-edit-confirmpass'); 
     const input_show        = document.getElementById('input-edit-show');
@@ -215,8 +216,7 @@ async function user_edit_modal() {
     let data = { 'id': row.cells[0].innerText };
 
     let res;
-    try {
-    //   let response = await fetch('/getone?[id='+id+']');
+    try {    
         let response = await fetch('/getone', {
             method  : 'post',    
             headers : {'Content-Type': 'application/json'},
@@ -233,8 +233,8 @@ async function user_edit_modal() {
         input_name.value        = res[0].Name;
         input_descr.value       = res[0].Descr;   
         input_email.value       = res[0].email;   
-        input_role.value        = res[0].Role;   
-        input_roleId.value      = res[0].RoleId;   
+        input_role.value        = res[0].Role;           
+        input_role.setAttribute("eva-id", res[0].RoleId);
         input_password.value    = '';   
         input_confirmpass.value = '';                
         input_show.value        = res[0].Show;  
@@ -254,7 +254,7 @@ async function user_edit() {
     const input_confirmpass = document.getElementById('input-edit-confirmpass'); 
     const input_eauth       = document.getElementById('input-edit-eauth');   
     const input_show        = document.getElementById('input-edit-show');   
-    const input_roleId      = document.getElementById('input-edit-roleId'); 
+    const input_role        = document.getElementById('input-edit-role'); 
 
     if (!input_password.value === input_confirmpass.value) return;
     
@@ -266,7 +266,7 @@ async function user_edit() {
         'Password'    : input_password.value,
         'EAuth'       : input_eauth.value,
         'Show'        : input_show.value,
-        'RoleId'      : input_roleId.value
+        'RoleId'      : input_role.getAttribute("eva-id")
     };
   
     let result;
@@ -279,7 +279,7 @@ async function user_edit() {
       await show_user_table();     
     //}
 }
-async function delete_user(user){
+async function delete_user(user) {
     console.log('delete_user', user);
     let res;
     try {
@@ -345,16 +345,13 @@ async function role_select() {
 
   const row = select_rows[0];  
 
-  const input_roleId      = document.getElementById('input-roleId');   
   const input_role        = document.getElementById('input-role');   
-  const input_edit_roleId = document.getElementById('input-edit-roleId');   
   const input_edit_role   = document.getElementById('input-edit-role');   
 
-
-  input_roleId.value      = row.cells[0].innerText;
   input_role.value        = row.cells[1].innerText;
-  input_edit_roleId.value = row.cells[0].innerText;  
+  input_role.setAttribute("eva-id", row.cells[0].innerText);
   input_edit_role.value   = row.cells[1].innerText;
+  input_edit_role.setAttribute("eva-id", row.cells[0].innerText);
 
   currentModal.hide();
            

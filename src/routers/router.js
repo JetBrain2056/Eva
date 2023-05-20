@@ -17,10 +17,12 @@ router.post('/lang', controller.Lang);
 
 router.get('/users', controller.getUsers);
 router.post('/getone', controller.getOne);
-router.post('/create', controller.Create)
-router.post('/updateuser', controller.Update)
+router.post('/create', controller.createUser);
+router.post('/updateuser', controller.updateUser);
 //router.delete('/delete/:id([0-9]+)', controller.delete)
-router.post('/delete', controller.Delete)
+router.post('/delete', controller.deleteUser);
+
 router.get('/roles', controller.getRoles);
+router.post('/createrole', controller.createRole)
 
 module.exports = { router }                                                  

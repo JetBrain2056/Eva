@@ -54,37 +54,36 @@
         <form class="form" id="create-form">
           <label for="input-username">Name:</label>
           <div class="input-group">
-            <input type="text" name="username" value="" placeholder="Name" id="input-username" class="form-control"/>
+            <input type="text" placeholder="Name" id="input-username" class="form-control"/>
           </div>
           <label for="input-descr">Descr:</label>
           <div class="input-group">
-            <input type="text" name="Descr" value="" placeholder="Full name" id="input-descr" class="form-control"/>
+            <input type="text" placeholder="Full name" id="input-descr" class="form-control"/>
           </div>
           <label for="input-role">Role:</label>
-          <div class="input-group">
-            <input type="text" id="input-roleId" class="form-control" hidden/>
+          <div class="input-group">            
             <input type="text" id="input-role" class="form-control"/>
-            <button class="btn btn-outline-secondary" type="button" id="input-role" onclick="user_edit_role()">...</button>
+            <button class="btn btn-outline-secondary" type="button" onclick="user_edit_role()">...</button>
           </div>
           <label for="input-email">E-mail:</label>
-          <div class="input-group">
-            <input type="text" name="email" value="" placeholder="email@example.com" id="input-email" class="form-control"/>
+          <div class="input-group">            
+            <input type="email" placeholder="email@example.com" id="input-email" class="form-control"/>
           </div>
           <label for="input-password">Password:</label>
           <div class="input-group">
-            <input type="password" name="password" value="" placeholder="Password" id="input-password" class="form-control"/>
+            <input type="password" placeholder="Password" id="input-password" class="form-control"/>
           </div>
           <label for="input-confirmpass">Confirm password:</label>
           <div class="input-group">
-            <input type="password" name="confirmpass" value="" placeholder="Password" id="input-confirmpass" class="form-control"/>
+            <input type="password" placeholder="Password" id="input-confirmpass" class="form-control"/>
           </div>
           <label for="input-eauth">Show user:</label>
           <div class="form-group">
-            <input type="checkbox" class="form-check-input" name="swow" id="input-show" checked/>
+            <input type="checkbox" class="form-check-input" id="input-show" checked/>
           </div>
           <label for="input-eauth">Enterprise auth:</label>
           <div class="form-group">
-            <input type="checkbox" class="form-check-input" name="eauth" id="input-eauth" checked/>
+            <input type="checkbox" class="form-check-input" id="input-eauth" checked/>
           </div>
         </form>
       </div>
@@ -104,37 +103,36 @@
       </div>
       <div class="modal-body">
         <form class="form" id="create-edit-form">
-          <label for="input-username">Name:</label>
+          <label for="input-edit-username">Name:</label>
           <div class="input-group">
-            <input type="text" name="username" value="" placeholder="Name" id="input-edit-username" class="form-control"/>
+            <input type="text" placeholder="Name" id="input-edit-username" class="form-control"/>
           </div>
-          <label for="input-descr">Descr:</label>
+          <label for="input-edit-descr">Descr:</label>
           <div class="input-group">
-            <input type="text" name="Descr" value="" placeholder="Full name" id="input-edit-descr" class="form-control"/>
+            <input type="text" placeholder="Full name" id="input-edit-descr" class="form-control"/>
           </div>
           <label for="input-edit-role">Role:</label>
-          <div class="input-group">
-            <input type="text" id="input-edit-roleId" class="form-control" hidden/>
+          <div class="input-group">            
             <input type="text" id="input-edit-role" class="form-control"/>
-             <button class="btn btn-outline-secondary" type="button" onclick="user_edit_role()">...</button>
+            <button class="btn btn-outline-secondary" type="button" onclick="user_edit_role()">...</button>
           </div>
-          <label for="input-email">E-mail:</label>
+          <label for="input-edit-email">E-mail:</label>
           <div class="input-group">
-            <input type="text" name="email" value="" placeholder="email@example.com" id="input-edit-email" class="form-control"/>
+            <input type="email" placeholder="email@example.com" id="input-edit-email" class="form-control"/>
           </div>
-          <label for="input-password">Password:</label>
+          <label for="input-edit-password">Password:</label>
           <div class="input-group">
-            <input type="password" name="password" value="" placeholder="Password" id="input-edit-password" class="form-control"/>
+            <input type="password" placeholder="Password" id="input-edit-password" class="form-control"/>
           </div>
-          <label for="input-confirmpass">Confirm password:</label>
+          <label for="input-edit-confirmpass">Confirm password:</label>
           <div class="input-group">
-            <input type="password" name="confirmpass" value="" placeholder="Password" id="input-edit-confirmpass" class="form-control"/>
+            <input type="password" placeholder="Password" id="input-edit-confirmpass" class="form-control"/>
           </div>
           <label for="input-edit-show">Show user:</label>
           <div class="form-group">
-            <input type="checkbox" class="form-check-input" name="swow" id="input-edit-show" checked/>
+            <input type="checkbox" class="form-check-input" id="input-edit-show" checked/>
           </div>
-          <label for="input-eauth">Enterprise auth:</label>
+          <label for="input-edit-eauth">Enterprise auth:</label>
           <div class="form-group">
             <input type="checkbox" class="form-check-input" name="eauth" id="input-edit-eauth" checked/>
           </div>
@@ -151,7 +149,7 @@
   <div class="modal-dialog  modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Выбор роли пользователя</h5>
+        <h5 class="modal-title">Выбор роли</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
       </div>
       <div class="modal-body">          

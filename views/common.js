@@ -151,7 +151,7 @@ async function create_user(data) {
     console.log('>>create_user...');
     let res;
     try {
-        let response = await fetch('/create', {
+        let response = await fetch('/createuser', {
             method  : 'post',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(data)
@@ -296,14 +296,14 @@ async function user_edit() {
       await show_user_table();     
     //}
 }
-async function delete_user(user) {
-    console.log('delete_user', user);
+async function delete_user(data) {
+    console.log('>>delete_user...');
     let res;
     try {
-        let response = await fetch('/delete', {
+        let response = await fetch('/deleteuser', {
             method  : 'post',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(user)
+            body: JSON.stringify(data)
         });
         res = await response.json();
     } catch (err) {
@@ -312,16 +312,13 @@ async function delete_user(user) {
     return res;
 }
 async function user_delete() {
-    console.log('user_delete');
-    let result = {};
+    console.log('>>user_delete...');
+    let result;
     for (const row of select_rows){
 
-        console.log(row.cells[0].innerText);
+        let data = {'id': row.cells[0].innerText};
 
-        const user = {'id': row.cells[0].innerText};
-
-        result = await delete_user(user);
-        console.log(result);
+        result = await delete_user(data);        
     }
 
     if(result) await show_user_table();

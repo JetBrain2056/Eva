@@ -55,7 +55,8 @@ footer {
 	
 }
 .input-group-text{
-	color:LightSlateGray
+	color:LightSlateGray;
+	
 }
 .form-signin .form-control:focus {
 	z-index: 2;

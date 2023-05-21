@@ -112,6 +112,20 @@ async function show_table(show_tbl , hide, col, data) {
     }   
 }
 /////////////////////////////////////////////////////////////////////////////
+let input_username = document.getElementById('input-username');
+
+async function select_user() {
+               
+    let data = await getUsers();    
+    for(let rows of data) {
+        
+        let option = document.createElement('option');
+        option.value = rows['Name'];
+        option.text  = rows['Name'];
+        input_username.appendChild(option);
+        
+    }
+}
 async function show_user_table() {
     
     let data = await getUsers();   
@@ -409,5 +423,6 @@ async function role_select() {
 }
 
 window.onload = async () => {
-    await show_user_table();
+    await select_user();
+    // await show_user_table();
 }

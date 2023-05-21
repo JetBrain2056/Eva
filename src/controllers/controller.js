@@ -44,6 +44,8 @@ exports.Signin = async (req,res,next) => {
 
     if (!req.body) return res.sendStatus(400);
 
+    console.log('body: ', req.body);
+
     const username = req.body.username;
     const password = req.body.password;
 

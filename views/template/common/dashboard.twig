@@ -252,22 +252,35 @@
       </div>
       <div class="modal-body">
         <form class="form" id="create-config-form">  
-          <label for="input-descr">Type:</label>
-          <div class="input-group">
-            <input type="text" placeholder="0" id="input-typeId" class="form-control"/>
+          <label for="input-type">Type object:</label>
+          <div class="input-group input-group-sm">
+            {# <input type="text" placeholder="0" id="input-type" class="form-control"/> #}
+            {# <button class="btn btn-outline-secondary" type="button" onclick="config_edit_type()">...</button> #}
+            <select type="text" name="type" value="" class="form-select form-control" id="input-type">
+              <option selected>  </option>
+              <option value="Constant">Константа</option>
+              <option value="Reference">Справочник</option>              
+            </select>
           </div>         
-          <label for="input-descr">textId:</label>
-          <div class="input-group">
-            <input type="text" placeholder="0" id="input-textId" class="form-control"/>
+          <label for="input-textId">Identifier:</label>
+          <div class="input-group input-group-sm">
+            <input type="text" placeholder="" id="input-textId" class="form-control"/>
           </div>  
+          <label for="input-typeId">Type Id:</label>
+          <div class="input-group input-group-sm">
+            <input type="text" placeholder="0" id="input-typeId" class="form-control"/>
+            <button class="btn btn-outline-secondary" type="button" onclick="config_edit_typeId()">...</button>
+          </div> 
           <label for="input-descr">Parent:</label>
-          <div class="input-group">
+          <div class="input-group input-group-sm">
             <input type="text" placeholder="..." id="input-parent" class="form-control"/>
+            <button class="btn btn-outline-secondary" type="button" onclick="config_edit_parent()">...</button>
           </div>  
         </form>
       </div>
       <div class="modal-footer">
         <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" onclick="config_create()">{{ button_save }}</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
       </div>
     </div>
   </div>

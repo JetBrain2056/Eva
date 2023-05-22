@@ -1,4 +1,4 @@
-const { User, Role }    = require('../models/models.js');
+const { User, Role, Config }    = require('../models/models.js');
 const { content, Lang } = require('../index.js');
 const bcrypt            = require('bcrypt');
 // const { Op, Sequelize, QueryTypes} = require("sequelize");
@@ -31,16 +31,16 @@ async function hashPassword(password, saltRounds = 10) {
         console.log(err);
     }
 }
-exports.Lang = (req,res) => {
+exports.Lang = function(req,res) {
     if (!req.body) return res.sendStatus(400);
     const {lang} = req.body;
     //Lang = 'rus';
 }
-exports.Auth = (req,res) => {
+exports.Auth = function(req,res) {
     content.logged = false;
     res.render('index.twig', content);
 }
-exports.Signin = async (req,res,next) => {
+exports.Signin = async function(req,res,next) {
 
     if (!req.body) return res.sendStatus(400);
 
@@ -110,7 +110,7 @@ exports.Signin = async (req,res,next) => {
         }
     }
 }
-exports.getUsers = async (req, res, next) => {
+exports.getUsers = async function(req, res, next) {
     try {
         // const data = await User.findAll({raw:true})
         // await res.send(data);
@@ -126,7 +126,7 @@ exports.getUsers = async (req, res, next) => {
         console.log(err);
     }
 }
-exports.getOne = async (req, res, next) => {
+exports.getOne = async function(req, res, next) {
 
     if (!req.body) return res.sendStatus(400);
 
@@ -149,7 +149,7 @@ exports.getOne = async (req, res, next) => {
         console.log(err);
     }
 }
-exports.createUser = async (req, res) => {
+exports.createUser = async function(req, res) {
     console.log('>>CreateUser...');
 
     if (!req.body) return res.sendStatus(400);
@@ -191,7 +191,7 @@ exports.createUser = async (req, res) => {
         console.log(err);
     }
 }
-exports.updateUser = async (req, res, next) => {
+exports.updateUser = async function(req, res, next) {
     console.log('>>Update...');
     
     if (!req.body) return res.sendStatus(400);     
@@ -218,20 +218,20 @@ exports.updateUser = async (req, res, next) => {
         console.log(err); 
     }   
 }
-exports.deleteUser = async (req, res) => {
-    console.log('Delete', req.body);
+exports.deleteUser = async function(req, res) {
+    console.log('>>deleteUser...');
     try {
         if (!req.body) return res.sendStatus(400);
 
         const {id} = req.body;
-        const user = await User.destroy({where: {id: id, AdmRole: false}});
+        const data = await User.destroy({where: {id: id, AdmRole: false}});
 
-        return await res.json(user);
+        return await res.json(data);
     } catch(err) {
         console.log(err);
     }
 }
-exports.getRoles = async (req, res, next) => {
+exports.getRoles = async function(req, res, next) {
     try {
         const data = await Role.findAll({raw:true})
         await res.send(data);
@@ -240,7 +240,7 @@ exports.getRoles = async (req, res, next) => {
         console.log(err);
     }
 }
-exports.createRole = async (req, res) => {
+exports.createRole = async function(req, res) {
     console.log('>>CreateRole...');
 
     if (!req.body) return res.sendStatus(400);
@@ -254,6 +254,45 @@ exports.createRole = async (req, res) => {
 
         return await res.json(data);   
     } catch (err){
+        console.log(err);
+    }
+}
+exports.getConfig = async function(req, res, next) {
+    try {
+        const data = await Config.findAll({raw:true})
+        await res.send(data);
+        next();
+    } catch(err) {
+        console.log(err);
+    }
+}
+exports.createConfig = async function(req, res) {
+    console.log('>>createConfig...');
+
+    if (!req.body) return res.sendStatus(400);
+    const { data } = req.body;
+    
+    try {                     
+        let result =           
+            await Config.create({
+                data    : data
+            });
+
+        return await res.json(result);   
+    } catch (err){
+        console.log(err);
+    }
+}
+exports.deleteConfig = async function(req, res) {
+    console.log('>>deleteConfig...');
+    try {
+        if (!req.body) return res.sendStatus(400);
+
+        const {id} = req.body;
+        const data = await Config.destroy({where: {id: id}});
+
+        return await res.json(data);
+    } catch(err) {
         console.log(err);
     }
 }

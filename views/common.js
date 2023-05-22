@@ -133,7 +133,7 @@ async function show_user_table() {
     const col  = { 'id':'Id', 'Name':'Name', 'Descr':'Descr', 'Role':'Role','email':'E-mail', 'Show':'Show',  'EAuth':'EAuth' };  
     const hide = ['id'];  
 
-    await show_table(tbl[0], hide, col, data);
+    await show_table(tbl[1], hide, col, data);
 
 }
 async function getUsers() {
@@ -300,7 +300,7 @@ async function delete_user(data) {
     console.log('>>delete_user...');
     let res;
     try {
-        let response = await fetch('/deleteuser', {
+        let response = await fetch('/deluser', {
             method  : 'post',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(data)
@@ -331,7 +331,7 @@ async function show_role_table() {
     const col  = { 'id':'Id', 'Name':'Name' };  
     const hide = ['id'];  
 
-    await show_table(tbl[1], hide, col, data);
+    await show_table(tbl[2], hide, col, data);
 
 }
 async function getUsersRoles() {
@@ -399,7 +399,7 @@ async function user_edit_role() {
   const col = {'id':'Id', 'Name':'Name'};  
   const hide = ['id'];
   
-  await show_table(tbl[2], hide, col, data);
+  await show_table(tbl[3], hide, col, data);
  
 }
 async function role_select() {
@@ -418,8 +418,94 @@ async function role_select() {
   currentModal.hide();
            
 }
+/////////////////////////////////////////////////////////////////////////////
+async function getConfig() {
+    console.log('>>getConfig...');
+    let res;
+    try{
+        const response = await fetch('/config');
+        res = await response.json();
+    } catch (err) {
+        console.log(err)
+    }
+    return res;
+}
+async function show_config_table() {
+    
+    let data = await getConfig();   
 
-window.onload = async () => {
+    const col  = { 'id':'Id', 'data':'Data' };  
+    const hide = [];  
+
+    await show_table(tbl[0], hide, col, data);
+
+}
+async function create_config(data) {
+    console.log('>>create_config...');
+    let res;
+    try {
+        let response = await fetch('/createconf', {
+            method  : 'post',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        });
+        res = await response.json();
+    } catch(err) {
+        console.log(err);
+    }
+    return res;
+}
+async function config_create() {
+    console.log('>>config_create...');
+
+    const input_data    = document.getElementById('input-data')
+    
+    if (!input_data.value) alert('Не заполнены данные!');
+
+    const data =  {
+        'data'    : input_data.value,
+    };
+    
+    let result;
+    try {
+        result = await create_config(data)
+        //console.log(result);        
+    } catch (e) {
+        console.log(e);
+    }
+
+    if (result) await show_config_table();
+
+}
+async function delete_config(data) {
+    console.log('>>delete_user...');
+    let res;
+    try {
+        let response = await fetch('/delconf', {
+            method  : 'post',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        });
+        res = await response.json();
+    } catch (err) {
+        console.log(err);
+    }
+    return res;
+}
+async function config_delete() {
+    console.log('>>config_delete...');
+    let result;
+    for (const row of select_rows){
+
+        let data = {'id': row.cells[0].innerText};
+
+        result = await delete_config(data);        
+    }
+
+    if(result) await show_config_table();
+}
+
+window.onload = async function() {
     await select_user();
-    // await show_user_table();
+    await show_config_table();
 }

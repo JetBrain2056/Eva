@@ -439,14 +439,14 @@ async function show_config_table() {
 
     for (const row of tmp) {
         let strJson = row.data; 
-        console.log(strJson);
+        // console.log(strJson);
         let Elements = await JSON.parse(strJson);
-        console.log(Elements);
+        // console.log(Elements);
         
         data.push(Object.assign({'id':row.id}, Elements));
     }
 
-    const col  = { 'id':'Id', 'typeId':'typeId',  'textId': 'eva-id'};  
+    const col  = { 'id':'Id', 'typeId':'Type',  'textId': 'Identifier'};  
     const hide = ['id'];  
 
     await show_table(tbl[0], hide, col, data);
@@ -470,12 +470,12 @@ async function create_config(data) {
 async function config_create() {
     console.log('>>config_create...');
 
-    const input_typeId = document.getElementById('input-typeId');
+    const input_type   = document.getElementById('input-type');
     const input_textId = document.getElementById('input-textId');    
     
     if (!input_textId.value) alert('Не заполнен идентификатор!');
     
-    let tmp = {typeId:input_typeId.value, textId:input_textId.value};        
+    let tmp = {typeId:input_type.value, textId:input_textId.value};        
 
     const data =  {
         'data'    : JSON.stringify(tmp),

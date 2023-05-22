@@ -21,7 +21,8 @@ const Role = sequelize.define('Role', {
 })
 
 const Config = sequelize.define('Config', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true}
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    data:  {type: DataTypes.STRING}
 })
 
 Role.hasOne(User)

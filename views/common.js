@@ -447,7 +447,7 @@ async function show_config_table() {
     }
 
     const col  = { 'id':'Id', 'typeId':'typeId',  'eva-id': 'eva-id'};  
-    const hide = [];  
+    const hide = ['id'];  
 
     await show_table(tbl[0], hide, col, data);
 
@@ -470,12 +470,17 @@ async function create_config(data) {
 async function config_create() {
     console.log('>>config_create...');
 
-    const input_data    = document.getElementById('input-data')
+    const input_typeId = document.getElementById('input-typeId');
+    const input_textId = document.getElementById('input-textId');    
     
-    if (!input_data.value) alert('Не заполнены данные!');
+    if (!input_textId.value) alert('Не заполнен идентификатор!');
+
+    let tmp = '{"typeId":'+input_typeId.value+', "eva-id": "' +input_textId.value+'"}';
+
+    console.log(tmp);
 
     const data =  {
-        'data'    : input_data.value,
+        'data'    : tmp,
     };
     
     let result;

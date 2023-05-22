@@ -7,7 +7,40 @@
     {# </div> #}
   {# </nav> #}  
   <div class="tab-content" id="nav-tabContent">
-    {# Users [0] #}
+    {# Config [0] #}
+    <div class="tab-pane fade active show" id="nav-config" role="tabpanel" aria-labelledby="nav-confi-tab">
+      <div class="btn-toolbar" role="toolbar" aria-label="toolbar group">
+        <div class="btn-group btn-group-sm" role="group">
+          <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" data-bs-toggle="modal" data-bs-target="#configModal">
+            <i class="fa fa-user-plus"></i>
+            <span>{{ button_add }}</span>
+          </button>
+          <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" data-bs-toggle="modal" data-bs-target="#configEditModal" onclick="confi_edit_modal()">
+            <i class="fa fa-edit"></i>
+            <span>{{ button_edit }}</span>
+          </button>
+          {# <button type="button" class="btn btn-primary d-flex gap-2 align-items-center">
+            <i class="fa fa-clone" aria-hidden="true"></i>
+            <span>{{ button_copy }}</span>
+          </button> #}
+          <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" onclick="config_delete()">
+            <i class="fa fa-user-times"></i>
+            <span>{{ button_delete }}</span>
+          </button>
+          <div class="btn-group btn-group-sm" role="group">
+            <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></button>
+            <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+              <li><a class="dropdown-item d-flex gap-2 align-items-center"><i class="fa fa-refresh"></i>{{ button_update }}</a></li>
+              <li><a class="dropdown-item">{{ button_etc}}</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item">...</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>           
+      <div class="eva-form"></div>      
+    </div> 
+    {# Users [1] #}
     <div class="tab-pane fade" id="nav-users" role="tabpanel" aria-labelledby="nav-users-tab">
       <div class="btn-toolbar" role="toolbar" aria-label="toolbar group">
         <div class="btn-group btn-group-sm" role="group">
@@ -40,7 +73,7 @@
       </div>           
       <div class="eva-form"></div>      
     </div>    
-    {# Roles [1] #}
+    {# Roles [2] #}
     <div class="tab-pane fade" id="nav-roles" role="tabpanel" aria-labelledby="nav-roles-tab">
       <div class="btn-toolbar" role="toolbar" aria-label="toolbar group">
         <div class="btn-group btn-group-sm" role="group">
@@ -161,7 +194,7 @@
     </div>
   </div>
 </div>
-{# Modal Edit User Role [2] #}
+{# Modal Edit User Role [3] #}
 <div class="modal modal-lg fade" id="editUserRoleModal" aria-hidden="true">
   <div class="modal-dialog  modal-dialog-scrollable">
     <div class="modal-content">
@@ -205,6 +238,28 @@
       <div class="modal-footer">
         <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" onclick="role_create()">{{ button_save }}</button>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+      </div>
+    </div>
+  </div>
+</div>
+{# Modal Config #}
+<div class="modal fade" id="configModal" tabindex="-1" aria-labelledby="configModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="configModalLabel">Добавить объект</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+      </div>
+      <div class="modal-body">
+        <form class="form" id="create-config-form">  
+          <label for="input-descr">Data:</label>
+          <div class="input-group">
+            <input type="text" placeholder="Data" id="input-data" class="form-control"/>
+          </div>         
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" onclick="config_create()">{{ button_save }}</button>
       </div>
     </div>
   </div>

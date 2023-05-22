@@ -20,9 +20,13 @@ router.post('/getone', controller.getOne);
 router.post('/createuser', controller.createUser);
 router.post('/updateuser', controller.updateUser);
 //router.delete('/delete/:id([0-9]+)', controller.delete)
-router.post('/deleteuser', controller.deleteUser);
+router.post('/deluser', controller.deleteUser);
 
 router.get('/roles', controller.getRoles);
-router.post('/createrole', controller.createRole)
+router.post('/createrole', controller.createRole);
+
+router.get('/config', controller.getConfig);
+router.post('/createconf', controller.createConfig);
+router.post('/delconf', controller.deleteConfig);
 
 module.exports = { router }                                                  

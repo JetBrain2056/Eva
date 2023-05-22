@@ -328,6 +328,8 @@ async function show_role_table() {
     
     let data = await getUsersRoles();   
 
+    console.log(data);
+
     const col  = { 'id':'Id', 'Name':'Name' };  
     const hide = ['id'];  
 
@@ -432,9 +434,19 @@ async function getConfig() {
 }
 async function show_config_table() {
     
-    let data = await getConfig();   
+    let tmp  = await getConfig();     
+    let data =[];
 
-    const col  = { 'id':'Id', 'data':'Data' };  
+    for (const row of tmp) {
+        let strJson = row.data; 
+        console.log(strJson);
+        let Elements = await JSON.parse(strJson);
+        console.log(Elements);
+        
+        data.push(Object.assign({'id':row.id}, Elements));
+    }
+
+    const col  = { 'id':'Id', 'typeId':'typeId',  'eva-id': 'eva-id'};  
     const hide = [];  
 
     await show_table(tbl[0], hide, col, data);

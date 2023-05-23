@@ -24,6 +24,7 @@ router.post('/deluser', controller.deleteUser);
 
 router.get('/roles', controller.getRoles);
 router.post('/createrole', controller.createRole);
+router.post('/delrole', controller.deleteRole);
 
 router.get('/config', controller.getConfig);
 router.post('/createconf', controller.createConfig);

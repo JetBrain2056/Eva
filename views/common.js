@@ -420,6 +420,33 @@ async function role_select() {
   currentModal.hide();
            
 }
+async function delete_role(data) {
+    console.log('>>delete_role...');
+    let res;
+    try {
+        let response = await fetch('/delrole', {
+            method  : 'post',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        });
+        res = await response.json();
+    } catch (err) {
+        console.log(err);
+    }
+    return res;
+}
+async function role_delete() {
+    console.log('>>role_delete...');
+    let result;
+    for (const row of select_rows){
+
+        let data = {'id': row.cells[0].innerText};
+
+        result = await delete_role(data);        
+    }
+
+    if(result) await show_role_table();
+}
 /////////////////////////////////////////////////////////////////////////////
 async function getConfig() {
     console.log('>>getConfig...');

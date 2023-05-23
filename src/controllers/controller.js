@@ -257,6 +257,19 @@ exports.createRole = async function(req, res) {
         console.log(err);
     }
 }
+exports.deleteRole = async function(req, res) {
+    console.log('>>deleteRole...');
+    try {
+        if (!req.body) return res.sendStatus(400);
+
+        const {id} = req.body;
+        const data = await Role.destroy({where: {id: id}});
+
+        return await res.json(data);
+    } catch(err) {
+        console.log(err);
+    }
+}
 exports.getConfig = async function(req, res, next) {
     try {
         const data = await Config.findAll({raw:true})

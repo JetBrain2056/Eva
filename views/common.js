@@ -69,7 +69,25 @@ function row_select(e) {
 async function show_table(show_tbl , hide, col, data) {
     console.log('show_table'); 
   
-    if (show_tbl) show_tbl.addEventListener('click', row_select);
+    if (show_tbl) {
+        show_tbl.addEventListener('click', row_select);
+  
+        show_tbl.addEventListener('dblclick',  (e) => {
+          
+          if (e.target.nodeName  === 'TH') {
+            return;
+          } else {
+            const currentForm = e.currentTarget.parentNode.parentNode;
+          
+            // if (e.target.closest('.eva-form tr')) {
+            // const modalTrigger = currentForm.querySelector('[data-bs-toggle="modalEdit"]');
+            const modalTrigger = currentForm.getElementsByClassName('eva-edit');
+            if (modalTrigger[0]) {
+              modalTrigger[0].click();
+            }
+          }
+        });
+    }
 
     show_tbl.innerHTML = '';
   

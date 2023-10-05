@@ -4,6 +4,7 @@ Demo (prototype) platform with MVC architecture, CRUD Rest API and Server-Side R
 The configurator is designed for interactive construction of the DBMS architecture and easy migrations of its versions.
 Only the administrative part of the configurator has been published. 
 It is planned to replace the TWIG template engine with HTMX.
+We invite co-authors :)
 
 ## Instalation
 

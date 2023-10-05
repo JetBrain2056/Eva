@@ -1,7 +1,9 @@
 # Eva
 Business application development platform.
-Demo platform with MVC architecture, CRUD Rest API and Server-Side Rendering (SSR).
-
+Demo (prototype) platform with MVC architecture, CRUD Rest API and Server-Side Rendering (SSR).
+The configurator is designed for interactive construction of the DBMS architecture and easy migrations of its versions.
+Only the administrative part of the configurator has been published. 
+It is planned to replace the TWIG template engine with HTMX.
 
 ## Instalation
 

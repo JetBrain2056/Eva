@@ -5,13 +5,13 @@ const bcrypt            = require('bcrypt');
 const sequelize         = require('../db');
 //const jwt            = require('jsonwebtoken');
 
-// const generateJwt = (id, login, role) => {
-//     return jwt.sign(
-//         {id, login, role},
-//         process.env.SECRET_KEY,
-//         {expiresIn: '24h'}
-//     )
-// }
+/* const generateJwt = (id, login, role) => {
+     return jwt.sign(
+         {id, login, role},
+         process.env.SECRET_KEY,
+         {expiresIn: '24h'}
+     )
+ } */
 
 // exports.check = (req, res, next) => {
 //     const token = generateJwt(req.user.id, req.user.login, req.user.role)

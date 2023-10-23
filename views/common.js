@@ -1,4 +1,4 @@
-let select_rows = [];
+let selectRows = [];
 let n = 0;
 let tbl = [];
 let forms = document.getElementsByClassName('eva-form');
@@ -11,8 +11,8 @@ for (const div of forms) {
     n = n + 1;
 }
 
-function row_select(e) {
-    console.log('row_select');
+function rowSelect(e) {
+    console.log('>>rowSelect...');
 
     const path = e.path || (e.composedPath && e.composedPath());
     const row  = path[1];
@@ -51,28 +51,28 @@ function row_select(e) {
         let text;
         if (e.ctrlKey) {
             text = 'The CTRL key was pressed!';
-            select_rows.push(row);
+            selectRows.push(row);
             row.style.background = 'aquamarine';
-            console.log('select_rows count: ', select_rows.length);
+            console.log('select_rows count: ', selectRows.length);
         } else {
             text = 'The CTRL key was NOT pressed!';
-            for (const rows of select_rows) {
+            for (const rows of selectRows) {
                 rows.style.background = '';
             }
-            select_rows.splice(0, select_rows.length);
+            selectRows.splice(0, selectRows.length);
             row.style.background = 'aquamarine';
-            select_rows.push(row);
+            selectRows.push(row);
         }
         console.log(text);
     }
 }
-async function show_table(show_tbl , hide, col, data) {
-    console.log('show_table'); 
+async function showTable(showTbl , hide, col, data) {
+    console.log('>>showTable...'); 
   
-    if (show_tbl) {
-        show_tbl.addEventListener('click', row_select);
+    if (showTbl) {
+        showTbl.addEventListener('click', rowSelect);
   
-        show_tbl.addEventListener('dblclick',  (e) => {
+        showTbl.addEventListener('dblclick',  (e) => {
           
           if (e.target.nodeName  === 'TH') {
             return;
@@ -89,17 +89,17 @@ async function show_table(show_tbl , hide, col, data) {
         });
     }
 
-    show_tbl.innerHTML = '';
+    showTbl.innerHTML = '';
   
     const thead = document.createElement('thead');
     thead.style.position = 'sticky';  
     thead.style.top      = '0px';
     thead.style.border   = '#00ff92';
     thead.style.background = 'White';  
-    show_tbl.appendChild(thead);
+    showTbl.appendChild(thead);
   
     const tbody = document.createElement('tbody');
-    show_tbl.appendChild(tbody);
+    showTbl.appendChild(tbody);
   
     const tr = document.createElement('tr'); 
     thead.appendChild(tr);
@@ -130,9 +130,9 @@ async function show_table(show_tbl , hide, col, data) {
     }   
 }
 /////////////////////////////////////////////////////////////////////////////
-let input_username = document.getElementById('input-username');
+let inputUserName = document.getElementById('input-username');
 
-async function select_user() {
+async function selectUser() {
                
     let data = await getUsers();    
     for(let rows of data) {
@@ -140,22 +140,22 @@ async function select_user() {
         let option = document.createElement('option');
         option.value = rows['Name'];
         option.text  = rows['Name'];
-        input_username.appendChild(option);
+        inputUserName.appendChild(option);
         
     }
 }
-async function show_user_table() {
+async function showUserTable() {
     
     let data = await getUsers();   
 
     const col  = { 'id':'Id', 'Name':'Name', 'Descr':'Descr', 'Role':'Role','email':'E-mail', 'Show':'Show',  'EAuth':'EAuth' };  
     const hide = ['id'];  
 
-    await show_table(tbl[1], hide, col, data);
+    await showTable(tbl[1], hide, col, data);
 
 }
 async function getUsers() {
-    console.log('getUsers');
+    console.log('>>getUsers...');
     let res;
     try{
         const response = await fetch('/users');
@@ -165,8 +165,8 @@ async function getUsers() {
     }
     return res;
 }
-async function create_user(data) {
-    console.log('>>create_user...');
+async function createUser(data) {
+    console.log('>>createUser...');
     let res;
     try {
         let response = await fetch('/createuser', {
@@ -180,8 +180,8 @@ async function create_user(data) {
     }
     return res;
 }
-async function user_create() {
-    console.log('>>user_create...');
+async function userCreate() {
+    console.log('>>userCreate...');
 
     const input_username    = document.getElementById('input-username');
     const input_password    = document.getElementById('input-password');
@@ -205,17 +205,17 @@ async function user_create() {
     
     let result;
     try {
-        result = await create_user(data)
+        result = await createUser(data)
         //console.log(result);        
     } catch (e) {
         console.log(e);
     }
 
-    if (result) await show_user_table();
+    if (result) await showUserTable();
 
 }
-async function edit_user(data) {
-    console.log('>>edit_user..'); 
+async function editUser(data) {
+    console.log('>>editUser...'); 
   
     let res;
     try {
@@ -231,10 +231,10 @@ async function edit_user(data) {
 
     return res;
 }
-async function user_edit_modal() {
-    console.log('user_modal'); 
+async function userEditModal() {
+    console.log('>>userEditModal...'); 
   
-    const row = select_rows[0];  
+    const row = selectRows[0];  
           
     const input_form        = document.getElementById('create-user-form');  
     const input_name        = document.getElementById('input-edit-username');  
@@ -276,8 +276,8 @@ async function user_edit_modal() {
     }         
 
 }
-async function user_edit() {
-    console.log('user_edit'); 
+async function userEdit() {
+    console.log('>>userEdit...'); 
       
     const input_form        = document.getElementById('create-user-form');  
     const input_name        = document.getElementById('input-edit-username');  
@@ -306,16 +306,16 @@ async function user_edit() {
 
     let result;
     try {
-      result = await edit_user(data)     
+      result = await editUser(data)     
     } catch (e) {
       console.log(e);
     }
     //if (result) {      
-      await show_user_table();     
+      await showUserTable();     
     //}
 }
-async function delete_user(data) {
-    console.log('>>delete_user...');
+async function deleteUser(data) {
+    console.log('>>deleteUser...');
     let res;
     try {
         let response = await fetch('/deluser', {
@@ -329,20 +329,20 @@ async function delete_user(data) {
     }
     return res;
 }
-async function user_delete() {
-    console.log('>>user_delete...');
+async function userDelete() {
+    console.log('>>userDelete...');
     let result;
-    for (const row of select_rows){
+    for (const row of selectRows){
 
         let data = {'id': row.cells[0].innerText};
 
-        result = await delete_user(data);        
+        result = await deleteUser(data);        
     }
 
-    if(result) await show_user_table();
+    if(result) await showUserTable();
 }
 /////////////////////////////////////////////////////////////////////////////
-async function show_role_table() {
+async function showRoleTable() {
     
     let data = await getUsersRoles();   
 
@@ -351,11 +351,11 @@ async function show_role_table() {
     const col  = { 'id':'Id', 'Name':'Name' };  
     const hide = ['id'];  
 
-    await show_table(tbl[2], hide, col, data);
+    await showTable(tbl[2], hide, col, data);
 
 }
 async function getUsersRoles() {
-    console.log('getUsersRoles...');
+    console.log('>>getUsersRoles...');
     let res;
     try{
         const response = await fetch('/roles');
@@ -365,8 +365,8 @@ async function getUsersRoles() {
     }
     return res;
 }
-async function create_role(data) {
-    console.log('>>create_role...');
+async function createRole(data) {
+    console.log('>>createRole...');
     let res;
     try {
         let response = await fetch('/createrole', {
@@ -380,8 +380,8 @@ async function create_role(data) {
     }
     return res;
 }
-async function role_create() {
-    console.log('>>role_create...');
+async function roleCreate() {
+    console.log('>>roleCreate...');
 
     const input_rolename    = document.getElementById('input-rolename')
     
@@ -393,18 +393,18 @@ async function role_create() {
     
     let result;
     try {
-        result = await create_role(data)
+        result = await createRole(data)
         //console.log(result);        
     } catch (e) {
         console.log(e);
     }
 
-    if (result) await show_role_table();
+    if (result) await showRoleTable();
 
 }
 let currentModal;
-async function user_edit_role() {
-  console.log('>>user_edit_role...'); 
+async function userEditRole() {
+  console.log('>>userEditRole...'); 
 
   let editUserRoleModal = document.getElementById("editUserRoleModal");
   let options =  {
@@ -419,13 +419,13 @@ async function user_edit_role() {
   const col = {'id':'Id', 'Name':'Name'};  
   const hide = ['id'];
   
-  await show_table(tbl[3], hide, col, data);
+  await showTable(tbl[3], hide, col, data);
  
 }
-async function role_select() {
-  console.log('>>role_select...'); 
+async function roleSelect() {
+  console.log('>>roleSelect...'); 
 
-  const row = select_rows[0];  
+  const row = selectRows[0];  
 
   const input_role        = document.getElementById('input-role');   
   const input_edit_role   = document.getElementById('input-edit-role');   
@@ -438,8 +438,8 @@ async function role_select() {
   currentModal.hide();
            
 }
-async function delete_role(data) {
-    console.log('>>delete_role...');
+async function deleteRole(data) {
+    console.log('>>deleteRole...');
     let res;
     try {
         let response = await fetch('/delrole', {
@@ -453,17 +453,17 @@ async function delete_role(data) {
     }
     return res;
 }
-async function role_delete() {
-    console.log('>>role_delete...');
+async function roleDelete() {
+    console.log('>>roleDelete...');
     let result;
-    for (const row of select_rows){
+    for (const row of selectRows){
 
         let data = {'id': row.cells[0].innerText};
 
-        result = await delete_role(data);        
+        result = await deleteRole(data);        
     }
 
-    if(result) await show_role_table();
+    if(result) await showRoleTable();
 }
 /////////////////////////////////////////////////////////////////////////////
 async function getConfig() {
@@ -477,7 +477,7 @@ async function getConfig() {
     }
     return res;
 }
-async function show_config_table() {
+async function showConfigTable() {
     
     let tmp  = await getConfig();     
     let data =[];
@@ -494,11 +494,11 @@ async function show_config_table() {
     const col  = { 'id':'Id', 'typeId':'Type',  'textId': 'Identifier'};  
     const hide = ['id'];  
 
-    await show_table(tbl[0], hide, col, data);
+    await showTable(tbl[0], hide, col, data);
 
 }
-async function create_config(data) {
-    console.log('>>create_config...');
+async function createConfig(data) {
+    console.log('>>createConfig...');
     let res;
     try {
         let response = await fetch('/createconf', {
@@ -512,8 +512,8 @@ async function create_config(data) {
     }
     return res;
 }
-async function config_create() {
-    console.log('>>config_create...');
+async function configCreate() {
+    console.log('>>configCreate...');
 
     const input_type   = document.getElementById('input-type');
     const input_textId = document.getElementById('input-textId');    
@@ -528,17 +528,17 @@ async function config_create() {
     
     let result;
     try {
-        result = await create_config(data)
+        result = await createConfig(data)
         //console.log(result);        
     } catch (e) {
         console.log(e);
     }
 
-    if (result) await show_config_table();
+    if (result) await showConfigTable();
 
 }
-async function delete_config(data) {
-    console.log('>>delete_user...');
+async function deleteConfig(data) {
+    console.log('>>deleteConfig...');
     let res;
     try {
         let response = await fetch('/delconf', {
@@ -552,20 +552,20 @@ async function delete_config(data) {
     }
     return res;
 }
-async function config_delete() {
-    console.log('>>config_delete...');
+async function configDelete() {
+    console.log('>>configDelete...');
     let result;
-    for (const row of select_rows){
+    for (const row of selectRows){
 
         let data = {'id': row.cells[0].innerText};
 
-        result = await delete_config(data);        
+        result = await deleteConfig(data);        
     }
 
-    if(result) await show_config_table();
+    if(result) await showConfigTable();
 }
 
 window.onload = async function() {
-    await select_user();
-    await show_config_table();
+    await selectUser();
+    await showConfigTable();
 }

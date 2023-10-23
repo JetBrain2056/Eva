@@ -7,7 +7,7 @@
           <i class="fa fa-user-plus"></i>
           <span>{{ button_add }}</span>
         </button>
-        <button type="button" class="btn btn-primary d-flex gap-2 align-items-center eva-edit" data-bs-toggle="modal" data-bs-target="#configEditModal" onclick="confi_edit_modal()">
+        <button type="button" class="btn btn-primary d-flex gap-2 align-items-center eva-edit" data-bs-toggle="modal" data-bs-target="#configEditModal" onclick="confiEditModal()">
           <i class="fa fa-edit"></i>
           <span>{{ button_edit }}</span>
         </button>
@@ -15,7 +15,7 @@
           <i class="fa fa-clone" aria-hidden="true"></i>
           <span>{{ button_copy }}</span>
         </button> #}
-        <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" onclick="config_delete()">
+        <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" onclick="configDelete()">
           <i class="fa fa-user-times"></i>
           <span>{{ button_delete }}</span>
         </button>
@@ -40,7 +40,7 @@
           <i class="fa fa-user-plus"></i>
           <span>{{ button_add }}</span>
         </button>
-        <button type="button" class="btn btn-primary d-flex gap-2 align-items-center eva-edit" data-bs-toggle="modal" data-bs-target="#userEditModal" onclick="user_edit_modal()">
+        <button type="button" class="btn btn-primary d-flex gap-2 align-items-center eva-edit" data-bs-toggle="modal" data-bs-target="#userEditModal" onclick="userEditModal()">
           <i class="fa fa-edit"></i>
           <span>{{ button_edit }}</span>
         </button>
@@ -48,7 +48,7 @@
           <i class="fa fa-clone" aria-hidden="true"></i>
           <span>{{ button_copy }}</span>
         </button> #}
-        <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" onclick="user_delete()">
+        <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" onclick="userDelete()">
           <i class="fa fa-user-times"></i>
           <span>{{ button_delete }}</span>
         </button>
@@ -73,7 +73,7 @@
           <i class="fa fa-plus-square"></i>
           <span>{{ button_add }}</span>
         </button>
-        <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" onclick="role_delete()">
+        <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" onclick="roleDelete()">
           <i class="fa fa-minus-square"></i>
           <span>{{ button_delete }}</span>
         </button>
@@ -104,7 +104,7 @@
           <label for="input-role">Role:</label>
           <div class="input-group">            
             <input type="text" id="input-role" class="form-control"/>
-            <button class="btn btn-outline-secondary" type="button" onclick="user_edit_role()">...</button>
+            <button class="btn btn-outline-secondary" type="button" onclick="userEditRole()">...</button>
           </div>
           <label for="input-email">E-mail:</label>
           <div class="input-group">            
@@ -129,7 +129,7 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" onclick="user_create()">{{ button_save }}</button>
+        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" onclick="userCreate()">{{ button_save }}</button>
       </div>
     </div>
   </div>
@@ -155,7 +155,7 @@
           <label for="input-edit-role">Role:</label>
           <div class="input-group">            
             <input type="text" id="input-edit-role" class="form-control"/>
-            <button class="btn btn-outline-secondary" type="button" onclick="user_edit_role()">...</button>
+            <button class="btn btn-outline-secondary" type="button" onclick="userEditRole()">...</button>
           </div>
           <label for="input-edit-email">E-mail:</label>
           <div class="input-group">
@@ -180,7 +180,7 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" onclick="user_edit()">{{ button_save }}</button>
+        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" onclick="userEdit()">{{ button_save }}</button>
       </div>
     </div>
   </div>
@@ -196,7 +196,7 @@
       <div class="modal-body">          
         <div class="btn-toolbar" role="toolbar" aria-label="toolbar group">          
           <div class="btn-group btn-group-sm" role="group">
-            <button type="button" class="btn btn-primary d-flex gap-2 align-items-center eva-edit" onclick="role_select()">
+            <button type="button" class="btn btn-primary d-flex gap-2 align-items-center eva-edit" onclick="roleSelect()">
               <i class=""></i>
               <span>Выбрать</span>
             </button>    
@@ -227,7 +227,7 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" onclick="role_create()">{{ button_save }}</button>
+        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" onclick="roleCreate()">{{ button_save }}</button>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
       </div>
     </div>
@@ -260,17 +260,17 @@
           <label for="input-typeId">Type Id:</label>
           <div class="input-group input-group-sm">
             <input type="text" placeholder="0" id="input-typeId" class="form-control"/>
-            <button class="btn btn-outline-secondary" type="button" onclick="config_edit_typeId()">...</button>
+            <button class="btn btn-outline-secondary" type="button" onclick="configEditTypeId()">...</button>
           </div> 
           <label for="input-descr">Parent:</label>
           <div class="input-group input-group-sm">
             <input type="text" placeholder="..." id="input-parent" class="form-control"/>
-            <button class="btn btn-outline-secondary" type="button" onclick="config_edit_parent()">...</button>
+            <button class="btn btn-outline-secondary" type="button" onclick="configEditParent()">...</button>
           </div>  
         </form>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" onclick="config_create()">{{ button_save }}</button>
+        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" onclick="configCreate()">{{ button_save }}</button>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
       </div>
     </div>

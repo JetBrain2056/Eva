@@ -1,7 +1,9 @@
-<footer class="footer d-sm-flex p-1">   
+<footer class="footer d-sm-flex justify-content-between p-1">       
     <div class="ms-1 col-6">   
+    {% if logged %}   
         <input class="text col-9" type="text" id="status"  disabled>   
-    </div>
+    {% endif %}   
+    </div>    
     <div class="">
         <a href="https://eva.brainrs.com">EVA © 2023 Brain Retail Service LLC</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;        
         <a href="https://github.com/JetBrain2056">Repository GitHub</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;

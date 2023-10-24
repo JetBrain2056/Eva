@@ -130,12 +130,13 @@ async function showTable(showTbl , hide, col, data) {
     }   
 }
 /////////////////////////////////////////////////////////////////////////////
-let inputUserName = document.getElementById('input-username');
+const inputUserName = document.getElementById('input-username');
+const inputStatus   = document.getElementById('status');
 
 async function selectUser() {
                
     let data = await getUsers();    
-    for(let rows of data) {
+    for (let rows of data) {
         
         let option = document.createElement('option');
         option.value = rows['Name'];
@@ -564,8 +565,15 @@ async function configDelete() {
 
     if(result) await showConfigTable();
 }
+async function updateConfig() {
+    console.log('>>updateConfig...');
+    inputStatus.value = '>>updateConfig...';
+
+}
+
 
 window.onload = async function() {
     await selectUser();
     await showConfigTable();
+    inputStatus.value = '>>Ready...';
 }

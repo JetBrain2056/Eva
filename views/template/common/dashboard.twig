@@ -22,7 +22,9 @@
         <div class="btn-group btn-group-sm" role="group">
           <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></button>
           <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-            <li><a class="dropdown-item d-flex gap-2 align-items-center"><i class="fa fa-refresh"></i>{{ button_update }}</a></li>
+            <li><a class="dropdown-item d-flex gap-2 align-items-center" onclick="updateConfig()">
+              <i class="fa fa-refresh"></i>{{ button_update }}</a>
+            </li>
             <li><a class="dropdown-item">{{ button_etc}}</a></li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item">...</a></li>

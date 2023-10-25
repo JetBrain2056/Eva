@@ -481,13 +481,11 @@ async function getConfig() {
 async function showConfigTable() {
     
     let tmp  = await getConfig();     
-    let data =[];
+    let data = [];
 
     for (const row of tmp) {
         let strJson = row.data; 
-        // console.log(strJson);
         let Elements = await JSON.parse(strJson);
-        // console.log(Elements);
         
         data.push(Object.assign({'id':row.id}, Elements));
     }
@@ -569,6 +567,29 @@ async function updateConfig() {
     console.log('>>updateConfig...');
     inputStatus.value = '>>updateConfig...';
 
+    let tmp  = await getConfig();     
+    let data = [];
+
+    for (const row of tmp) {
+        let strJson = row.data; 
+        let Elements = await JSON.parse(strJson);
+        console.log(Elements);
+        
+        data.push(Object.assign({'id':row.id}, Elements));
+    }
+
+    let res;
+    try {
+        let response = await fetch('/updateconf', {
+            method  : 'post',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        });
+        res = await response.json();
+    } catch(err) {
+        console.log(err);
+    }
+    return res;
 }
 
 

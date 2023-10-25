@@ -309,3 +309,7 @@ exports.deleteConfig = async function(req, res) {
         console.log(err);
     }
 }
+exports.updateConfig = async function(req, res) {
+    console.log('>>updateConfig...');
+    console.log(req.body);
+}

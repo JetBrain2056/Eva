@@ -30,4 +30,6 @@ router.get('/config', controller.getConfig);
 router.post('/createconf', controller.createConfig);
 router.post('/delconf', controller.deleteConfig);
 
+router.post('/updateconf', controller.updateConfig);
+
 module.exports = { router }                                                  

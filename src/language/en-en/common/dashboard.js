@@ -1,12 +1,12 @@
 let dashboard = {
     // Heading
-    $_heading_title : 'Панель состояния',
+    $_heading_title : 'Heading title',
 
     // Error
-    $_error_install : 'ВНИМАНИЕ: Установочная папка до сих пор существует! Удалите папку install',
+    $_error_install : 'Error: install',
 
     //modal
-    $_text_addusers : 'Добавить пользователя'
+    $_text_addusers : 'Add users'
 }
 
 module.exports =   { dashboard }

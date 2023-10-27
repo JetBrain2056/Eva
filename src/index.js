@@ -134,7 +134,9 @@ let content = {
     //dashboard
     heading_title  : dashboard.$_heading_title,    
     error_install  : dashboard.$_error_install,
-    text_addusers  : dashboard.$_text_addusers,
+    text_add_user  : dashboard.$_text_add_user,
+    text_constant : dashboard.$_text_constant,
+    text_reference : dashboard.$_text_reference,
 
     //footer
     text_footer    : footer.$_text_footer,

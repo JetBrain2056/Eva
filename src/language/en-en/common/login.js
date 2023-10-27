@@ -4,7 +4,7 @@ let login = {
 
     // Text
     $_text_heading   : 'Authorization',
-    $_text_login     : 'Log in to the system EVA',
+    $_text_login     : 'Log in system EVA',
     $_text_forgotten : 'Forgotten?',
 
     // Entry

@@ -1,4 +1,4 @@
-const lg_lg = process.env.LANGUAGE||'ru-ru'; 
+const lg_lg = process.env.LANGUAGE||'en-en'; 
 
 //language
 const { root }        = require('./language/'+lg_lg+'/root.js');
@@ -7,7 +7,6 @@ const { header }      = require('./language/'+lg_lg+'/common/header.js');
 const { column_left } = require('./language/'+lg_lg+'/common/column_left.js');
 const { dashboard }   = require('./language/'+lg_lg+'/common/dashboard.js');
 const { footer }      = require('./language/'+lg_lg+'/common/footer.js');
-const { security }    = require('./language/'+lg_lg+'/common/security.js');
  
 let content = {
     home               : '/',
@@ -18,8 +17,10 @@ let content = {
     name               : 'EVA',
     Ent                : 'Enterprise',
     Dev                : 'Developer',
-    about_program      : 'About program...',
+    About_program      : header.$_about_program,
     Version            : '1.0.0',
+    Information        : 'Information',
+    Help               : header.$_text_help,
 
     //root
     lang               : root.$_code,
@@ -50,6 +51,10 @@ let content = {
     text_support           : header.$_text_support,
     text_documentation     : header.$_text_documentation,
     text_logout            : header.$_text_logout,
+    text_config            : header.$_text_config,
+    text_administration    : header.$_text_administration,
+    text_roles             : header.$_text_roles,
+    text_log               : header.$_text_log,
 
     //column_left
     asideList              : [{href : '#', title : column_left.$_title_1 },
@@ -78,7 +83,7 @@ let content = {
     text_dashboard         : column_left.$_text_dashboard,
     text_design            : column_left.$_text_design,
     text_download          : column_left.$_text_download,
-    text_log               : column_left.$_text_log,
+    //text_log               : column_left.$_text_log,
     text_event             : column_left.$_text_event,
     text_extension         : column_left.$_text_extension,
     text_filter            : column_left.$_text_filter,
@@ -135,11 +140,5 @@ let content = {
     text_footer    : footer.$_text_footer,
     text_version   : footer.$_text_version,    
 }
-
-//if (content.logged == true){        
-//    content.heading_title = header.$_heading_title;
-//}else{    
-//    content.heading_title = login.$_heading_title;
-//} 
 
 module.exports = { content }

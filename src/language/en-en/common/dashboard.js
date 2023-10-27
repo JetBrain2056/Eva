@@ -6,7 +6,9 @@ let dashboard = {
     $_error_install : 'Error: install',
 
     //modal
-    $_text_addusers : 'Add users'
+    $_text_add_user : 'Add user',
+    $_text_constant : 'Constant',
+    $_text_reference : 'Reference'
 }
 
 module.exports =   { dashboard }

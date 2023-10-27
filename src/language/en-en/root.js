@@ -14,11 +14,11 @@ let root = {
     $_text_yes				: 'Yes',
     $_text_no				: 'No',
     $_text_none				: ' --- Not select --- ',
-    $_text_select			: ' --- Selected --- ',
-    $_text_all_zones		: 'All zone',
+    $_text_select			: ' --- Select --- ',
+    $_text_all_zones		: 'All zones',
     $_text_pagination		: 'Views on %d end %d of %d (total %d pages)',
-    $_text_loading			: 'Upload...',
-    $_text_no_results		: 'No data!',
+    $_text_loading			: 'Loading...',
+    $_text_no_results		: 'No results!',
 
     // Buttons
     $_button_back					: 'Back',

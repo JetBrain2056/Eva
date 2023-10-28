@@ -1,9 +1,9 @@
 const { User, Role, Config }    = require('../models/models.js');
-const { content, Lang } = require('../index.js');
+const { content }       = require('../index.js');
 const bcrypt            = require('bcrypt');
-// const { Op, Sequelize, QueryTypes} = require("sequelize");
 const sequelize         = require('../db');
-//const jwt            = require('jsonwebtoken');
+const { DataTypes }     = require('sequelize');
+//const jwt              = require('jsonwebtoken');
 
 /* const generateJwt = (id, login, role) => {
      return jwt.sign(
@@ -17,7 +17,6 @@ const sequelize         = require('../db');
 //     const token = generateJwt(req.user.id, req.user.login, req.user.role)
 //     return res.json({token})
 // }
-
 async function hashPassword(password, saltRounds = 10) {
     try {
         // Generate a salt
@@ -30,11 +29,6 @@ async function hashPassword(password, saltRounds = 10) {
     } catch(err) {
         console.log(err);
     }
-}
-exports.Lang = function(req,res) {
-    if (!req.body) return res.sendStatus(400);
-    const {lang} = req.body;
-    //Lang = 'rus';
 }
 exports.Auth = function(req,res) {
     content.logged = false;
@@ -309,7 +303,43 @@ exports.deleteConfig = async function(req, res) {
         console.log(err);
     }
 }
+exports.editObject = async function(req, res, next) {
+    console.log('>>editObject...');
+    
+    if (!req.body) return res.sendStatus(400);     
+
+}
+exports.getObject = async function(req, res) {
+
+    if (!req.body) return res.sendStatus(400);    
+
+    const {id} = req.body;
+    try {
+  
+        const data = await sequelize.query(
+            'SELECT "Configs"."id", "Configs"."Data"'
+            +'FROM "Configs"'
+            +'where "Configs"."id" = '+ id +';'
+        );
+        return await res.send(data[0]); 
+        
+    } catch(err) {
+        console.log(err);
+    }
+}
 exports.updateConfig = async function(req, res) {
     console.log('>>updateConfig...');
-    console.log(req.body);
+    if (!req.body) return res.sendStatus(400);
+
+    for (let row of req.body) {        
+        let tblId   = row.textId;        
+        let columns = {id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true}}; //demo
+        try {
+            const EvaObject = sequelize.define(tblId, columns)
+            console.log(EvaObject);            
+        } catch(err) {
+            console.log(err);
+        }
+    }
+    await sequelize.sync()
 }

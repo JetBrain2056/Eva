@@ -7,7 +7,7 @@
           <i class="fa fa-plus-square"></i>
           <span>{{ button_add }}</span>
         </button>
-        <button type="button" class="btn btn-primary d-flex gap-2 align-items-center eva-edit" data-bs-toggle="modal" data-bs-target="#configEditModal" onclick="configEditModal()">
+        <button type="button" class="btn btn-primary d-flex gap-2 align-items-center eva-edit" data-bs-toggle="modal" data-bs-target="#objectEditModal" onclick="objectEditModal()">
           <i class="fa fa-edit"></i>
           <span>{{ button_edit }}</span>
         </button>
@@ -275,6 +275,48 @@
       <div class="modal-footer">
         <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" onclick="configCreate()">{{ button_save }}</button>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{button_close}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+{# Modal Object Edit #}
+<div class="modal fade" id="objectEditModal" tabindex="-1" aria-labelledby="objectEditModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="objectEditModalLabel">Edit object</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+      </div>
+      <div class="modal-body">
+        <form class="form" id="object-edit-form">
+          <label for="input-edit-type">Type object:</label>
+          <div class="input-group input-group-sm">
+            {# <input type="text" placeholder="0" id="input-type" class="form-control"/> #}
+            {# <button class="btn btn-outline-secondary" type="button" onclick="config_edit_type()">...</button> #}
+            <select type="text" name="type" value="" class="form-select form-control" id="input-edit-type">
+              <option selected>  </option>
+              <option value="Constant">{{text_constant}}</option>
+              <option value="Reference">{{text_reference}}</option>              
+            </select>
+          </div>         
+          <label for="input-edit-textId">Identifier:</label>
+          <div class="input-group input-group-sm">
+            <input type="text" placeholder="" id="input-edit-textId" class="form-control"/>
+          </div>  
+          <label for="input-edit-typeId">Type Id:</label>
+          <div class="input-group input-group-sm">
+            <input type="text" placeholder="0" id="input-edit-typeId" class="form-control"/>
+            <button class="btn btn-outline-secondary" type="button" onclick="objectEditTypeId()">...</button>
+          </div> 
+          <label for="input-edit-descr">Parent:</label>
+          <div class="input-group input-group-sm">
+            <input type="text" placeholder="..." id="input-edit-parent" class="form-control"/>
+            <button class="btn btn-outline-secondary" type="button" onclick="objectEditParent()">...</button>
+          </div>    
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" onclick="objectEdit()">{{ button_save }}</button>
       </div>
     </div>
   </div>

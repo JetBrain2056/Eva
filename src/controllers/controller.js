@@ -310,6 +310,7 @@ exports.editObject = async function(req, res, next) {
 
 }
 exports.getObject = async function(req, res) {
+    console.log('>>getObject...');
 
     if (!req.body) return res.sendStatus(400);    
 
@@ -317,7 +318,7 @@ exports.getObject = async function(req, res) {
     try {
   
         const data = await sequelize.query(
-            'SELECT "Configs"."id", "Configs"."Data"'
+            'SELECT "Configs"."id", "Configs"."data"'
             +'FROM "Configs"'
             +'where "Configs"."id" = '+ id +';'
         );

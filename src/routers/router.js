@@ -8,12 +8,7 @@ router.get('/', controller.Auth);
 //Post index data  
 router.post('/', controller.Signin);
 
-//Post index data    
-router.post('/lang', controller.Lang);
-
-//router.post('/signup', UserController.signup)
-//router.post('/login', UserController.login)
-//router.get('/check', UserController.check)
+//Post index data 
 
 router.get('/users', controller.getUsers);
 router.post('/getone', controller.getOne);
@@ -29,6 +24,8 @@ router.post('/delrole', controller.deleteRole);
 router.get('/config', controller.getConfig);
 router.post('/createconf', controller.createConfig);
 router.post('/delconf', controller.deleteConfig);
+router.post('/editobject', controller.editObject);
+router.post('/getobject', controller.getObject);
 
 router.post('/updateconf', controller.updateConfig);
 

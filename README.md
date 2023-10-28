@@ -6,7 +6,7 @@ Only the administrative part of the configurator has been published.
 It is planned to replace the TWIG template engine with HTMX.
 We invite co-authors :)
 
-## Instalation
+## Installation
 
 ### SSH
 ```

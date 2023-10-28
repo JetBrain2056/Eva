@@ -491,7 +491,7 @@ async function showConfigTable() {
     }
 
     const col  = { 'id':'Id', 'typeId':'Type',  'textId': 'Identifier'};  
-    const hide = ['id'];  
+    const hide = [];  
 
     await showTable(tbl[0], hide, col, data);
 
@@ -536,6 +536,80 @@ async function configCreate() {
     if (result) await showConfigTable();
 
 }
+async function editObject(data) {
+    console.log('>>editObject...'); 
+
+    inputStatus.value = '>>Edit object...';
+  
+    let res;
+    try {
+      let response = await fetch('/editobj', { 
+          method  : 'post',    
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(data)            
+        });  
+        res = await response.json();                      
+    } catch (e) {
+      console.log(e);
+    }
+
+    return res;
+}
+async function configEditModal() {
+    console.log('>>objectEditModal...'); 
+  
+    const row = selectRows[0];  
+          
+    // const input_form        = document.getElementById('create-user-form');  
+
+    let data = { 'id': row.cells[0].innerText };
+
+    let res;
+    try {    
+        let response = await fetch('/getobject', {
+            method  : 'post',    
+            headers : {'Content-Type': 'application/json'},
+            body    : JSON.stringify(data)            
+        });  
+        res = await response.json();     
+       
+    } catch (err) {
+      console.log(err);
+    }
+  
+    if (res) {
+       
+        input_form.setAttribute("eva-id", res[0].id);
+        //
+        //...
+      
+    }         
+
+}
+async function configEdit() {
+    console.log('>>configEdit...'); 
+      
+    const input_form        = document.getElementById('create-user-form');  
+
+    // if (!input_tblId.value === input_.value) return;
+    
+    const data =  {
+        'id'          : input_form.getAttribute("eva-id"),
+        'data'        : input_data.value
+    };
+  
+    console.log(data);
+
+    let result;
+    try {
+      result = await editConfig(data)     
+    } catch (e) {
+      console.log(e);
+    }
+    //if (result) {      
+      await showConfigTable();     
+    //}
+}
 async function deleteConfig(data) {
     console.log('>>deleteConfig...');
     let res;
@@ -565,7 +639,7 @@ async function configDelete() {
 }
 async function updateConfig() {
     console.log('>>updateConfig...');
-    inputStatus.value = '>>updateConfig...';
+    inputStatus.value = '>> Update config in DB...';
 
     let tmp  = await getConfig();     
     let data = [];
@@ -586,10 +660,12 @@ async function updateConfig() {
             body: JSON.stringify(data)
         });
         res = await response.json();
+        // inputStatus.value = '>>'+res;
     } catch(err) {
         console.log(err);
     }
-    return res;
+    inputStatus.value = '>> Config update completed!';
+    // return res;
 }
 
 

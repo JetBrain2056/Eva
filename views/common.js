@@ -555,14 +555,18 @@ async function editObject(data) {
 
     return res;
 }
-async function configEditModal() {
+async function objectEditModal() {
     console.log('>>objectEditModal...'); 
   
     const row = selectRows[0];  
           
-    // const input_form        = document.getElementById('create-user-form');  
+    const input_form   = document.getElementById('object-edit-form');  
+    const input_type   = document.getElementById('input-edit-type');
+    const input_textId = document.getElementById('input-edit-textId');    
 
     let data = { 'id': row.cells[0].innerText };
+
+    console.log(data);
 
     let res;
     try {    
@@ -571,17 +575,22 @@ async function configEditModal() {
             headers : {'Content-Type': 'application/json'},
             body    : JSON.stringify(data)            
         });  
-        res = await response.json();     
-       
+        res = await response.json();  
+        console.log(res);          
     } catch (err) {
       console.log(err);
     }
   
     if (res) {
-       
+
+        let strJson = res[0].data;   
+        console.log(strJson);         
+        let Elements = await JSON.parse(strJson);
+        console.log(Elements);    
+
         input_form.setAttribute("eva-id", res[0].id);
-        //
-        //...
+        input_type.value        = Elements.typeId;
+        input_textId.value      = Elements.textId;
       
     }         
 

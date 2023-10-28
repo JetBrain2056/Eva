@@ -7,7 +7,7 @@
           <i class="fa fa-plus-square"></i>
           <span>{{ button_add }}</span>
         </button>
-        <button type="button" class="btn btn-primary d-flex gap-2 align-items-center eva-edit" data-bs-toggle="modal" data-bs-target="#configEditModal" onclick="confiEditModal()">
+        <button type="button" class="btn btn-primary d-flex gap-2 align-items-center eva-edit" data-bs-toggle="modal" data-bs-target="#configEditModal" onclick="configEditModal()">
           <i class="fa fa-edit"></i>
           <span>{{ button_edit }}</span>
         </button>
@@ -15,16 +15,17 @@
           <i class="fa fa-clone" aria-hidden="true"></i>
           <span>{{ button_copy }}</span>
         </button> #}
-        <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" onclick="configDelete()">
+         <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" onclick="configDelete()">
           <i class="fa fa-minus-square"></i>
           <span>{{ button_delete }}</span>
         </button>
+        <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" onclick="updateConfig()">
+            <i class="fa fa-floppy-o"></i>
+            <span>{{ button_save }}</span>
+        </button>       
         <div class="btn-group btn-group-sm" role="group">
           <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></button>
-          <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-            <li><a class="dropdown-item d-flex gap-2 align-items-center" onclick="updateConfig()">
-              <i class="fa fa-refresh"></i>{{ button_update }}</a>
-            </li>
+          <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">           
             <li><a class="dropdown-item">{{ button_etc}}</a></li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item">...</a></li>

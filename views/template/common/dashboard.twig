@@ -293,11 +293,7 @@
           <div class="input-group input-group-sm">
             {# <input type="text" placeholder="0" id="input-type" class="form-control"/> #}
             {# <button class="btn btn-outline-secondary" type="button" onclick="config_edit_type()">...</button> #}
-            <select type="text" name="type" value="" class="form-select form-control" id="input-edit-type">
-              <option selected>  </option>
-              <option value="Constant">{{text_constant}}</option>
-              <option value="Reference">{{text_reference}}</option>              
-            </select>
+            <input type="text" name="type" class="form-control" id="input-edit-type" disabled></input>
           </div>         
           <label for="input-edit-textId">Identifier:</label>
           <div class="input-group input-group-sm">

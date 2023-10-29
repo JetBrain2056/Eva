@@ -120,7 +120,7 @@ exports.getUsers = async function(req, res, next) {
         console.log(err);
     }
 }
-exports.getOne = async function(req, res, next) {
+exports.getUser = async function(req, res, next) {
 
     if (!req.body) return res.sendStatus(400);
 
@@ -303,11 +303,23 @@ exports.deleteConfig = async function(req, res) {
         console.log(err);
     }
 }
-exports.editObject = async function(req, res, next) {
+exports.editObject = async function(req, res) {
     console.log('>>editObject...');
     
     if (!req.body) return res.sendStatus(400);     
+    const { id, data }  = req.body;  
 
+    try {
+        const result = await Config.update({ 
+            data  : data            
+        }, {
+            where: {id: id}
+        })
+        // console.log(data);
+        return await res.json(result); 
+    } catch(err) {
+        console.log(err); 
+    }   
 }
 exports.getObject = async function(req, res) {
     console.log('>>getObject...');

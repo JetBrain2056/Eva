@@ -132,6 +132,7 @@ async function showTable(showTbl , hide, col, data) {
 /////////////////////////////////////////////////////////////////////////////
 const inputUserName = document.getElementById('input-username');
 const inputStatus   = document.getElementById('status');
+const btnConfigSave = document.getElementById('btn-config-save');
 
 async function selectUser() {
                
@@ -534,6 +535,7 @@ async function configCreate() {
     }
 
     if (result) await showConfigTable();
+    btnConfigSave.style.backgroundColor = 'red';
 
 }
 async function editObject(data) {
@@ -543,7 +545,7 @@ async function editObject(data) {
   
     let res;
     try {
-      let response = await fetch('/editobj', { 
+      let response = await fetch('/editobject', { 
           method  : 'post',    
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify(data)            
@@ -583,10 +585,8 @@ async function objectEditModal() {
   
     if (res) {
 
-        let strJson = res[0].data;   
-        console.log(strJson);         
-        let Elements = await JSON.parse(strJson);
-        console.log(Elements);    
+        let strJson = res[0].data;          
+        let Elements = await JSON.parse(strJson);        
 
         input_form.setAttribute("eva-id", res[0].id);
         input_type.value        = Elements.typeId;
@@ -595,29 +595,32 @@ async function objectEditModal() {
     }         
 
 }
-async function configEdit() {
+async function objectEdit() {
     console.log('>>configEdit...'); 
       
-    const input_form        = document.getElementById('create-user-form');  
+    const input_form   = document.getElementById('object-edit-form');  
+    const input_type   = document.getElementById('input-edit-type');
+    const input_textId = document.getElementById('input-edit-textId');   
 
-    // if (!input_tblId.value === input_.value) return;
-    
+    let tmp = { typeId:input_type.value, textId:input_textId.value };        
+
     const data =  {
-        'id'          : input_form.getAttribute("eva-id"),
-        'data'        : input_data.value
+        'id'      : input_form.getAttribute("eva-id"),
+        'data'    : JSON.stringify(tmp),
     };
   
     console.log(data);
 
     let result;
     try {
-      result = await editConfig(data)     
+      result = await editObject(data);    
     } catch (e) {
       console.log(e);
     }
     //if (result) {      
       await showConfigTable();     
     //}
+    btnConfigSave.style.backgroundColor = 'red';
 }
 async function deleteConfig(data) {
     console.log('>>deleteConfig...');
@@ -645,6 +648,8 @@ async function configDelete() {
     }
 
     if(result) await showConfigTable();
+
+    btnConfigSave.style.backgroundColor = 'red';
 }
 async function updateConfig() {
     console.log('>>updateConfig...');
@@ -668,15 +673,16 @@ async function updateConfig() {
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(data)
         });
-        res = await response.json();
+        //res = await response.json();
         // inputStatus.value = '>>'+res;
     } catch(err) {
         console.log(err);
     }
+
+    btnConfigSave.style.backgroundColor = '#282c34';
     inputStatus.value = '>> Config update completed!';
     // return res;
 }
-
 
 window.onload = async function() {
     await selectUser();

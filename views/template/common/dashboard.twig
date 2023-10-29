@@ -1,6 +1,6 @@
 <div class="tab-content" id="nav-tabContent">
   {# Config [0] #}
-  <div class="tab-pane fade active show" id="nav-config" role="tabpanel" aria-labelledby="nav-confi-tab">
+  <div class="tab-pane fade active show" id="nav-config" role="tabpanel" aria-labelledby="nav-config-tab">
     <div class="btn-toolbar" role="toolbar" aria-label="toolbar group">
       <div class="btn-group btn-group-sm" role="group">
         <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" data-bs-toggle="modal" data-bs-target="#configModal">
@@ -19,7 +19,7 @@
           <i class="fa fa-minus-square"></i>
           <span>{{ button_delete }}</span>
         </button>
-        <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" onclick="updateConfig()">
+        <button id="btn-config-save" type="button" class="btn btn-primary d-flex gap-2 align-items-center" onclick="updateConfig()">
             <i class="fa fa-floppy-o"></i>
             <span>{{ button_save }}</span>
         </button>       
@@ -236,24 +236,30 @@
     </div>
   </div>
 </div>
-{# Modal Config #}
-<div class="modal fade" id="configModal" tabindex="-1" aria-labelledby="configModalLabel" aria-hidden="true">
+{# Modal Object #}
+<div class="modal fade" id="configModal" tabindex="-1" aria-labelledby="objectModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="configModalLabel">Add object</h5>
+        <h5 class="modal-title" id="objectModalLabel">Add object</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form class="form" id="create-config-form">  
+        <form class="form" id="create-object-form">  
           <label for="input-type">Type object:</label>
           <div class="input-group input-group-sm">
             {# <input type="text" placeholder="0" id="input-type" class="form-control"/> #}
             {# <button class="btn btn-outline-secondary" type="button" onclick="config_edit_type()">...</button> #}
             <select type="text" name="type" value="" class="form-select form-control" id="input-type">
               <option selected>  </option>
+              <option value="Subsystem">{{text_subsystem}}</option>  
+              <option value="Module">{{text_module}}</option>  
               <option value="Constant">{{text_constant}}</option>
               <option value="Reference">{{text_reference}}</option>              
+              <option value="Document">{{text_document}}</option>  
+              <option value="Processing">{{text_processing}}</option>  
+              <option value="Register">{{text_register}}</option>  
+              <option value="Report">{{text_report}}</option>                              
             </select>
           </div>         
           <label for="input-textId">Identifier:</label>

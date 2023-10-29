@@ -11,7 +11,7 @@ router.post('/', controller.Signin);
 //Post index data 
 
 router.get('/users', controller.getUsers);
-router.post('/getone', controller.getOne);
+router.post('/getuser', controller.getUser);
 router.post('/createuser', controller.createUser);
 router.post('/updateuser', controller.updateUser);
 //router.delete('/delete/:id([0-9]+)', controller.delete)

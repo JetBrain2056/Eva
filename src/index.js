@@ -16,22 +16,20 @@ let content = {
     shortIcon          : './image/astronautSpace.ico',
     name               : 'EVA',
     Ent                : 'Enterprise',
-    Dev                : 'Developer',
-    About_program      : header.$_about_program,
+    Dev                : 'Developer', 
     Version            : '1.0.0',
     Information        : 'Information',
-    Help               : header.$_text_help,
 
     //root
-    lang               : root.$_code,
-    button_close       : root.$_button_close,
-    button_add         : root.$_button_add,
-    button_delete      : root.$_button_delete,
-    button_edit        : root.$_button_edit,
-    button_copy        : root.$_button_copy,
-    button_update      : root.$_button_update,
-    button_etc         : root.$_button_etc,
-    button_save        : root.$_button_save,
+    lang                   : root.$_code,
+    button_close           : root.$_button_close,
+    button_add             : root.$_button_add,
+    button_delete          : root.$_button_delete,
+    button_edit            : root.$_button_edit,
+    button_copy            : root.$_button_copy,
+    button_update          : root.$_button_update,
+    button_etc             : root.$_button_etc,
+    button_save            : root.$_button_save,
 
     //login    
     text_heading           : login.$_text_heading,
@@ -44,6 +42,8 @@ let content = {
     error_token            : login.$_error_token,
 
     //header
+    About_program          : header.$_about_program,
+    Help                   : header.$_text_help,
     text_profile           : header.$_text_profile,
     text_store             : header.$_text_store,
     text_help              : header.$_text_help,
@@ -135,8 +135,14 @@ let content = {
     heading_title  : dashboard.$_heading_title,    
     error_install  : dashboard.$_error_install,
     text_add_user  : dashboard.$_text_add_user,
-    text_constant : dashboard.$_text_constant,
+    text_subsystem : dashboard.$_text_subsystem,
+    text_module    : dashboard.$_text_module,
+    text_constant  : dashboard.$_text_constant,
     text_reference : dashboard.$_text_reference,
+    text_document  : dashboard.$_text_document,
+    text_processing: dashboard.$_text_processing,
+    text_register  : dashboard.$_text_register,
+    text_report    : dashboard.$_text_report,
 
     //footer
     text_footer    : footer.$_text_footer,

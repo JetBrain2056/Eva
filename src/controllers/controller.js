@@ -261,6 +261,7 @@ exports.deleteRole = async function(req, res) {
         console.log(err);
     }
 }
+//Config//////////////////////////////////
 exports.getConfig = async function(req, res) {
     try {
         const data = await Config.findAll({raw:true})
@@ -278,6 +279,7 @@ exports.createConfig = async function(req, res) {
     try {                     
         let result =           
             await Config.create({
+                state   : 1,
                 data    : data
             });
 
@@ -292,9 +294,15 @@ exports.deleteConfig = async function(req, res) {
         if (!req.body) return res.sendStatus(400);
 
         const {id} = req.body;
-        const data = await Config.destroy({where: {id: id}});
+        // const data = await Config.destroy({where: {id: id}});
+        // return await res.json(data);
 
-        return await res.json(data);
+        const result = await Config.update({ 
+            state : 2                     
+        }, {
+            where: {id: id}
+        })
+        return await res.json(result); 
     } catch(err) {
         console.log(err);
     }
@@ -307,11 +315,11 @@ exports.editObject = async function(req, res) {
 
     try {
         const result = await Config.update({ 
+            state : 1,
             data  : data            
         }, {
             where: {id: id}
-        })
-        // console.log(data);
+        })        
         return await res.json(result); 
     } catch(err) {
         console.log(err); 
@@ -342,12 +350,38 @@ exports.updateConfig = async function(req, res) {
 
     for (let row of req.body) {        
         let tblId   = row.textId;        
-        let columns = {id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true}}; //demo
-        try {
-            const EvaObject = sequelize.define(tblId, columns)
-            console.log(EvaObject);            
-        } catch(err) {
-            console.log(err);
+        let columns = {id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true}}; //
+        
+        console.log(row);
+
+        let EvaObject;
+        if (row.state === 0) {
+            return;
+        } else if (row.state === 1) {    
+            try {
+                EvaObject = sequelize.define(tblId, columns);
+
+                const result = await Config.update({ 
+                    state : 0                     
+                }, {
+                    where: {id: row.id}
+                })
+                console.log(EvaObject);            
+            } catch(err) {
+                console.log(err);
+            }
+        } else if (row.state === 2) {
+            try {                
+                        
+                EvaObject = await Config.destroy({where: {id: row.id}});
+
+                //await sequelize.destroy(tblId);
+                await sequelize.dropSchema(tblId);
+        
+                //return await res.json(EvaObject);
+            } catch(err) {
+                console.log(err);
+            }
         }
     }
     await sequelize.sync()

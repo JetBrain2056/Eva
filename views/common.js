@@ -128,9 +128,10 @@ async function showTable(showTbl , hide, col, data) {
       }
     }   
 }
-async function getModal(modalForm) {
+function getModal(modalForm) {
     let options =  { focus: true };
-    currentModal = new bootstrap.Modal(modalForm, options);    
+    currentModal = new bootstrap.Modal(modalForm, options); 
+    currentModal.show();   
 }
 /////////////////////////////////////////////////////////////////////////////
 const inputUserName = document.getElementById('input-username');
@@ -315,7 +316,7 @@ async function userEdit() {
         'RoleId'      : input_role.getAttribute("eva-id")
     };
   
-    console.log(data);
+    // console.log(data);
 
     let result;
     try {
@@ -323,6 +324,9 @@ async function userEdit() {
     } catch (e) {
       console.log(e);
     }
+
+    currentModal.hide();
+
     //if (result) {      
       await showUserTable();     
     //}
@@ -566,16 +570,13 @@ async function editObject(data) {
 }
 async function objectEditModal() {
     console.log('>>objectEditModal...'); 
-
+  
+    if (selectRows.length === 0) return;
     let modalForm = document.getElementById("objectEditModal");
 
-    currentModal = await getModal(modalForm);
+    getModal(modalForm);
   
-    if (selectRows.length === 0) return currentModal.hide();
-
-    currentModal.show();
-  
-    const row = selectRows[0];  
+    const row = await selectRows[0];  
           
     const input_form   = document.getElementById('object-edit-form');  
     const input_type   = document.getElementById('input-edit-type');
@@ -632,6 +633,9 @@ async function objectEdit() {
     } catch (e) {
       console.log(e);
     }
+
+    // currentModal.hide();
+
     //if (result) {      
       await showConfigTable();     
     //}
@@ -674,11 +678,14 @@ async function updateConfig() {
     let data = [];
 
     for (const row of tmp) {
-        let strJson = row.data; 
-        let Elements = await JSON.parse(strJson);
-        console.log(Elements);
-        
-        data.push(Object.assign({'id':row.id}, Elements));
+        console.log(row.state);
+        if (row.state===1||row.state===2) {
+            let strJson = row.data; 
+            let Elements = await JSON.parse(strJson);
+            console.log(Elements);
+            
+            data.push(Object.assign({'id':row.id, 'state':row.state}, Elements));
+        }
     }
 
     let res;
@@ -688,14 +695,16 @@ async function updateConfig() {
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(data)
         });
-        //res = await response.json();
-        // inputStatus.value = '>>'+res;
+        //res = await response.json();        
+        btnConfigSave.style.backgroundColor = '#282c34';
+        inputStatus.value = '>> Config update completed!';
     } catch(err) {
         console.log(err);
     }
 
-    btnConfigSave.style.backgroundColor = '#282c34';
-    inputStatus.value = '>> Config update completed!';
+    //if(result) 
+    await showConfigTable();
+   
     // return res;
 }
 

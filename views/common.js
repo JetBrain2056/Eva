@@ -1,4 +1,5 @@
 let selectRows = [];
+let currentModal;
 let n = 0;
 let tbl = [];
 let forms = document.getElementsByClassName('eva-form');
@@ -235,8 +236,19 @@ async function editUser(data) {
 }
 async function userEditModal() {
     console.log('>>userEditModal...'); 
+
+    let modalForm = document.getElementById("userEditModal");
+    let options =  {
+    focus: true
+    };
+
+    currentModal = new bootstrap.Modal(modalForm, options);    
   
-    const row = selectRows[0];  
+    if (selectRows.length === 0) return currentModal.hide();
+
+    currentModal.show();
+
+    const row = await selectRows[0];      
           
     const input_form        = document.getElementById('user-edit-form');  
     const input_name        = document.getElementById('input-edit-username');  
@@ -291,7 +303,7 @@ async function userEdit() {
     const input_show        = document.getElementById('input-edit-show');   
     const input_role        = document.getElementById('input-edit-role'); 
 
-    if (!input_password.value === input_confirmpass.value) return;
+    if (!input_password.value === input_confirmpass.value) return;   
     
     const data =  {
         'id'          : input_form.getAttribute("eva-id"),
@@ -404,16 +416,13 @@ async function roleCreate() {
     if (result) await showRoleTable();
 
 }
-let currentModal;
 async function userEditRole() {
   console.log('>>userEditRole...'); 
 
-  let editUserRoleModal = document.getElementById("editUserRoleModal");
-  let options =  {
-    focus: true
-  };
+  let modalForm = document.getElementById("editUserRoleModal");
+  let options =  { focus: true };
 
-  currentModal = new bootstrap.Modal(editUserRoleModal, options);
+  currentModal = new bootstrap.Modal(modalForm, options);
   currentModal.show();
 
   let data = await getUsersRoles();  
@@ -559,6 +568,15 @@ async function editObject(data) {
 }
 async function objectEditModal() {
     console.log('>>objectEditModal...'); 
+
+    let modalForm = document.getElementById("objectEditModal");
+    let options =  { focus: true };
+
+    currentModal = new bootstrap.Modal(modalForm, options);    
+  
+    if (selectRows.length === 0) return currentModal.hide();
+
+    currentModal.show();
   
     const row = selectRows[0];  
           

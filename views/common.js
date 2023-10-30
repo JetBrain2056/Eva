@@ -299,8 +299,8 @@ async function userEdit() {
         'Descr'       : input_descr.value,
         'email'       : input_email.value,
         'Password'    : input_password.value,
-        'EAuth'       : input_eauth.value,
-        'Show'        : input_show.value,
+        'EAuth'       : input_eauth.checked,
+        'Show'        : input_show.checked,
         'RoleId'      : input_role.getAttribute("eva-id")
     };
   

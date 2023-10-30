@@ -22,6 +22,7 @@ const Role = sequelize.define('Role', {
 
 const Config = sequelize.define('Config', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    state: {type: DataTypes.INTEGER},
     data:  {type: DataTypes.STRING}
 })
 

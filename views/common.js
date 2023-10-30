@@ -79,9 +79,7 @@ async function showTable(showTbl , hide, col, data) {
             return;
           } else {
             const currentForm = e.currentTarget.parentNode.parentNode;
-          
-            // if (e.target.closest('.eva-form tr')) {
-            // const modalTrigger = currentForm.querySelector('[data-bs-toggle="modalEdit"]');
+              
             const modalTrigger = currentForm.getElementsByClassName('eva-edit');
             if (modalTrigger[0]) {
               modalTrigger[0].click();
@@ -129,6 +127,10 @@ async function showTable(showTbl , hide, col, data) {
         }
       }
     }   
+}
+async function getModal(modalForm) {
+    let options =  { focus: true };
+    currentModal = new bootstrap.Modal(modalForm, options);    
 }
 /////////////////////////////////////////////////////////////////////////////
 const inputUserName = document.getElementById('input-username');
@@ -238,11 +240,8 @@ async function userEditModal() {
     console.log('>>userEditModal...'); 
 
     let modalForm = document.getElementById("userEditModal");
-    let options =  {
-    focus: true
-    };
 
-    currentModal = new bootstrap.Modal(modalForm, options);    
+    currentModal = await getModal(modalForm);
   
     if (selectRows.length === 0) return currentModal.hide();
 
@@ -420,9 +419,8 @@ async function userEditRole() {
   console.log('>>userEditRole...'); 
 
   let modalForm = document.getElementById("editUserRoleModal");
-  let options =  { focus: true };
 
-  currentModal = new bootstrap.Modal(modalForm, options);
+  currentModal = await getModal(modalForm);
   currentModal.show();
 
   let data = await getUsersRoles();  
@@ -570,9 +568,8 @@ async function objectEditModal() {
     console.log('>>objectEditModal...'); 
 
     let modalForm = document.getElementById("objectEditModal");
-    let options =  { focus: true };
 
-    currentModal = new bootstrap.Modal(modalForm, options);    
+    currentModal = await getModal(modalForm);
   
     if (selectRows.length === 0) return currentModal.hide();
 

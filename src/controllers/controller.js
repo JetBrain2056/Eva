@@ -185,8 +185,8 @@ exports.createUser = async function(req, res) {
         console.log(err);
     }
 }
-exports.updateUser = async function(req, res, next) {
-    console.log('>>Update...');
+exports.updateUser = async function(req, res) {
+    console.log('>>updateUser...');
     
     if (!req.body) return res.sendStatus(400);     
 

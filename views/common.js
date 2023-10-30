@@ -238,7 +238,7 @@ async function userEditModal() {
   
     const row = selectRows[0];  
           
-    const input_form        = document.getElementById('create-user-form');  
+    const input_form        = document.getElementById('user-edit-form');  
     const input_name        = document.getElementById('input-edit-username');  
     const input_descr       = document.getElementById('input-edit-descr');    
     const input_email       = document.getElementById('input-edit-email');    
@@ -248,11 +248,11 @@ async function userEditModal() {
     const input_show        = document.getElementById('input-edit-show');
     const input_eauth       = document.getElementById('input-edit-eauth');
 
-    let data = { 'id': row.cells[0].innerText };
+    let data = { 'id': row.cells[0].innerText};
 
     let res;
     try {    
-        let response = await fetch('/getone', {
+        let response = await fetch('/getuser', {
             method  : 'post',    
             headers : {'Content-Type': 'application/json'},
             body    : JSON.stringify(data)            
@@ -281,7 +281,7 @@ async function userEditModal() {
 async function userEdit() {
     console.log('>>userEdit...'); 
       
-    const input_form        = document.getElementById('create-user-form');  
+    const input_form        = document.getElementById('user-edit-form');  
     const input_name        = document.getElementById('input-edit-username');  
     const input_descr       = document.getElementById('input-edit-descr');     
     const input_email       = document.getElementById('input-edit-email');    

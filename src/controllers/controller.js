@@ -30,7 +30,7 @@ async function hashPassword(password, saltRounds = 10) {
         console.log(err);
     }
 }
-exports.Auth = function(req,res) {
+export function Auth(req,res) {
     content.logged = false;
     res.render('index.twig', content);
 }
@@ -185,7 +185,7 @@ exports.createUser = async function(req, res) {
         console.log(err);
     }
 }
-exports.updateUser = async function(req, res) {
+exports.updateUser = async function(req, res, next) {
     console.log('>>updateUser...');
     
     if (!req.body) return res.sendStatus(400);     

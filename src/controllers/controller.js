@@ -30,11 +30,11 @@ async function hashPassword(password, saltRounds = 10) {
         console.log(err);
     }
 }
-export function Auth(req,res) {
+exports.Auth = function(req,res) {
     content.logged = false;
     res.render('index.twig', content);
 }
-exports.Signin = async function(req,res,next) {
+exports.Signin = async function(req, res) {
 
     if (!req.body) return res.sendStatus(400);
 
@@ -104,7 +104,7 @@ exports.Signin = async function(req,res,next) {
         }
     }
 }
-exports.getUsers = async function(req, res, next) {
+exports.getUsers = async function(req, res) {
     try {
         // const data = await User.findAll({raw:true})
         // await res.send(data);
@@ -114,13 +114,12 @@ exports.getUsers = async function(req, res, next) {
             +'LEFT JOIN "Roles" as "N"'
             +'on "Users"."RoleId" = "N"."id";'
         );
-        await res.send(data[0]); 
-        next();
+        await res.send(data[0]);         
     } catch(err) {
         console.log(err);
     }
 }
-exports.getUser = async function(req, res, next) {
+exports.getUser = async function(req, res) {
 
     if (!req.body) return res.sendStatus(400);
 
@@ -137,8 +136,7 @@ exports.getUser = async function(req, res, next) {
             +'on "Users"."RoleId" = "N"."id"'
             +'where "Users"."id" = '+ id +';'
         );
-        return await res.send(data[0]); 
-        next();
+        return await res.send(data[0]);         
     } catch(err) {
         console.log(err);
     }
@@ -185,7 +183,7 @@ exports.createUser = async function(req, res) {
         console.log(err);
     }
 }
-exports.updateUser = async function(req, res, next) {
+exports.updateUser = async function(req, res) {
     console.log('>>updateUser...');
     
     if (!req.body) return res.sendStatus(400);     
@@ -225,11 +223,10 @@ exports.deleteUser = async function(req, res) {
         console.log(err);
     }
 }
-exports.getRoles = async function(req, res, next) {
+exports.getRoles = async function(req, res) {
     try {
         const data = await Role.findAll({raw:true})
-        await res.send(data);
-        next();
+        await res.send(data);        
     } catch(err) {
         console.log(err);
     }
@@ -264,11 +261,10 @@ exports.deleteRole = async function(req, res) {
         console.log(err);
     }
 }
-exports.getConfig = async function(req, res, next) {
+exports.getConfig = async function(req, res) {
     try {
         const data = await Config.findAll({raw:true})
-        await res.send(data);
-        next();
+        await res.send(data);        
     } catch(err) {
         console.log(err);
     }

@@ -353,17 +353,17 @@ exports.updateConfig = async function(req, res) {
         let columns = {id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true}}; //
         
         console.log(row);
-
-        let EvaObject;
+        
         if (row.state === 0) {
             return;
         } else if (row.state === 1) {    
             try {
-                EvaObject = sequelize.define(tblId, columns);
+                const EvaObject = sequelize.define(tblId, columns);
                 console.log('Create table: '+EvaObject);   
+                await sequelize.sync(EvaObject);
             } catch(err) {
                 console.log(err);
-            }
+            }            
             try {
                 const result = await Config.update({ 
                     state : 0                     
@@ -374,24 +374,22 @@ exports.updateConfig = async function(req, res) {
             } catch(err) {
                 console.log(err);
             }
-        } else if (row.state === 2) {
+        } else if (row.state === 2) {          
+            try { 
+                //const EvaObject = sequelize.define(tblId, columns);
+                //await EvaObject.drop();
+                await sequelize.query('DROP TABLE IF EXISTS "' + tblId+'s";');
+                console.log('Deleted table: '+tblId);                           
+            } catch(err) {
+                console.log(err);
+            }
             try {                                        
                 const count = await Config.destroy({where: {id: row.id}});
                 console.log('Deleted row(s): '+count);
             } catch(err) {
                 console.log(err);
             }
-            try { 
-                //EvaObject = sequelize.define(tblId, columns);
-                //await EvaObject.drop();
-                EvaObject = await sequelize.query('DROP TABLE IF EXISTS "' + tblId+'";');
-                await sequelize.sync(EvaObject);
-                console.log('Delete table: '+EvaObject);            
-            } catch(err) {
-                console.log(err);
-            }
         }
-        await sequelize.sync();
     }
    
 }

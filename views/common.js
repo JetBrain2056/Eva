@@ -421,8 +421,7 @@ async function userEditRole() {
 
   let modalForm = document.getElementById("editUserRoleModal");
 
-  currentModal = await getModal(modalForm);
-  currentModal.show();
+  currentModal = getModal(modalForm);
 
   let data = await getUsersRoles();  
 
@@ -434,6 +433,8 @@ async function userEditRole() {
 }
 async function roleSelect() {
   console.log('>>roleSelect...'); 
+
+  if (selectRows.length === 0) return;
 
   const row = selectRows[0];  
 

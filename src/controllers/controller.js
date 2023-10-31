@@ -360,29 +360,38 @@ exports.updateConfig = async function(req, res) {
         } else if (row.state === 1) {    
             try {
                 EvaObject = sequelize.define(tblId, columns);
-
+                console.log('Create table: '+EvaObject);   
+            } catch(err) {
+                console.log(err);
+            }
+            try {
                 const result = await Config.update({ 
                     state : 0                     
                 }, {
                     where: {id: row.id}
-                })
-                console.log(EvaObject);            
+                }) 
+                console.log('Update table: '+result);                           
             } catch(err) {
                 console.log(err);
             }
         } else if (row.state === 2) {
-            try {                
-                        
-                EvaObject = await Config.destroy({where: {id: row.id}});
-
-                //await sequelize.destroy(tblId);
-                await sequelize.dropSchema(tblId);
-        
-                //return await res.json(EvaObject);
+            try {                                        
+                const count = await Config.destroy({where: {id: row.id}});
+                console.log('Deleted row(s): '+count);
+            } catch(err) {
+                console.log(err);
+            }
+            try { 
+                //EvaObject = sequelize.define(tblId, columns);
+                //await EvaObject.drop();
+                EvaObject = await sequelize.query('DROP TABLE IF EXISTS "' + tblId+'";');
+                await sequelize.sync(EvaObject);
+                console.log('Delete table: '+EvaObject);            
             } catch(err) {
                 console.log(err);
             }
         }
+        await sequelize.sync();
     }
-    await sequelize.sync()
+   
 }

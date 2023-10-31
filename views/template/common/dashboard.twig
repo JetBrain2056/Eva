@@ -189,7 +189,7 @@
   </div>
 </div>
 {# Modal Edit User Role [3] #}
-<div class="modal modal-lg fade" id="editUserRoleModal" aria-hidden="true">
+<div class="modal modal-lg fade" id="editUserRoleModal" tabindex="-2" aria-labelledby="userEditRoleModalLabel" aria-hidden="true">
   <div class="modal-dialog  modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
@@ -199,7 +199,7 @@
       <div class="modal-body">          
         <div class="btn-toolbar" role="toolbar" aria-label="toolbar group">          
           <div class="btn-group btn-group-sm" role="group">
-            <button type="button" class="btn btn-primary d-flex gap-2 align-items-center eva-edit" onclick="roleSelect()">
+            <button type="submit" class="btn btn-primary d-flex gap-2 align-items-center eva-edit" data-bs-dismiss="modal" onclick="roleSelect()">
               <i class=""></i>
               <span>Select</span>
             </button>    

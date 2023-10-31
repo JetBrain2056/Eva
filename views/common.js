@@ -129,9 +129,9 @@ async function showTable(showTbl , hide, col, data) {
     }   
 }
 function getModal(modalForm) {
-    let options =  { focus: true };
+    let options =  { focus: false };
     currentModal = new bootstrap.Modal(modalForm, options); 
-    currentModal.show();   
+    return currentModal.show();   
 }
 /////////////////////////////////////////////////////////////////////////////
 const inputUserName = document.getElementById('input-username');
@@ -239,14 +239,11 @@ async function editUser(data) {
 }
 async function userEditModal() {
     console.log('>>userEditModal...'); 
+  
+    if (selectRows.length === 0) return;
 
     let modalForm = document.getElementById("userEditModal");
-
-    currentModal = await getModal(modalForm);
-  
-    if (selectRows.length === 0) return currentModal.hide();
-
-    currentModal.show();
+    currentModal = getModal(modalForm);
 
     const row = await selectRows[0];      
           
@@ -572,9 +569,10 @@ async function objectEditModal() {
     console.log('>>objectEditModal...'); 
   
     if (selectRows.length === 0) return;
+
     let modalForm = document.getElementById("objectEditModal");
 
-    getModal(modalForm);
+    currentModal = getModal(modalForm);
   
     const row = await selectRows[0];  
           
@@ -634,7 +632,7 @@ async function objectEdit() {
       console.log(e);
     }
 
-    // currentModal.hide();
+    currentModal.hide();
 
     //if (result) {      
       await showConfigTable();     

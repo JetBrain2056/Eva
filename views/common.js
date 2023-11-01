@@ -128,9 +128,11 @@ async function showTable(showTbl , hide, col, data) {
       }
     }   
 }
-function getModal(modalForm) {
-    let options =  { focus: false };
-    currentModal = new bootstrap.Modal(modalForm, options); 
+
+getModal = (modalForm) => {
+    let options =  { focus: true };
+    currentModal = new bootstrap.Modal(modalForm, options);  
+    
     return currentModal.show();   
 }
 /////////////////////////////////////////////////////////////////////////////
@@ -150,16 +152,6 @@ async function selectUser() {
         
     }
 }
-async function showUserTable() {
-    
-    let data = await getUsers();   
-
-    const col  = { 'id':'Id', 'Name':'Name', 'Descr':'Descr', 'Role':'Role','email':'E-mail', 'Show':'Show',  'EAuth':'EAuth' };  
-    const hide = ['id'];  
-
-    await showTable(tbl[1], hide, col, data);
-
-}
 async function getUsers() {
     console.log('>>getUsers...');
     let res;
@@ -170,6 +162,16 @@ async function getUsers() {
         console.log(err)
     }
     return res;
+}
+async function showUserTable() {
+    
+    let data = await getUsers();   
+
+    const col  = { 'id':'Id', 'Name':'Name', 'Descr':'Descr', 'Role':'Role', 'email':'E-mail', 'Show':'Show', 'EAuth':'EAuth' };  
+    const hide = ['id'];  
+
+    await showTable(tbl[1], hide, col, data);
+
 }
 async function createUser(data) {
     console.log('>>createUser...');
@@ -240,12 +242,13 @@ async function editUser(data) {
 async function userEditModal() {
     console.log('>>userEditModal...'); 
   
-    if (selectRows.length === 0) return;
+    //if (selectRows.length === 0) { return };
 
-    let modalForm = document.getElementById("userEditModal");
-    currentModal = getModal(modalForm);
+    //const modalForm = document.getElementById("userEditModal");
+    //currentModal = getModal(modalForm);
+    //modalForm.addEventListener('show.bs.modal', ()=>{return});
 
-    const row = await selectRows[0];      
+    const row = selectRows[0];      
           
     const input_form        = document.getElementById('user-edit-form');  
     const input_name        = document.getElementById('input-edit-username');  
@@ -281,14 +284,17 @@ async function userEditModal() {
         input_role.value        = res[0].Role;           
         input_role.setAttribute("eva-id", res[0].RoleId);
         input_password.value    = '';   
-        input_confirmpass.value = '';                
-        input_show.value        = res[0].Show;  
-        input_eauth.value       = res[0].EAuth;       
+        input_confirmpass.value = '';    
+        input_show.checked        = res[0].Show;  
+        input_eauth.checked       = res[0].EAuth;       
     }         
 
 }
 async function userEdit() {
     console.log('>>userEdit...'); 
+
+    // const modalForm = document.getElementById("userEditModal");
+    // currentModal = getModal(modalForm);
       
     const input_form        = document.getElementById('user-edit-form');  
     const input_name        = document.getElementById('input-edit-username');  
@@ -322,11 +328,9 @@ async function userEdit() {
       console.log(e);
     }
 
-    currentModal.hide();
+    // await currentModal.hide();
 
-    //if (result) {      
-      await showUserTable();     
-    //}
+    if (result) await showUserTable();
 }
 async function deleteUser(data) {
     console.log('>>deleteUser...');
@@ -571,7 +575,7 @@ async function objectEditModal() {
   
     if (selectRows.length === 0) return;
 
-    let modalForm = document.getElementById("objectEditModal");
+    const modalForm = document.getElementById("objectEditModal");
 
     currentModal = getModal(modalForm);
   
@@ -612,6 +616,10 @@ async function objectEditModal() {
 }
 async function objectEdit() {
     console.log('>>configEdit...'); 
+
+    // let modalForm = document.getElementById("objectEditModal");
+
+    // currentModal = await getModal(modalForm);
       
     const input_form   = document.getElementById('object-edit-form');  
     const input_type   = document.getElementById('input-edit-type');
@@ -624,7 +632,7 @@ async function objectEdit() {
         'data'    : JSON.stringify(tmp),
     };
   
-    console.log(data);
+    //console.log(data);
 
     let result;
     try {
@@ -632,8 +640,9 @@ async function objectEdit() {
     } catch (e) {
       console.log(e);
     }
-
-    currentModal.hide();
+    
+    //if (currentModal.show) 
+    await currentModal.hide();
 
     //if (result) {      
       await showConfigTable();     

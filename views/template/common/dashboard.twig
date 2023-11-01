@@ -43,7 +43,7 @@
           <i class="fa fa-user-plus"></i>
           <span>{{ button_add }}</span>
         </button>        
-        <button type="button" class="btn btn-primary d-flex gap-2 align-items-center eva-edit" onclick="userEditModal()">
+        <button type="button" class="btn btn-primary d-flex gap-2 align-items-center eva-edit" data-bs-toggle="modal" data-bs-target="#userEditModal" onclick="userEditModal()">
           <i class="fa fa-edit"></i>
           <span>{{ button_edit }}</span>
         </button>
@@ -318,7 +318,7 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" onclick="objectEdit()">{{ button_save }}</button>
+        <button type="submit" class="btn btn-primary" onclick="objectEdit()">{{ button_save }}</button>
       </div>
     </div>
   </div>

@@ -18,8 +18,7 @@ let content = {
     Ent                : 'Enterprise',
     Dev                : 'Developer', 
     Version            : '1.0.0',
-    Information        : 'Information',
-    mode               : true,
+    Information        : 'Information',    
 
     //root
     lang                   : root.$_code,

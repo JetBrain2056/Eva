@@ -133,16 +133,30 @@ getModal = (modalForm) => {
     
     return currentModal.show();   
 }
-function operationMode() {
+function operationMode(e) {
+    console.log('>>operationMode...');
+    
     const Developer  = document.getElementById('Developer');
     const Enterprise = document.getElementById('Enterprise'); 
 
+    let elem = e.target.value;
+    //console.log(elem);
+
     if (Developer.checked) {
+        console.log('>>Start dev...')
         return;
-    } else if (Enterprise.checked) {
-       //srart app 
+    } else if (Enterprise.checked) {       
+       console.log('>>Start app...');
+       let mode = document.querySelector('.content').getAttribute('data-mode');
+       console.log(mode);
+       mode = false;       
     }
 }
+const operModes = document.getElementsByName("operation_mode");
+for (const mode of operModes) {    
+    mode.addEventListener('change', operationMode)
+}
+
 /////////////////////////////////////////////////////////////////////////////
 const inputUserName = document.getElementById('input-username');
 const inputStatus   = document.getElementById('status');
@@ -153,11 +167,12 @@ async function selectUser() {
     let data = await getUsers();    
     for (let rows of data) {
         
-        let option = document.createElement('option');
-        option.value = rows['Name'];
-        option.text  = rows['Name'];
-        inputUserName.appendChild(option);
-        
+        if (rows['Show']) {
+            let option = document.createElement('option');
+            option.value = rows['Name'];
+            option.text  = rows['Name'];
+            inputUserName.appendChild(option);
+        }        
     }
 }
 async function getUsers() {

@@ -19,6 +19,7 @@ let content = {
     Dev                : 'Developer', 
     Version            : '1.0.0',
     Information        : 'Information',
+    mode               : true,
 
     //root
     lang                   : root.$_code,

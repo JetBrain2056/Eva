@@ -149,7 +149,7 @@ function operationMode(e) {
        console.log('>>Start app...');
        let mode = document.querySelector('.content').getAttribute('data-mode');
        console.log(mode);
-       mode = false;       
+    //    Object.mode = false;       
     }
 }
 const operModes = document.getElementsByName("operation_mode");

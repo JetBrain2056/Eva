@@ -11,7 +11,6 @@ for (const div of forms) {
     div.appendChild(tbl[n]); 
     n = n + 1;
 }
-
 function rowSelect(e) {
     console.log('>>rowSelect...');
 
@@ -128,12 +127,21 @@ async function showTable(showTbl , hide, col, data) {
       }
     }   
 }
-
 getModal = (modalForm) => {
     let options =  { focus: true };
     currentModal = new bootstrap.Modal(modalForm, options);  
     
     return currentModal.show();   
+}
+function operationMode() {
+    const Developer  = document.getElementById('Developer');
+    const Enterprise = document.getElementById('Enterprise'); 
+
+    if (Developer.checked) {
+        return;
+    } else if (Enterprise.checked) {
+       //srart app 
+    }
 }
 /////////////////////////////////////////////////////////////////////////////
 const inputUserName = document.getElementById('input-username');

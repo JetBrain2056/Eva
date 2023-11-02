@@ -146,11 +146,10 @@ function operationMode(e) {
         console.log('>>Start dev...')
         return;
     } else if (Enterprise.checked) {       
-       console.log('>>Start app...');
-       let mode = document.querySelector('.content').getAttribute('data-mode');
-       console.log(mode);
-    //    Object.mode = false;       
+       console.log('>>Start app...');        
     }
+    let mode = document.querySelector('.content').getAttribute('data-mode');
+    console.log(mode);    
 }
 const operModes = document.getElementsByName("operation_mode");
 for (const mode of operModes) {    

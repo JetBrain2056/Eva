@@ -40,6 +40,14 @@ exports.Signin = async function(req, res) {
 
     console.log('body: ', req.body);
 
+    const operMode = req.body.operation_mode;
+
+    if ( operMode=== 'on') {
+        content.mode = true;
+    } else if (operMode=== 'off') {
+        content.mode = false;
+    }
+
     const username = req.body.username;
     const password = req.body.password;
 

@@ -14,7 +14,7 @@
         <link href="./stylesheet/stylesheet.css" rel="stylesheet">
     </head>
     <body>             
-        <div class="content d-flex flex-column"> 
+        <div class="content d-flex flex-column" data-mode = {{ mode }}>             
             {% include "./template/common/header.twig" %}  
             {% if logged %}                             
                 {% if mode %} {#Backend#}

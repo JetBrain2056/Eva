@@ -17,14 +17,19 @@
         <div class="content d-flex flex-column"> 
             {% include "./template/common/header.twig" %}  
             {% if logged %}                             
-                <div class="d-flex flex-row flex-grow-1">                    
-                    <div class="col-2 sidebar" style="overflow-y: scroll">
-                        {% include "./template/common/column_left.twig" %}
-                    </div>
-                    <div class="col">
-                        {% include "./template/common/dashboard.twig" %}
-                    </div>                    
-                </div>                             
+                {% if mode %} {#Backend#}
+                    <div class="d-flex flex-row flex-grow-1">                    
+                        <div class="col-2 sidebar" style="overflow-y: scroll">
+                            {% include "./template/common/column_left.twig" %}
+                        </div>
+                        <div class="col">
+                            {% include "./template/common/dashboard.twig" %}
+                        </div>                    
+                    </div>  
+                {% else %} {#Frontend#}                          
+                    <noscript>You need to enable JavaScript to run this app.</noscript>
+                    <div id="eva-app">{#Start app#}</div>
+                {% endif %}                               
             {% else %}                            
                 {% include "./template/common/login.twig" %}                            
             {% endif %}   

@@ -9,13 +9,13 @@
         <script defer src="./eva-app.js"></script>
         <script defer src="./@popperjs/core/dist/umd/popper.min.js"></script>
         <script defer src="./js/bootstrap.min.js"></script>
-        <link rel="icon" type="image/x-icon" href="{{ shortIcon }}">
+        <link rel="icon" type="image/x-icon" href={{ shortIcon }}>
         <link href="./css/bootstrap.min.css" rel="stylesheet">
         <link href="./font-awesome/css/font-awesome.min.css" rel="stylesheet">
         <link href="./stylesheet/stylesheet.css" rel="stylesheet">
     </head>
     <body>             
-        <div class="content d-flex flex-column" data-mode = {{ mode }}>             
+        <div class="content d-flex flex-column" data-mode={{ mode }}>             
             {% include "./template/common/header.twig" %}  
             {% if logged %}                             
                 {% if mode %} {#Backend#}

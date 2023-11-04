@@ -162,7 +162,7 @@ const inputStatus   = document.getElementById('status');
 const btnConfigSave = document.getElementById('btn-config-save');
 
 async function selectUser() {
-               
+    console.log('>>selectUser...');           
     let data = await getUsers();    
     for (let rows of data) {
         

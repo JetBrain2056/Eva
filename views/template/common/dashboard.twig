@@ -96,9 +96,9 @@
       </div>
       <div class="modal-body">
         <form class="form" id="create-user-form">
-          <label for="input-username">Name:</label>
+          <label for="input-user-name">Name:</label>
           <div class="input-group">
-            <input type="text" placeholder="Name" id="input-username" class="form-control"/>
+            <input type="text" placeholder="Name" id="input-user-name" class="form-control"/>
           </div>
           <label for="input-descr">Descr:</label>
           <div class="input-group">
@@ -298,7 +298,7 @@
         <h5 class="modal-title" id="objectEditModalLabel">Edit object</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body">        
         <form class="form" id="object-edit-form">
           <label for="input-edit-type">Type object:</label>
           <div class="input-group input-group-sm">
@@ -309,7 +309,12 @@
           <label for="input-edit-textId">Identifier:</label>
           <div class="input-group input-group-sm">
             <input type="text" placeholder="" id="input-edit-textId" class="form-control"/>
-          </div>  
+          </div>            
+          <label for="input-edit-subsystem">Subsystem:</label>
+          <div class="input-group input-group-sm">
+            <input id= "subsystem" type="text" placeholder="" id="input-edit-subsystem" class="form-control"/>
+            <button id= "subsystemBtn" class="btn btn-outline-secondary" type="button" onclick="objectEditSubsystem()">...</button>
+          </div>           
           <label for="input-edit-typeId">Type Id:</label>
           <div class="input-group input-group-sm">
             <input type="text" placeholder="0" id="input-edit-typeId" class="form-control"/>

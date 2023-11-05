@@ -27,14 +27,15 @@ const Config = sequelize.define('Config', {
 })
 
 const Subsystem = sequelize.define('Subsystem', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},    
-    name:  {type: DataTypes.STRING, unique: true}
+    id:   {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},    
+    name: {type: DataTypes.STRING, unique: true},
+    display: {type: DataTypes.BOOLEAN, defaultValue: 'false'}
 })
 
 const Constant = sequelize.define('Constant', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},    
     name:  {type: DataTypes.STRING, unique: true},
-    guidType: {type: DataTypes.STRING, unique: true},
+    uuidType: {type: DataTypes.STRING, unique: true},
 })
 
 Role.hasOne(User)

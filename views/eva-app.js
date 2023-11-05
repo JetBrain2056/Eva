@@ -1,5 +1,7 @@
-const app = document.getElementById('eva-app');
-console.log(app);
+
+function init() {
+    const app = document.getElementById('eva-app');
+    console.log(app);       
     const div = document.createElement('div');
     console.log(div);
     div.setAttribute("class", "d-flex flex-row flex-grow-1");              
@@ -15,4 +17,7 @@ console.log(app);
         div3.setAttribute("class","col");
         div.appendChild(div3); 
         div3.insertAdjacentHTML = '{% include "./template/common/dashboard.twig" %}';
-app.appendChild(div); 
+    app.appendChild(div);
+}
+
+document.addEventListener('DOMContentLoaded', init());

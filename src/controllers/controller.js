@@ -1,8 +1,9 @@
-const { User, Role, Config }    = require('../models/models.js');
+const { User, Role, Config, Subsystem, Constant } = require('../models/models.js');
 const { content }       = require('../index.js');
 const bcrypt            = require('bcrypt');
 const sequelize         = require('../db');
 const { DataTypes }     = require('sequelize');
+const { v4: uuidv4 }    = require('uuid');
 //const jwt              = require('jsonwebtoken');
 
 /* const generateJwt = (id, login, role) => {
@@ -358,20 +359,43 @@ exports.updateConfig = async function(req, res) {
 
     for (let row of req.body) {        
         let tblId   = row.textId;        
-        let columns = {id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true}}; //
+        let columns = {id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true}}; //DEMO!!!
         
         console.log(row);
         
         if (row.state === 0) {
             return;
-        } else if (row.state === 1) {    
-            try {
-                const EvaObject = sequelize.define(tblId, columns);
-                console.log('Create table: '+EvaObject);   
-                await sequelize.sync(EvaObject);
-            } catch(err) {
-                console.log(err);
-            }            
+        } else if (row.state === 1) {   
+            let typeId = row.typeId;
+            if (typeId==='Subsystem') {            
+                try {
+                    const elem = await Subsystem.create({                        
+                        name: tblId
+                    });
+                    console.log('Create element: '+elem);                       
+                } catch(err) {
+                    console.log(err);
+                }    
+            } else if (typeId==='Constant') {   
+                const uuid = uuidv4();                 
+                try {
+                    const elem = await Constant.create({                        
+                        name: tblId,
+                        guidType: uuid
+                    });
+                    console.log('Create element: '+elem);                       
+                } catch(err) {
+                    console.log(err);
+                }                    
+            } else {                    
+                try {
+                    const EvaObject = sequelize.define(tblId, columns);
+                    console.log('Create table: '+EvaObject);   
+                    await sequelize.sync(EvaObject);
+                } catch(err) {
+                    console.log(err);
+                }        
+            }
             try {
                 const result = await Config.update({ 
                     state : 0                     
@@ -400,4 +424,12 @@ exports.updateConfig = async function(req, res) {
         }
     }
    
+}
+exports.getSubsystems = async function(req, res) {
+    try {
+        const data = await Subsystem.findAll({raw:true})
+        await res.send(data);        
+    } catch(err) {
+        console.log(err);
+    }
 }

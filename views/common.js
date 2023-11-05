@@ -155,7 +155,6 @@ const operModes = document.getElementsByName("operation_mode");
 for (const mode of operModes) {    
     mode.addEventListener('change', operationMode)
 }
-
 function logout() {
     console.log('>>Logout()...');
     let mode = document.querySelector('.content').getAttribute('data-mode');
@@ -180,9 +179,11 @@ async function getUsers() {
 async function selectUser() {
     console.log('>>selectUser...');           
 
-    let data = await getUsers();    
+    let data = await getUsers();
 
-    let inputUserName = document.getElementById('input-username');
+    const inputUserName = document.getElementById('input-username');
+
+    console.log(inputUserName);  
 
     for (let rows of data) {
         

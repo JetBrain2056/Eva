@@ -381,7 +381,7 @@ exports.updateConfig = async function(req, res) {
                 try {
                     const elem = await Constant.create({                        
                         name: tblId,
-                        guidType: uuid
+                        uuidType: uuid
                     });
                     console.log('Create element: '+elem);                       
                 } catch(err) {

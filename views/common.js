@@ -755,7 +755,7 @@ async function showSubsystemsTable() {
 
     let data = await getSubsystems();  
   
-    const col = {'id':'Id', 'name':'Name'};  
+    const col = {'id':'Id', 'name':'Name', 'view':'View subsystem'};  
     const hide = ['id'];
     
     await showTable(tbl[4], hide, col, data);

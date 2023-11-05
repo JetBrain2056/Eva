@@ -737,6 +737,54 @@ async function updateConfig() {
    
     // return res;
 }
+/////////////////////////////////////////////////////////////////////////////
+async function getSubsystems() {
+    console.log('>>getSubsystems()...');
+    let res;
+    try{
+        const response = await fetch('/subsystems');
+        res = await response.json();
+    } catch (err) {
+        console.log(err)
+    }
+    return res;
+  
+}
+async function showSubsystemsTable() {
+    console.log('>>showSubsystemsTable...');
+
+    let data = await getSubsystems();  
+  
+    const col = {'id':'Id', 'name':'Name'};  
+    const hide = ['id'];
+    
+    await showTable(tbl[4], hide, col, data);
+
+}
+async function subsystemSelect() {
+    console.log('>>selectSubsystem...');
+    inputStatus.value = '>> Select subsystem...';
+
+    if (selectRows.length === 0) return;
+
+    const row = selectRows[0];  
+  
+    const inputSubsystem  = document.getElementById('input-subsystem');       
+  
+    inputSubsystem.value  = row.cells[1].innerText;
+    inputSubsystem.setAttribute("eva-id", row.cells[0].innerText);
+  
+    currentModal.hide();
+}
+async function objectEditSubsystem() {
+
+    let modalForm = document.getElementById("editSubsystemModal");
+
+    currentModal = getModal(modalForm);
+  
+    await showSubsystemsTable();
+
+}
 
 window.onload = async function() {
     await selectUser();

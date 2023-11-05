@@ -26,6 +26,17 @@ const Config = sequelize.define('Config', {
     data:  {type: DataTypes.STRING}
 })
 
+const Subsystem = sequelize.define('Subsystem', {
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},    
+    name:  {type: DataTypes.STRING, unique: true}
+})
+
+const Constant = sequelize.define('Constant', {
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},    
+    name:  {type: DataTypes.STRING, unique: true},
+    guidType: {type: DataTypes.STRING, unique: true},
+})
+
 Role.hasOne(User)
 User.belongsTo(Role)
 
@@ -34,5 +45,7 @@ sequelize.sync()
 module.exports = {
     User,
     Role,
-    Config
+    Config,
+    Subsystem,
+    Constant
 }

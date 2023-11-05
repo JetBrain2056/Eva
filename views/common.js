@@ -156,24 +156,16 @@ for (const mode of operModes) {
     mode.addEventListener('change', operationMode)
 }
 
+function logout() {
+    console.log('>>Logout()...');
+    let mode = document.querySelector('.content').getAttribute('data-mode');
+    console.log(mode);   
+}
+
 /////////////////////////////////////////////////////////////////////////////
-const inputUserName = document.getElementById('input-username');
 const inputStatus   = document.getElementById('status');
 const btnConfigSave = document.getElementById('btn-config-save');
 
-async function selectUser() {
-    console.log('>>selectUser...');           
-    let data = await getUsers();    
-    for (let rows of data) {
-        
-        if (rows['Show']) {
-            let option = document.createElement('option');
-            option.value = rows['Name'];
-            option.text  = rows['Name'];
-            inputUserName.appendChild(option);
-        }        
-    }
-}
 async function getUsers() {
     console.log('>>getUsers...');
     let res;
@@ -184,6 +176,24 @@ async function getUsers() {
         console.log(err)
     }
     return res;
+}
+async function selectUser() {
+    console.log('>>selectUser...');           
+
+    let data = await getUsers();    
+
+    let inputUserName = document.getElementById('input-username');
+
+    for (let rows of data) {
+        
+        if (rows['Show']) {
+            let option = document.createElement('option');
+            option.value = rows['Name'];
+            option.text  = rows['Name'];
+
+            inputUserName.appendChild(option);
+        }        
+    }    
 }
 async function showUserTable() {
     
@@ -515,6 +525,7 @@ async function getConfig() {
     return res;
 }
 async function showConfigTable() {
+    console.log('>>showConfigTable...');
     
     let tmp  = await getConfig();     
     let data = [];
@@ -598,6 +609,8 @@ async function objectEditModal() {
     if (selectRows.length === 0) return;
 
     const modalForm = document.getElementById("objectEditModal");
+    const subsystem = document.getElementById("subsystem");
+    const subsystemBtn = document.getElementById("subsystemBtn");
 
     currentModal = getModal(modalForm);
   
@@ -632,7 +645,14 @@ async function objectEditModal() {
         input_form.setAttribute("eva-id", res[0].id);
         input_type.value        = Elements.typeId;
         input_textId.value      = Elements.textId;
-      
+        console.log(Elements.typeId);
+        if (Elements.typeId==='Subsystem') {            
+            subsystem.setAttribute("disabled","disabled"); 
+            subsystemBtn.setAttribute("disabled","disabled"); 
+        } else {
+            subsystem.removeAttribute ("disabled"); 
+            subsystemBtn.removeAttribute("disabled"); 
+        }
     }         
 
 }
@@ -755,7 +775,7 @@ async function showSubsystemsTable() {
 
     let data = await getSubsystems();  
   
-    const col = {'id':'Id', 'name':'Name', 'view':'View subsystem'};  
+    const col = {'id':'Id', 'name':'Name', 'display':'Display subsystem'};  
     const hide = ['id'];
     
     await showTable(tbl[4], hide, col, data);
@@ -787,7 +807,12 @@ async function objectEditSubsystem() {
 }
 
 window.onload = async function() {
-    await selectUser();
-    await showConfigTable();
-    inputStatus.value = '>>Ready...';
+    try {
+        await selectUser();        
+        inputStatus.value = '>>Ready...';
+    } catch(e) {
+        console.log(e);
+    }
 }
+
+document.addEventListener('DOMContentLoaded', showConfigTable);

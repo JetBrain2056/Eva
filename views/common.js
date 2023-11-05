@@ -67,7 +67,8 @@ function rowSelect(e) {
     }
 }
 async function showTable(showTbl , hide, col, data) {
-    console.log('>>showTable...'); 
+    console.log('>>showTable()...'); 
+    console.log('table: ' + showTbl); 
   
     if (showTbl) {
         showTbl.addEventListener('click', rowSelect);
@@ -148,7 +149,7 @@ function operationMode(e) {
     } else if (Enterprise.checked) {       
        console.log('>>Start app...');        
     }
-    let mode = document.querySelector('.content').getAttribute('data-mode');
+    const mode = content.getAttribute('data-mode');
     console.log(mode);    
 }
 const operModes = document.getElementsByName("operation_mode");
@@ -157,13 +158,14 @@ for (const mode of operModes) {
 }
 function logout() {
     console.log('>>Logout()...');
-    let mode = document.querySelector('.content').getAttribute('data-mode');
+    let mode = content.getAttribute('data-mode');
     console.log(mode);   
 }
 
 /////////////////////////////////////////////////////////////////////////////
 const inputStatus   = document.getElementById('status');
 const btnConfigSave = document.getElementById('btn-config-save');
+const content       = document.querySelector('.content');
 
 async function getUsers() {
     console.log('>>getUsers...');
@@ -527,6 +529,13 @@ async function getConfig() {
 }
 async function showConfigTable() {
     console.log('>>showConfigTable...');
+
+    const logged = content.getAttribute("data-logged");
+    console.log('logged:' + logged);
+    const mode = content.getAttribute("data-mode");
+ 
+    if (logged==='false') return;
+    if (mode==='false') return;
     
     let tmp  = await getConfig();     
     let data = [];
@@ -542,6 +551,8 @@ async function showConfigTable() {
     const hide = [];  
 
     await showTable(tbl[0], hide, col, data);
+
+    inputStatus.value = '>>Ready...';
 
 }
 async function createConfig(data) {
@@ -809,8 +820,9 @@ async function objectEditSubsystem() {
 
 window.onload = async function() {
     try {
-        await selectUser();        
-        inputStatus.value = '>>Ready...';
+        const logged = content.getAttribute("data-logged");
+        if (logged==='true') return;
+        await selectUser();                
     } catch(e) {
         console.log(e);
     }

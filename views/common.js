@@ -548,7 +548,7 @@ async function showConfigTable() {
     }
 
     const col  = { 'id':'Id', 'typeId':'Type',  'textId': 'Identifier'};  
-    const hide = [];  
+    const hide = ['id'];  
 
     await showTable(tbl[0], hide, col, data);
 
@@ -573,12 +573,19 @@ async function createConfig(data) {
 async function configCreate() {
     console.log('>>configCreate...');
 
+    // const input_form   = document.getElementById('object-edit-form');  
     const input_type   = document.getElementById('input-type');
     const input_textId = document.getElementById('input-textId');    
+    const input_subsystem  = document.getElementById('input-subsystem');    
     
-    if (!input_textId.value) alert('Не заполнен идентификатор!');
+    if (!input_textId.value) alert('Error: Impty ID!');
     
-    let tmp = {typeId:input_type.value, textId:input_textId.value};        
+    let tmp = { 
+        typeId: input_type.value, 
+        textId: input_textId.value,
+        subsysId: input_subsystem.getAttribute("eva-id"),
+        subsysName: input_subsystem.value
+    };        
 
     const data =  {
         'data'    : JSON.stringify(tmp),
@@ -621,8 +628,6 @@ async function objectEditModal() {
     if (selectRows.length === 0) return;
 
     const modalForm = document.getElementById("objectEditModal");
-    const subsystem = document.getElementById("subsystem");
-    const subsystemBtn = document.getElementById("subsystemBtn");
 
     currentModal = getModal(modalForm);
   
@@ -630,7 +635,9 @@ async function objectEditModal() {
           
     const input_form   = document.getElementById('object-edit-form');  
     const input_type   = document.getElementById('input-edit-type');
-    const input_textId = document.getElementById('input-edit-textId');    
+    const input_textId = document.getElementById('input-edit-textId');   
+    const input_subsystem = document.getElementById('input-edit-subsystem');   
+    const subsystemBtn    = document.getElementById("subsystemBtn");
 
     let data = { 'id': row.cells[0].innerText };
 
@@ -657,12 +664,14 @@ async function objectEditModal() {
         input_form.setAttribute("eva-id", res[0].id);
         input_type.value        = Elements.typeId;
         input_textId.value      = Elements.textId;
+        input_subsystem.value   = Elements.subsysName;
+        input_subsystem.setAttribute("eva-id", Elements.subsysId);
         console.log(Elements.typeId);
-        if (Elements.typeId==='Subsystem') {            
-            subsystem.setAttribute("disabled","disabled"); 
+        if (Elements.typeId==='Subsystem'||Elements.typeId==='Constant') {            
+            input_subsystem.setAttribute("disabled","disabled"); 
             subsystemBtn.setAttribute("disabled","disabled"); 
         } else {
-            subsystem.removeAttribute ("disabled"); 
+            input_subsystem.removeAttribute ("disabled"); 
             subsystemBtn.removeAttribute("disabled"); 
         }
     }         
@@ -678,8 +687,14 @@ async function objectEdit() {
     const input_form   = document.getElementById('object-edit-form');  
     const input_type   = document.getElementById('input-edit-type');
     const input_textId = document.getElementById('input-edit-textId');   
+    const input_subsystem = document.getElementById('input-edit-subsystem');  
 
-    let tmp = { typeId:input_type.value, textId:input_textId.value };        
+    let tmp = { 
+        typeId: input_type.value, 
+        textId: input_textId.value,
+        subsysId: input_subsystem.getAttribute("eva-id"),
+        subsysName: input_subsystem.value
+    };        
 
     const data =  {
         'id'      : input_form.getAttribute("eva-id"),

@@ -29,6 +29,6 @@ router.post('/getobject', controller.getObject);
 
 router.post('/updateconf', controller.updateConfig);
 
-router.post('/subsystems', controller.getSubsystems);
+router.get('/subsystems', controller.getSubsystems);
 
 module.exports = { router }                                                  

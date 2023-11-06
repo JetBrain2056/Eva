@@ -51,10 +51,10 @@ async function dashboard(div) {
     console.log('>>dashboard()...');
 
     const div2 = document.createElement('div');
-    div2.setAttribute("class", "tab-content p-2 gap-2");       
+    div2.setAttribute("class", "tab-content p-4 gap-2");          
         const div4 = document.createElement('div');
         div4.setAttribute("class", "tab-pane fade");   
-        div4.setAttribute("role", "tabpanel");  
+        div4.setAttribute("role", "tabpanel");          
         div2.appendChild(div4);  
     div.appendChild(div2);  
 
@@ -67,7 +67,7 @@ async function dashboard(div) {
         } else {    
             const a = document.createElement('a');
             a.setAttribute("class","nav-link");  
-            a.setAttribute("style","color:grey");  
+            a.setAttribute("style","color:grey;font-size: 19px;");  
             a.innerText = elements.textId;
             div2.appendChild(a);  
         }
@@ -88,7 +88,7 @@ function init() {
         div.setAttribute("class", "d-flex flex-row flex-grow-1");                          
             const div3 = document.createElement('div');
             div3.setAttribute("class","col");
-            div3.setAttribute("style", "height:calc(100vh - 99.5px);");               
+            div3.setAttribute("style", "height:calc(100vh - 96px); border: 1px solid #00ff92");                
             //div3.insertAdjacentHTML = '{% include "./template/common/dashboard.twig" %}';
             dashboard(div3);
             div.appendChild(div3); 

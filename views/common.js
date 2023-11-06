@@ -485,7 +485,7 @@ async function roleSelect() {
   input_edit_role.value   = row.cells[1].innerText;
   input_edit_role.setAttribute("eva-id", row.cells[0].innerText);
 
-  currentModal.hide();
+  await currentModal.hide();
            
 }
 async function deleteRole(data) {
@@ -801,12 +801,15 @@ async function subsystemSelect() {
 
     const row = selectRows[0];  
   
-    const inputSubsystem  = document.getElementById('input-subsystem');       
+    const inputSubsystem     = document.getElementById('input-subsystem');       
+    const inputEditSubsystem = document.getElementById('input-edit-subsystem');  
   
     inputSubsystem.value  = row.cells[1].innerText;
     inputSubsystem.setAttribute("eva-id", row.cells[0].innerText);
+    inputEditSubsystem.value  = row.cells[1].innerText;
+    inputEditSubsystem.setAttribute("eva-id", row.cells[0].innerText);
   
-    currentModal.hide();
+    await currentModal.hide();
 }
 async function objectEditSubsystem() {
 

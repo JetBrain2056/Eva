@@ -19,7 +19,6 @@ async function navItem(navTab, name) {
     li.appendChild(a); 
     navTab.appendChild(li); 
 }
-
 async function header(navTab) {
     console.log('>>header()...');
     //MAIN

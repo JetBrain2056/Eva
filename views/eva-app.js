@@ -1,4 +1,4 @@
-
+///Get on server/////////////////////////////////////////////////////////////
 async function getSubsystems() {
     console.log('>>getSubsystems()...');
     let res;
@@ -21,6 +21,9 @@ async function getConfig() {
     }
     return res;
 }
+//Button comands/////////////////////////////////////////////////////////////
+
+//Content////////////////////////////////////////////////////////////////////
 async function navItem(navTab, name) {
     const li = document.createElement('li');
     li.setAttribute("class","nav-item");
@@ -48,7 +51,7 @@ async function dashboard(div) {
     console.log('>>dashboard()...');
 
     const div2 = document.createElement('div');
-    div2.setAttribute("class", "tab-content");       
+    div2.setAttribute("class", "tab-content p-2 gap-2");       
         const div4 = document.createElement('div');
         div4.setAttribute("class", "tab-pane fade");   
         div4.setAttribute("role", "tabpanel");  
@@ -70,6 +73,7 @@ async function dashboard(div) {
         }
     }        
 }
+/////////////////////////////////////////////////////////////////////////////
 function init() {
     const mode = document.querySelector('.content').getAttribute('data-mode');
     console.log('mode: ' + mode);   

@@ -10,19 +10,28 @@ async function getSubsystems() {
     }
     return res;  
 }
+async function navItem(navTab, name) {
+    const li = document.createElement('li');
+    li.setAttribute("class","nav-item");
+        const a = document.createElement('a');
+        a.setAttribute("class","nav-link");        
+        a.innerText = name;
+    li.appendChild(a); 
+    navTab.appendChild(li); 
+}
+
 async function header(navTab) {
+    console.log('>>header()...');
+    //MAIN
+    await navItem(navTab, 'Desktop');
+    await navItem(navTab, 'References');    
+    await navItem(navTab, 'Service');    
     
     let data = await getSubsystems();
     console.log(data);
     for (let row of data) {
         console.log(row.name);
-        const li = document.createElement('li');
-        li.setAttribute("class","nav-item");
-        const a = document.createElement('a');
-        a.setAttribute("class","nav-link active");        
-        a.innerText = row.name;
-        li.appendChild(a); 
-        navTab.appendChild(li); 
+        li = await navItem(navTab, row.name);          
     }
 }
 function init() {

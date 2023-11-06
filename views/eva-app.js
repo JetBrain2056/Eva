@@ -1,4 +1,4 @@
-///Get on server/////////////////////////////////////////////////////////////
+//Get on server//////////////////////////////////////////////////////////////
 async function getSubsystems() {
     console.log('>>getSubsystems()...');
     let res;
@@ -22,6 +22,18 @@ async function getConfig() {
     return res;
 }
 //Button comands/////////////////////////////////////////////////////////////
+function openRef() {
+    console.log('>>openRef()...');
+
+    const navUsers = document.getElementById("nav-users");
+
+    const $dashboard = document.getElementById("dashboard");
+    $dashboard.innerHTML = "It's work!";
+
+}
+
+//const Counterpartie = document.getElementById("Counterpartie");
+//Counterpartie.addEventListener("click", await openRef());
 
 //Content////////////////////////////////////////////////////////////////////
 async function navItem(navTab, name) {
@@ -29,7 +41,8 @@ async function navItem(navTab, name) {
     li.setAttribute("class","nav-item");
         const a = document.createElement('a');
         a.setAttribute("class","nav-link");        
-        a.innerText = name;
+        a.setAttribute("id", name);           
+        a.innerText = name;        
     li.appendChild(a); 
     navTab.appendChild(li); 
 }
@@ -69,6 +82,7 @@ async function dashboard(div) {
             a.setAttribute("class","nav-link");  
             a.setAttribute("style","color:grey;font-size: 19px;");  
             a.innerText = elements.textId;
+            a.setAttribute("onclick", "openRef()");
             div2.appendChild(a);  
         }
     }        
@@ -79,14 +93,14 @@ function init() {
     console.log('mode: ' + mode);   
     if (mode==='false') {
         const app = document.getElementById('eva-app');
-        console.log(app); 
+        //console.log(app); 
         
         const navTab = document.getElementById("eva-nav");
         header(navTab);
-        const div = document.createElement('div');
-        console.log(div);
+        const div = document.createElement('div');   
         div.setAttribute("class", "d-flex flex-row flex-grow-1");                          
             const div3 = document.createElement('div');
+            div3.setAttribute("id","dashboard");
             div3.setAttribute("class","col");
             div3.setAttribute("style", "height:calc(100vh - 96px); border: 1px solid #00ff92");                
             //div3.insertAdjacentHTML = '{% include "./template/common/dashboard.twig" %}';

@@ -358,19 +358,19 @@ exports.updateConfig = async function(req, res) {
     if (!req.body) return res.sendStatus(400);
 
     for (let row of req.body) {        
-        let tblId   = row.textId;        
+        let objectId = row.textId;        
         let columns = {id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true}}; //DEMO!!!
         
         console.log(row);
+        let typeId = row.typeId;
         
         if (row.state === 0) {
             return;
-        } else if (row.state === 1) {   
-            let typeId = row.typeId;
+        } else if (row.state === 1) {               
             if (typeId==='Subsystem') {            
                 try {
                     const elem = await Subsystem.create({                        
-                        name: tblId
+                        name: objectId
                     });
                     console.log('Create element: '+elem);                       
                 } catch(err) {
@@ -380,7 +380,7 @@ exports.updateConfig = async function(req, res) {
                 const uuid = uuidv4();                 
                 try {
                     const elem = await Constant.create({                        
-                        name: tblId,
+                        name: objectId,
                         uuidType: uuid
                     });
                     console.log('Create element: '+elem);                       
@@ -389,7 +389,7 @@ exports.updateConfig = async function(req, res) {
                 }                    
             } else {                    
                 try {
-                    const EvaObject = sequelize.define(tblId, columns);
+                    const EvaObject = sequelize.define(objectId, columns);
                     console.log('Create table: '+EvaObject);   
                     await sequelize.sync(EvaObject);
                 } catch(err) {
@@ -406,21 +406,38 @@ exports.updateConfig = async function(req, res) {
             } catch(err) {
                 console.log(err);
             }
-        } else if (row.state === 2) {          
-            try { 
-                //const EvaObject = sequelize.define(tblId, columns);
-                //await EvaObject.drop();
-                await sequelize.query('DROP TABLE IF EXISTS "' + tblId+'s";');
-                console.log('Deleted table: '+tblId);                           
-            } catch(err) {
-                console.log(err);
-            }
+        } else if (row.state === 2) {  
+            if (typeId==='Subsystem') {            
+                try {
+                    const count = await Subsystem.destroy({where: {name: objectId}});                    
+                    console.log('Deleted row(s): '+count);                     
+                } catch(err) {
+                    console.log(err);
+                }    
+            } else if (typeId==='Constant') {                                  
+                try {
+                    const count = await Constant.destroy({where: {name: objectId}});
+                   
+                    console.log('Deleted row(s): '+count);                      
+                } catch(err) {
+                    console.log(err);
+                }                    
+            } else {         
+                try { 
+                    //const EvaObject = sequelize.define(tblId, columns);
+                    //await EvaObject.drop();
+                    await sequelize.query('DROP TABLE IF EXISTS "' + objectId+'s";');
+                    console.log('Deleted table: '+objectId);                           
+                } catch(err) {
+                    console.log(err);
+                }
+            }    
             try {                                        
                 const count = await Config.destroy({where: {id: row.id}});
                 console.log('Deleted row(s): '+count);
             } catch(err) {
                 console.log(err);
-            }
+            }                
         }
     }
    

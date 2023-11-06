@@ -29,7 +29,7 @@ const Config = sequelize.define('Config', {
 const Subsystem = sequelize.define('Subsystem', {
     id:   {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},    
     name: {type: DataTypes.STRING, unique: true},
-    display: {type: DataTypes.BOOLEAN, defaultValue: 'false'}
+    display: {type: DataTypes.BOOLEAN, defaultValue: 'true'}
 })
 
 const Constant = sequelize.define('Constant', {

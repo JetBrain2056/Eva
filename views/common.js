@@ -828,4 +828,4 @@ window.onload = async function() {
     }
 }
 
-document.addEventListener('DOMContentLoaded', showConfigTable);
+document.addEventListener('DOMContentLoaded', showConfigTable());

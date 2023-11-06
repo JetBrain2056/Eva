@@ -48,10 +48,12 @@ async function dashboard(div) {
     console.log('>>dashboard()...');
 
     const div2 = document.createElement('div');
-    div2.setAttribute("class", "tab-content");   
+    div2.setAttribute("class", "tab-content");       
+        const div4 = document.createElement('div');
+        div4.setAttribute("class", "tab-pane fade");   
+        div4.setAttribute("role", "tabpanel");  
+        div2.appendChild(div4);  
     div.appendChild(div2);  
-
-    //<div class="tab-pane fade active show" id="nav-config" role="tabpanel" aria-labelledby="nav-config-tab"></div>
 
     let data = await getConfig();
     for (let row of data) {

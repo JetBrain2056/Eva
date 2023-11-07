@@ -22,30 +22,40 @@ async function getConfig() {
     return res;
 }
 //Button comands/////////////////////////////////////////////////////////////
+function openNav() {
+    console.log('>>openNav()...');
+
+    console.log(name);
+
+    const status = document.getElementById("status");
+    status.value = ">It's work!";
+}
 function openRef() {
     console.log('>>openRef()...');
 
     const $dashboard = document.getElementById("dashboard");
-
-    //$dashboard.innerHTML = '<div type="text/html" data="{% include "./template/common/references.twig" %}"></div>';       
+          
     $dashboard.innerHTML = ">It's work!";
-    //$dashboard.innerHTML = '<div>{% include "./template/common/references.twig" %}</div>';
-   
-    //$dashboard.innerHTML = '<button type="button" class="btn btn-primary d-flex gap-2 align-items-center" data-bs-toggle="modal" data-bs-target="#refModal">'
-    //                     +'<i class="fa fa-plus-square"></i>'
-    //                     +'<span>{{ button_add }}</span>'
-    //                 +'</button>';    
+    //$dashboard.innerHTML = `{% include "./template/common/references.twig" %}`;
+    //$dashboard.innerHTML = `<object type="text/html" data="{% include "./template/common/references.twig" %}"></object>`; 
+    // $dashboard.innerHTML = `<button type="button" class="btn btn-primary d-flex gap-2 align-items-center" data-bs-toggle="modal" data-bs-target="#refModal">
+    //                             <i class="fa fa-plus-square"></i>
+    //                             <span>{{ button_add }}</span>
+    //                         </button>`;    
 }
 //Content////////////////////////////////////////////////////////////////////
-async function navItem(navTab, name) {
+let a = [];
+
+async function navItem(navTab, name) {    
     const li = document.createElement('li');
     li.setAttribute("class","nav-item");
-        const a = document.createElement('a');
-        a.setAttribute("class","nav-link");        
-        a.setAttribute("id", name);           
-        a.innerText = name;        
-    li.appendChild(a); 
-    navTab.appendChild(li); 
+        a[name] = document.createElement('a');
+        a[name].setAttribute("class","nav-link eva-link");        
+        a[name].setAttribute("id", name);           
+        a[name].innerText = name;        
+        //a[name].onclick = openNav();           
+    li.appendChild(a[name]);     
+    navTab.appendChild(li);         
 }
 async function dashboardItem(node, name) {
     const li = document.createElement('li');
@@ -71,8 +81,12 @@ async function header(navTab) {
     console.log(data);
     for (let row of data) {
         console.log(row.name);
-        li = await navItem(navTab, row.name);          
-    }
+        await navItem(navTab, row.name);          
+    }   
+    // const evaLinks = document.getElementsByClassName("eva-link");
+    // for (let link of evaLinks) {
+    //     link.addEventListener("click", openNav());
+    // }
 }
 async function dashboard(div) {
     console.log('>>dashboard()...');

@@ -1,3 +1,4 @@
+
 //Get on server//////////////////////////////////////////////////////////////
 async function getSubsystems() {
     console.log('>>getSubsystems()...');
@@ -22,10 +23,10 @@ async function getConfig() {
     return res;
 }
 //Button comands/////////////////////////////////////////////////////////////
-function openNav() {
+function openNav(e) {
     console.log('>>openNav()...');
 
-    console.log(name);
+    console.log(e);
 
     const status = document.getElementById("status");
     status.value = ">It's work!";
@@ -34,36 +35,55 @@ function openRef() {
     console.log('>>openRef()...');
 
     const $dashboard = document.getElementById("dashboard");
+
+    const ref = document.getElementById("nav-tabRef");    
+     console.log(ref);
+    const navRef = "{{ block('app') }}";
+    // console.log(navRef);
           
-    $dashboard.innerHTML = ">It's work!";
-    //$dashboard.innerHTML = `{% include "./template/common/references.twig" %}`;
-    //$dashboard.innerHTML = `<object type="text/html" data="{% include "./template/common/references.twig" %}"></object>`; 
-    // $dashboard.innerHTML = `<button type="button" class="btn btn-primary d-flex gap-2 align-items-center" data-bs-toggle="modal" data-bs-target="#refModal">
-    //                             <i class="fa fa-plus-square"></i>
-    //                             <span>{{ button_add }}</span>
-    //                         </button>`;    
+    $dashboard.innerHTML = ">It's work!"; 
+    $dashboard.setAttribute("data-app",navRef);
+    // $dashboard.innerHTML = `<div class="" id="nav-tabRef">                              
+    //                             <div class="" id="nav-ref" role="tabpanel" aria-labelledby="nav-ref-tab">
+    //                                 <div class="btn-toolbar" role="toolbar" aria-label="toolbar group">
+        //                                 <div class="btn-group btn-group-sm" role="group">
+        //                                     <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" data-bs-toggle="modal" data-bs-target="#refModal">
+        //                                          <i class="fa fa-plus-square"></i>
+        //                                          <span>{{ button_add }}</span>
+        //                                     </button>
+        //                                     <button type="button" class="btn btn-primary d-flex gap-2 align-items-center eva-edit" onclick="refEditModal()">
+        //                                         <i class="fa fa-edit"></i>
+        //                                         <span>{{ button_edit }}</span>
+        //                                     </button>
+        //                                 </div>
+    //                                 </div>           
+    //                                 <div class="eva-form"></div>      
+    //                             </div> 
+    //                         </div>`;   
 }
 //Content////////////////////////////////////////////////////////////////////
 let a = [];
 
-async function navItem(navTab, name) {    
+function navItem(navTab, name) {    
     const li = document.createElement('li');
     li.setAttribute("class","nav-item");
         a[name] = document.createElement('a');
         a[name].setAttribute("class","nav-link eva-link");        
         a[name].setAttribute("id", name);           
-        a[name].innerText = name;        
-        //a[name].onclick = openNav();           
+        a[name].innerText = name;    
+        a[name].href="#";  
+        a[name].onclick = openNav();           
     li.appendChild(a[name]);     
     navTab.appendChild(li);         
 }
-async function dashboardItem(node, name) {
+function dashboardItem(node, name) {
     const li = document.createElement('li');
     li.setAttribute("class","nav-item");
         const a = document.createElement('a');
         a.setAttribute("class","nav-link");        
         a.setAttribute("id", name);           
         a.innerText = name;
+        a.href="#";
         a.setAttribute("style","color:grey;font-size: 19px;");       
         a.setAttribute("onclick", "openRef()");     
     li.appendChild(a); 
@@ -73,19 +93,23 @@ async function dashboardItem(node, name) {
 async function header(navTab) {
     console.log('>>header()...');
     //MAIN
-    await navItem(navTab, 'Desktop');
-    await navItem(navTab, 'References');    
-    await navItem(navTab, 'Service');    
+     navItem(navTab, 'Desktop');
+     navItem(navTab, 'References');    
+     navItem(navTab, 'Service');    
     
     let data = await getSubsystems();
-    console.log(data);
+    //console.log(data);
     for (let row of data) {
-        console.log(row.name);
-        await navItem(navTab, row.name);          
+        //console.log(row.name);
+        navItem(navTab, row.name);          
     }   
+
     // const evaLinks = document.getElementsByClassName("eva-link");
-    // for (let link of evaLinks) {
-    //     link.addEventListener("click", openNav());
+    // console.log(evaLinks);
+    // for (let link of Object.keys(evaLinks)) {
+    //     console.log(link);
+    //     console.log(evaLinks[link]);
+    //     evaLinks[link].addEventListener("click", openNav(evaLinks[link].id));
     // }
 }
 async function dashboard(div) {
@@ -116,7 +140,7 @@ async function dashboard(div) {
 }
 /////////////////////////////////////////////////////////////////////////////
 function init() {
-    const mode = document.querySelector('.content').getAttribute('data-mode');
+    const mode = document.querySelector('.content').dataset.mode;
     console.log('mode: ' + mode);   
     if (mode==='false') {
         const app = document.getElementById('eva-app');
@@ -130,10 +154,11 @@ function init() {
             const div3 = document.createElement('div');           
             div3.setAttribute("class","col p-4 gap-2");
             div3.setAttribute("id","dashboard");            
+            div3.setAttribute("data-app","{{ block('app') }}"); 
             dashboard(div3);
             div.appendChild(div3); 
-        app.appendChild(div);
-    }
+        app.appendChild(div);   
+    } 
 }
 
 document.addEventListener('DOMContentLoaded', init());

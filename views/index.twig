@@ -12,7 +12,7 @@
         <link rel="icon" type="image/x-icon" href="{{ shortIcon }}">
         <link href="./css/bootstrap.min.css" rel="stylesheet">
         <link href="./font-awesome/css/font-awesome.min.css" rel="stylesheet">
-        <link href="./stylesheet/stylesheet.css" rel="stylesheet">
+        <link href="./stylesheet/stylesheet.css" rel="stylesheet">        
     </head>
     <body>             
         <div class="content d-flex flex-column" data-mode="{{ mode }}" data-logged="{{ logged }}">             
@@ -26,10 +26,11 @@
                         <div class="col">
                             {% include "./template/common/dashboard.twig" %}
                         </div>                    
-                    </div>  
+                    </div>                      
                 {% else %} {#Frontend#}                          
+                    {% use "./template/common/references.twig" %}                                                              
                     <noscript>You need to enable JavaScript to run this app.</noscript>
-                    <div id="eva-app">{#Start app#}</div>
+                    <div id="eva-app" data-app="{{ block('name') }}">{#Start app#}</div>                         
                 {% endif %}                               
             {% else %}                            
                 {% include "./template/common/login.twig" %}                            

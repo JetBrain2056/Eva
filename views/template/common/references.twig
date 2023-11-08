@@ -1,0 +1,109 @@
+{# {% extends "../../index.twig" as app %}     #}
+
+<div class="modal fade" id="nav-tabRef">
+  {# Reference [4] #}
+  <div class="" id="nav-ref" role="tabpanel" aria-labelledby="nav-ref-tab">
+    <div class="btn-toolbar" role="toolbar" aria-label="toolbar group">
+      <div class="btn-group btn-group-sm" role="group">
+        <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" data-bs-toggle="modal" data-bs-target="#refModal">
+          <i class="fa fa-plus-square"></i>
+          <span>{{ button_add }}</span>
+        </button>
+        <button type="button" class="btn btn-primary d-flex gap-2 align-items-center eva-edit" onclick="refEditModal()">
+          <i class="fa fa-edit"></i>
+          <span>{{ button_edit }}</span>
+        </button>
+        {# <button type="button" class="btn btn-primary d-flex gap-2 align-items-center">
+          <i class="fa fa-clone" aria-hidden="true"></i>
+          <span>{{ button_copy }}</span>
+        </button> #}
+         <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" onclick="refDelete()">
+          <i class="fa fa-minus-square"></i>
+          <span>{{ button_delete }}</span>
+        </button>
+        <button id="btn-config-save" type="button" class="btn btn-primary d-flex gap-2 align-items-center" onclick="refUpdate()">
+            <i class="fa fa-floppy-o"></i>
+            <span>{{ button_save }}</span>
+        </button>       
+        <div class="btn-group btn-group-sm" role="group">
+          <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></button>
+          <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">           
+            <li><a class="dropdown-item">{{ button_etc}}</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item">...</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>           
+    <div class="eva-form"></div>      
+  </div> 
+</div>  
+{% block app %}  
+{# Modal Ref #}
+<div class="modal fade" id="refModal" tabindex="-1" aria-labelledby="refModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="refModalLabel">Add object</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form class="form" id="create-ref-form">  
+          <label for="input-type">Type object:</label>
+          <div class="input-group input-group-sm">
+            {# <input type="text" placeholder="0" id="input-type" class="form-control"/> #}
+            {# <button class="btn btn-outline-secondary" type="button" onclick="config_edit_type()">...</button> #}        
+          </div>   
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" onclick="refCreate()">{{ button_save }}</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">{{button_close}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+ {% endblock %}   
+{# Modal Object Edit #}
+<div class="modal fade" id="refEditModal" tabindex="-1" aria-labelledby="refEditModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="objectEditModalLabel">Edit object</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+      </div>
+      <div class="modal-body">        
+        <form class="form" id="object-edit-form">
+          <label for="input-edit-type">Type object:</label>
+          <div class="input-group input-group-sm">
+            {# <input type="text" placeholder="0" id="input-type" class="form-control"/> #}
+            {# <button class="btn btn-outline-secondary" type="button" onclick="config_edit_type()">...</button> #}
+            <input type="text" name="type" class="form-control" id="input-edit-type" disabled></input>
+          </div>         
+          <label for="input-edit-textId">Identifier:</label>
+          <div class="input-group input-group-sm">
+            <input type="text" placeholder="" id="input-edit-textId" class="form-control"/>
+          </div>            
+          <label for="input-edit-subsystem">Subsystem:</label>
+          <div class="input-group input-group-sm">
+            <input type="text" placeholder="" id="input-edit-subsystem" class="form-control"/>
+            <button id= "subsystemBtn" class="btn btn-outline-secondary" type="button" onclick="objectEditSubsystem()">...</button>
+          </div>           
+          <label for="input-edit-typeId">Type Id:</label>
+          <div class="input-group input-group-sm">
+            <input type="text" placeholder="0" id="input-edit-typeId" class="form-control"/>
+            <button class="btn btn-outline-secondary" type="button" onclick="objectEditTypeId()">...</button>
+          </div> 
+          <label for="input-edit-descr">Parent:</label>
+          <div class="input-group input-group-sm">
+            <input type="text" placeholder="..." id="input-edit-parent" class="form-control"/>
+            <button class="btn btn-outline-secondary" type="button" onclick="objectEditParent()">...</button>
+          </div>    
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" onclick="objectEdit()">{{ button_save }}</button>
+      </div>
+    </div>
+  </div>
+</div>

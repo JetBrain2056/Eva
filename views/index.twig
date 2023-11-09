@@ -27,10 +27,11 @@
                             {% include "./template/common/dashboard.twig" %}
                         </div>                    
                     </div>                      
-                {% else %} {#Frontend#}                          
-                    {% use "./template/common/references.twig" %}                                                              
-                    <noscript>You need to enable JavaScript to run this app.</noscript>
-                    <div id="eva-app" data-app="{{ block('name') }}">{#Start app#}</div>                         
+                {% else %} {#Frontend#}                                                                                                         
+                    <noscript>You need to enable JavaScript to run this app.</noscript>                    
+                    <div id="eva-app" data-app="">{#Start app#}</div>                                             
+                        {% use "./template/common/references.twig" %}                        
+                        {{ block('app') }}
                 {% endif %}                               
             {% else %}                            
                 {% include "./template/common/login.twig" %}                            

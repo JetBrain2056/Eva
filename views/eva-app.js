@@ -29,42 +29,24 @@ function openNav(e) {
     console.log(e);
 
     const status = document.getElementById("status");
-    status.value = ">It's work!";
+    //status.value = ">It's work!";
 }
 function openRef() {
     console.log('>>openRef()...');
 
     const $dashboard = document.getElementById("dashboard");      
-    //$dashboard.innerHTML = ">It's work!"; 
-    //app.innerHTML = `<script>{{ block('app') }}</script>`;  
+    $dashboard.innerHTML = ""; 
+    //$dashboard.innerHTML = `{{ block('ref') | json_encode | raw }}`;  
 
-    let navTabRef = document.getElementById("nav-tab-ref");
-    //console.log(navRef);    
+    let btnBlock = document.getElementById("nav-tab-ref");
+    console.log(btnBlock);      
+    
+    $dashboard.appendChild(btnBlock);
 
-    let options =  { focus: true };
-    let currentModal = new bootstrap.Modal(navTabRef, options);  
+    // let options =  { focus: true };
+    // let currentModal = new bootstrap.Modal(navTabRef, options);  
 
-    currentModal.show();
-
-    //app.appendChild(navRef);       
-         
-    // $dashboard.innerHTML = `<div class="" id="nav-tabRef">                              
-    //                             <div class="" id="nav-ref" role="tabpanel" aria-labelledby="nav-ref-tab">
-    //                                 <div class="btn-toolbar" role="toolbar" aria-label="toolbar group">
-        //                                 <div class="btn-group btn-group-sm" role="group">
-        //                                     <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" data-bs-toggle="modal" data-bs-target="#refModal">
-        //                                          <i class="fa fa-plus-square"></i>
-        //                                          <span>{{ button_add }}</span>
-        //                                     </button>
-        //                                     <button type="button" class="btn btn-primary d-flex gap-2 align-items-center eva-edit" onclick="refEditModal()">
-        //                                         <i class="fa fa-edit"></i>
-        //                                         <span>{{ button_edit }}</span>
-        //                                     </button>
-        //                                 </div>
-    //                                 </div>           
-    //                                 <div class="eva-form"></div>      
-    //                             </div> 
-    //                         </div>`;   
+    // currentModal.show(); 
 }
 //Content////////////////////////////////////////////////////////////////////
 let a = [];

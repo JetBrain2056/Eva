@@ -1,14 +1,11 @@
-{# {% extends 'dashboard.twig' %} #}
 {% block ref %}    
-<div class="" id="nav-tab-ref" >
-  {# Reference [4] #}
-  <div class="">
-    <div class="">
-    <div class="">
-      <h5 class="title" id="refModalLabel">Reference</h5>
-      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-    </div>
+<div class="tab-content" id="nav-tab-ref" >
+  {# Reference [5] #}
     <div class="tab-pane" id="nav-ref" role="tabpanel" aria-labelledby="nav-ref-tab">
+      <div class="d-flex gap-1 align-items-center">
+        <h5 class="title" id="refModalLabel">Reference</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
       <div class="btn-toolbar" role="toolbar" aria-label="toolbar group">
         <div class="btn-group btn-group-sm" role="group">
           <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" data-bs-toggle="modal" data-bs-target="#refModal">
@@ -41,12 +38,10 @@
           </div>
         </div>
       </div>           
-      <div class="eva-form"></div>      
-    </div> 
+      <div class="eva-form"></div>       
     </div>  
-  </div>  
 </div> 
-{% endblock %}
+
 {# Modal Ref #}  
 <div class="modal fade" id="refModal" tabindex="-1" aria-labelledby="refModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -114,3 +109,4 @@
     </div>
   </div>
 </div>
+{% endblock %}

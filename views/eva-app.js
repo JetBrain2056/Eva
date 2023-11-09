@@ -22,23 +22,41 @@ async function getConfig() {
     return res;
 }
 //Button comands/////////////////////////////////////////////////////////////
-function openNav(e) {
+function openNav() {
     console.log('>>openNav()...');
 
-    console.log(e);
+    //console.log(e);
+
+    //const $dashboard = document.getElementById("nav-desk");  
+    // $dashboard.innerHTML = "";
+  
+    // $dashboard.appendChild(btnBlock);
+
+    //let btnBlock = document.getElementById("nav-desk");
+    //btnBlock.setAttribute("class", "tab-content");
+    // console.log(btnBlock);      
+    
+    //$dashboard.appendChild(btnBlock);
+
+    // let someTabTriggerEl = document.getElementById('nav-desk');
+    
+    // let tab = new bootstrap.Tab(someTabTriggerEl);
+  
+    // tab.show();
 
     const status = document.getElementById("status");
-    //status.value = ">It's work!";
+    status.value = ">It's work!";
 }
 function openRef() {
     console.log('>>openRef()...');
 
     const $dashboard = document.getElementById("dashboard");      
+    //$dashboard.setAttribute("class", "tab-content");
     $dashboard.innerHTML = ""; 
     //$dashboard.innerHTML = `{{ block('ref') | json_encode | raw }}`;  
 
     let btnBlock = document.getElementById("nav-ref");
-    btnBlock.setAttribute("class", "tab-content");
+    //btnBlock.setAttribute("class", "tab-content");
     // console.log(btnBlock);      
     
     $dashboard.appendChild(btnBlock);
@@ -57,7 +75,8 @@ function navItem(navTab, name) {
         a[name] = document.createElement('a');
         a[name].setAttribute("class","nav-link eva-link");        
         a[name].setAttribute("id", name);      
-        a[name].setAttribute("role", "tab");              
+        a[name].setAttribute("role", "tab");  
+        a[name].setAttribute("data-bs-toggle","tab");            
         a[name].innerText = name;    
         a[name].href="#";  
         a[name].onclick = openNav();           

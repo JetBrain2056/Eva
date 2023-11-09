@@ -34,15 +34,20 @@ function openNav(e) {
 function openRef() {
     console.log('>>openRef()...');
 
-    const $dashboard = document.getElementById("dashboard");
+    const $dashboard = document.getElementById("dashboard");      
+    //$dashboard.innerHTML = ">It's work!"; 
+    //app.innerHTML = `<script>{{ block('app') }}</script>`;  
 
-    const ref = document.getElementById("nav-tabRef");    
-     console.log(ref);
-    const navRef = "{{ block('app') }}";
-    // console.log(navRef);
-          
-    $dashboard.innerHTML = ">It's work!"; 
-    $dashboard.setAttribute("data-app",navRef);
+    let navTabRef = document.getElementById("nav-tab-ref");
+    //console.log(navRef);    
+
+    let options =  { focus: true };
+    let currentModal = new bootstrap.Modal(navTabRef, options);  
+
+    currentModal.show();
+
+    //app.appendChild(navRef);       
+         
     // $dashboard.innerHTML = `<div class="" id="nav-tabRef">                              
     //                             <div class="" id="nav-ref" role="tabpanel" aria-labelledby="nav-ref-tab">
     //                                 <div class="btn-toolbar" role="toolbar" aria-label="toolbar group">
@@ -115,14 +120,6 @@ async function header(navTab) {
 async function dashboard(div) {
     console.log('>>dashboard()...');
 
-    // const div2 = document.createElement('div');
-    // div2.setAttribute("class", "tab-content p-4 gap-2");          
-    //     const div4 = document.createElement('div');
-    //     div4.setAttribute("class", "tab-pane fade");   
-    //     div4.setAttribute("role", "tabpanel");          
-    //     div2.appendChild(div4);  
-    // div.appendChild(div2);  
-
     let data = await getConfig();
     for (let row of data) {
         let strJson = row.data; 
@@ -139,11 +136,12 @@ async function dashboard(div) {
     }        
 }
 /////////////////////////////////////////////////////////////////////////////
+const app = document.getElementById('eva-app');
 function init() {
     const mode = document.querySelector('.content').dataset.mode;
     console.log('mode: ' + mode);   
     if (mode==='false') {
-        const app = document.getElementById('eva-app');
+        //const app = document.getElementById('eva-app');
         //console.log(app); 
         
         const navTab = document.getElementById("eva-nav");
@@ -153,8 +151,7 @@ function init() {
         div.setAttribute("style", "height:calc(100vh - 96px); border: 1px solid #00ff92");       
             const div3 = document.createElement('div');           
             div3.setAttribute("class","col p-4 gap-2");
-            div3.setAttribute("id","dashboard");            
-            div3.setAttribute("data-app","{{ block('app') }}"); 
+            div3.setAttribute("id","dashboard");      
             dashboard(div3);
             div.appendChild(div3); 
         app.appendChild(div);   

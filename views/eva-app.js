@@ -1,4 +1,3 @@
-
 //Get on server//////////////////////////////////////////////////////////////
 async function getSubsystems() {
     console.log('>>getSubsystems()...');
@@ -38,15 +37,16 @@ function openRef() {
     $dashboard.innerHTML = ""; 
     //$dashboard.innerHTML = `{{ block('ref') | json_encode | raw }}`;  
 
-    let btnBlock = document.getElementById("nav-tab-ref");
-    console.log(btnBlock);      
+    let btnBlock = document.getElementById("nav-ref");
+    btnBlock.setAttribute("class", "tab-content");
+    // console.log(btnBlock);      
     
     $dashboard.appendChild(btnBlock);
 
-    // let options =  { focus: true };
-    // let currentModal = new bootstrap.Modal(navTabRef, options);  
-
-    // currentModal.show(); 
+    // let someTabTriggerEl = document.getElementById('nav-ref');
+    // let tab = new bootstrap.Tab(someTabTriggerEl);
+  
+    // tab.show();
 }
 //Content////////////////////////////////////////////////////////////////////
 let a = [];
@@ -56,26 +56,24 @@ function navItem(navTab, name) {
     li.setAttribute("class","nav-item");
         a[name] = document.createElement('a');
         a[name].setAttribute("class","nav-link eva-link");        
-        a[name].setAttribute("id", name);           
+        a[name].setAttribute("id", name);      
+        a[name].setAttribute("role", "tab");              
         a[name].innerText = name;    
         a[name].href="#";  
         a[name].onclick = openNav();           
     li.appendChild(a[name]);     
     navTab.appendChild(li);         
 }
-function dashboardItem(node, name) {
-    const li = document.createElement('li');
-    li.setAttribute("class","nav-item");
-        const a = document.createElement('a');
-        a.setAttribute("class","nav-link");        
-        a.setAttribute("id", name);           
-        a.innerText = name;
-        a.href="#";
-        a.setAttribute("style","color:grey;font-size: 19px;");       
-        a.setAttribute("onclick", "openRef()");     
-    li.appendChild(a); 
-    node.appendChild(li); 
-    return node;
+function navLink(nav, name) {
+    console.log('>>navLink()...');
+    const a = document.createElement('a');
+    a.setAttribute("class","nav-link");        
+    a.setAttribute("id", name);           
+    a.innerText = name;
+    a.href="#";
+    a.setAttribute("style","color:grey;font-size: 19px;");       
+    a.setAttribute("onclick", "openRef()");         
+    nav.appendChild(a); 
 }
 async function header(navTab) {
     console.log('>>header()...');
@@ -109,11 +107,10 @@ async function dashboard(div) {
         if (!row.state===0||elements.typeId==='Constant'||elements.typeId==='Subsystem') {
             console.log(elements.typeId);
         } else {    
-            const ul = document.createElement('ul');
-            ul.setAttribute("class","nav navbar-nav gap-2");  
-            ul.setAttribute("role","tablist");                 
-                dashboardItem(ul, elements.textId);                    
-            div.appendChild(ul);  
+            const nav = document.createElement('nav');
+            nav.setAttribute("class","nav flex-column");                 
+                navLink(nav, elements.textId);                    
+            div.appendChild(nav);  
         }
     }        
 }

@@ -30,8 +30,8 @@
                 {% else %} {#Frontend#}                                                                                                         
                     <noscript>You need to enable JavaScript to run this app.</noscript>                    
                     <div id="eva-app" data-app="">{#Start app#}</div>                                             
-                        {% use "./template/common/references.twig" %}                        
-                        {{ block('app') }}
+                        {% use "./template/common/references.twig" %}  
+                        <object style="display:none">{{ block('ref') }}</object>                                                        
                 {% endif %}                               
             {% else %}                            
                 {% include "./template/common/login.twig" %}                            

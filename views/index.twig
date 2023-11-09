@@ -27,9 +27,11 @@
                             {% include "./template/common/dashboard.twig" %}
                         </div>                    
                     </div>                      
-                {% else %} {#Frontend#}                                                                                                         
+                {% else %} {#Frontend#}                       
                     <noscript>You need to enable JavaScript to run this app.</noscript>                    
                     <div id="eva-app" data-app="">{#Start app#}</div>                                             
+                        {% use "./template/common/desktop.twig" %}  
+                        <object style="display:none">{{ block('desk') }}</object>                       
                         {% use "./template/common/references.twig" %}  
                         <object style="display:none">{{ block('ref') }}</object>                                                        
                 {% endif %}                               
@@ -37,6 +39,6 @@
                 {% include "./template/common/login.twig" %}                            
             {% endif %}   
             {% include "./template/common/footer.twig" %}  
-        </div>
+        </div> 
     </body>
 </html>

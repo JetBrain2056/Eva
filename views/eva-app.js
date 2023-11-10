@@ -85,7 +85,25 @@ async function navItem(navTab, name) {
         //a[name].onclick = openNav();           
     li.appendChild(a[name]);     
     navTab.appendChild(li);  
-    //return navTab;       
+    //return navTab; 
+
+    const evaSubsys = document.querySelector('.eva-subsys'); 
+
+    if (name=='Desktop'||name=='References'||name=='Store') {
+    }else{
+    const subsys = document.createElement("div");        
+    subsys.setAttribute("class","tab-pane fade");
+    //subsys.setAttribute("style","display:block"); 
+    subsys.setAttribute("role","tabpanel");
+    subsys.setAttribute("id", "nav-"+name);
+    subsys.setAttribute("aria-labelledby","nav-"+name+"-tab");
+        const h5 = document.createElement("h5");  
+        h5.setAttribute("class","title");
+        h5.innerText = name;
+    subsys.appendChild(h5);    
+    evaSubsys.appendChild(subsys);    
+        
+    }
 }
 function navLink(nav, name) {
     console.log('>>navLink()...');
@@ -94,27 +112,26 @@ function navLink(nav, name) {
     a.setAttribute("id", name);           
     a.innerText = name;
     a.href="#";
-    a.setAttribute("style","color:grey;font-size: 19px;");       
+    a.setAttribute("style","color: grey;font-size: 19px;");       
     a.setAttribute("onclick", "openRef()");         
     nav.appendChild(a); 
 }
 async function header(navTab) {
     console.log('>>header()...');
     //MAIN
-     navItem(navTab, 'Desktop');
-     const div = document.getElementById("nav-Desktop");
-     //const div2= document.createElement('div');    
-     //div.appendChild(div2);
-     await dashboard(div);
+    navItem(navTab, 'Desktop');
+    const div = document.getElementById("nav-Desktop");
+    await dashboard(div);
     
-     navItem(navTab, 'References');    
-     navItem(navTab, 'Service');    
+    navItem(navTab, 'References');    
+    navItem(navTab, 'Store');    
     
+    //DYNAMIC    
     let data = await getSubsystems();
     //console.log(data);
     for (let row of data) {
         //console.log(row.name);
-        navItem(navTab, row.name);          
+        navItem(navTab, row.name);           
     }  
 }
 async function dashboard(div) {

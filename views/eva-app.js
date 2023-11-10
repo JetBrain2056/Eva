@@ -1,4 +1,4 @@
-
+let a = [];
 //Get on server//////////////////////////////////////////////////////////////
 async function getSubsystems() {
     console.log('>>getSubsystems()...');
@@ -28,7 +28,7 @@ function openNav(name) {
 
     console.log(name);
 
-    const $dashboard = document.getElementById("dashboard");  
+    //const $dashboard = document.getElementById("dashboard");  
     //$dashboard.innerHTML = "";
 
     // const navDesk = document.getElementById("nav-desk");    
@@ -47,7 +47,7 @@ function openNav(name) {
 function openRef() {
     console.log('>>openRef()...');
 
-    const $dashboard = document.getElementById("dashboard");    
+    //const $dashboard = document.getElementById("dashboard");    
     //$dashboard.innerHTML = ""; 
     //$dashboard.innerHTML = `{{ block('ref') | json_encode | raw }}`;  
 
@@ -62,8 +62,6 @@ function openRef() {
     // tab.show();
 }
 //Content////////////////////////////////////////////////////////////////////
-let a = [];
-
 async function navItem(navTab, name) {    
     const li = document.createElement('li');
     li.setAttribute("class","nav-item");
@@ -85,24 +83,22 @@ async function navItem(navTab, name) {
         //a[name].onclick = openNav();           
     li.appendChild(a[name]);     
     navTab.appendChild(li);  
-    //return navTab; 
 
     const evaSubsys = document.querySelector('.eva-subsys'); 
 
-    if (name=='Desktop'||name=='References'||name=='Store') {
-    }else{
-    const subsys = document.createElement("div");        
-    subsys.setAttribute("class","tab-pane fade");
-    //subsys.setAttribute("style","display:block"); 
-    subsys.setAttribute("role","tabpanel");
-    subsys.setAttribute("id", "nav-"+name);
-    subsys.setAttribute("aria-labelledby","nav-"+name+"-tab");
-        const h5 = document.createElement("h5");  
-        h5.setAttribute("class","title");
-        h5.innerText = name;
-    subsys.appendChild(h5);    
-    evaSubsys.appendChild(subsys);    
-        
+    if (name=='Desktop'||name=='References'||name=='Reports') {
+    } else {
+        const subsys = document.createElement("div");        
+        subsys.setAttribute("class","tab-pane fade");    
+        subsys.setAttribute("role","tabpanel");
+        subsys.setAttribute("id", "nav-"+name);
+        subsys.setAttribute("aria-labelledby","nav-"+name+"-tab");
+            const h5 = document.createElement("h5");  
+            h5.setAttribute("class","title");
+            h5.innerText = name;
+            h5.appendChild(document.createElement("hr"));  
+        subsys.appendChild(h5);    
+        evaSubsys.appendChild(subsys);            
     }
 }
 function navLink(nav, name) {
@@ -124,7 +120,7 @@ async function header(navTab) {
     await dashboard(div);
     
     navItem(navTab, 'References');    
-    navItem(navTab, 'Store');    
+    navItem(navTab, 'Reports');    
     
     //DYNAMIC    
     let data = await getSubsystems();
@@ -167,16 +163,7 @@ function init() {
     console.log('mode: ' + mode);   
     if (mode==='false') {        
         const navTab = document.getElementById("eva-nav");
-        header(navTab);        
-        //const div = document.createElement('div');   
-        //div.setAttribute("class", "d-flex flex-row flex-grow-1");                                  
-        //app.setAttribute("style", "height:calc(100vh - 96px); border: 1px solid #00ff92");       
-            //const div3 = document.createElement('div');           
-            //div3.setAttribute("class","tab-content col p-4 gap-2");
-            //div3.setAttribute("id","dashboard");                  
-            //dashboard(div3);
-            //div.appendChild(div3); 
-        //app.appendChild(div);         
+        header(navTab);                       
     } 
 }
        

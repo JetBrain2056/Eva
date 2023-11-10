@@ -1,11 +1,8 @@
 {% block ref %}    
-<div class="tab-content" id="nav-tab-ref" >
-  {# Reference [5] #}
-    <div class="tab-pane" id="nav-ref" role="tabpanel" aria-labelledby="nav-ref-tab">
-      <div class="d-flex gap-1 align-items-center">
-        <h5 class="title" id="refModalLabel">Reference</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
+{# <div class="tab-content" id="nav-tab-content" > #}
+    {# Reference [2] #}
+    <div class="tab-pane fade" id="nav-References" role="tabpanel" aria-labelledby="nav-ref-tab">      
+      <h5 class="title" id="refLabel">Reference</h5>          
       <div class="btn-toolbar" role="toolbar" aria-label="toolbar group">
         <div class="btn-group btn-group-sm" role="group">
           <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" data-bs-toggle="modal" data-bs-target="#refModal">
@@ -24,10 +21,6 @@
             <i class="fa fa-minus-square"></i>
             <span>{{ button_delete }}</span>
           </button>
-          {# <button id="btn-config-save" type="button" class="btn btn-primary d-flex gap-2 align-items-center" onclick="refUpdate()">
-              <i class="fa fa-floppy-o"></i>
-              <span>{{ button_save }}</span>
-          </button>        #}
           <div class="btn-group btn-group-sm" role="group">
             <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></button>
             <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">           
@@ -40,7 +33,7 @@
       </div>           
       <div class="eva-form"></div>       
     </div>  
-</div> 
+{# </div>  #}
 
 {# Modal Ref #}  
 <div class="modal fade" id="refModal" tabindex="-1" aria-labelledby="refModalLabel" aria-hidden="true">
@@ -53,9 +46,7 @@
       <div class="modal-body">
         <form class="form" id="create-ref-form">  
           <label for="input-type">Type object:</label>
-          <div class="input-group input-group-sm">
-            {# <input type="text" placeholder="0" id="input-type" class="form-control"/> #}
-            {# <button class="btn btn-outline-secondary" type="button" onclick="config_edit_type()">...</button> #}        
+          <div class="input-group input-group-sm">     
           </div>   
         </form>
       </div>
@@ -67,7 +58,7 @@
   </div>
 </div> 
 {# Modal Object Edit #}
-<div class="modal fade" id="refEditModal" tabindex="-1" aria-labelledby="refEditModalLabel" aria-hidden="true">
+{# <div class="modal fade" id="refEditModal" tabindex="-1" aria-labelledby="refEditModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -78,8 +69,6 @@
         <form class="form" id="object-edit-form">
           <label for="input-edit-type">Type object:</label>
           <div class="input-group input-group-sm">
-            {# <input type="text" placeholder="0" id="input-type" class="form-control"/> #}
-            {# <button class="btn btn-outline-secondary" type="button" onclick="config_edit_type()">...</button> #}
             <input type="text" name="type" class="form-control" id="input-edit-type" disabled></input>
           </div>         
           <label for="input-edit-textId">Identifier:</label>
@@ -108,5 +97,5 @@
       </div>
     </div>
   </div>
-</div>
+</div> #}
 {% endblock %}

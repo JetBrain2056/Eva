@@ -1,3 +1,4 @@
+
 //Get on server//////////////////////////////////////////////////////////////
 async function getSubsystems() {
     console.log('>>getSubsystems()...');
@@ -22,24 +23,20 @@ async function getConfig() {
     return res;
 }
 //Button comands/////////////////////////////////////////////////////////////
-function openNav() {
+function openNav(name) {
     console.log('>>openNav()...');
 
-    //console.log(e);
+    console.log(name);
 
-    //const $dashboard = document.getElementById("nav-desk");  
-    // $dashboard.innerHTML = "";
-  
-    // $dashboard.appendChild(btnBlock);
+    const $dashboard = document.getElementById("dashboard");  
+    //$dashboard.innerHTML = "";
 
-    //let btnBlock = document.getElementById("nav-desk");
-    //btnBlock.setAttribute("class", "tab-content");
-    // console.log(btnBlock);      
+    // const navDesk = document.getElementById("nav-desk");    
+    // console.log(navDesk);      
     
-    //$dashboard.appendChild(btnBlock);
+    // $dashboard.appendChild(navDesk);
 
-    // let someTabTriggerEl = document.getElementById('nav-desk');
-    
+    // let someTabTriggerEl = document.getElementById('nav-desk');    
     // let tab = new bootstrap.Tab(someTabTriggerEl);
   
     // tab.show();
@@ -50,16 +47,14 @@ function openNav() {
 function openRef() {
     console.log('>>openRef()...');
 
-    const $dashboard = document.getElementById("dashboard");      
-    //$dashboard.setAttribute("class", "tab-content");
-    $dashboard.innerHTML = ""; 
+    const $dashboard = document.getElementById("dashboard");    
+    //$dashboard.innerHTML = ""; 
     //$dashboard.innerHTML = `{{ block('ref') | json_encode | raw }}`;  
 
-    let btnBlock = document.getElementById("nav-ref");
-    //btnBlock.setAttribute("class", "tab-content");
+    //let btnBlock = document.getElementById("nav-ref");
     // console.log(btnBlock);      
     
-    $dashboard.appendChild(btnBlock);
+    //$dashboard.appendChild(btnBlock);
 
     // let someTabTriggerEl = document.getElementById('nav-ref');
     // let tab = new bootstrap.Tab(someTabTriggerEl);
@@ -69,19 +64,28 @@ function openRef() {
 //Content////////////////////////////////////////////////////////////////////
 let a = [];
 
-function navItem(navTab, name) {    
+async function navItem(navTab, name) {    
     const li = document.createElement('li');
     li.setAttribute("class","nav-item");
-        a[name] = document.createElement('a');
-        a[name].setAttribute("class","nav-link eva-link");        
+        a[name] = document.createElement('a');             
         a[name].setAttribute("id", name);      
         a[name].setAttribute("role", "tab");  
-        a[name].setAttribute("data-bs-toggle","tab");            
+        a[name].setAttribute("data-bs-toggle","tab");   
+        a[name].setAttribute("data-bs-target","#nav-"+name);
+        a[name].setAttribute("aria-controls","nav-"+name);
+        if (name=='Desktop') {
+            a[name].setAttribute("class","nav-link active eva-link");   
+            a[name].setAttribute("aria-selected", true);        
+        } else {             
+            a[name].setAttribute("class","nav-link eva-link");      
+            a[name].setAttribute("aria-selected", false);
+        }
         a[name].innerText = name;    
         a[name].href="#";  
-        a[name].onclick = openNav();           
+        //a[name].onclick = openNav();           
     li.appendChild(a[name]);     
-    navTab.appendChild(li);         
+    navTab.appendChild(li);  
+    //return navTab;       
 }
 function navLink(nav, name) {
     console.log('>>navLink()...');
@@ -98,6 +102,11 @@ async function header(navTab) {
     console.log('>>header()...');
     //MAIN
      navItem(navTab, 'Desktop');
+     const div = document.getElementById("nav-Desktop");
+     //const div2= document.createElement('div');    
+     //div.appendChild(div2);
+     await dashboard(div);
+    
      navItem(navTab, 'References');    
      navItem(navTab, 'Service');    
     
@@ -106,15 +115,7 @@ async function header(navTab) {
     for (let row of data) {
         //console.log(row.name);
         navItem(navTab, row.name);          
-    }   
-
-    // const evaLinks = document.getElementsByClassName("eva-link");
-    // console.log(evaLinks);
-    // for (let link of Object.keys(evaLinks)) {
-    //     console.log(link);
-    //     console.log(evaLinks[link]);
-    //     evaLinks[link].addEventListener("click", openNav(evaLinks[link].id));
-    // }
+    }  
 }
 async function dashboard(div) {
     console.log('>>dashboard()...');
@@ -129,31 +130,37 @@ async function dashboard(div) {
             const nav = document.createElement('nav');
             nav.setAttribute("class","nav flex-column");                 
                 navLink(nav, elements.textId);                    
-            div.appendChild(nav);  
+            div.appendChild(nav);          
         }
     }        
+}
+function clickNav() {
+    const evaLinks = document.getElementsByClassName("eva-link");
+    console.log(evaLinks);
+    for (let link of Object.keys(evaLinks)) {
+        console.log(link);
+        console.log(evaLinks[link]);
+        evaLinks[link].addEventListener("click", openNav(link));
+    }
 }
 /////////////////////////////////////////////////////////////////////////////
 const app = document.getElementById('eva-app');
 function init() {
     const mode = document.querySelector('.content').dataset.mode;
     console.log('mode: ' + mode);   
-    if (mode==='false') {
-        //const app = document.getElementById('eva-app');
-        //console.log(app); 
-        
+    if (mode==='false') {        
         const navTab = document.getElementById("eva-nav");
-        header(navTab);
-        const div = document.createElement('div');   
-        div.setAttribute("class", "d-flex flex-row flex-grow-1");                                  
-        div.setAttribute("style", "height:calc(100vh - 96px); border: 1px solid #00ff92");       
-            const div3 = document.createElement('div');           
-            div3.setAttribute("class","col p-4 gap-2");
-            div3.setAttribute("id","dashboard");      
-            dashboard(div3);
-            div.appendChild(div3); 
-        app.appendChild(div);   
+        header(navTab);        
+        //const div = document.createElement('div');   
+        //div.setAttribute("class", "d-flex flex-row flex-grow-1");                                  
+        //app.setAttribute("style", "height:calc(100vh - 96px); border: 1px solid #00ff92");       
+            //const div3 = document.createElement('div');           
+            //div3.setAttribute("class","tab-content col p-4 gap-2");
+            //div3.setAttribute("id","dashboard");                  
+            //dashboard(div3);
+            //div.appendChild(div3); 
+        //app.appendChild(div);         
     } 
 }
-
+       
 document.addEventListener('DOMContentLoaded', init());

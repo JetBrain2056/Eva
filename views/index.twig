@@ -17,24 +17,26 @@
     <body>             
         <div class="content d-flex flex-column" data-mode="{{ mode }}" data-logged="{{ logged }}">             
             {% include "./template/common/header.twig" %}  
-            {% if logged %}                             
-                {% if mode %} {#Backend#}
-                    <div class="d-flex flex-row flex-grow-1">                    
+            {% if logged %}              
+                <div class="d-flex flex-row flex-grow-1">                
+                    {% if mode %} {#Backend#}                                       
                         <div class="col-2 sidebar" style="overflow-y: scroll">
                             {% include "./template/common/column_left.twig" %}
                         </div>
                         <div class="col">
                             {% include "./template/common/dashboard.twig" %}
-                        </div>                    
-                    </div>                      
-                {% else %} {#Frontend#}                       
-                    <noscript>You need to enable JavaScript to run this app.</noscript>                    
-                    <div id="eva-app" data-app="">{#Start app#}</div>                                             
-                        {% use "./template/common/desktop.twig" %}  
-                        <object style="display:none">{{ block('desk') }}</object>                       
-                        {% use "./template/common/references.twig" %}  
-                        <object style="display:none">{{ block('ref') }}</object>                                                        
-                {% endif %}                               
+                        </div>                                                            
+                    {% else %} {#Frontend#}                       
+                        <noscript>You need to enable JavaScript to run this app.</noscript>                    
+                        <div class="eva fade" id="eva-app" data-app="">{#Start app#}</div>                                                             
+                            <div class="col tab-content p-3" style="height:calc(100vh - 96px); border: 1px solid #00ff92">                               
+                                {% include "./template/common/desktop.twig" %}  
+                                {# <object style="">{{ block('desk') }}</object>                        #}
+                                {% include "./template/common/references.twig" %}  
+                                {# <object>{{ block('ref') }}</object> #}
+                            </div>                            
+                    {% endif %}       
+                </div>                         
             {% else %}                            
                 {% include "./template/common/login.twig" %}                            
             {% endif %}   

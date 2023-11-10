@@ -40,26 +40,27 @@ function openNav(name) {
     // let tab = new bootstrap.Tab(someTabTriggerEl);
   
     // tab.show();
-
     const status = document.getElementById("status");
     status.value = ">It's work!";
 }
 function openRef() {
     console.log('>>openRef()...');
 
-    //const $dashboard = document.getElementById("dashboard");    
+    //const $dashboard = document.getElementById("nav-Desktop");    
     //$dashboard.innerHTML = ""; 
     //$dashboard.innerHTML = `{{ block('ref') | json_encode | raw }}`;  
 
-    //let btnBlock = document.getElementById("nav-ref");
-    // console.log(btnBlock);      
+    let btnBlock = document.getElementById("References");
+    console.log(btnBlock);      
     
     //$dashboard.appendChild(btnBlock);
-
+    
     // let someTabTriggerEl = document.getElementById('nav-ref');
-    // let tab = new bootstrap.Tab(someTabTriggerEl);
+    let tab = new bootstrap.Tab(btnBlock);
   
-    // tab.show();
+    tab.show();
+    const status = document.getElementById("status");
+    status.value = ">It's work!";
 }
 //Content////////////////////////////////////////////////////////////////////
 async function navItem(navTab, name) {    
@@ -72,7 +73,7 @@ async function navItem(navTab, name) {
         a[name].setAttribute("data-bs-target","#nav-"+name);
         a[name].setAttribute("aria-controls","nav-"+name);
         if (name=='Desktop') {
-            a[name].setAttribute("class","nav-link active eva-link");   
+            a[name].setAttribute("class","nav-link active eva-nav-link");   
             a[name].setAttribute("aria-selected", true);        
         } else {             
             a[name].setAttribute("class","nav-link eva-link");      
@@ -99,12 +100,12 @@ async function navItem(navTab, name) {
             h5.appendChild(document.createElement("hr"));  
         subsys.appendChild(h5);    
         evaSubsys.appendChild(subsys);            
-    }
+    }    
 }
 function navLink(nav, name) {
     console.log('>>navLink()...');
     const a = document.createElement('a');
-    a.setAttribute("class","nav-link");        
+    a.setAttribute("class","nav-link eva-link");        
     a.setAttribute("id", name);           
     a.innerText = name;
     a.href="#";
@@ -163,7 +164,10 @@ function init() {
     console.log('mode: ' + mode);   
     if (mode==='false') {        
         const navTab = document.getElementById("eva-nav");
-        header(navTab);                       
+        header(navTab);    
+        const status = document.getElementById("status");
+        clickNav();
+        status.value='>onload' ;                 
     } 
 }
        

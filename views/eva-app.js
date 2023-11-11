@@ -46,19 +46,15 @@ function openNav(name) {
 function openRef() {
     console.log('>>openRef()...');
 
-    //const $dashboard = document.getElementById("nav-Desktop");    
-    //$dashboard.innerHTML = ""; 
-    //$dashboard.innerHTML = `{{ block('ref') | json_encode | raw }}`;  
+    //let desktop = document.getElementById("nav-Desktop");    
+    //desktop.innerHTML = '';
+    const block = document.getElementById("ref-form");   
+    //desktop.appendChild(block);
+    console.log(block);      
 
-    let btnBlock = document.getElementById("References");
-    console.log(btnBlock);      
-    
-    //$dashboard.appendChild(btnBlock);
-    
-    // let someTabTriggerEl = document.getElementById('nav-ref');
-    let tab = new bootstrap.Tab(btnBlock);
-  
+    let tab = new bootstrap.Tab(block);
     tab.show();
+
     const status = document.getElementById("status");
     status.value = ">It's work!";
 }
@@ -88,7 +84,9 @@ async function navItem(navTab, name) {
     const evaSubsys = document.querySelector('.eva-subsys'); 
 
     if (name=='Desktop'||name=='References'||name=='Reports') {
+        //main
     } else {
+        //subsystem
         const subsys = document.createElement("div");        
         subsys.setAttribute("class","tab-pane fade");    
         subsys.setAttribute("role","tabpanel");
@@ -117,11 +115,13 @@ async function header(navTab) {
     console.log('>>header()...');
     //MAIN
     navItem(navTab, 'Desktop');
-    const div = document.getElementById("nav-Desktop");
-    await dashboard(div);
-    
+    let div = document.getElementById("nav-Desktop");
+    await tabDesk(div);    
     navItem(navTab, 'References');    
+    div = document.getElementById("nav-References");
+    await tabRef(div);
     navItem(navTab, 'Reports');    
+    //navItem(navTab, 'ref-form');
     
     //DYNAMIC    
     let data = await getSubsystems();
@@ -131,8 +131,8 @@ async function header(navTab) {
         navItem(navTab, row.name);           
     }  
 }
-async function dashboard(div) {
-    console.log('>>dashboard()...');
+async function tabDesk(div) {
+    console.log('>>tabDesk()...');
 
     let data = await getConfig();
     for (let row of data) {
@@ -148,13 +148,29 @@ async function dashboard(div) {
         }
     }        
 }
+async function tabRef(div) {
+    console.log('>>tabRef()...');
+
+    let data = await getConfig();
+    for (let row of data) {
+        let strJson = row.data; 
+        let elements = await JSON.parse(strJson);
+        if (row.state===0 && elements.typeId==='Reference') {
+                    
+            const nav = document.createElement('nav');
+            nav.setAttribute("class","nav flex-column");                 
+                navLink(nav, elements.textId);                    
+            div.appendChild(nav);          
+        }
+    }        
+}
 function clickNav() {
     const evaLinks = document.getElementsByClassName("eva-link");
     console.log(evaLinks);
     for (let link of Object.keys(evaLinks)) {
         console.log(link);
         console.log(evaLinks[link]);
-        evaLinks[link].addEventListener("click", openNav(link));
+        evaLinks[link].addEventListener("click", openRef(link));
     }
 }
 /////////////////////////////////////////////////////////////////////////////
@@ -166,7 +182,7 @@ function init() {
         const navTab = document.getElementById("eva-nav");
         header(navTab);    
         const status = document.getElementById("status");
-        clickNav();
+        // clickNav();
         status.value='>onload' ;                 
     } 
 }

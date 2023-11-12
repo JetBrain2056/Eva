@@ -32,7 +32,10 @@
           </div>
         </div>
       </div>           
-      <div class="eva-ref-form"></div>       
+      <div class="eva-ref-form" id="eva-ref-form">                     
+        {# <table class="table table-striped table-hover table-sm table-responsive">     #}
+        {# </table> #}
+      </div>       
     </div>  
 {# </div>  #}
 
@@ -41,14 +44,19 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="refModalLabel">Add object</h5>
+        <h5 class="modal-title" id="refModalLabel">Add element</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <form class="form" id="create-ref-form">  
-          <label for="input-type">Type object:</label>
-          <div class="input-group input-group-sm">     
-          </div>   
+          <label for="input-ref-name">Name:</label>
+          <div class="input-group">
+            <input type="text" placeholder="Name" id="input-ref-name" class="form-control"/>
+          </div>
+          <label for="input-ref-descr">Descr:</label>
+          <div class="input-group">
+            <input type="text" placeholder="Descr" id="input-ref-descr" class="form-control"/>
+          </div>
         </form>
       </div>
       <div class="modal-footer">

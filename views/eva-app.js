@@ -22,44 +22,43 @@ async function getConfig() {
     }
     return res;
 }
-//Button comands/////////////////////////////////////////////////////////////
+//Commands on client/////////////////////////////////////////////////////////
+function clickLink() {
+    // const evaLinks = document.getElementsByClassName("eva-link");
+    // console.log(evaLinks);
+    // for (let link of Object.keys(evaLinks)) {
+    //     console.log(link);
+    //     console.log(evaLinks[link]);
+    //     evaLinks[link].addEventListener("click", openRef(link));
+    // }
+}
 function openNav(name) {
     console.log('>>openNav()...');
 
     console.log(name);
 
-    //const $dashboard = document.getElementById("dashboard");  
-    //$dashboard.innerHTML = "";
-
-    // const navDesk = document.getElementById("nav-desk");    
-    // console.log(navDesk);      
-    
-    // $dashboard.appendChild(navDesk);
-
-    // let someTabTriggerEl = document.getElementById('nav-desk');    
-    // let tab = new bootstrap.Tab(someTabTriggerEl);
-  
-    // tab.show();
     const status = document.getElementById("status");
     status.value = ">It's work!";
 }
-function openRef() {
+function openRef(refName) {
     console.log('>>openRef()...');
 
-    //let desktop = document.getElementById("nav-Desktop");    
-    //desktop.innerHTML = '';
-    const block = document.getElementById("ref-form");   
-    //desktop.appendChild(block);
-    console.log(block);      
+    console.log(refName);
 
-    let tab = new bootstrap.Tab(block);
+    const refForm = document.getElementById("ref-form");       
+    //console.log(block);
+    
+    const refFormLabel = document.getElementById("refFormLabel"); 
+    refFormLabel.innerText = refName+'s';
+
+    let tab = new bootstrap.Tab(refForm);
     tab.show();
 
     const status = document.getElementById("status");
     status.value = ">It's work!";
 }
 //Content////////////////////////////////////////////////////////////////////
-async function navItem(navTab, name) {    
+function navItem(navTab, name) {    
     const li = document.createElement('li');
     li.setAttribute("class","nav-item");
         a[name] = document.createElement('a');             
@@ -69,10 +68,10 @@ async function navItem(navTab, name) {
         a[name].setAttribute("data-bs-target","#nav-"+name);
         a[name].setAttribute("aria-controls","nav-"+name);
         if (name=='Desktop') {
-            a[name].setAttribute("class","nav-link active eva-nav-link");   
+            a[name].setAttribute("class","nav-link active");   
             a[name].setAttribute("aria-selected", true);        
         } else {             
-            a[name].setAttribute("class","nav-link eva-link");      
+            a[name].setAttribute("class","nav-link");      
             a[name].setAttribute("aria-selected", false);
         }
         a[name].innerText = name;    
@@ -108,21 +107,23 @@ function navLink(nav, name) {
     a.innerText = name;
     a.href="#";
     a.setAttribute("style","color: grey;font-size: 19px;");       
-    a.setAttribute("onclick", "openRef()");         
+    a.setAttribute("onclick", "openRef(id)");         
     nav.appendChild(a); 
 }
 async function header(navTab) {
     console.log('>>header()...');
+    
     //MAIN
     navItem(navTab, 'Desktop');
     let div = document.getElementById("nav-Desktop");
-    await tabDesk(div);    
+    tabDesk(div);    
     navItem(navTab, 'References');    
     div = document.getElementById("nav-References");
-    await tabRef(div);
+    tabRef(div);    
     navItem(navTab, 'Reports');    
-    //navItem(navTab, 'ref-form');
-    
+    div = document.getElementById("nav-Reports");
+    //tabRep(div);   
+
     //DYNAMIC    
     let data = await getSubsystems();
     //console.log(data);
@@ -164,21 +165,12 @@ async function tabRef(div) {
         }
     }        
 }
-function clickNav() {
-    const evaLinks = document.getElementsByClassName("eva-link");
-    console.log(evaLinks);
-    for (let link of Object.keys(evaLinks)) {
-        console.log(link);
-        console.log(evaLinks[link]);
-        evaLinks[link].addEventListener("click", openRef(link));
-    }
-}
 /////////////////////////////////////////////////////////////////////////////
 const app = document.getElementById('eva-app');
 function init() {
     const mode = document.querySelector('.content').dataset.mode;
     console.log('mode: ' + mode);   
-    if (mode==='false') {        
+    if (mode==='false') {                
         const navTab = document.getElementById("eva-nav");
         header(navTab);    
         const status = document.getElementById("status");

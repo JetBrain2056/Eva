@@ -66,7 +66,7 @@ function rowSelect(e) {
         console.log(text);
     }
 }
-async function showTable(showTbl , hide, col, data) {
+async function showTable(showTbl, hide, col, data) {
     console.log('>>showTable()...'); 
     console.log('table: ' + showTbl); 
   

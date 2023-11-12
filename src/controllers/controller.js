@@ -358,7 +358,9 @@ exports.updateConfig = async function(req, res) {
 
     for (let row of req.body) {        
         let objectId = row.textId;        
-        let columns = {id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true}}; //DEMO!!!
+        //DEMO!!!
+        let columns = {id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+                       name: {type: DataTypes.STRING}}; 
         
         console.log(row);
         let typeId = row.typeId;
@@ -460,9 +462,30 @@ exports.getReferences = async function(req, res) {
     const {textId} = req.body;    
     try {
         const data = await sequelize.query(
-            `SELECT "R"."id" FROM "`+textId+`s" as "R";`         
+            `SELECT "R"."id", "R"."name" FROM "`+textId+`s" as "R";`         
         );
         return await res.send(data[0]);        
+    } catch(err) {
+        console.log(err);
+    }
+}
+exports.createReference = async function(req, res) {
+    console.log('>>createReference()...');
+    if (!req.body) return res.sendStatus(400);
+    console.log('body :'+req.body);
+    const {textId, name, descr} = req.body;   
+        
+    let columns = {id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+                   name: {type: DataTypes.STRING}}; 
+    try {
+        let EvaObject = sequelize.define(textId, columns); 
+        //let EvaObject =  sequelize.models.findOne({textId});
+        console.log('EvaObject: '+EvaObject.f);
+        const data = await EvaObject.create({
+            name : name                   
+        });
+        // console.log(data);
+        return await res.json(textId);
     } catch(err) {
         console.log(err);
     }

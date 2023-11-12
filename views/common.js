@@ -3,8 +3,7 @@ let currentModal;
 let n = 0;
 let tbl = [];
 let forms = document.getElementsByClassName('eva-form');
-for (const div of forms) {                            
-    // div.setAttribute("style", "overflow-y: scroll;");           
+for (const div of forms) {                                          
     div.setAttribute("style", "height: calc(100vh - 171px); overflow-y: scroll;");               
     tbl[n] = document.createElement('table');
     tbl[n].setAttribute("class", "table table-striped table-hover table-sm table-responsive");              
@@ -68,8 +67,11 @@ function rowSelect(e) {
 }
 async function showTable(showTbl, hide, col, data) {
     console.log('>>showTable()...'); 
-    console.log('table: ' + showTbl); 
-  
+
+    //console.log('table: ' + showTbl); 
+
+    showTbl.innerHTML='';
+   
     if (showTbl) {
         showTbl.addEventListener('click', rowSelect);
   
@@ -86,9 +88,9 @@ async function showTable(showTbl, hide, col, data) {
             }
           }
         });
+    } else {       
+        //return;
     }
-
-    showTbl.innerHTML = '';
   
     const thead = document.createElement('thead');
     thead.style.position = 'sticky';  
@@ -114,19 +116,24 @@ async function showTable(showTbl, hide, col, data) {
       th.textContent = col[e];      
     }       
   
-    for (const rows of data) {                  
-      const tr = document.createElement('tr');
-      tbody.appendChild(tr);             
-      for (let p of Object.keys(col)) {            
-        const td = document.createElement('td');    
-        tr.appendChild(td);              
-        td.textContent = rows[p];    
-        for (const h of hide) {   
-            if (p===h)     
-            td.style.display = "none";        
-        }
-      }
-    }   
+    if (data) {
+        for (const rows of data) {                  
+            const tr = document.createElement('tr');
+            tbody.appendChild(tr);             
+            for (let p of Object.keys(col)) {            
+                const td = document.createElement('td');    
+                tr.appendChild(td);              
+                td.textContent = rows[p];    
+                for (const h of hide) {   
+                    if (p===h)     
+                    td.style.display = "none";        
+                }
+            }
+        } 
+    } else {
+        console.log('data: '+data)
+        return;   
+    }
 }
 getModal = (modalForm) => {
     let options =  { focus: true };

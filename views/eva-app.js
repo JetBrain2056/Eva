@@ -1,97 +1,98 @@
 let a = [];
+selectRows = [];
 n = 0;
-// tbl = [];
-async function showAppTable(showTbl, hide, col, data) {
-    console.log('>>showTable()...'); 
+//tbl = [];
+// async function showAppTable(showTbl, hide, col, data) {
+//     console.log('>>showTable()...'); 
 
-    //console.log('table: ' + showTbl); 
+//     //console.log('table: ' + showTbl); 
    
-    if (showTbl) {
-        showTbl.addEventListener('click', rowSelect);
+//     if (showTbl) {
+//         showTbl.addEventListener('click', rowSelect);
   
-        showTbl.addEventListener('dblclick',  (e) => {
+//         showTbl.addEventListener('dblclick',  (e) => {
           
-          if (e.target.nodeName  === 'TH') {
-            return;
-          } else {
-            const currentForm = e.currentTarget.parentNode.parentNode;
+//           if (e.target.nodeName  === 'TH') {
+//             return;
+//           } else {
+//             const currentForm = e.currentTarget.parentNode.parentNode;
               
-            const modalTrigger = currentForm.getElementsByClassName('eva-edit');
-            if (modalTrigger[0]) {
-              modalTrigger[0].click();
-            }
-          }
-        });
-    } else {       
-        return;
-    }
+//             const modalTrigger = currentForm.getElementsByClassName('eva-edit');
+//             if (modalTrigger[0]) {
+//               modalTrigger[0].click();
+//             }
+//           }
+//         });
+//     } else {       
+//         return;
+//     }    
   
-    const thead = document.createElement('thead');
-    thead.style.position = 'sticky';  
-    thead.style.top      = '0px';
-    thead.style.border   = '#00ff92';
-    thead.style.background = 'White';  
-    showTbl.appendChild(thead);
+//     const thead = document.createElement('thead');
+//     thead.style.position = 'sticky';  
+//     thead.style.top      = '0px';
+//     thead.style.border   = '#00ff92';
+//     thead.style.background = 'White';  
+//     showTbl.appendChild(thead);
   
-    const tbody = document.createElement('tbody');
-    showTbl.appendChild(tbody);
+//     const tbody = document.createElement('tbody');
+//     showTbl.appendChild(tbody);
   
-    const tr = document.createElement('tr'); 
-    thead.appendChild(tr);
+//     const tr = document.createElement('tr'); 
+//     thead.appendChild(tr);
     
-    for (const e of Object.keys(col)) {             
-      const th = document.createElement('th');    
-      th.setAttribute("sort-attr", "");                        
-      for (const h of hide) {   
-        if (e===h)     
-        th.style.display = "none";        
-      }
-      tr.appendChild(th);        
-      th.textContent = col[e];      
-    }       
+//     for (const e of Object.keys(col)) {             
+//       const th = document.createElement('th');    
+//       th.setAttribute("sort-attr", "");                        
+//       for (const h of hide) {   
+//         if (e===h)     
+//         th.style.display = "none";        
+//       }
+//       tr.appendChild(th);        
+//       th.textContent = col[e];      
+//     }       
   
-    if (data) {
-        for (const rows of data) {                  
-            const tr = document.createElement('tr');
-            tbody.appendChild(tr);             
-            for (let p of Object.keys(col)) {            
-                const td = document.createElement('td');    
-                tr.appendChild(td);              
-                td.textContent = rows[p];    
-                for (const h of hide) {   
-                    if (p===h)     
-                    td.style.display = "none";        
-                }
-            }
-        } 
-    } else {
-        console.log('data: '+data)
-        return;   
-    }
-}
+//     if (data) {
+//         for (const rows of data) {                  
+//             const tr = document.createElement('tr');
+//             tbody.appendChild(tr);             
+//             for (let p of Object.keys(col)) {            
+//                 const td = document.createElement('td');    
+//                 tr.appendChild(td);              
+//                 td.textContent = rows[p];    
+//                 for (const h of hide) {   
+//                     if (p===h)     
+//                     td.style.display = "none";        
+//                 }
+//             }
+//         } 
+//     } else {
+//         console.log('data: '+data)
+//         return;   
+//     }
+// }
 //Get on server//////////////////////////////////////////////////////////////
-async function getSubsystems() {
-    console.log('>>getSubsystems()...');
-    let res;
-    try{
-        const response = await fetch('/subsystems');
-        res = await response.json();
-    } catch (err) {
-        console.log(err)
-    }
-    return res;  
-}
-async function getConfig() {
-    console.log('>>getConfig()...');
-    let res;
-    try{
-        const response = await fetch('/config');
-        res = await response.json();
-    } catch (err) {
-        console.log(err)
-    }
-    return res;
-}
+// async function getSubsystems() {
+//     console.log('>>getSubsystems()...');
+//     let res;
+//     try{
+//         const response = await fetch('/subsystems');
+//         res = await response.json();
+//     } catch (err) {
+//         console.log(err)
+//     }
+//     return res;  
+// }
+// async function getConfig() {
+//     console.log('>>getConfig()...');
+//     let res;
+//     try{
+//         const response = await fetch('/config');
+//         res = await response.json();
+//     } catch (err) {
+//         console.log(err)
+//     }
+//     return res;
+// }
 async function getReferences(refName) {
     console.log('>>getReferences()...');
 
@@ -111,23 +112,24 @@ async function getReferences(refName) {
     }
 }
 async function showRefTable(refName) {
-      
+    console.log('>>showRefTable()...');
+
+    const refFormLabel = document.getElementById("refFormLabel"); 
+    refFormLabel.innerText = refName+'s';
+
     const formTbl = document.getElementById("eva-ref-form");    
     formTbl.innerHTML='';
     formTbl.setAttribute("style", "height: calc(100vh - 171px); overflow-y: scroll;");               
         const refTbl = document.createElement('table');
         refTbl.setAttribute("class", "table table-striped table-hover table-sm table-responsive");              
     formTbl.appendChild(refTbl);      
-    
-    const refFormLabel = document.getElementById("refFormLabel"); 
-    refFormLabel.innerText = refName+'s';
 
     let data = await getReferences(refName);   
 
     const col  = { 'id':'Id' };  
     const hide = [];      
 
-    await showAppTable(refTbl, hide, col, data);
+    await showTable(refTbl, hide, col, data);
 
 }
 //Commands on client/////////////////////////////////////////////////////////

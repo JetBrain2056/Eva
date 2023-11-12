@@ -1,20 +1,8 @@
 let a = [];
-//let currentModal;
-n = 0;
 tbl = [];
-forms = document.getElementsByClassName('eva-ref-form');
-for (const div of forms) {                            
-    // div.setAttribute("style", "overflow-y: scroll;");           
-    div.setAttribute("style", "height: calc(100vh - 171px); overflow-y: scroll;");               
-    tbl[n] = document.createElement('table');
-    tbl[n].setAttribute("class", "table table-striped table-hover table-sm table-responsive");              
-    div.appendChild(tbl[n]); 
-    n = n + 1;
-}
 async function showAppTable(showTbl, hide, col, data) {
     console.log('>>showTable()...'); 
-    console.log('table: ' + showTbl); 
-  
+   
     if (showTbl) {
         showTbl.addEventListener('click', rowSelect);
   
@@ -31,6 +19,9 @@ async function showAppTable(showTbl, hide, col, data) {
             }
           }
         });
+    } else {
+        console.log('table: ' + showTbl); 
+        // return;
     }
 
     showTbl.innerHTML = '';
@@ -59,19 +50,24 @@ async function showAppTable(showTbl, hide, col, data) {
       th.textContent = col[e];      
     }       
   
-    for (const rows of data) {                  
-      const tr = document.createElement('tr');
-      tbody.appendChild(tr);             
-      for (let p of Object.keys(col)) {            
-        const td = document.createElement('td');    
-        tr.appendChild(td);              
-        td.textContent = rows[p];    
-        for (const h of hide) {   
-            if (p===h)     
-            td.style.display = "none";        
-        }
-      }
-    }   
+    if (data) {
+        for (const rows of data) {                  
+            const tr = document.createElement('tr');
+            tbody.appendChild(tr);             
+            for (let p of Object.keys(col)) {            
+                const td = document.createElement('td');    
+                tr.appendChild(td);              
+                td.textContent = rows[p];    
+                for (const h of hide) {   
+                    if (p===h)     
+                    td.style.display = "none";        
+                }
+            }
+        } 
+    } else {
+        console.log('data: '+data)
+        return;   
+    }
 }
 //Get on server//////////////////////////////////////////////////////////////
 async function getSubsystems() {
@@ -115,13 +111,13 @@ async function getReferences(refName) {
     }
 }
 async function showRefTable(refName) {
-    
+
     let data = await getReferences(refName);   
 
     const col  = { 'id':'Id' };  
-    const hide = [];  
+    const hide = [];      
 
-    await showAppTable(tbl[0], hide, col, data);
+    await showAppTable(tbl[refName], hide, col, data);
 
 }
 //Commands on client/////////////////////////////////////////////////////////
@@ -142,21 +138,26 @@ function openNav(name) {
     // const status = document.getElementById("status");
     // status.value = ">It's work!";
 }
-function openRef(refName) {
+async function openRef(refName) {
     console.log('>>openRef()...');
 
     //console.log(refName);
-
-    const refForm = document.getElementById("ref-form");       
     //console.log(refForm);
+
+    const refForm = document.getElementById("ref-form");        
+    const formTbl = document.getElementById("eva-ref-form");    
+    formTbl.setAttribute("style", "height: calc(100vh - 171px); overflow-y: scroll;");               
+        tbl[refName] = document.createElement('table');
+        tbl[refName].setAttribute("class", "table table-striped table-hover table-sm table-responsive");              
+    formTbl.appendChild(tbl[refName]);  
     
     const refFormLabel = document.getElementById("refFormLabel"); 
     refFormLabel.innerText = refName+'s';
 
     let tab = new bootstrap.Tab(refForm);
-    tab.show();
+    tab.show();    
 
-    showRefTable(refName);
+    await showRefTable(refName, formTbl);
 
     const status = document.getElementById("status");
     status.value = ">It's work!";

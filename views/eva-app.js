@@ -14,11 +14,11 @@ async function getReferences(refName) {
             headers : {'Content-Type': 'application/json'},
             body    : JSON.stringify(data)            
         });  
-        res = await response.json();     
-       
+        res = await response.json();            
     } catch (err) {
       console.log(err);
     }
+    return res;
 }
 //Commands on client/////////////////////////////////////////////////////////
 function clickLink() {

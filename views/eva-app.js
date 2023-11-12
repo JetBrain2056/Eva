@@ -1,7 +1,7 @@
 let a = [];
 selectRows = [];
 n = 0;
-//Get on Server//////////////////////////////////////////////////////////////
+//Get/post on Server///////////////////////////////////////////////////////////
 async function getReferences(refName) {
     console.log('>>getReferences()...');
 
@@ -14,12 +14,30 @@ async function getReferences(refName) {
             headers : {'Content-Type': 'application/json'},
             body    : JSON.stringify(data)            
         });  
-        res = await response.json();            
+        res = await response.json();  
+        console.log(res);          
     } catch (err) {
       console.log(err);
     }
     return res;
 }
+async function refCreateServer(data) {
+    console.log('>>refCreateServer()...');
+    console.log(data);
+    let res;
+    try {
+        let response = await fetch('/createref', {
+            method  : 'post',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        });
+        res = await response.json();
+    } catch(err) {
+        console.log(err);
+    }
+    return res;
+}
+
 //Commands on client/////////////////////////////////////////////////////////
 function clickLink() {
     // const evaLinks = document.getElementsByClassName("eva-link");
@@ -41,17 +59,45 @@ function openNav(name) {
 async function openRef(refName) {
     console.log('>>openRef()...');
 
-    //console.log(refName);
+    console.log(refName);
 
-    const refForm = document.getElementById("ref-form");  
+    const form = document.getElementById("ref-form");  
+    const refForm = document.getElementById("create-ref-form");
+    refForm.setAttribute("eva-id", refName);
 
-    let tab = new bootstrap.Tab(refForm);
+    let tab = new bootstrap.Tab(form);
     tab.show();    
 
     await showRefTable(refName);
 
     const status = document.getElementById("status");
     status.value = ">It's work!";
+}
+async function refCreate() {
+    console.log('>>refCreate()...');
+
+    const refForm = document.getElementById("create-ref-form");
+    const textId = refForm.getAttribute("eva-id");
+
+    const inputName  = document.getElementById('input-ref-name');
+    const inputDescr = document.getElementById('input-ref-descr');
+
+    const data =  {
+        'textId'  : textId,
+        'name'    : inputName.value,
+        'descr'   : inputDescr.value
+    };
+    
+    let result;
+    try {
+        result = await refCreateServer(data)
+        console.log(result);        
+    } catch (e) {
+        console.log(e);
+    }
+
+    if (result) await showRefTable(result);
+
 }
 //DOM Dynamic Content////////////////////////////////////////////////////////
 async function showRefTable(refName) {
@@ -69,7 +115,7 @@ async function showRefTable(refName) {
 
     let data = await getReferences(refName);   
 
-    const col  = { 'id':'Id' };  
+    const col  = { 'id':'Id', 'name':'Name' };  
     const hide = [];      
 
     await showTable(refTbl, hide, col, data);

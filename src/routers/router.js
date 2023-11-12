@@ -2,13 +2,9 @@ const Router = require('express');
 const router = new Router();
 const controller = require('../controllers/controller.js');
 
-//Get index data  
+//Developer
 router.get('/', controller.Auth);
-
-//Post index data  
 router.post('/', controller.Signin);
-
-//Post index data 
 
 router.get('/users', controller.getUsers);
 router.post('/getuser', controller.getUser);
@@ -29,7 +25,9 @@ router.post('/getobject', controller.getObject);
 
 router.post('/updateconf', controller.updateConfig);
 
+//eva-app
 router.get('/subsystems', controller.getSubsystems);
 router.post('/getref', controller.getReferences);
+router.post('/createref', controller.createReference);
 
 module.exports = { router }                                                  

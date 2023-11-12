@@ -335,8 +335,7 @@ exports.editObject = async function(req, res) {
     }   
 }
 exports.getObject = async function(req, res) {
-    console.log('>>getObject...');
-
+    console.log('>>getObject()...');
     if (!req.body) return res.sendStatus(400);    
 
     const {id} = req.body;
@@ -443,9 +442,27 @@ exports.updateConfig = async function(req, res) {
    
 }
 exports.getSubsystems = async function(req, res) {
+    console.log('>>getSubsystems()...');
+    if (!req.body) return res.sendStatus(400);    
+    // console.log(req);
     try {
         const data = await Subsystem.findAll({raw:true})
         await res.send(data);        
+    } catch(err) {
+        console.log(err);
+    }
+}
+//eva-app/////////////////////////////////
+exports.getReferences = async function(req, res) {
+    console.log('>>getReferences()...');
+    if (!req.body) return res.sendStatus(400);
+    console.log(req.body);
+    const {textId} = req.body;    
+    try {
+        const data = await sequelize.query(
+            `SELECT "R"."id" FROM "`+textId+`s" as "R";`         
+        );
+        return await res.send(data[0]);        
     } catch(err) {
         console.log(err);
     }

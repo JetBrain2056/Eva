@@ -5,6 +5,8 @@ const sequelize         = require('../db');
 const { DataTypes }     = require('sequelize');
 const { v4: uuidv4 }    = require('uuid');
 //const jwt              = require('jsonwebtoken');
+let refColumns = {id  : {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+               name: {type: DataTypes.STRING}}; 
 
 /* const generateJwt = (id, login, role) => {
      return jwt.sign(
@@ -358,9 +360,6 @@ exports.updateConfig = async function(req, res) {
 
     for (let row of req.body) {        
         let objectId = row.textId;        
-        //DEMO!!!
-        let columns = {id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-                       name: {type: DataTypes.STRING}}; 
         
         console.log(row);
         let typeId = row.typeId;
@@ -390,7 +389,7 @@ exports.updateConfig = async function(req, res) {
                 }                    
             } else {                    
                 try {
-                    const EvaObject = sequelize.define(objectId, columns);
+                    const EvaObject = sequelize.define(objectId, refColumns);
                     console.log('Create table: '+EvaObject);   
                     await sequelize.sync(EvaObject);
                 } catch(err) {
@@ -473,14 +472,12 @@ exports.createReference = async function(req, res) {
     console.log('>>createReference()...');
     if (!req.body) return res.sendStatus(400);
     console.log('body :'+req.body);
-    const {textId, name, descr} = req.body;   
-        
-    let columns = {id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-                   name: {type: DataTypes.STRING}}; 
+    const {textId, name, descr} = req.body;               
+
     try {
-        let EvaObject = sequelize.define(textId, columns); 
-        //let EvaObject =  sequelize.models.findOne({textId});
-        console.log('EvaObject: '+EvaObject.f);
+        let EvaObject = sequelize.define(textId, refColumns); 
+  
+        console.log('EvaObject: '+EvaObject);
         const data = await EvaObject.create({
             name : name                   
         });

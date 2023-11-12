@@ -1,7 +1,10 @@
 let a = [];
-tbl = [];
+n = 0;
+// tbl = [];
 async function showAppTable(showTbl, hide, col, data) {
     console.log('>>showTable()...'); 
+
+    //console.log('table: ' + showTbl); 
    
     if (showTbl) {
         showTbl.addEventListener('click', rowSelect);
@@ -19,12 +22,9 @@ async function showAppTable(showTbl, hide, col, data) {
             }
           }
         });
-    } else {
-        console.log('table: ' + showTbl); 
-        // return;
+    } else {       
+        return;
     }
-
-    showTbl.innerHTML = '';
   
     const thead = document.createElement('thead');
     thead.style.position = 'sticky';  
@@ -111,13 +111,23 @@ async function getReferences(refName) {
     }
 }
 async function showRefTable(refName) {
+      
+    const formTbl = document.getElementById("eva-ref-form");    
+    formTbl.innerHTML='';
+    formTbl.setAttribute("style", "height: calc(100vh - 171px); overflow-y: scroll;");               
+        const refTbl = document.createElement('table');
+        refTbl.setAttribute("class", "table table-striped table-hover table-sm table-responsive");              
+    formTbl.appendChild(refTbl);      
+    
+    const refFormLabel = document.getElementById("refFormLabel"); 
+    refFormLabel.innerText = refName+'s';
 
     let data = await getReferences(refName);   
 
     const col  = { 'id':'Id' };  
     const hide = [];      
 
-    await showAppTable(tbl[refName], hide, col, data);
+    await showAppTable(refTbl, hide, col, data);
 
 }
 //Commands on client/////////////////////////////////////////////////////////
@@ -144,20 +154,12 @@ async function openRef(refName) {
     //console.log(refName);
     //console.log(refForm);
 
-    const refForm = document.getElementById("ref-form");        
-    const formTbl = document.getElementById("eva-ref-form");    
-    formTbl.setAttribute("style", "height: calc(100vh - 171px); overflow-y: scroll;");               
-        tbl[refName] = document.createElement('table');
-        tbl[refName].setAttribute("class", "table table-striped table-hover table-sm table-responsive");              
-    formTbl.appendChild(tbl[refName]);  
-    
-    const refFormLabel = document.getElementById("refFormLabel"); 
-    refFormLabel.innerText = refName+'s';
+    const refForm = document.getElementById("ref-form");  
 
     let tab = new bootstrap.Tab(refForm);
     tab.show();    
 
-    await showRefTable(refName, formTbl);
+    await showRefTable(refName);
 
     const status = document.getElementById("status");
     status.value = ">It's work!";

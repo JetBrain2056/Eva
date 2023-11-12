@@ -42,7 +42,6 @@ async function openRef(refName) {
     console.log('>>openRef()...');
 
     //console.log(refName);
-    //console.log(refForm);
 
     const refForm = document.getElementById("ref-form");  
 
@@ -54,7 +53,7 @@ async function openRef(refName) {
     const status = document.getElementById("status");
     status.value = ">It's work!";
 }
-//Content////////////////////////////////////////////////////////////////////
+//DOM Dynamic Content////////////////////////////////////////////////////////
 async function showRefTable(refName) {
     console.log('>>showRefTable()...');
 

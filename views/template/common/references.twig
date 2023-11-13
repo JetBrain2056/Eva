@@ -10,11 +10,11 @@
             <i class="fa fa-plus-square"></i>
             <span>{{ button_add }}</span>
           </button>
-          <button type="button" class="btn btn-primary d-flex gap-2 align-items-center eva-edit" onclick="refEditModal()">
+          <button type="button" class="btn btn-primary d-flex gap-2 align-items-center eva-edit" data-bs-toggle="modal" data-bs-target="#refEditModal" onclick="refEditModal()">
             <i class="fa fa-edit"></i>
             <span>{{ button_edit }}</span>
           </button>
-          <button type="button" class="btn btn-primary d-flex gap-2 align-items-center">
+          <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" >
             <i class="fa fa-clone" aria-hidden="true"></i>
             <span>{{ button_copy }}</span>
           </button>
@@ -60,51 +60,43 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" onclick="refCreate()">{{ button_save }}</button>
-        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">{{button_close}}</button>
+        {# <button type="submit" class="btn btn-primary" onclick="refCreate()"><i class="fa fa-floppy-o"></i></button> #}
+        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" onclick="refCreate()">{{ button_save }}&{{button_close}}</button>
+        {# <button type="button" class="btn btn-primary" data-bs-dismiss="modal">{{button_close}}</button> #}
       </div>
     </div>
   </div>
 </div> 
-{# Modal Object Edit #}
-{# <div class="modal fade" id="refEditModal" tabindex="-1" aria-labelledby="refEditModalLabel" aria-hidden="true">
+{# Modal Ref Edit #}
+<div class="modal fade" id="refEditModal" tabindex="-1" aria-labelledby="refEditModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="objectEditModalLabel">Edit object</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+        <h5 class="modal-title" id="refEditModalLabel">Edit element:</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">        
-        <form class="form" id="object-edit-form">
-          <label for="input-edit-type">Type object:</label>
-          <div class="input-group input-group-sm">
-            <input type="text" name="type" class="form-control" id="input-edit-type" disabled></input>
-          </div>         
-          <label for="input-edit-textId">Identifier:</label>
-          <div class="input-group input-group-sm">
-            <input type="text" placeholder="" id="input-edit-textId" class="form-control"/>
-          </div>            
-          <label for="input-edit-subsystem">Subsystem:</label>
-          <div class="input-group input-group-sm">
-            <input type="text" placeholder="" id="input-edit-subsystem" class="form-control"/>
-            <button id= "subsystemBtn" class="btn btn-outline-secondary" type="button" onclick="objectEditSubsystem()">...</button>
-          </div>           
-          <label for="input-edit-typeId">Type Id:</label>
+        <form class="form" id="edit-ref-form">
+          <label for="input-edit-typeId">Kod:</label>
           <div class="input-group input-group-sm">
             <input type="text" placeholder="0" id="input-edit-typeId" class="form-control"/>
-            <button class="btn btn-outline-secondary" type="button" onclick="objectEditTypeId()">...</button>
+            <button class="btn btn-outline-secondary" type="button" onclick="refKodEdit()">...</button>
           </div> 
-          <label for="input-edit-descr">Parent:</label>
+          <label for="input-edit-type">Name:</label>
+          <div class="input-group input-group-sm">
+            <input type="text" name="type" class="form-control" id="input-edit-ref-name"></input>
+          </div>                                 
+          {# <label for="input-edit-descr">Parent:</label>
           <div class="input-group input-group-sm">
             <input type="text" placeholder="..." id="input-edit-parent" class="form-control"/>
-            <button class="btn btn-outline-secondary" type="button" onclick="objectEditParent()">...</button>
-          </div>    
+            <button class="btn btn-outline-secondary" type="button" onclick="refEditParent()">...</button>
+          </div> #}
         </form>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary" onclick="objectEdit()">{{ button_save }}</button>
+        <button type="submit" class="btn btn-primary" onclick="refEdit()">{{ button_save }}&{{button_close}}</button>
       </div>
     </div>
-  </div> 
-</div> #}
+  </div>
+</div>
 {% endblock %}

@@ -311,9 +311,11 @@ const app = document.getElementById('eva-app');
 function init() {
     const mode = document.querySelector('.content').dataset.mode;
     console.log('mode: ' + mode);   
-    if (mode==='false') {                
-        const navTab = document.getElementById("eva-nav");
+    if (mode==='false') {  
+        app.setAttribute("class","col tab-content p-3 eva-subsys");    
+        app.setAttribute("style","height:calc(100vh - 95.5px); border: 1px solid #00ff92");
         
+        const navTab = document.getElementById("eva-nav");    
         header(navTab);    
 
         const status = document.getElementById("status");    

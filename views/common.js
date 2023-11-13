@@ -232,8 +232,10 @@ async function createUser(data) {
 }
 async function userCreate() {
     console.log('>>userCreate...');
-
-    const input_username    = document.getElementById('input-username');
+    
+    const input_form        = document.getElementById('create-user-form');  
+    const createMode = input_form.getAttribute("create-mode");  
+    const input_username    = document.getElementById('input-user-name');
     const input_password    = document.getElementById('input-password');
     const input_confirmpass = document.getElementById('input-confirmpass');
     const input_descr       = document.getElementById('input-descr');
@@ -245,6 +247,7 @@ async function userCreate() {
     if (!input_username.value) alert('Не заполнено имя пользователя!');
 
     const data =  {
+        'id'      : input_form.getAttribute("eva-id"),
         'Name'    : input_username.value,
         'Descr'   : input_descr.value,
         'Password': input_password.value,
@@ -254,13 +257,22 @@ async function userCreate() {
     };
     
     let result;
-    try {
-        result = await createUser(data)
-        //console.log(result);        
-    } catch (e) {
+    console.log('createMode: '+createMode);
+    if (createMode==='true') {
+        try {
+            result = await createUser(data)
+            console.log('create: '+result);        
+        } catch (e) {
+            console.log(e);
+        }
+    } else {
+        try {
+        result = await editUser(data);
+        console.log('create: '+result);          
+        } catch (e) {
         console.log(e);
+        }
     }
-
     if (result) await showUserTable();
 
 }
@@ -285,7 +297,9 @@ async function userCreateModal() {
     console.log('>>userCreateModal()...');     
 
     const inputLabel        = document.getElementById("userModalLabel");
-    inputLabel.innerText = 'Add user:';       
+    inputLabel.innerText = 'Add user:';      
+    const input_form        = document.getElementById('create-user-form');  
+    input_form.setAttribute("create-mode",true);   
 }
 async function userEditModal() {
     console.log('>>userEditModal...'); 
@@ -294,6 +308,7 @@ async function userEditModal() {
 
     const row = selectRows[0];      
 
+    
     const inputLabel        = document.getElementById("userModalLabel");
     const input_form        = document.getElementById('create-user-form');  
     const input_name        = document.getElementById('input-user-name');  
@@ -304,7 +319,8 @@ async function userEditModal() {
     const input_confirmpass = document.getElementById('input-confirmpass'); 
     const input_show        = document.getElementById('input-show');
     const input_eauth       = document.getElementById('input-eauth');
-    
+
+    input_form.setAttribute("create-mode",false);    
     inputLabel.innerText = 'Edit user:';
 
     let data = { 'id': row.cells[0].innerText};
@@ -336,48 +352,6 @@ async function userEditModal() {
         input_eauth.checked       = res[0].EAuth;       
     }         
 
-}
-async function userEdit() {
-    console.log('>>userEdit...'); 
-
-    // const modalForm = document.getElementById("userEditModal");
-    // currentModal = getModal(modalForm);
-      
-    const input_form        = document.getElementById('user-edit-form');  
-    const input_name        = document.getElementById('input-edit-username');  
-    const input_descr       = document.getElementById('input-edit-descr');     
-    const input_email       = document.getElementById('input-edit-email');    
-    const input_password    = document.getElementById('input-edit-password');    
-    const input_confirmpass = document.getElementById('input-edit-confirmpass'); 
-    const input_eauth       = document.getElementById('input-edit-eauth');   
-    const input_show        = document.getElementById('input-edit-show');   
-    const input_role        = document.getElementById('input-edit-role'); 
-
-    if (!input_password.value === input_confirmpass.value) return;   
-    
-    const data =  {
-        'id'          : input_form.getAttribute("eva-id"),
-        'Name'        : input_name.value,
-        'Descr'       : input_descr.value,
-        'email'       : input_email.value,
-        'Password'    : input_password.value,
-        'EAuth'       : input_eauth.checked,
-        'Show'        : input_show.checked,
-        'RoleId'      : input_role.getAttribute("eva-id")
-    };
-  
-    // console.log(data);
-
-    let result;
-    try {
-      result = await editUser(data)     
-    } catch (e) {
-      console.log(e);
-    }
-
-    // await currentModal.hide();
-
-    if (result) await showUserTable();
 }
 async function deleteUser(data) {
     console.log('>>deleteUser...');
@@ -555,8 +529,10 @@ async function showConfigTable() {
     for (const row of tmp) {
         let strJson = row.data; 
         let Elements = await JSON.parse(strJson);
-        
-        data.push(Object.assign({'id':row.id}, Elements));
+
+        if (row.state===0||row.state===1) {
+            data.push(Object.assign({'id':row.id}, Elements));
+        }
     }
 
     const col  = { 'id':'Id', 'typeId':'Type',  'textId': 'Identifier'};  
@@ -612,7 +588,7 @@ async function configCreate() {
     }
 
     if (result) await showConfigTable();
-    btnConfigSave.removeAttribute("disabled");
+    //btnConfigSave.removeAttribute("disabled");
     btnConfigSave.style.backgroundColor = 'red';
 
 }
@@ -751,7 +727,7 @@ async function deleteConfig(data) {
     return res;
 }
 async function configDelete() {
-    console.log('>>configDelete...');
+    console.log('>>configDelete()...');
     let result;
     for (const row of selectRows){
 
@@ -789,15 +765,17 @@ async function updateConfig() {
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(data)
         });
-        //res = await response.json();        
+        res = await response.json();        
         btnConfigSave.style.backgroundColor = '#282c34';
-        inputStatus.value = '>> Config update completed!';
+     
     } catch(err) {
         console.log(err);
     }
 
     //if(result) 
     await showConfigTable();
+
+    inputStatus.value = '>> Config update completed!';
    
     // return res;
 }

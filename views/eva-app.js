@@ -99,8 +99,7 @@ async function refCreate() {
 
     const data =  {
         'textId'  : textId,
-        'name'    : inputName.value,
-        'descr'   : inputDescr.value
+        'name'    : inputName.value        
     };
     
     let result;

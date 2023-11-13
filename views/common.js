@@ -281,26 +281,31 @@ async function editUser(data) {
 
     return res;
 }
+async function userCreateModal() {
+    console.log('>>userCreateModal()...');     
+
+    const inputLabel        = document.getElementById("userModalLabel");
+    inputLabel.innerText = 'Add user:';       
+}
 async function userEditModal() {
     console.log('>>userEditModal...'); 
   
-    //if (selectRows.length === 0) { return };
-
-    //const modalForm = document.getElementById("userEditModal");
-    //currentModal = getModal(modalForm);
-    //modalForm.addEventListener('show.bs.modal', ()=>{return});
+    if (selectRows.length === 0) { return };
 
     const row = selectRows[0];      
-          
-    const input_form        = document.getElementById('user-edit-form');  
-    const input_name        = document.getElementById('input-edit-username');  
-    const input_descr       = document.getElementById('input-edit-descr');    
-    const input_email       = document.getElementById('input-edit-email');    
-    const input_role        = document.getElementById('input-edit-role');           
-    const input_password    = document.getElementById('input-edit-password');    
-    const input_confirmpass = document.getElementById('input-edit-confirmpass'); 
-    const input_show        = document.getElementById('input-edit-show');
-    const input_eauth       = document.getElementById('input-edit-eauth');
+
+    const inputLabel        = document.getElementById("userModalLabel");
+    const input_form        = document.getElementById('create-user-form');  
+    const input_name        = document.getElementById('input-user-name');  
+    const input_descr       = document.getElementById('input-descr');    
+    const input_email       = document.getElementById('input-email');    
+    const input_role        = document.getElementById('input-role');           
+    const input_password    = document.getElementById('input-password');    
+    const input_confirmpass = document.getElementById('input-confirmpass'); 
+    const input_show        = document.getElementById('input-show');
+    const input_eauth       = document.getElementById('input-eauth');
+    
+    inputLabel.innerText = 'Edit user:';
 
     let data = { 'id': row.cells[0].innerText};
 

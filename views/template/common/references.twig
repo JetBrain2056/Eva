@@ -6,11 +6,11 @@
       {# <hr/> #}
       <div class="btn-toolbar" role="toolbar" aria-label="toolbar group">
         <div class="btn-group btn-group-sm" role="group">
-          <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" data-bs-toggle="modal" data-bs-target="#refModal">
+          <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" data-bs-toggle="modal" data-bs-target="#refModal" onclick="refModal()">
             <i class="fa fa-plus-square"></i>
             <span>{{ button_add }}</span>
           </button>
-          <button type="button" class="btn btn-primary d-flex gap-2 align-items-center eva-edit" data-bs-toggle="modal" data-bs-target="#refEditModal" onclick="refEditModal()">
+          <button type="button" class="btn btn-primary d-flex gap-2 align-items-center eva-edit" data-bs-toggle="modal" data-bs-target="#refModal" onclick="refEditModal()">
             <i class="fa fa-edit"></i>
             <span>{{ button_edit }}</span>
           </button>
@@ -44,14 +44,14 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="refModalLabel">Add element</h5>
+        <h5 class="modal-title" id="refModalLabel"></h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <form class="form" id="create-ref-form">  
           <label for="input-ref-kod">Kod:</label>
           <div class="input-group input-group-sm">
-            <input type="text" placeholder="000000000" id="input-edit-ref-kod" class="form-control"/>
+            <input type="text" placeholder="000000000" id="input-ref-kod" class="form-control"/>
           </div> 
           <label for="input-ref-name">Name:</label>
           <div class="input-group">
@@ -71,35 +71,4 @@
     </div>
   </div>
 </div> 
-{# Modal Ref Edit #}
-<div class="modal fade" id="refEditModal" tabindex="-1" aria-labelledby="refEditModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="refEditModalLabel">Edit element:</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">        
-        <form class="form" id="edit-ref-form">
-          <label for="input-edit-ref-kod">Kod:</label>
-          <div class="input-group input-group-sm">
-            <input type="text" placeholder="000000000" id="input-edit-ref-kod" class="form-control"/>
-          </div> 
-          <label for="input-edit-ref-name">Name:</label>
-          <div class="input-group input-group-sm">
-            <input type="text" placeholder="Name" class="form-control" id="input-edit-ref-name"></input>
-          </div>                                 
-          {# <label for="input-edit-descr">Parent:</label>
-          <div class="input-group input-group-sm">
-            <input type="text" placeholder="..." id="input-edit-parent" class="form-control"/>
-            <button class="btn btn-outline-secondary" type="button" onclick="refEditParent()">...</button>
-          </div> #}
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="submit" class="btn btn-primary" onclick="refEdit()">{{ button_save }}&{{button_close}}</button>
-      </div>
-    </div>
-  </div>
-</div>
 {% endblock %}

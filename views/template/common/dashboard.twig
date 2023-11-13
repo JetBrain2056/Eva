@@ -3,7 +3,7 @@
   <div class="tab-pane fade active show" id="nav-config" role="tabpanel" aria-labelledby="nav-config-tab">
     <div class="btn-toolbar" role="toolbar" aria-label="toolbar group">
       <div class="btn-group btn-group-sm" role="group">
-        <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" data-bs-toggle="modal" data-bs-target="#configModal">
+        <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" data-bs-toggle="modal" data-bs-target="#objectModal">
           <i class="fa fa-plus-square"></i>
           <span>{{ button_add }}</span>
         </button>
@@ -19,7 +19,7 @@
           <i class="fa fa-minus-square"></i>
           <span>{{ button_delete }}</span>
         </button>
-        <button id="btn-config-save" type="button" class="btn btn-primary d-flex gap-2 align-items-center" onclick="updateConfig()">
+        <button id="btn-config-save" type="button" class="btn btn-primary d-flex gap-2 align-items-center" onclick="updateConfig()" disabled>
             <i class="fa fa-floppy-o"></i>
             <span>{{ button_save }}</span>
         </button>       
@@ -91,7 +91,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="userModalLabel">{{ text_add_user }}</h5>
+        <h5 class="modal-title" id="userModalLabel"></h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -186,7 +186,7 @@
   </div>
 </div>
 {# Modal Object #}
-<div class="modal fade" id="configModal" tabindex="-1" aria-labelledby="objectModalLabel" aria-hidden="true">
+<div class="modal fade" id="objectModal" tabindex="-1" aria-labelledby="objectModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -197,8 +197,6 @@
         <form class="form" id="create-object-form">  
           <label for="input-type">Type object:</label>
           <div class="input-group input-group-sm">
-            {# <input type="text" placeholder="0" id="input-type" class="form-control"/> #}
-            {# <button class="btn btn-outline-secondary" type="button" onclick="config_edit_type()">...</button> #}
             <select type="text" name="type" value="" class="form-select form-control" id="input-type">
               <option selected>  </option>
               <option value="Subsystem">{{text_subsystem}}</option>  
@@ -223,61 +221,18 @@
           <label for="input-typeId">Type Id:</label>
           <div class="input-group input-group-sm">
             <input type="text" placeholder="0" id="input-typeId" class="form-control"/>
-            <button class="btn btn-outline-secondary" type="button" onclick="configEditTypeId()">...</button>
+            <button class="btn btn-outline-secondary" type="button" onclick="objectTypeId()" disabled>...</button>
           </div> 
           <label for="input-descr">Parent:</label>
           <div class="input-group input-group-sm">
             <input type="text" placeholder="..." id="input-parent" class="form-control"/>
-            <button class="btn btn-outline-secondary" type="button" onclick="configEditParent()">...</button>
+            <button class="btn btn-outline-secondary" type="button" onclick="objectParent()" disabled>...</button>
           </div>  
         </form>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" onclick="configCreate()">{{ button_save }}</button>
-        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">{{button_close}}</button>
-      </div>
-    </div>
-  </div>
-</div>
-{# Modal Object Edit #}
-<div class="modal fade" id="objectEditModal" tabindex="-1" aria-labelledby="objectEditModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="objectEditModalLabel">Edit object</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
-      </div>
-      <div class="modal-body">        
-        <form class="form" id="object-edit-form">
-          <label for="input-edit-type">Type object:</label>
-          <div class="input-group input-group-sm">
-            {# <input type="text" placeholder="0" id="input-type" class="form-control"/> #}
-            {# <button class="btn btn-outline-secondary" type="button" onclick="config_edit_type()">...</button> #}
-            <input type="text" name="type" class="form-control" id="input-edit-type" disabled></input>
-          </div>         
-          <label for="input-edit-textId">Identifier:</label>
-          <div class="input-group input-group-sm">
-            <input type="text" placeholder="" id="input-edit-textId" class="form-control"/>
-          </div>            
-          <label for="input-edit-subsystem">Subsystem:</label>
-          <div class="input-group input-group-sm">
-            <input type="text" placeholder="" id="input-edit-subsystem" class="form-control"/>
-            <button id= "subsystemBtn" class="btn btn-outline-secondary" type="button" onclick="objectEditSubsystem()">...</button>
-          </div>           
-          <label for="input-edit-typeId">Type Id:</label>
-          <div class="input-group input-group-sm">
-            <input type="text" placeholder="0" id="input-edit-typeId" class="form-control"/>
-            <button class="btn btn-outline-secondary" type="button" onclick="objectEditTypeId()">...</button>
-          </div> 
-          <label for="input-edit-descr">Parent:</label>
-          <div class="input-group input-group-sm">
-            <input type="text" placeholder="..." id="input-edit-parent" class="form-control"/>
-            <button class="btn btn-outline-secondary" type="button" onclick="objectEditParent()">...</button>
-          </div>    
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="submit" class="btn btn-primary" onclick="objectEdit()">{{ button_save }}</button>
+        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" onclick="configCreate()">{{ button_save }}&{{button_close}}</button>
+        {# <button type="button" class="btn btn-primary" data-bs-dismiss="modal">{{button_close}}</button> #}
       </div>
     </div>
   </div>

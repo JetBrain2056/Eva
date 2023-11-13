@@ -27,7 +27,9 @@ router.post('/updateconf', controller.updateConfig);
 
 //eva-app
 router.get('/subsystems', controller.getSubsystems);
-router.post('/getref', controller.getReferences);
+router.post('/getrefs', controller.getReferences);
+router.post('/getref', controller.getReference);
 router.post('/createref', controller.createReference);
+router.post('/delref', controller.deleteReference);
 
 module.exports = { router }                                                  

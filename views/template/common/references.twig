@@ -49,14 +49,18 @@
       </div>
       <div class="modal-body">
         <form class="form" id="create-ref-form">  
+          <label for="input-ref-kod">Kod:</label>
+          <div class="input-group input-group-sm">
+            <input type="text" placeholder="000000000" id="input-edit-ref-kod" class="form-control"/>
+          </div> 
           <label for="input-ref-name">Name:</label>
           <div class="input-group">
             <input type="text" placeholder="Name" id="input-ref-name" class="form-control"/>
           </div>
-          <label for="input-ref-descr">Descr:</label>
+          {# <label for="input-ref-descr">Descr:</label>
           <div class="input-group">
             <input type="text" placeholder="Descr" id="input-ref-descr" class="form-control"/>
-          </div>
+          </div> #}
         </form>
       </div>
       <div class="modal-footer">
@@ -77,14 +81,13 @@
       </div>
       <div class="modal-body">        
         <form class="form" id="edit-ref-form">
-          <label for="input-edit-typeId">Kod:</label>
+          <label for="input-edit-ref-kod">Kod:</label>
           <div class="input-group input-group-sm">
-            <input type="text" placeholder="0" id="input-edit-typeId" class="form-control"/>
-            <button class="btn btn-outline-secondary" type="button" onclick="refKodEdit()">...</button>
+            <input type="text" placeholder="000000000" id="input-edit-ref-kod" class="form-control"/>
           </div> 
-          <label for="input-edit-type">Name:</label>
+          <label for="input-edit-ref-name">Name:</label>
           <div class="input-group input-group-sm">
-            <input type="text" name="type" class="form-control" id="input-edit-ref-name"></input>
+            <input type="text" placeholder="Name" class="form-control" id="input-edit-ref-name"></input>
           </div>                                 
           {# <label for="input-edit-descr">Parent:</label>
           <div class="input-group input-group-sm">

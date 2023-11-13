@@ -39,11 +39,11 @@
   <div class="tab-pane fade" id="nav-users" role="tabpanel" aria-labelledby="nav-users-tab">
     <div class="btn-toolbar" role="toolbar" aria-label="toolbar group">
       <div class="btn-group btn-group-sm" role="group">
-        <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" data-bs-toggle="modal" data-bs-target="#usersModal">
+        <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" data-bs-toggle="modal" data-bs-target="#userModal" onclick="userCreateModal()">
           <i class="fa fa-user-plus"></i>
           <span>{{ button_add }}</span>
         </button>        
-        <button type="button" class="btn btn-primary d-flex gap-2 align-items-center eva-edit" data-bs-toggle="modal" data-bs-target="#userEditModal" onclick="userEditModal()">
+        <button type="button" class="btn btn-primary d-flex gap-2 align-items-center eva-edit" data-bs-toggle="modal" data-bs-target="#userModal" onclick="userEditModal()">
           <i class="fa fa-edit"></i>
           <span>{{ button_edit }}</span>
         </button>
@@ -87,12 +87,12 @@
 </div>  
 
 {# Modal User #}
-<div class="modal fade" id="usersModal" tabindex="-1" aria-labelledby="usersModalLabel" aria-hidden="true">
+<div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="usersModalLabel">{{ text_add_user }}</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+        <h5 class="modal-title" id="userModalLabel">{{ text_add_user }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <form class="form" id="create-user-form">
@@ -132,58 +132,7 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" onclick="userCreate()">{{ button_save }}</button>
-      </div>
-    </div>
-  </div>
-</div>
-{# Modal User Edit #}
-<div class="modal fade" id="userEditModal" tabindex="-1" aria-labelledby="userEditModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="userEditModalLabel">Edit user</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
-      </div>
-      <div class="modal-body">
-        <form class="form" id="user-edit-form">
-          <label for="input-edit-username">Name:</label>
-          <div class="input-group">
-            <input type="text" placeholder="Name" id="input-edit-username" class="form-control"/>
-          </div>
-          <label for="input-edit-descr">Descr:</label>
-          <div class="input-group">
-            <input type="text" placeholder="Full name" id="input-edit-descr" class="form-control"/>
-          </div>
-          <label for="input-edit-role">Role:</label>
-          <div class="input-group">            
-            <input type="text" id="input-edit-role" class="form-control"/>
-            <button class="btn btn-outline-secondary" type="button" onclick="userEditRole()">...</button>
-          </div>
-          <label for="input-edit-email">E-mail:</label>
-          <div class="input-group">
-            <input type="email" placeholder="email@example.com" id="input-edit-email" class="form-control"/>
-          </div>
-          <label for="input-edit-password">Password:</label>
-          <div class="input-group">
-            <input type="password" placeholder="Password" id="input-edit-password" class="form-control"/>
-          </div>
-          <label for="input-edit-confirmpass">Confirm password:</label>
-          <div class="input-group">
-            <input type="password" placeholder="Password" id="input-edit-confirmpass" class="form-control"/>
-          </div>
-          <label for="input-edit-show">Show user:</label>
-          <div class="form-group">
-            <input type="checkbox" class="form-check-input" id="input-edit-show" checked/>
-          </div>
-          <label for="input-edit-eauth">Enterprise auth:</label>
-          <div class="form-group">
-            <input type="checkbox" class="form-check-input" name="eauth" id="input-edit-eauth" checked/>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" onclick="userEdit()">{{ button_save }}</button>
+        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" onclick="userCreate()">{{ button_save }}&{{ button_close }}</button>
       </div>
     </div>
   </div>

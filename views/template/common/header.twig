@@ -1,12 +1,12 @@
 <header id="header" class="navbar navbar-dark navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
     <a class="navbar-brand" href="{{ home }}">{{ name }}</a>
-    {% if logged %}
-      {% if mode %}
+    {% if logged %}      
       <nav class="d-flex me-lg-5">
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
+        {% if mode %}
         <div class="collapse navbar-collapse" id="navbarNavDropdown">         
           <ul class="nav navbar-nav align-items-center gap-2" id="nav-tab" role="tablist">                              
             <li class="nav-item">
@@ -59,13 +59,8 @@
               <a class="nav-link" aria-current="page" href="{{ logout }}" onclick="logout()"><i class="fa fa-sign-out"></i></a>
             </li>
           </ul>
-        </div>
-      </nav>
-      {% else %}
-      <nav class="d-flex me-lg-5">
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
+        </div>    
+        {% else %}
         <div class="collapse navbar-collapse" id="navbarNavDropdown">                                
           <ul class="nav navbar-nav" id="eva-nav" role="tablist">             
             <li class="nav-item" hidden>
@@ -104,8 +99,8 @@
             </li>
           </ul>
         </div>
-      </nav>
-      {% endif %}
+        {% endif %}
+      </nav>     
     {% endif %}
   </div>
 </header>

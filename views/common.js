@@ -612,6 +612,7 @@ async function configCreate() {
     }
 
     if (result) await showConfigTable();
+    btnConfigSave.removeAttribute("disabled");
     btnConfigSave.style.backgroundColor = 'red';
 
 }
@@ -639,16 +640,20 @@ async function objectEditModal() {
   
     if (selectRows.length === 0) return;
 
-    const modalForm = document.getElementById("objectEditModal");
+    const modalForm = document.getElementById("objectModal");
 
     currentModal = getModal(modalForm);
   
     const row = await selectRows[0];  
-          
-    const input_form   = document.getElementById('object-edit-form');  
-    const input_type   = document.getElementById('input-edit-type');
-    const input_textId = document.getElementById('input-edit-textId');   
-    const input_subsystem = document.getElementById('input-edit-subsystem');   
+
+    const objectModalLabel = document.getElementById('objectModalLabel');  
+    objectModalLabel.innerText = 'Edit object';
+
+    const input_form      = document.getElementById('create-object-form');  
+    const input_type      = document.getElementById('input-type');
+    input_type.setAttribute("disabled","disabled");
+    const input_textId    = document.getElementById('input-textId');   
+    const input_subsystem = document.getElementById('input-subsystem');   
     const subsystemBtn    = document.getElementById("subsystemBtn");
 
     let data = { 'id': row.cells[0].innerText };

@@ -9,7 +9,7 @@ async function getReferences(refName) {
 
     let res;
     try {    
-        let response = await fetch('/getref', {
+        let response = await fetch('/getrefs', {
             method  : 'post',    
             headers : {'Content-Type': 'application/json'},
             body    : JSON.stringify(data)            
@@ -37,7 +37,21 @@ async function refCreateServer(data) {
     }
     return res;
 }
-
+async function refDeleteServer(data) {
+    console.log('>>refDeleteServer()...');
+    let res;
+    try {
+        let response = await fetch('/delref', {
+            method  : 'post',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        });
+        res = await response.json();
+    } catch (err) {
+        console.log(err);
+    }
+    return res;
+}
 //Commands on client/////////////////////////////////////////////////////////
 function clickLink() {
     // const evaLinks = document.getElementsByClassName("eva-link");
@@ -62,8 +76,10 @@ async function openRef(refName) {
     console.log(refName);
 
     const form = document.getElementById("ref-form");  
-    const refForm = document.getElementById("create-ref-form");
+    const refForm = document.getElementById("create-ref-form");    
     refForm.setAttribute("eva-id", refName);
+    const editRefForm = document.getElementById("edit-ref-form");    
+    editRefForm.setAttribute("eva-textId", refName);
 
     let tab = new bootstrap.Tab(form);
     tab.show();    
@@ -96,12 +112,75 @@ async function refCreate() {
         console.log(e);
     }
 
-    if (result) await showRefTable(result);
+    if (result) await showRefTable(textId);
+
+}
+async function refDelete() {
+    console.log('>>refDelete...');
+
+    const refForm = document.getElementById("nav-ref-form");
+    const textId = refForm.getAttribute("eva-id");
+
+    let result;
+    for (const row of selectRows){
+
+        let data = {
+            'textId': textId,
+            'id': row.cells[0].innerText
+        };
+
+        result = await refDeleteServer(data);        
+    }
+
+    if(result) await showRefTable(textId);
+}
+async function refEditModal() {
+    console.log('>>refEditModal...'); 
+  
+    if (selectRows.length === 0) { return };
+
+    const row = selectRows[0];      
+          
+    const editRefForm        = document.getElementById('edit-ref-form');  
+    let textId = editRefForm.getAttribute("eva-textId");
+
+    console.log(textId);
+
+    const input_name     = document.getElementById('input-edit-ref-name');  
+
+    let data = { 
+        'textId': textId,
+        'id': row.cells[0].innerText
+    };
+
+    let res;
+    try {    
+        let response = await fetch('/getref', {
+            method  : 'post',    
+            headers : {'Content-Type': 'application/json'},
+            body    : JSON.stringify(data)            
+        });  
+        res = await response.json();     
+       
+    } catch (err) {
+      console.log(err);
+    }
+  
+    if (res) {
+       
+        editRefForm.setAttribute("eva-id", res[0].id);
+        input_name.value        = res[0].name;
+        input_descr.value       = res[0].descr;   
+     
+    }  
 
 }
 //DOM Dynamic Content////////////////////////////////////////////////////////
 async function showRefTable(refName) {
     console.log('>>showRefTable()...');
+
+    const refForm = document.getElementById("nav-ref-form");
+    refForm.setAttribute("eva-id", refName);
 
     const refFormLabel = document.getElementById("refFormLabel"); 
     refFormLabel.innerText = refName+'s';

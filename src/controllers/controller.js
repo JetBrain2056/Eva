@@ -468,6 +468,22 @@ exports.getReferences = async function(req, res) {
         console.log(err);
     }
 }
+exports.getReference = async function(req, res) {
+    console.log('>>getReferences()...');
+    if (!req.body) return res.sendStatus(400);
+    console.log(req.body);
+    const {textId, id} = req.body;    
+    try {
+        const data = await sequelize.query(
+            `SELECT "R"."id", "R"."name" 
+             FROM "`+textId+`s" as "R" 
+             WHERE "R"."id"=`+id+`;`         
+        );
+        return await res.send(data[0]);        
+    } catch(err) {
+        console.log(err);
+    }
+}
 exports.createReference = async function(req, res) {
     console.log('>>createReference()...');
     if (!req.body) return res.sendStatus(400);
@@ -476,13 +492,25 @@ exports.createReference = async function(req, res) {
 
     try {
         let EvaObject = sequelize.define(textId, refColumns); 
-  
-        console.log('EvaObject: '+EvaObject);
+        //console.log('EvaObject: '+EvaObject);
         const data = await EvaObject.create({
             name : name                   
         });
         // console.log(data);
         return await res.json(textId);
+    } catch(err) {
+        console.log(err);
+    }
+}
+exports.deleteReference = async function(req, res) {
+    console.log('>>deleteReference()...');
+    if (!req.body) return res.sendStatus(400);
+    const {textId, id} = req.body;
+    try {              
+        let EvaObject = sequelize.define(textId, refColumns); 
+        const data = await EvaObject.destroy({where: {id: id}});
+
+        return await res.json(data);
     } catch(err) {
         console.log(err);
     }

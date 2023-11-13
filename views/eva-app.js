@@ -77,9 +77,8 @@ async function openRef(refName) {
 
     const form = document.getElementById("ref-form");  
     const refForm = document.getElementById("create-ref-form");    
-    refForm.setAttribute("eva-id", refName);
-    const editRefForm = document.getElementById("edit-ref-form");    
-    editRefForm.setAttribute("eva-textId", refName);
+    refForm.setAttribute("eva-id", refName);    
+    refForm.setAttribute("eva-textId", refName);
 
     let tab = new bootstrap.Tab(form);
     tab.show();    
@@ -134,19 +133,30 @@ async function refDelete() {
 
     if(result) await showRefTable(textId);
 }
+async function refModal() {
+    console.log('>>refEditModal...'); 
+  
+    if (selectRows.length === 0) { return };   
+          
+    const refModalLabel    = document.getElementById('refModalLabel');  
+    refModalLabel.innerText = 'Add element';    
+}
 async function refEditModal() {
     console.log('>>refEditModal...'); 
   
     if (selectRows.length === 0) { return };
 
     const row = selectRows[0];      
+
+    const refModalLabel    = document.getElementById('refModalLabel');  
+    refModalLabel.innerText = 'Edit element';   
           
-    const editRefForm        = document.getElementById('edit-ref-form');  
+    const editRefForm    = document.getElementById('create-ref-form');  
     let textId = editRefForm.getAttribute("eva-textId");
 
     console.log(textId);
 
-    const input_name     = document.getElementById('input-edit-ref-name');  
+    const input_name     = document.getElementById('input-ref-name');  
 
     let data = { 
         'textId': textId,
@@ -170,7 +180,7 @@ async function refEditModal() {
        
         editRefForm.setAttribute("eva-id", res[0].id);
         input_name.value        = res[0].name;
-        input_descr.value       = res[0].descr;   
+        //input_descr.value       = res[0].descr;   
      
     }  
 

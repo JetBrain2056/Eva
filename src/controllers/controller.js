@@ -235,8 +235,9 @@ exports.deleteUser = async function(req, res) {
     }
 }
 exports.getRoles = async function(req, res) {
+    console.log('getRoles()...');
     try {
-        const data = await Role.findAll({raw:true})
+        const data = await Role.findAll({raw:true});
         await res.send(data);        
     } catch(err) {
         console.log(err);
@@ -274,8 +275,10 @@ exports.deleteRole = async function(req, res) {
 }
 //Config//////////////////////////////////
 exports.getConfig = async function(req, res) {
+    console.log('>>getConfig()...');
     try {
-        const data = await Config.findAll({raw:true})
+        const  data = await Config.findAll({raw:true});
+        console.log(data);
         await res.send(data);        
     } catch(err) {
         console.log(err);
@@ -444,7 +447,7 @@ exports.updateConfig = async function(req, res) {
 }
 exports.getSubsystems = async function(req, res) {
     console.log('>>getSubsystems()...');
-    if (!req.body) return res.sendStatus(400);    
+    //if (!req.body) return res.sendStatus(400);    
     // console.log(req);
     try {
         const data = await Subsystem.findAll({raw:true})

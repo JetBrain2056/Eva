@@ -23,10 +23,26 @@ async function getReferences(refName) {
 }
 async function refCreateServer(data) {
     console.log('>>refCreateServer()...');
-    console.log(data);
+    //console.log(data);
     let res;
     try {
         let response = await fetch('/createref', {
+            method  : 'post',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        });
+        res = await response.json();
+    } catch(err) {
+        console.log(err);
+    }
+    return res;
+}
+async function refUpdateServer(data) {
+    console.log('>>refUpdateServer()...');
+    console.log(data);
+    let res;
+    try {
+        let response = await fetch('/updateref', {
             method  : 'post',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(data)
@@ -92,22 +108,33 @@ async function refCreate() {
     console.log('>>refCreate()...');
 
     const refForm = document.getElementById("create-ref-form");
-    const textId = refForm.getAttribute("eva-id");
+    const textId     = refForm.getAttribute("eva-textId");
+    const createMode = refForm.getAttribute("create-mode");  
 
-    const inputName  = document.getElementById('input-ref-name');
-    const inputDescr = document.getElementById('input-ref-descr');
+    const inputName  = document.getElementById('input-ref-name');    
 
     const data =  {
         'textId'  : textId,
+        'id'      : refForm.getAttribute("eva-id"),
         'name'    : inputName.value        
     };
     
     let result;
-    try {
-        result = await refCreateServer(data)
-        console.log(result);        
-    } catch (e) {
-        console.log(e);
+    console.log('createMode: '+createMode);
+    if (createMode==='true') {
+        try {
+            result = await refCreateServer(data)
+            console.log(result);        
+        } catch (e) {
+            console.log(e);
+        }
+    } else {
+        try {
+            result = await refUpdateServer(data)
+            console.log(result);        
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     if (result) await showRefTable(textId);
@@ -135,10 +162,12 @@ async function refDelete() {
 async function refModal() {
     console.log('>>refEditModal...'); 
   
-    if (selectRows.length === 0) { return };   
+    //if (selectRows.length === 0) { return };   
           
     const refModalLabel    = document.getElementById('refModalLabel');  
     refModalLabel.innerText = 'Add element';    
+    const refForm        = document.getElementById('create-ref-form');  
+    refForm.setAttribute("create-mode", true);   
 }
 async function refEditModal() {
     console.log('>>refEditModal...'); 
@@ -150,10 +179,10 @@ async function refEditModal() {
     const refModalLabel    = document.getElementById('refModalLabel');  
     refModalLabel.innerText = 'Edit element';   
           
-    const editRefForm    = document.getElementById('create-ref-form');  
-    let textId = editRefForm.getAttribute("eva-textId");
-
-    console.log(textId);
+    const refForm    = document.getElementById('create-ref-form');  
+    let textId = refForm.getAttribute("eva-textId");
+    console.log(textId);    
+    refForm.setAttribute("create-mode", false);  
 
     const input_name     = document.getElementById('input-ref-name');  
 
@@ -175,14 +204,11 @@ async function refEditModal() {
       console.log(err);
     }
   
-    if (res) {
-       
-        editRefForm.setAttribute("eva-id", res[0].id);
+    if (res) {       
+        refForm.setAttribute("eva-id", res[0].id);
         input_name.value        = res[0].name;
-        //input_descr.value       = res[0].descr;   
-     
+        //input_descr.value       = res[0].descr;        
     }  
-
 }
 //DOM Dynamic Content////////////////////////////////////////////////////////
 async function showRefTable(refName) {

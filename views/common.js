@@ -135,7 +135,7 @@ async function showTable(showTbl, hide, col, data) {
         return;   
     }
 }
-getModal = (modalForm) => {
+function getModal(modalForm) {
     let options =  { focus: true };
     currentModal = new bootstrap.Modal(modalForm, options);  
     
@@ -397,13 +397,6 @@ async function roleDelete() {
 /////////////////////////////////////////////////////////////////////////////
 async function showConfigTable() {
     console.log('>>showConfigTable...');
-
-    const logged = content.getAttribute("data-logged");
-    console.log('logged:' + logged);
-    const mode = content.getAttribute("data-mode");
- 
-    if (logged==='false') return;
-    if (mode==='false') return;
     
     let tmp  = await getOnServer('/getconfig');     
     let data = [];
@@ -647,4 +640,16 @@ window.onload = async function() {
     }
 }
 
-document.addEventListener('DOMContentLoaded', showConfigTable());
+function devMode() {
+    console.log('>>developMode()...');
+    const logged = content.getAttribute("data-logged");
+    console.log('logged:' + logged);
+    const mode = content.getAttribute("data-mode");
+ 
+    if (logged==='false') return;
+    if (mode==='true') {   
+        showConfigTable();
+    }    
+}
+
+document.addEventListener('DOMContentLoaded', devMode());

@@ -141,28 +141,6 @@ getModal = (modalForm) => {
     
     return currentModal.show();   
 }
-function operationMode(e) {
-    console.log('>>operationMode...');
-    
-    const Developer  = document.getElementById('Developer');
-    const Enterprise = document.getElementById('Enterprise'); 
-
-    let elem = e.target.value;
-    //console.log(elem);
-
-    if (Developer.checked) {
-        console.log('>>Start dev...')
-        return;
-    } else if (Enterprise.checked) {       
-       console.log('>>Start app...');        
-    }
-    const mode = content.getAttribute('data-mode');
-    console.log(mode);    
-}
-const operModes = document.getElementsByName("operation_mode");
-for (const mode of operModes) {    
-    mode.addEventListener('change', operationMode)
-}
 function logout() {
     console.log('>>Logout()...');
     let mode = content.getAttribute('data-mode');
@@ -207,7 +185,7 @@ async function selectUser() {
 
     const inputUserName = document.getElementById('input-username');
 
-    console.log(inputUserName);  
+    //console.log(inputUserName);  
 
     for (let rows of data) {
         

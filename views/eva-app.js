@@ -2,14 +2,12 @@ let a = [];
 selectRows = [];
 n = 0;
 //Get/post on Server///////////////////////////////////////////////////////////
-async function getReferences(refName) {
-    console.log('>>getReferences()...');
-
-    let data = { 'textId': refName };
+async function getOnServer(data, link) {
+    console.log('>>getOnServer()...');
 
     let res;
     try {    
-        let response = await fetch('/getrefs', {
+        let response = await fetch(link, {
             method  : 'post',    
             headers : {'Content-Type': 'application/json'},
             body    : JSON.stringify(data)            
@@ -21,43 +19,11 @@ async function getReferences(refName) {
     }
     return res;
 }
-async function refCreateServer(data) {
-    console.log('>>refCreateServer()...');
-    //console.log(data);
+async function postOnServer(data, link) {
+    console.log('>>postOnServer()...');
     let res;
     try {
-        let response = await fetch('/createref', {
-            method  : 'post',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(data)
-        });
-        res = await response.json();
-    } catch(err) {
-        console.log(err);
-    }
-    return res;
-}
-async function refUpdateServer(data) {
-    console.log('>>refUpdateServer()...');
-    console.log(data);
-    let res;
-    try {
-        let response = await fetch('/updateref', {
-            method  : 'post',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(data)
-        });
-        res = await response.json();
-    } catch(err) {
-        console.log(err);
-    }
-    return res;
-}
-async function refDeleteServer(data) {
-    console.log('>>refDeleteServer()...');
-    let res;
-    try {
-        let response = await fetch('/delref', {
+        let response = await fetch(link, {
             method  : 'post',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(data)
@@ -69,23 +35,6 @@ async function refDeleteServer(data) {
     return res;
 }
 //Commands on client/////////////////////////////////////////////////////////
-function clickLink() {
-    // const evaLinks = document.getElementsByClassName("eva-link");
-    // console.log(evaLinks);
-    // for (let link of Object.keys(evaLinks)) {
-    //     console.log(link);
-    //     console.log(evaLinks[link]);
-    //     evaLinks[link].addEventListener("click", openRef(link));
-    // }
-}
-function openNav(name) {
-    // console.log('>>openNav()...');
-
-    // console.log(name);
-
-    // const status = document.getElementById("status");
-    // status.value = ">It's work!";
-}
 async function openRef(refName) {
     console.log('>>openRef()...');
 
@@ -123,14 +72,14 @@ async function refCreate() {
     console.log('createMode: '+createMode);
     if (createMode==='true') {
         try {
-            result = await refCreateServer(data)
+            result = await postOnServer(data, '/createref')
             console.log(result);        
         } catch (e) {
             console.log(e);
         }
     } else {
         try {
-            result = await refUpdateServer(data)
+            result = await postOnServer(data, '/updateref')
             console.log(result);        
         } catch (e) {
             console.log(e);
@@ -154,7 +103,7 @@ async function refDelete() {
             'id': row.cells[0].innerText
         };
 
-        result = await refDeleteServer(data);        
+        result = await postOnServer(data, '/delref');        
     }
 
     if(result) await showRefTable(textId);
@@ -227,7 +176,8 @@ async function showRefTable(refName) {
         refTbl.setAttribute("class", "table table-striped table-hover table-sm table-responsive");              
     formTbl.appendChild(refTbl);      
 
-    let data = await getReferences(refName);   
+    let tmp = {'textId': refName };
+    let data = await getOnServer(tmp, '/getrefs');   
 
     const col  = { 'id':'Id', 'name':'Name' };  
     const hide = [];      

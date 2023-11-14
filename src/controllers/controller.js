@@ -487,16 +487,14 @@ exports.getReference = async function(req, res) {
 exports.createReference = async function(req, res) {
     console.log('>>createReference()...');
     if (!req.body) return res.sendStatus(400);
-    //console.log('body :'+req.body);
-    const {textId, name, descr} = req.body;               
-
+    
+    const {textId, name} = req.body;               
     try {
         let EvaObject = sequelize.define(textId, refColumns); 
-        //console.log('EvaObject: '+EvaObject);
         const data = await EvaObject.create({
             name : name                   
         });
-        // console.log(data);
+        console.log('Create object: '+data);
         return await res.json(textId);
     } catch(err) {
         console.log(err);

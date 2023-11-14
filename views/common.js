@@ -168,27 +168,42 @@ function logout() {
     let mode = content.getAttribute('data-mode');
     console.log(mode);   
 }
-
 /////////////////////////////////////////////////////////////////////////////
 const inputStatus   = document.getElementById('status');
 const btnConfigSave = document.getElementById('btn-config-save');
 const content       = document.querySelector('.content');
-
-async function getUsers() {
-    console.log('>>getUsers...');
+//Get/post on Server///////////////////////////////////////////////////////////
+async function postOnServer(data, link) {
+    console.log('>>postOnServer()...');
+    let res;
+    try {
+        let response = await fetch(link, {
+            method  : 'post',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        });
+        res = await response.json();
+    } catch (err) {
+        console.log(err);
+    }
+    return res;
+}
+async function getOnServer(link) {
+    console.log('>>getOnServer()...');
     let res;
     try{
-        const response = await fetch('/users');
+        let response = await fetch(link);
         res = await response.json();
     } catch (err) {
         console.log(err)
     }
     return res;
 }
+//////////////////////////////////////////////////////////////////////////////
 async function selectUser() {
     console.log('>>selectUser...');           
 
-    let data = await getUsers();
+    let data = await getOnServer('/getusers');
 
     const inputUserName = document.getElementById('input-username');
 
@@ -207,28 +222,13 @@ async function selectUser() {
 }
 async function showUserTable() {
     
-    let data = await getUsers();   
+    let data = await getOnServer('/getusers');   
 
     const col  = { 'id':'Id', 'Name':'Name', 'Descr':'Descr', 'Role':'Role', 'email':'E-mail', 'Show':'Show', 'EAuth':'EAuth' };  
     const hide = ['id'];  
 
     await showTable(tbl[1], hide, col, data);
 
-}
-async function createUser(data) {
-    console.log('>>createUser...');
-    let res;
-    try {
-        let response = await fetch('/createuser', {
-            method  : 'post',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(data)
-        });
-        res = await response.json();
-    } catch(err) {
-        console.log(err);
-    }
-    return res;
 }
 async function userCreate() {
     console.log('>>userCreate...');
@@ -260,14 +260,14 @@ async function userCreate() {
     console.log('createMode: '+createMode);
     if (createMode==='true') {
         try {
-            result = await createUser(data)
+            result = await postOnServer(data, '/createuser')
             console.log('create: '+result);        
         } catch (e) {
             console.log(e);
         }
     } else {
         try {
-        result = await editUser(data);
+        result = await postOnServer(data, '/updateuser');
         console.log('create: '+result);          
         } catch (e) {
         console.log(e);
@@ -275,23 +275,6 @@ async function userCreate() {
     }
     if (result) await showUserTable();
 
-}
-async function editUser(data) {
-    console.log('>>editUser...'); 
-  
-    let res;
-    try {
-      let response = await fetch('/updateuser', { 
-          method  : 'post',    
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify(data)            
-        });  
-        res = await response.json();                      
-    } catch (e) {
-      console.log(e);
-    }
-
-    return res;
 }
 async function userCreateModal() {
     console.log('>>userCreateModal()...');     
@@ -307,7 +290,6 @@ async function userEditModal() {
     if (selectRows.length === 0) { return };
 
     const row = selectRows[0];      
-
     
     const inputLabel        = document.getElementById("userModalLabel");
     const input_form        = document.getElementById('create-user-form');  
@@ -325,18 +307,7 @@ async function userEditModal() {
 
     let data = { 'id': row.cells[0].innerText};
 
-    let res;
-    try {    
-        let response = await fetch('/getuser', {
-            method  : 'post',    
-            headers : {'Content-Type': 'application/json'},
-            body    : JSON.stringify(data)            
-        });  
-        res = await response.json();     
-       
-    } catch (err) {
-      console.log(err);
-    }
+    let res = await postOnServer(data,'/getuser');
   
     if (res) {
        
@@ -353,21 +324,6 @@ async function userEditModal() {
     }         
 
 }
-async function deleteUser(data) {
-    console.log('>>deleteUser...');
-    let res;
-    try {
-        let response = await fetch('/deluser', {
-            method  : 'post',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(data)
-        });
-        res = await response.json();
-    } catch (err) {
-        console.log(err);
-    }
-    return res;
-}
 async function userDelete() {
     console.log('>>userDelete...');
     let result;
@@ -375,7 +331,7 @@ async function userDelete() {
 
         let data = {'id': row.cells[0].innerText};
 
-        result = await deleteUser(data);        
+        result = await postOnServer(data,'/deluser');        
     }
 
     if(result) await showUserTable();
@@ -383,7 +339,7 @@ async function userDelete() {
 /////////////////////////////////////////////////////////////////////////////
 async function showRoleTable() {
     
-    let data = await getUsersRoles();   
+    let data = await getOnServer('/getroles');   
 
     console.log(data);
 
@@ -393,38 +349,12 @@ async function showRoleTable() {
     await showTable(tbl[2], hide, col, data);
 
 }
-async function getUsersRoles() {
-    console.log('>>getUsersRoles...');
-    let res;
-    try{
-        const response = await fetch('/roles');
-        res = await response.json();
-    } catch (err) {
-        console.log(err)
-    }
-    return res;
-}
-async function createRole(data) {
-    console.log('>>createRole...');
-    let res;
-    try {
-        let response = await fetch('/createrole', {
-            method  : 'post',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(data)
-        });
-        res = await response.json();
-    } catch(err) {
-        console.log(err);
-    }
-    return res;
-}
 async function roleCreate() {
     console.log('>>roleCreate...');
 
     const input_rolename    = document.getElementById('input-rolename')
     
-    if (!input_rolename.value) alert('Не заполнено наименование!');
+    if (!input_rolename.value) alert('The name is not filled in!');
 
     const data =  {
         'Name'    : input_rolename.value,
@@ -432,7 +362,7 @@ async function roleCreate() {
     
     let result;
     try {
-        result = await createRole(data)
+        result = await postOnServer(data,'/createrole')
         //console.log(result);        
     } catch (e) {
         console.log(e);
@@ -448,7 +378,7 @@ async function userEditRole() {
 
   currentModal = getModal(modalForm);
 
-  let data = await getUsersRoles();  
+  let data = await getOnServer('/getroles');  
 
   const col = {'id':'Id', 'Name':'Name'};  
   const hide = ['id'];
@@ -474,21 +404,6 @@ async function roleSelect() {
   await currentModal.hide();
            
 }
-async function deleteRole(data) {
-    console.log('>>deleteRole...');
-    let res;
-    try {
-        let response = await fetch('/delrole', {
-            method  : 'post',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(data)
-        });
-        res = await response.json();
-    } catch (err) {
-        console.log(err);
-    }
-    return res;
-}
 async function roleDelete() {
     console.log('>>roleDelete...');
     let result;
@@ -496,23 +411,12 @@ async function roleDelete() {
 
         let data = {'id': row.cells[0].innerText};
 
-        result = await deleteRole(data);        
+        result = await postOnServer(data,'/delrole');        
     }
 
     if(result) await showRoleTable();
 }
 /////////////////////////////////////////////////////////////////////////////
-async function getConfig() {
-    console.log('>>getConfig...');
-    let res;
-    try{
-        const response = await fetch('/config');
-        res = await response.json();
-    } catch (err) {
-        console.log(err)
-    }
-    return res;
-}
 async function showConfigTable() {
     console.log('>>showConfigTable...');
 
@@ -523,7 +427,7 @@ async function showConfigTable() {
     if (logged==='false') return;
     if (mode==='false') return;
     
-    let tmp  = await getConfig();     
+    let tmp  = await getOnServer('/getconfig');     
     let data = [];
 
     for (const row of tmp) {
@@ -543,25 +447,9 @@ async function showConfigTable() {
     inputStatus.value = '>>Ready...';
 
 }
-async function createConfig(data) {
-    console.log('>>createConfig...');
-    let res;
-    try {
-        let response = await fetch('/createconf', {
-            method  : 'post',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(data)
-        });
-        res = await response.json();
-    } catch(err) {
-        console.log(err);
-    }
-    return res;
-}
 async function configCreate() {
-    console.log('>>configCreate...');
+    console.log('>>configCreate()...');
 
-    // const input_form   = document.getElementById('object-edit-form');  
     const input_type   = document.getElementById('input-type');
     const input_textId = document.getElementById('input-textId');    
     const input_subsystem  = document.getElementById('input-subsystem');    
@@ -575,13 +463,11 @@ async function configCreate() {
         subsysName: input_subsystem.value
     };        
 
-    const data =  {
-        'data'    : JSON.stringify(tmp),
-    };
+    const data =  {'data': JSON.stringify(tmp)};
     
     let result;
     try {
-        result = await createConfig(data)
+        result = await postOnServer(data,'/createconf')
         //console.log(result);        
     } catch (e) {
         console.log(e);
@@ -591,25 +477,6 @@ async function configCreate() {
     //btnConfigSave.removeAttribute("disabled");
     btnConfigSave.style.backgroundColor = 'red';
 
-}
-async function editObject(data) {
-    console.log('>>editObject...'); 
-
-    inputStatus.value = '>>Edit object...';
-  
-    let res;
-    try {
-      let response = await fetch('/editobject', { 
-          method  : 'post',    
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify(data)            
-        });  
-        res = await response.json();                      
-    } catch (e) {
-      console.log(e);
-    }
-
-    return res;
 }
 async function objectEditModal() {
     console.log('>>objectEditModal...'); 
@@ -698,33 +565,17 @@ async function objectEdit() {
 
     let result;
     try {
-      result = await editObject(data);    
+      result = await postOnServer(data,'/editobject');    
     } catch (e) {
       console.log(e);
     }
-    
-    //if (currentModal.show) 
+        
     await currentModal.hide();
 
     //if (result) {      
       await showConfigTable();     
     //}
     btnConfigSave.style.backgroundColor = 'red';
-}
-async function deleteConfig(data) {
-    console.log('>>deleteConfig...');
-    let res;
-    try {
-        let response = await fetch('/delconf', {
-            method  : 'post',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(data)
-        });
-        res = await response.json();
-    } catch (err) {
-        console.log(err);
-    }
-    return res;
 }
 async function configDelete() {
     console.log('>>configDelete()...');
@@ -733,7 +584,7 @@ async function configDelete() {
 
         let data = {'id': row.cells[0].innerText};
 
-        result = await deleteConfig(data);        
+        result = await postOnServer(data,'/delconf');        
     }
 
     if(result) await showConfigTable();
@@ -744,7 +595,7 @@ async function updateConfig() {
     console.log('>>updateConfig...');
     inputStatus.value = '>> Update config in DB...';
 
-    let tmp  = await getConfig();     
+    let tmp  = await getOnServer('/getconfig');     
     let data = [];
 
     for (const row of tmp) {
@@ -758,44 +609,21 @@ async function updateConfig() {
         }
     }
 
-    let res;
-    try {
-        let response = await fetch('/updateconf', {
-            method  : 'post',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(data)
-        });
-        res = await response.json();        
-        btnConfigSave.style.backgroundColor = '#282c34';
-     
-    } catch(err) {
-        console.log(err);
-    }
+    result = postOnServer(data, '/updateconf');
+
+    btnConfigSave.style.backgroundColor = '#282c34';
 
     //if(result) 
     await showConfigTable();
 
     inputStatus.value = '>> Config update completed!';
-   
-    // return res;
+       
 }
 /////////////////////////////////////////////////////////////////////////////
-async function getSubsystems() {
-    console.log('>>getSubsystems()...');
-    let res;
-    try{
-        const response = await fetch('/subsystems');
-        res = await response.json();
-    } catch (err) {
-        console.log(err)
-    }
-    return res;
-  
-}
 async function showSubsystemsTable() {
     console.log('>>showSubsystemsTable...');
 
-    let data = await getSubsystems();  
+    let data = await getOnServer('/subsystems');  
   
     const col = {'id':'Id', 'name':'Name', 'display':'Display subsystem'};  
     const hide = ['id'];

@@ -1,6 +1,7 @@
 let a = [];
 selectRows = [];
 n = 0;
+
 //Commands on client/////////////////////////////////////////////////////////
 async function openRef(refName) {
     console.log('>>openRef()...');
@@ -125,8 +126,8 @@ async function refEditModal() {
     }  
 }
 //DOM Dynamic Content////////////////////////////////////////////////////////
-async function showRefTable(refName) {
-    console.log('>>showRefTable()...');
+function buildTable(refName) {
+    console.log('>>buildTable()...');  
 
     const refForm = document.getElementById("nav-ref-form");
     refForm.setAttribute("eva-id", refName);
@@ -139,7 +140,15 @@ async function showRefTable(refName) {
     formTbl.setAttribute("style", "height: calc(100vh - 171px); overflow-y: scroll;");               
         const refTbl = document.createElement('table');
         refTbl.setAttribute("class", "table table-striped table-hover table-sm table-responsive");              
-    formTbl.appendChild(refTbl);      
+    formTbl.appendChild(refTbl);  
+
+    return refTbl;
+
+}
+async function showRefTable(refName) {
+    console.log('>>showRefTable()...');   
+
+    refTbl = buildTable(refName);
 
     let tmp = {'textId': refName };
     let data = await postOnServer(tmp, '/getrefs');   
@@ -200,8 +209,10 @@ function navLink(nav, name) {
     a.setAttribute("onclick", "openRef(id)");         
     nav.appendChild(a); 
 }
-async function header(navTab) {
+async function header() {
     console.log('>>header()...');
+
+    const navTab = document.getElementById("eva-nav");  
     
     //MAIN
     navItem(navTab, 'Desktop'); 
@@ -214,7 +225,7 @@ async function header(navTab) {
     for (let row of data) {
         //console.log(row.name);
         navItem(navTab, row.name);           
-    }  
+    }      
 
     let div = document.getElementById("nav-Desktop");
     tabDesk(div);  
@@ -257,19 +268,24 @@ async function tabRef(div) {
     }        
 }
 /////////////////////////////////////////////////////////////////////////////
-const app = document.getElementById('eva-app');
-function init() {
-    const mode = document.querySelector('.content').dataset.mode;
-    console.log('mode: ' + mode);   
-    if (mode==='false') {  
-        app.setAttribute("class","col tab-content p-3 eva-subsys");    
-        app.setAttribute("style","height:calc(100vh - 95.5px); border: 1px solid #00ff92");
-        
-        const navTab = document.getElementById("eva-nav");    
-        header(navTab);    
+function startApp() {
 
-        const status = document.getElementById("status");    
-        status.value='>onload' ;                 
+    const app = document.getElementById('eva-app');
+    app.setAttribute("class","col tab-content p-3 eva-subsys");    
+    app.style="height:calc(100vh - 95.5px); border: 1px solid #00ff92";
+
+    const status = document.getElementById("status"); 
+    status.value='>onload';  
+}
+function init() {
+    
+    const mode   = document.querySelector('.content').dataset.mode;
+    const logged = document.querySelector('.content').dataset.logged;
+    console.log('mode: ' + mode);   
+    if (mode==='false'||logged==='true') {      
+            
+        startApp();
+        header();                                   
     } 
 }
        

@@ -243,8 +243,8 @@ async function userCreate() {
     const input_show        = document.getElementById('input-show');
     const input_role        = document.getElementById('input-role');
 
-    if (input_password.value !== input_confirmpass.value) alert('Неверное подтверждение пароля!');
-    if (!input_username.value) alert('Не заполнено имя пользователя!');
+    if (input_password.value !== input_confirmpass.value) alert('Incorrect password confirmation!');
+    if (!input_username.value) alert('User name is not filled in!');
 
     const data =  {
         'id'      : input_form.getAttribute("eva-id"),

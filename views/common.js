@@ -640,16 +640,18 @@ window.onload = async function() {
     }
 }
 
-function devMode() {
-    console.log('>>developMode()...');
-    const logged = content.getAttribute("data-logged");
-    console.log('logged:' + logged);
-    const mode = content.getAttribute("data-mode");
+async function loginMode() {
+    console.log('>>loginMode()...'); 
+
+    const logged = content.getAttribute("data-logged");   
+    const mode   = content.getAttribute("data-mode");
+
+    console.log('logged: ' + logged);
  
     if (logged==='false') return;
-    if (mode==='true') {   
-        showConfigTable();
+    if (mode==='true'&&logged==='true') {   
+        await showConfigTable();
     }    
 }
 
-document.addEventListener('DOMContentLoaded', devMode());
+document.addEventListener('DOMContentLoaded', loginMode());

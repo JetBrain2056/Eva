@@ -1,29 +1,12 @@
 let a = [];
 selectRows = [];
 n = 0;
-//Get/post on Server///////////////////////////////////////////////////////////
-async function postOnServer(data, link) {
-    console.log('>>postOnServer()...');
-    let res;
-    try {
-        let response = await fetch(link, {
-            method  : 'post',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(data)
-        });
-        res = await response.json();
-    } catch (err) {
-        console.log(err);
-    }
-    return res;
-}
 //Commands on client/////////////////////////////////////////////////////////
 async function openRef(refName) {
     console.log('>>openRef()...');
-
     console.log(refName);
 
-    const form = document.getElementById("ref-form");  
+    const form    = document.getElementById("ref-form");  
     const refForm = document.getElementById("create-ref-form");    
     refForm.setAttribute("eva-id", refName);    
     refForm.setAttribute("eva-textId", refName);
@@ -39,10 +22,9 @@ async function openRef(refName) {
 async function refCreate() {
     console.log('>>refCreate()...');
 
-    const refForm = document.getElementById("create-ref-form");
+    const refForm    = document.getElementById("create-ref-form");
     const textId     = refForm.getAttribute("eva-textId");
     const createMode = refForm.getAttribute("create-mode");  
-
     const inputName  = document.getElementById('input-ref-name');    
 
     const data =  {
@@ -227,7 +209,7 @@ async function header(navTab) {
     navItem(navTab, 'Reports');    
 
     //DYNAMIC    
-    let data = await getSubsystems();
+    let data = await getOnServer('/subsystems');
     //console.log(data);
     for (let row of data) {
         //console.log(row.name);
@@ -244,7 +226,7 @@ async function header(navTab) {
 async function tabDesk(div) {
     console.log('>>tabDesk()...');
 
-    let data = await getConfig();
+    let data = await getOnServer('/getconfig');
     for (let row of data) {
         let strJson = row.data; 
         let elements = await JSON.parse(strJson);
@@ -261,7 +243,7 @@ async function tabDesk(div) {
 async function tabRef(div) {
     console.log('>>tabRef()...');
 
-    let data = await getConfig();
+    let data = await getOnServer('/getconfig');
     for (let row of data) {
         let strJson = row.data; 
         let elements = await JSON.parse(strJson);

@@ -6,7 +6,7 @@ const { DataTypes }     = require('sequelize');
 const { v4: uuidv4 }    = require('uuid');
 //const jwt              = require('jsonwebtoken');
 let refColumns = {id  : {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-               name: {type: DataTypes.STRING}}; 
+                  name: {type: DataTypes.STRING}}; 
 
 /* const generateJwt = (id, login, role) => {
      return jwt.sign(
@@ -487,7 +487,7 @@ exports.getReference = async function(req, res) {
 exports.createReference = async function(req, res) {
     console.log('>>createReference()...');
     if (!req.body) return res.sendStatus(400);
-    console.log('body :'+req.body);
+    //console.log('body :'+req.body);
     const {textId, name, descr} = req.body;               
 
     try {
@@ -502,15 +502,35 @@ exports.createReference = async function(req, res) {
         console.log(err);
     }
 }
+exports.updateReference = async function(req, res) {
+    console.log('>>updateReference()...');
+
+    if (!req.body) return res.sendStatus(400);     
+
+    const {textId, id, name} = req.body;  
+    console.log('texId :'+textId);
+    try {
+        let EvaObject = sequelize.define(textId, refColumns); 
+        const data = await EvaObject.update({ 
+            name : name      
+        },{
+            where: {id: id}
+        });
+        console.log('Update object:'+data);
+        return await res.json(data); 
+    } catch (err) {
+        console.log(err); 
+    }   
+}
 exports.deleteReference = async function(req, res) {
     console.log('>>deleteReference()...');
     if (!req.body) return res.sendStatus(400);
     const {textId, id} = req.body;
     try {              
         let EvaObject = sequelize.define(textId, refColumns); 
-        const data = await EvaObject.destroy({where: {id: id}});
-
-        return await res.json(data);
+        const count = await EvaObject.destroy({where: {id: id}});
+        console.log('Delete object count:'+count);
+        return await res.json(count);
     } catch(err) {
         console.log(err);
     }

@@ -220,7 +220,7 @@ async function header() {
     navItem(navTab, 'Reports');    
 
     //DYNAMIC    
-    let data = await getOnServer('/subsystems');
+    data = await getOnServer('/subsystems');
     //console.log(data);
     for (let row of data) {
         //console.log(row.name);
@@ -268,7 +268,7 @@ async function tabRef(div) {
     }        
 }
 /////////////////////////////////////////////////////////////////////////////
-function startApp() {
+function appContent() {
 
     const app = document.getElementById('eva-app');
     app.setAttribute("class","col tab-content p-3 eva-subsys");    
@@ -282,10 +282,10 @@ function init() {
     const mode   = document.querySelector('.content').dataset.mode;
     const logged = document.querySelector('.content').dataset.logged;
     console.log('mode: ' + mode);   
-    if (mode==='false'||logged==='true') {      
-            
-        startApp();
-        header();                                   
+    if (mode==='false'&&logged==='true') {      
+                    
+        appContent();
+        header();                                           
     } 
 }
        

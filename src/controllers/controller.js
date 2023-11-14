@@ -34,14 +34,16 @@ async function hashPassword(password, saltRounds = 10) {
     }
 }
 exports.Auth = function(req,res) {
+    console.log('>>Auth()...');
+    if (!req.body) return res.sendStatus(400);
     content.logged = false;
     res.render('index.twig', content);
 }
 exports.Signin = async function(req, res) {
-
+    console.log('>>Signin()...');
     if (!req.body) return res.sendStatus(400);
 
-    console.log('body: ', req.body);
+    //console.log('body: ', req.body);
 
     const operMode = req.body.operation_mode;
 
@@ -115,6 +117,7 @@ exports.Signin = async function(req, res) {
         }
     }
 }
+//Users/////////////////////////////////////////////
 exports.getUsers = async function(req, res) {
     try {
         // const data = await User.findAll({raw:true})
@@ -273,7 +276,7 @@ exports.deleteRole = async function(req, res) {
         console.log(err);
     }
 }
-//Config//////////////////////////////////
+//Config//////////////////////////////////////////////
 exports.getConfig = async function(req, res) {
     console.log('>>getConfig()...');
     try {

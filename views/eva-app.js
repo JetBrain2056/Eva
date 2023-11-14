@@ -281,7 +281,7 @@ function init() {
     
     const mode   = document.querySelector('.content').dataset.mode;
     const logged = document.querySelector('.content').dataset.logged;
-    console.log('mode: ' + mode);   
+    //console.log('mode: ' + mode);   
     if (mode==='false'&&logged==='true') {      
                     
         appContent();

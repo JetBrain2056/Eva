@@ -2,23 +2,6 @@ let a = [];
 selectRows = [];
 n = 0;
 //Get/post on Server///////////////////////////////////////////////////////////
-async function getOnServer(data, link) {
-    console.log('>>getOnServer()...');
-
-    let res;
-    try {    
-        let response = await fetch(link, {
-            method  : 'post',    
-            headers : {'Content-Type': 'application/json'},
-            body    : JSON.stringify(data)            
-        });  
-        res = await response.json();  
-        console.log(res);          
-    } catch (err) {
-      console.log(err);
-    }
-    return res;
-}
 async function postOnServer(data, link) {
     console.log('>>postOnServer()...');
     let res;
@@ -177,7 +160,7 @@ async function showRefTable(refName) {
     formTbl.appendChild(refTbl);      
 
     let tmp = {'textId': refName };
-    let data = await getOnServer(tmp, '/getrefs');   
+    let data = await postOnServer(tmp, '/getrefs');   
 
     const col  = { 'id':'Id', 'name':'Name' };  
     const hide = [];      

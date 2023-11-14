@@ -2,7 +2,10 @@ let selectRows = [];
 let currentModal;
 let n = 0;
 let tbl = [];
-let forms = document.getElementsByClassName('eva-form');
+const inputStatus   = document.getElementById('status');
+const btnConfigSave = document.getElementById('btn-config-save');
+const content       = document.querySelector('.content');
+const forms         = document.getElementsByClassName('eva-form');
 for (const div of forms) {                                          
     div.setAttribute("style", "height: calc(100vh - 171px); overflow-y: scroll;");               
     tbl[n] = document.createElement('table');
@@ -146,11 +149,27 @@ function logout() {
     let mode = content.getAttribute('data-mode');
     console.log(mode);   
 }
-/////////////////////////////////////////////////////////////////////////////
-const inputStatus   = document.getElementById('status');
-const btnConfigSave = document.getElementById('btn-config-save');
-const content       = document.querySelector('.content');
-//Get/post on Server///////////////////////////////////////////////////////////
+async function listUsers() {
+    console.log('>>listUsers()...');           
+
+    let data = await getOnServer('/getusers');
+
+    const inputUserName = document.getElementById('input-username');
+
+    //console.log(inputUserName);  
+
+    for (let rows of data) {
+        
+        if (rows['Show']) {
+            let option = document.createElement('option');
+            option.value = rows['Name'];
+            option.text  = rows['Name'];
+
+            inputUserName.appendChild(option);
+        }        
+    }    
+}
+//Get/post on Server//////////////////////////////////////////////////////////
 async function postOnServer(data, link) {
     console.log('>>postOnServer()...');
     let res;
@@ -178,26 +197,6 @@ async function getOnServer(link) {
     return res;
 }
 //////////////////////////////////////////////////////////////////////////////
-async function selectUser() {
-    console.log('>>selectUser...');           
-
-    let data = await getOnServer('/getusers');
-
-    const inputUserName = document.getElementById('input-username');
-
-    //console.log(inputUserName);  
-
-    for (let rows of data) {
-        
-        if (rows['Show']) {
-            let option = document.createElement('option');
-            option.value = rows['Name'];
-            option.text  = rows['Name'];
-
-            inputUserName.appendChild(option);
-        }        
-    }    
-}
 async function showUserTable() {
     
     let data = await getOnServer('/getusers');   
@@ -629,29 +628,28 @@ async function objectEditSubsystem() {
     await showSubsystemsTable();
 
 }
-
-window.onload = async function() {
+/////////////////////////////////////////////////////////////////////////////
+window.onload = function() {
     try {
         const logged = content.getAttribute("data-logged");
         if (logged==='true') return;
-        await selectUser();                
+        listUsers();                
     } catch(e) {
         console.log(e);
     }
 }
-
-async function loginMode() {
+function loginMode() {
     console.log('>>loginMode()...'); 
 
     const logged = content.getAttribute("data-logged");   
     const mode   = content.getAttribute("data-mode");
 
-    console.log('logged: ' + logged);
+    //console.log('logged: ' + logged);
  
-    if (logged==='false') return;
-    if (mode==='true'&&logged==='true') {   
-        await showConfigTable();
+    if (mode==='true'&&logged==='true') {           
+        showConfigTable();
+    } else {
+        return;
     }    
 }
-
 document.addEventListener('DOMContentLoaded', loginMode());

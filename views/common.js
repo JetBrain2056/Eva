@@ -480,6 +480,12 @@ async function objectModal() {
     input_form.reset();    
     input_form.setAttribute("create-mode",true);   
 
+    const input_type      = document.getElementById('input-type');
+    input_type.removeAttribute("disabled");
+
+    const input_subsystem = document.getElementById('input-subsystem');  
+    input_subsystem.removeAttribute("disabled");
+
     currentModal = getModal(modalForm);
 
 }
@@ -522,13 +528,13 @@ async function objectEditModal() {
         input_subsystem.value   = Elements.subsysName;
         input_subsystem.setAttribute("eva-id", Elements.subsysId);
         console.log(Elements.typeId);
-        if (Elements.typeId==='Subsystem'||Elements.typeId==='Constant') {            
-            input_subsystem.setAttribute("disabled","disabled"); 
-            subsystemBtn.setAttribute("disabled","disabled"); 
-        } else {
-            input_subsystem.removeAttribute ("disabled"); 
-            subsystemBtn.removeAttribute("disabled"); 
-        }
+        // if (Elements.typeId==='Subsystem'||Elements.typeId==='Constant') {            
+        //     input_subsystem.setAttribute("disabled","disabled"); 
+        //     subsystemBtn.setAttribute("disabled","disabled"); 
+        // } else {
+        //     input_subsystem.removeAttribute("disabled"); 
+        //     subsystemBtn.removeAttribute("disabled"); 
+        // }
     }         
 
 }

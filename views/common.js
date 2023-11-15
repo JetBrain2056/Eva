@@ -507,20 +507,9 @@ async function objectEditModal() {
 
     let data = { 'id': row.cells[0].innerText };
 
-    console.log(data);
+    //console.log(data);
 
-    let res;
-    try {    
-        let response = await fetch('/getobject', {
-            method  : 'post',    
-            headers : {'Content-Type': 'application/json'},
-            body    : JSON.stringify(data)            
-        });  
-        res = await response.json();  
-        console.log(res);          
-    } catch (err) {
-      console.log(err);
-    }
+    let res = await postOnServer(data,'/getobject');
   
     if (res) {
 

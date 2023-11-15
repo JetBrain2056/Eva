@@ -3,7 +3,7 @@
   <div class="tab-pane fade active show" id="nav-config" role="tabpanel" aria-labelledby="nav-config-tab">
     <div class="btn-toolbar" role="toolbar" aria-label="toolbar group">
       <div class="btn-group btn-group-sm" role="group">
-        <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" data-bs-toggle="modal" data-bs-target="#objectModal">
+        <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" onclick="objectModal()">
           <i class="fa fa-plus-square"></i>
           <span>{{ button_add }}</span>
         </button>
@@ -15,7 +15,7 @@
           <i class="fa fa-clone" aria-hidden="true"></i>
           <span>{{ button_copy }}</span>
         </button> #}
-         <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" onclick="configDelete()">
+         <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" onclick="objectDelete()">
           <i class="fa fa-minus-square"></i>
           <span>{{ button_delete }}</span>
         </button>
@@ -190,49 +190,83 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="objectModalLabel">Add object</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h5 class="modal-title" id="objectModalLabel">Add object*</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>          
       </div>
+      <ul class="nav nav-tabs" role="tablist">                
+        <li class="nav-item">
+          <a class="nav-link active" href="#" id="object-main" data-bs-toggle="tab" data-bs-target="#nav-main"  role="tab" aria-controls="nav-main" aria-selected="true" onclick="">
+            Main
+          </a>
+        </li> 
+        <li class="nav-item">
+          <a class="nav-link" href="#" id="object-requisite" data-bs-toggle="tab" data-bs-target="#nav-requisite"  role="tab" aria-controls="nav-requisite" aria-selected="false" onclick="">
+            Requisite
+          </a>
+        </li> 
+      </ul>   
       <div class="modal-body">
-        <form class="form" id="create-object-form">  
-          <label for="input-type">Type object:</label>
-          <div class="input-group input-group-sm">
-            <select type="text" name="type" value="" class="form-select form-control" id="input-type">
-              <option selected>  </option>
-              <option value="Subsystem">{{text_subsystem}}</option>  
-              <option value="Module">{{text_module}}</option>  
-              <option value="Constant">{{text_constant}}</option>
-              <option value="Reference">{{text_reference}}</option>              
-              <option value="Document">{{text_document}}</option>  
-              <option value="Processing">{{text_processing}}</option>  
-              <option value="Register">{{text_register}}</option>  
-              <option value="Report">{{text_report}}</option>                              
-            </select>
-          </div>         
-          <label for="input-textId">Identifier:</label>
-          <div class="input-group input-group-sm">
-            <input type="text" placeholder="" id="input-textId" class="form-control"/>
-          </div>  
-          <label for="input-subsystem">Subsystem:</label>
-            <div class="input-group input-group-sm">
-            <input type="text" placeholder="0" id="input-subsystem" class="form-control"/>
-            <button class="btn btn-outline-secondary" type="button" onclick="objectEditSubsystem()">...</button>
-          </div> 
-          <label for="input-typeId">Type Id:</label>
-          <div class="input-group input-group-sm">
-            <input type="text" placeholder="0" id="input-typeId" class="form-control"/>
-            <button class="btn btn-outline-secondary" type="button" onclick="objectTypeId()" disabled>...</button>
-          </div> 
-          <label for="input-descr">Parent:</label>
-          <div class="input-group input-group-sm">
-            <input type="text" placeholder="..." id="input-parent" class="form-control"/>
-            <button class="btn btn-outline-secondary" type="button" onclick="objectParent()" disabled>...</button>
-          </div>  
-        </form>
+        <div class="tab-content">  
+          <div class="tab-pane fade active show" id="nav-main" role="tabpanel" aria-labelledby="nav-main-tab">
+            <form class="form needs-validation" id="create-object-form" novalidate>  
+              <label for="input-type">Type object:</label>
+              <div class="input-group input-group-sm">
+                <select type="text" name="type" value="" class="form-select form-control" id="input-type" required>
+                  <option selected desabled>...</option>
+                  <option value="Subsystem">{{text_subsystem}}</option>  
+                  <option value="Module">{{text_module}}</option>  
+                  <option value="Constant">{{text_constant}}</option>
+                  <option value="Reference">{{text_reference}}</option>              
+                  <option value="Document">{{text_document}}</option>  
+                  <option value="Processing">{{text_processing}}</option>  
+                  <option value="Register">{{text_register}}</option>  
+                  <option value="Report">{{text_report}}</option>                              
+                </select>
+              </div>         
+              <label for="input-textId">Identifier:</label>
+              <div class="input-group input-group-sm">
+                <input type="text" placeholder="" id="input-textId" class="form-control" required/>
+                  <div class="invalid-feedback">
+                    Not filled in.
+                  </div>
+              </div>  
+              <label for="input-subsystem">Subsystem:</label>
+                <div class="input-group input-group-sm">
+                <input type="text" placeholder="0" id="input-subsystem" class="form-control"/>
+                <button class="btn btn-outline-secondary" type="button" onclick="objectEditSubsystem()">...</button>
+              </div> 
+              <label for="input-typeId">Type Id:</label>
+              <div class="input-group input-group-sm">
+                <input type="text" placeholder="0" id="input-typeId" class="form-control"/>
+                <button class="btn btn-outline-secondary" type="button" onclick="objectTypeId()" disabled>...</button>
+              </div> 
+              <label for="input-descr">Parent:</label>
+              <div class="input-group input-group-sm">
+                <input type="text" placeholder="..." id="input-parent" class="form-control"/>
+                <button class="btn btn-outline-secondary" type="button" onclick="objectParent()" disabled>...</button>
+              </div>  
+            </form>
+          </div>   
+          <div class="tab-pane fade" id="nav-requisite" role="tabpanel" aria-labelledby="nav-requisite-tab">
+            <div class="btn-toolbar" role="toolbar" aria-label="toolbar group">
+              <div class="btn-group btn-group-sm" role="group">
+                <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" data-bs-toggle="modal" data-bs-target="#reqModal">
+                  <i class="fa fa-plus-square"></i>
+                  <span>{{ button_add }}</span>
+                </button>
+                <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" onclick="reqDelete()">
+                  <i class="fa fa-minus-square"></i>
+                  <span>{{ button_delete }}</span>
+                </button>
+              </div>
+            </div> 
+            {# <div class="eva-form"></div>   #}
+          </div>
+        </div>    
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" onclick="configCreate()">{{ button_save }}&{{button_close}}</button>
-        {# <button type="button" class="btn btn-primary" data-bs-dismiss="modal">{{button_close}}</button> #}
+        <button type="submit" class="btn btn-primary" onclick="objectSave()"><i class="fa fa-floppy-o"></i></button>        
+        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" onclick="objectCreate()">{{ button_save }}&{{button_close}}</button>        
       </div>
     </div>
   </div>

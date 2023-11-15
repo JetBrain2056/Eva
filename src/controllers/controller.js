@@ -332,7 +332,7 @@ exports.editObject = async function(req, res) {
 
     try {
         const result = await Config.update({ 
-            state : 1,
+            state : 3,
             data  : data            
         }, {
             where: {id: id}
@@ -371,11 +371,12 @@ exports.updateConfig = async function(req, res) {
         let typeId = row.typeId;
         
         if (row.state === 0) {
-            return;
+            //return;
         } else if (row.state === 1) {               
             if (typeId==='Subsystem') {            
                 try {
-                    const elem = await Subsystem.create({                        
+                    const elem = await Subsystem.create({   
+                        id  : row.id,                     
                         name: objectId
                     });
                     console.log('Create element: '+elem);                       
@@ -385,7 +386,8 @@ exports.updateConfig = async function(req, res) {
             } else if (typeId==='Constant') {   
                 const uuid = uuidv4();                 
                 try {
-                    const elem = await Constant.create({                        
+                    const elem = await Constant.create({   
+                        id  :  row.id,              
                         name: objectId,
                         uuidType: uuid
                     });
@@ -430,8 +432,6 @@ exports.updateConfig = async function(req, res) {
                 }                    
             } else {         
                 try { 
-                    //const EvaObject = sequelize.define(tblId, columns);
-                    //await EvaObject.drop();
                     await sequelize.query('DROP TABLE IF EXISTS "' + objectId+'s";');
                     console.log('Deleted table: '+objectId);                           
                 } catch(err) {
@@ -444,7 +444,45 @@ exports.updateConfig = async function(req, res) {
             } catch(err) {
                 console.log(err);
             }                
-        }
+        } else if (row.state === 3) {  
+            if (typeId==='Subsystem') {            
+                try {
+                    const count = await Subsystem.update({ 
+                        name : objectId                    
+                    }, {
+                        where: {id: row.id}
+                    });                    
+                    console.log('Update row(s): '+count);                     
+                } catch(err) {
+                    console.log(err);
+                }    
+            } else if (typeId==='Constant') {                                  
+                try {
+                    const count = await Constant.update({
+                        name : objectId                    
+                    }, {
+                        where: {id: row.id}
+                    });                            
+                   
+                    console.log('Update row(s): '+count);                      
+                } catch(err) {
+                    console.log(err);
+                }                    
+            } else { 
+                //demo
+            }
+            console.log('>>Config.update()...');
+            try {
+                const result = await Config.update({ 
+                    state : 0                     
+                }, {
+                    where: {id: row.id}
+                }) 
+                console.log('Update table: '+result);                           
+            } catch(err) {
+                console.log(err);
+            }
+        }    
     }
    
 }

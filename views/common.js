@@ -257,9 +257,10 @@ async function userCreateModal() {
     console.log('>>userCreateModal()...');     
 
     const inputLabel        = document.getElementById("userModalLabel");
-    inputLabel.innerText = 'Add user:';      
+    inputLabel.innerText = 'Add user*:';      
     const input_form        = document.getElementById('create-user-form');  
-    input_form.setAttribute("create-mode",true);   
+    input_form.reset(); 
+    input_form.setAttribute("create-mode",true);            
 }
 async function userEditModal() {
     console.log('>>userEditModal...'); 
@@ -404,7 +405,7 @@ async function showConfigTable() {
         let strJson = row.data; 
         let Elements = await JSON.parse(strJson);
 
-        if (row.state===0||row.state===1) {
+        if (row.state===0||row.state===1||row.state===3) {
             data.push(Object.assign({'id':row.id}, Elements));
         }
     }
@@ -417,35 +418,69 @@ async function showConfigTable() {
     inputStatus.value = '>>Ready...';
 
 }
-async function configCreate() {
+async function objectCreate() {
     console.log('>>configCreate()...');
 
     const input_type   = document.getElementById('input-type');
     const input_textId = document.getElementById('input-textId');    
-    const input_subsystem  = document.getElementById('input-subsystem');    
+    const input_subsystem  = document.getElementById('input-subsystem');   
+    const input_form       = document.getElementById('create-object-form');  
+    const createMode = input_form.getAttribute("create-mode");  
     
-    if (!input_textId.value) alert('Error: Impty ID!');
+    if (!input_textId.value) {
+        alert('ID not filled in!');
+        return;
+    }
     
     let tmp = { 
-        typeId: input_type.value, 
-        textId: input_textId.value,
-        subsysId: input_subsystem.getAttribute("eva-id"),
+        typeId    : input_type.value, 
+        textId    : input_textId.value,
+        subsysId  : input_subsystem.getAttribute("eva-id"),
         subsysName: input_subsystem.value
-    };        
+    };          
 
-    const data =  {'data': JSON.stringify(tmp)};
+    const data =  {
+        'id'      : input_form.getAttribute("eva-id"),
+        'data'    : JSON.stringify(tmp),
+    };
     
     let result;
-    try {
-        result = await postOnServer(data,'/createconf')
-        //console.log(result);        
-    } catch (e) {
-        console.log(e);
+    console.log('createMode: '+createMode);
+    if (createMode==='true') {
+        try {
+            result = await postOnServer(data, '/createobject')
+            console.log(result);        
+        } catch (e) {
+            console.log(e);
+        }
+    } else {
+        try {
+            result = await postOnServer(data, '/editobject')
+            console.log(result);        
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     if (result) await showConfigTable();
+
     //btnConfigSave.removeAttribute("disabled");
     btnConfigSave.style.backgroundColor = 'red';
+
+}
+async function objectModal() {
+    console.log('>>objectModal()...'); 
+
+    const modalForm = document.getElementById("objectModal");
+
+    const objectModalLabel = document.getElementById('objectModalLabel');  
+    objectModalLabel.innerText = 'Add object';
+
+    const input_form      = document.getElementById('create-object-form'); 
+    input_form.reset();    
+    input_form.setAttribute("create-mode",true);   
+
+    currentModal = getModal(modalForm);
 
 }
 async function objectEditModal() {
@@ -463,6 +498,7 @@ async function objectEditModal() {
     objectModalLabel.innerText = 'Edit object';
 
     const input_form      = document.getElementById('create-object-form');  
+    input_form.setAttribute("create-mode",false);   
     const input_type      = document.getElementById('input-type');
     input_type.setAttribute("disabled","disabled");
     const input_textId    = document.getElementById('input-textId');   
@@ -507,54 +543,14 @@ async function objectEditModal() {
     }         
 
 }
-async function objectEdit() {
-    console.log('>>configEdit...'); 
-
-    // let modalForm = document.getElementById("objectEditModal");
-
-    // currentModal = await getModal(modalForm);
-      
-    const input_form   = document.getElementById('object-edit-form');  
-    const input_type   = document.getElementById('input-edit-type');
-    const input_textId = document.getElementById('input-edit-textId');   
-    const input_subsystem = document.getElementById('input-edit-subsystem');  
-
-    let tmp = { 
-        typeId: input_type.value, 
-        textId: input_textId.value,
-        subsysId: input_subsystem.getAttribute("eva-id"),
-        subsysName: input_subsystem.value
-    };        
-
-    const data =  {
-        'id'      : input_form.getAttribute("eva-id"),
-        'data'    : JSON.stringify(tmp),
-    };
-  
-    //console.log(data);
-
-    let result;
-    try {
-      result = await postOnServer(data,'/editobject');    
-    } catch (e) {
-      console.log(e);
-    }
-        
-    await currentModal.hide();
-
-    //if (result) {      
-      await showConfigTable();     
-    //}
-    btnConfigSave.style.backgroundColor = 'red';
-}
-async function configDelete() {
-    console.log('>>configDelete()...');
+async function objectDelete() {
+    console.log('>>objectDelete()...');
     let result;
     for (const row of selectRows){
 
         let data = {'id': row.cells[0].innerText};
 
-        result = await postOnServer(data,'/delconf');        
+        result = await postOnServer(data,'/delobject');        
     }
 
     if(result) await showConfigTable();
@@ -570,7 +566,7 @@ async function updateConfig() {
 
     for (const row of tmp) {
         console.log(row.state);
-        if (row.state===1||row.state===2) {
+        if (row.state===1||row.state===2||row.state===3) {
             let strJson = row.data; 
             let Elements = await JSON.parse(strJson);
             console.log(Elements);
@@ -583,8 +579,7 @@ async function updateConfig() {
 
     btnConfigSave.style.backgroundColor = '#282c34';
 
-    //if(result) 
-    await showConfigTable();
+    if(result) await showConfigTable();
 
     inputStatus.value = '>> Config update completed!';
        

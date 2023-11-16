@@ -193,7 +193,7 @@
         <h5 class="modal-title" id="objectModalLabel">Add object*</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>          
       </div>
-      <ul class="nav nav-tabs" role="tablist">                
+      <ul class="nav nav-tabs" role="tablist" style="background:grey">                
         <li class="nav-item">
           <a class="nav-link active" href="#" id="object-main" data-bs-toggle="tab" data-bs-target="#nav-main"  role="tab" aria-controls="nav-main" aria-selected="true" onclick="">
             Main
@@ -201,7 +201,17 @@
         </li> 
         <li class="nav-item">
           <a class="nav-link" href="#" id="object-requisite" data-bs-toggle="tab" data-bs-target="#nav-requisite"  role="tab" aria-controls="nav-requisite" aria-selected="false" onclick="">
-            Requisite
+            Requisites
+          </a>
+        </li> 
+        <li class="nav-item">
+          <a class="nav-link" href="#" id="object-tabular" data-bs-toggle="tab" data-bs-target="#nav-tabular"  role="tab" aria-controls="nav-tabular" aria-selected="false" onclick="">
+            Tabular parts
+          </a>
+        </li> 
+        <li class="nav-item">
+          <a class="nav-link" href="#" id="object-forms" data-bs-toggle="tab" data-bs-target="#nav-forms"  role="tab" aria-controls="nav-forms" aria-selected="false" onclick="">
+            Forms
           </a>
         </li> 
       </ul>   
@@ -211,7 +221,7 @@
             <form class="form needs-validation" id="create-object-form" novalidate>  
               <label for="input-type">Type object:</label>
               <div class="input-group input-group-sm">
-                <select type="text" name="type" value="" class="form-select form-control" id="input-type" required>
+                <select type="text" name="type" value="" class="form-select form-control" id="input-type">
                   <option selected desabled>...</option>
                   <option value="Subsystem">{{text_subsystem}}</option>  
                   <option value="Module">{{text_module}}</option>  
@@ -232,7 +242,7 @@
               </div>  
               <label for="input-subsystem">Subsystem:</label>
                 <div class="input-group input-group-sm">
-                <input type="text" placeholder="0" id="input-subsystem" class="form-control"/>
+                <input type="text" placeholder="0" id="input-subsystem" class="form-control" required/>
                 <button class="btn btn-outline-secondary" type="button" onclick="objectEditSubsystem()">...</button>
               </div> 
               <label for="input-typeId">Type Id:</label>
@@ -240,10 +250,10 @@
                 <input type="text" placeholder="0" id="input-typeId" class="form-control"/>
                 <button class="btn btn-outline-secondary" type="button" onclick="objectTypeId()" disabled>...</button>
               </div> 
-              <label for="input-descr">Parent:</label>
+              <label for="input-owner">Owner:</label>
               <div class="input-group input-group-sm">
-                <input type="text" placeholder="..." id="input-parent" class="form-control"/>
-                <button class="btn btn-outline-secondary" type="button" onclick="objectParent()" disabled>...</button>
+                <input type="text" placeholder="..." id="input-owner" class="form-control"/>
+                <button class="btn btn-outline-secondary" type="button" onclick="objectOwner()" disabled>...</button>
               </div>  
             </form>
           </div>   
@@ -255,6 +265,36 @@
                   <span>{{ button_add }}</span>
                 </button>
                 <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" onclick="reqDelete()">
+                  <i class="fa fa-minus-square"></i>
+                  <span>{{ button_delete }}</span>
+                </button>
+              </div>
+            </div> 
+            {# <div class="eva-form"></div>   #}
+          </div>
+          <div class="tab-pane fade" id="nav-tabular" role="tabpanel" aria-labelledby="nav-tabular-tab">
+            <div class="btn-toolbar" role="toolbar" aria-label="toolbar group">
+              <div class="btn-group btn-group-sm" role="group">
+                <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" data-bs-toggle="modal" data-bs-target="#tabularModal">
+                  <i class="fa fa-plus-square"></i>
+                  <span>{{ button_add }}</span>
+                </button>
+                <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" onclick="tabularDelete()">
+                  <i class="fa fa-minus-square"></i>
+                  <span>{{ button_delete }}</span>
+                </button>
+              </div>
+            </div> 
+            {# <div class="eva-form"></div>   #}
+          </div>
+          <div class="tab-pane fade" id="nav-forms" role="tabpanel" aria-labelledby="nav-forms-tab">
+            <div class="btn-toolbar" role="toolbar" aria-label="toolbar group">
+              <div class="btn-group btn-group-sm" role="group">
+                <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" data-bs-toggle="modal" data-bs-target="#formsModal">
+                  <i class="fa fa-plus-square"></i>
+                  <span>{{ button_add }}</span>
+                </button>
+                <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" onclick="formsDelete()">
                   <i class="fa fa-minus-square"></i>
                   <span>{{ button_delete }}</span>
                 </button>

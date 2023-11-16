@@ -557,8 +557,12 @@ exports.updateReference = async function(req, res) {
 
     if (!req.body) return res.sendStatus(400);     
 
-    const {textId, id, kod, name} = req.body;  
-    console.log('texId :'+textId);
+    const {textId, id, name, reqlist} = req.body;  
+    //console.log('texId :'+textId);
+    for (let elem of reqlist) {
+        refColumns[elem.req1] = {type: DataTypes.STRING};
+    }
+    console.log(refColumns);
     try {
         let EvaObject = sequelize.define(textId, refColumns); 
         const data = await EvaObject.update({ 

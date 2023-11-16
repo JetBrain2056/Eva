@@ -5,7 +5,7 @@ const sequelize         = require('../db');
 const { DataTypes }     = require('sequelize');
 const { v4: uuidv4 }    = require('uuid');
 //const jwt              = require('jsonwebtoken');
-let refColumns = {id  : {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+let refColumns = {id  : {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},                  
                   name: {type: DataTypes.STRING}}; 
 
 /* const generateJwt = (id, login, role) => {
@@ -123,10 +123,11 @@ exports.getUsers = async function(req, res) {
         // const data = await User.findAll({raw:true})
         // await res.send(data);
         const data = await sequelize.query(
-            'SELECT "Users"."id", "Users"."Name", "Users"."Descr", "Users"."EAuth", "Users"."Show", "Users"."Password", "Users"."email", "Users"."AdmRole", "Users"."RoleId", "N"."Name" as "Role" '
-            +'FROM "Users"'
-            +'LEFT JOIN "Roles" as "N"'
-            +'on "Users"."RoleId" = "N"."id";'
+            `SELECT "Users"."id", "Users"."Name", "Users"."Descr", "Users"."EAuth", "Users"."Show", "Users"."Password",
+                "Users"."email", "Users"."AdmRole", "Users"."RoleId", "N"."Name" as "Role"
+             FROM "Users"
+             LEFT JOIN "Roles" as "N"
+             on "Users"."RoleId" = "N"."id";`
         );
         await res.send(data[0]);         
     } catch(err) {
@@ -144,11 +145,13 @@ exports.getUser = async function(req, res) {
         // const data = await User.findAll({raw:true})
         // await res.send(data);
         const data = await sequelize.query(
-            'SELECT "Users"."id", "Users"."Name", "Users"."Descr", "Users"."EAuth", "Users"."Show", "Users"."Password", "Users"."email", "Users"."AdmRole", "Users"."RoleId", "N"."id" as "RoleId", "N"."Name" as "Role" '
-            +'FROM "Users"'
-            +'LEFT JOIN "Roles" as "N"'
-            +'on "Users"."RoleId" = "N"."id"'
-            +'where "Users"."id" = '+ id +';'
+            `SELECT "Users"."id", "Users"."Name", "Users"."Descr", "Users"."EAuth", "Users"."Show",
+                "Users"."Password", "Users"."email", "Users"."AdmRole", "Users"."RoleId", "N"."id" as "RoleId", 
+                "N"."Name" as "Role"
+             FROM "Users"
+             LEFT JOIN "Roles" as "N"
+             on "Users"."RoleId" = "N"."id"
+             where "Users"."id" = `+ id +`;`
         );
         return await res.send(data[0]);         
     } catch(err) {
@@ -306,13 +309,11 @@ exports.createConfig = async function(req, res) {
     }
 }
 exports.deleteConfig = async function(req, res) {
-    console.log('>>deleteConfig...');
+    console.log('>>deleteConfig()...');
     try {
         if (!req.body) return res.sendStatus(400);
 
         const {id} = req.body;
-        // const data = await Config.destroy({where: {id: id}});
-        // return await res.json(data);
 
         const result = await Config.update({ 
             state : 2                     
@@ -350,9 +351,9 @@ exports.getObject = async function(req, res) {
     try {
   
         const data = await sequelize.query(
-            'SELECT "Configs"."id", "Configs"."data"'
-            +'FROM "Configs"'
-            +'where "Configs"."id" = '+ id +';'
+            `SELECT "Configs"."id", "Configs"."data"
+             FROM "Configs"
+             Where "Configs"."id" = `+ id +`;`
         );
         return await res.send(data[0]); 
         
@@ -505,7 +506,8 @@ exports.getReferences = async function(req, res) {
     const {textId} = req.body;    
     try {
         const data = await sequelize.query(
-            `SELECT "R"."id", "R"."name" FROM "`+textId+`s" as "R";`         
+            `SELECT *
+             FROM "`+textId+`s" as "R";`         
         );
         return await res.send(data[0]);        
     } catch(err) {
@@ -519,7 +521,7 @@ exports.getReference = async function(req, res) {
     const {textId, id} = req.body;    
     try {
         const data = await sequelize.query(
-            `SELECT "R"."id", "R"."name" 
+            `SELECT *
              FROM "`+textId+`s" as "R" 
              WHERE "R"."id"=`+id+`;`         
         );
@@ -532,10 +534,16 @@ exports.createReference = async function(req, res) {
     console.log('>>createReference()...');
     if (!req.body) return res.sendStatus(400);
     
-    const {textId, name} = req.body;               
+    const {textId, name, reqlist} = req.body;   
+
+    for (let elem of reqlist) {
+        refColumns = refColumns +'{'+elem.req1+': {type: DataTypes.STRING}}';
+    }
+    console.log(refColumns);
+
     try {
         let EvaObject = sequelize.define(textId, refColumns); 
-        const data = await EvaObject.create({
+        const data = await EvaObject.create({       
             name : name                   
         });
         console.log('Create object: '+data);
@@ -549,7 +557,7 @@ exports.updateReference = async function(req, res) {
 
     if (!req.body) return res.sendStatus(400);     
 
-    const {textId, id, name} = req.body;  
+    const {textId, id, kod, name} = req.body;  
     console.log('texId :'+textId);
     try {
         let EvaObject = sequelize.define(textId, refColumns); 

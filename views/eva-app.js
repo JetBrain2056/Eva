@@ -28,11 +28,12 @@ async function refCreate() {
     const textId     = refForm.getAttribute("eva-textId");
     const createMode = refForm.getAttribute("create-mode");  
     const inputName  = document.getElementById('input-ref-name');    
+    //const inputKod   = document.getElementById('input-ref-kod'); 
 
     const data =  {
         'textId'  : textId,
         'id'      : refForm.getAttribute("eva-id"),
-        'name'    : inputName.value        
+        'name'    : inputName.value
     };
     
     let result;
@@ -76,9 +77,7 @@ async function refDelete() {
     if(result) await showRefTable(textId);
 }
 async function refModal() {
-    console.log('>>refEditModal...'); 
-  
-    //if (selectRows.length === 0) { return };   
+    console.log('>>refEditModal...');      
           
     const refModalLabel    = document.getElementById('refModalLabel');  
     refModalLabel.innerText = 'Add element';    
@@ -96,12 +95,14 @@ async function refEditModal() {
     const refModalLabel    = document.getElementById('refModalLabel');  
     refModalLabel.innerText = 'Edit element';   
           
-    const refForm    = document.getElementById('create-ref-form');      
+    const refForm    = document.getElementById('create-ref-form');    
+    refForm.reset();     
     let textId = refForm.getAttribute("eva-textId");
     console.log(textId);    
     refForm.setAttribute("create-mode", false);  
 
     const input_name     = document.getElementById('input-ref-name');  
+    const input_id      = document.getElementById('input-ref-id');  
 
     let data = { 
         'textId': textId,
@@ -123,8 +124,8 @@ async function refEditModal() {
   
     if (res) {       
         refForm.setAttribute("eva-id", res[0].id);
-        input_name.value        = res[0].name;
-        //input_descr.value       = res[0].descr;        
+        input_name.value      = res[0].name;
+        input_id.value        = res[0].id;        
     }  
 }
 //DOM Dynamic Content////////////////////////////////////////////////////////
@@ -155,7 +156,7 @@ async function showRefTable(refName) {
     let tmp = {'textId': refName };
     let data = await postOnServer(tmp, '/getrefs');   
 
-    const col  = { 'id':'Id', 'name':'Name' };  
+    const col  = { 'id':'Id' ,'name':'Name' };  
     const hide = [];      
 
     await showTable(refTbl, hide, col, data);

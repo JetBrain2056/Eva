@@ -8,7 +8,8 @@ async function openRef(refName) {
     console.log(refName);
 
     const form    = document.getElementById("ref-form");  
-    const refForm = document.getElementById("create-ref-form");    
+    const refForm = document.getElementById("create-ref-form");  
+    refForm.reset();   
     refForm.setAttribute("eva-id", refName);    
     refForm.setAttribute("eva-textId", refName);
 
@@ -82,6 +83,7 @@ async function refModal() {
     const refModalLabel    = document.getElementById('refModalLabel');  
     refModalLabel.innerText = 'Add element';    
     const refForm        = document.getElementById('create-ref-form');  
+    refForm.reset();   
     refForm.setAttribute("create-mode", true);   
 }
 async function refEditModal() {
@@ -94,7 +96,7 @@ async function refEditModal() {
     const refModalLabel    = document.getElementById('refModalLabel');  
     refModalLabel.innerText = 'Edit element';   
           
-    const refForm    = document.getElementById('create-ref-form');  
+    const refForm    = document.getElementById('create-ref-form');      
     let textId = refForm.getAttribute("eva-textId");
     console.log(textId);    
     refForm.setAttribute("create-mode", false);  

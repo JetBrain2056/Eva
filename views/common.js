@@ -426,17 +426,22 @@ async function objectCreate() {
     const input_subsystem  = document.getElementById('input-subsystem');   
     const input_form       = document.getElementById('create-object-form');  
     const createMode = input_form.getAttribute("create-mode");  
+
+    const input_req   = document.getElementById('input-ref-req');
     
     if (!input_textId.value) {
         alert('ID not filled in!');
         return;
     }
+
+    let requis = {req1 : input_req.value};
     
     let tmp = { 
         typeId    : input_type.value, 
         textId    : input_textId.value,
         subsysId  : input_subsystem.getAttribute("eva-id"),
-        subsysName: input_subsystem.value
+        subsysName: input_subsystem.value,
+        reqlist : requis
     };          
 
     const data =  {
@@ -504,6 +509,7 @@ async function objectEditModal() {
     objectModalLabel.innerText = 'Edit object';
 
     const input_form      = document.getElementById('create-object-form');  
+    input_form.reset();
     input_form.setAttribute("create-mode",false);   
     const input_type      = document.getElementById('input-type');
     input_type.setAttribute("disabled","disabled");

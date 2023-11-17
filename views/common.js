@@ -434,14 +434,15 @@ async function objectCreate() {
         return;
     }
 
-    let requis = {req1 : input_req.value};
+    let req=[];
+    let requis = { req : [input_req.value]};
     
     let tmp = { 
         typeId    : input_type.value, 
         textId    : input_textId.value,
         subsysId  : input_subsystem.getAttribute("eva-id"),
         subsysName: input_subsystem.value,
-        reqlist : requis
+        reqlist   : requis
     };          
 
     const data =  {

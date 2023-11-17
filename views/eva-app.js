@@ -27,13 +27,14 @@ async function refCreate() {
     const refForm    = document.getElementById("create-ref-form");
     const textId     = refForm.getAttribute("eva-textId");
     const createMode = refForm.getAttribute("create-mode");  
-    const inputName  = document.getElementById('input-ref-name');    
-    //const inputKod   = document.getElementById('input-ref-kod'); 
+    const inputName  = document.getElementById('input-ref-name');  
+      
+    //const inputReq   = document.getElementById('input-ref-req'); 
 
     const data =  {
         'textId'  : textId,
         'id'      : refForm.getAttribute("eva-id"),
-        'name'    : inputName.value
+        'name'    : inputName.value        
     };
     
     let result;

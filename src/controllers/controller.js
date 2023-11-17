@@ -362,7 +362,7 @@ exports.getObject = async function(req, res) {
     }
 }
 exports.updateConfig = async function(req, res) {
-    console.log('>>updateConfig...');
+    console.log('>>updateConfig(365)...');
     if (!req.body) return res.sendStatus(400);
 
     for (let row of req.body) {        
@@ -372,7 +372,7 @@ exports.updateConfig = async function(req, res) {
         let typeId = row.typeId;
         
         if (row.state === 0) {
-            //return;
+            continue;
         } else if (row.state === 1) {               
             if (typeId==='Subsystem') {            
                 try {
@@ -531,15 +531,17 @@ exports.getReference = async function(req, res) {
     }
 }
 exports.createReference = async function(req, res) {
-    console.log('>>createReference()...');
+    console.log('>>createReference(534)...');
     if (!req.body) return res.sendStatus(400);
     
     const {textId, name, reqlist} = req.body;   
-
-    for (let elem of reqlist) {
-        refColumns = refColumns +'{'+elem.req1+': {type: DataTypes.STRING}}';
+    console.log('reqlist: '+reqlist);
+    if (reqlist) {
+        for (let elem of Object.keys(reqlist)) {
+            refColumns[reqlist[elem]] = {type: DataTypes.STRING};
+        }
+        console.log(refColumns);
     }
-    console.log(refColumns);
 
     try {
         let EvaObject = sequelize.define(textId, refColumns); 
@@ -553,7 +555,7 @@ exports.createReference = async function(req, res) {
     }
 }
 exports.updateReference = async function(req, res) {
-    console.log('>>updateReference()...');
+    console.log('>>updateReference(558)...');
 
     if (!req.body) return res.sendStatus(400);     
 
@@ -562,7 +564,7 @@ exports.updateReference = async function(req, res) {
     for (let elem of reqlist) {
         refColumns[elem.req1] = {type: DataTypes.STRING};
     }
-    console.log(refColumns);
+    console.log('refColumns: '+refColumns);
     try {
         let EvaObject = sequelize.define(textId, refColumns); 
         const data = await EvaObject.update({ 
@@ -580,10 +582,10 @@ exports.deleteReference = async function(req, res) {
     console.log('>>deleteReference()...');
     if (!req.body) return res.sendStatus(400);
     const {textId, id} = req.body;
-    try {              
-        let EvaObject = sequelize.define(textId, refColumns); 
-        const count = await EvaObject.destroy({where: {id: id}});
-        console.log('Delete object count:'+count);
+    try {                      
+        let count = await sequelize.query(`DELETE FROM "`+textId+`s" 
+                                           WHERE "id"=`+id+`;`);
+        console.log('count:',count);                                  
         return await res.json(count);
     } catch(err) {
         console.log(err);

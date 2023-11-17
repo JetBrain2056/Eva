@@ -41,7 +41,8 @@ const Constant = sequelize.define('Constant', {
 Role.hasOne(User)
 User.belongsTo(Role)
 
-sequelize.sync()
+// sequelize.sync({alter: true});
+sequelize.sync();
 
 module.exports = {
     User,

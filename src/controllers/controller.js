@@ -2,11 +2,9 @@ const { User, Role, Config, Subsystem, Constant } = require('../models/models.js
 const { content }       = require('../index.js');
 const bcrypt            = require('bcrypt');
 const sequelize         = require('../db');
-const { DataTypes }     = require('sequelize');
+const { DataTypes}      = require('sequelize');
 const { v4: uuidv4 }    = require('uuid');
 //const jwt              = require('jsonwebtoken');
-let refColumns = {id  : {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},                  
-                  name: {type: DataTypes.STRING}}; 
 
 /* const generateJwt = (id, login, role) => {
      return jwt.sign(
@@ -365,6 +363,9 @@ exports.updateConfig = async function(req, res) {
     console.log('>>updateConfig(365)...');
     if (!req.body) return res.sendStatus(400);
 
+    let refColumns = {id  : {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},                  
+                      name: {type: DataTypes.STRING}}; 
+
     for (let row of req.body) {        
         let objectId = row.textId;        
         
@@ -400,7 +401,7 @@ exports.updateConfig = async function(req, res) {
                 try {
                     const EvaObject = sequelize.define(objectId, refColumns);
                     console.log('Create table: '+EvaObject);   
-                    await sequelize.sync(EvaObject);
+                    await EvaObject.sync({alter: true});
                 } catch(err) {
                     console.log(err);
                 }        
@@ -470,7 +471,20 @@ exports.updateConfig = async function(req, res) {
                     console.log(err);
                 }                    
             } else { 
-                //demo
+                console.log('reqlist: '+row.reqlist);
+                if (row.reqlist) {
+                    for (let elem of Object.keys(row.reqlist)) {
+                        refColumns[row.reqlist[elem]] = {type: DataTypes.STRING};
+                    }
+                    console.log(refColumns);
+                }
+                try {                    
+                    const EvaObject = sequelize.define(objectId, refColumns);
+                    console.log('Create table: '+EvaObject);   
+                    await EvaObject.sync({ alter: true });                    
+                } catch(err) {
+                    console.log(err);
+                }  
             }
             console.log('>>Config.update()...');
             try {
@@ -502,7 +516,7 @@ exports.getSubsystems = async function(req, res) {
 exports.getReferences = async function(req, res) {
     console.log('>>getReferences()...');
     if (!req.body) return res.sendStatus(400);
-    console.log(req.body);
+    //console.log(req.body);
     const {textId} = req.body;    
     try {
         const data = await sequelize.query(
@@ -515,9 +529,9 @@ exports.getReferences = async function(req, res) {
     }
 }
 exports.getReference = async function(req, res) {
-    console.log('>>getReferences()...');
+    console.log('>>getReference()...');
     if (!req.body) return res.sendStatus(400);
-    console.log(req.body);
+    //console.log(req.body);
     const {textId, id} = req.body;    
     try {
         const data = await sequelize.query(
@@ -533,21 +547,28 @@ exports.getReference = async function(req, res) {
 exports.createReference = async function(req, res) {
     console.log('>>createReference(534)...');
     if (!req.body) return res.sendStatus(400);
+
+    let refColumns = {id  : {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},                  
+                      name: {type: DataTypes.STRING}}; 
     
     const {textId, name, reqlist} = req.body;   
-    console.log('reqlist: '+reqlist);
-    if (reqlist) {
-        for (let elem of Object.keys(reqlist)) {
-            refColumns[reqlist[elem]] = {type: DataTypes.STRING};
-        }
-        console.log(refColumns);
-    }
+    // console.log('reqlist: '+reqlist);
+    // if (reqlist) {
+    //     for (let elem of Object.keys(reqlist)) {
+    //         refColumns[reqlist[elem]] = {type: DataTypes.STRING};
+    //     }
+    //     console.log(refColumns);
+    // }
 
     try {
-        let EvaObject = sequelize.define(textId, refColumns); 
-        const data = await EvaObject.create({       
-            name : name                   
+        // let data = await sequelize.query(`INSERT INTO "`+textId+`s" 
+        //                                   VALUES (DEFAULT, '`+name+`',`+DataTypes.DATE+`,`+DataTypes.DATE+`);`);
+
+        let EvaObject = sequelize.define(textId, refColumns);
+        const data = await EvaObject.create({
+            name : name
         });
+
         console.log('Create object: '+data);
         return await res.json(textId);
     } catch(err) {
@@ -560,18 +581,14 @@ exports.updateReference = async function(req, res) {
     if (!req.body) return res.sendStatus(400);     
 
     const {textId, id, name, reqlist} = req.body;  
-    //console.log('texId :'+textId);
-    for (let elem of reqlist) {
-        refColumns[elem.req1] = {type: DataTypes.STRING};
-    }
+    console.log('reqlist:',reqlist);
+    // for (let elem of reqlist) {
+    //     refColumns[elem.req1] = {type: DataTypes.STRING};
+    // }
     console.log('refColumns: '+refColumns);
     try {
-        let EvaObject = sequelize.define(textId, refColumns); 
-        const data = await EvaObject.update({ 
-            name : name      
-        },{
-            where: {id: id}
-        });
+        let data = await sequelize.query(`UPDATE "`+textId+`s" SET "name" = '`+name+`'
+                                          WHERE "id"=`+id+`;`);
         console.log('Update object:'+data);
         return await res.json(data); 
     } catch (err) {
@@ -584,7 +601,7 @@ exports.deleteReference = async function(req, res) {
     const {textId, id} = req.body;
     try {                      
         let count = await sequelize.query(`DELETE FROM "`+textId+`s" 
-                                           WHERE "id"=`+id+`;`);
+                                           WHERE "id"=`+id+` RETURNING  id;`);
         console.log('count:',count);                                  
         return await res.json(count);
     } catch(err) {

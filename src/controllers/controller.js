@@ -6,7 +6,8 @@ const { DataTypes}      = require('sequelize');
 const { v4: uuidv4 }    = require('uuid');
 //const jwt              = require('jsonwebtoken');
 
-const dateNow = (new Date(Date.now())).toLocaleString();
+const newDate = new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000);
+const dateNow = newDate.toISOString().slice(0, 19).replace('T', ' ');
 
 /* const generateJwt = (id, login, role) => {
      return jwt.sign(
@@ -606,7 +607,7 @@ exports.deleteReference = async function(req, res) {
     try {                      
         let data = await sequelize.query(`DELETE FROM "`+textId+`s" 
                                            WHERE "id"=`+id+`;`);
-        console.log('Delete object: ',data);                                  
+        console.log('Delete object: ',data[1]);                                  
         return await res.json(data);
     } catch(err) {
         console.log(err);

@@ -6,6 +6,8 @@ const { DataTypes}      = require('sequelize');
 const { v4: uuidv4 }    = require('uuid');
 //const jwt              = require('jsonwebtoken');
 
+const dateNow = (new Date(Date.now())).toLocaleString();
+
 /* const generateJwt = (id, login, role) => {
      return jwt.sign(
          {id, login, role},
@@ -265,7 +267,7 @@ exports.createRole = async function(req, res) {
     }
 }
 exports.deleteRole = async function(req, res) {
-    console.log('>>deleteRole...');
+    console.log(dateNow, '>>deleteRole()...');
     try {
         if (!req.body) return res.sendStatus(400);
 
@@ -279,17 +281,17 @@ exports.deleteRole = async function(req, res) {
 }
 //Config//////////////////////////////////////////////
 exports.getConfig = async function(req, res) {
-    console.log('>>getConfig()...');
+    console.log(dateNow,'>>getConfig()...');
     try {
         const  data = await Config.findAll({raw:true});
-        console.log(data);
+        //console.log(data);
         await res.send(data);        
     } catch(err) {
         console.log(err);
     }
 }
 exports.createConfig = async function(req, res) {
-    console.log('>>createConfig...');
+    console.log(dateNow,'>>createConfig...');
 
     if (!req.body) return res.sendStatus(400);
     const { data } = req.body;
@@ -307,7 +309,7 @@ exports.createConfig = async function(req, res) {
     }
 }
 exports.deleteConfig = async function(req, res) {
-    console.log('>>deleteConfig()...');
+    console.log(dateNow,'>>deleteConfig()...');
     try {
         if (!req.body) return res.sendStatus(400);
 
@@ -324,7 +326,7 @@ exports.deleteConfig = async function(req, res) {
     }
 }
 exports.editObject = async function(req, res) {
-    console.log('>>editObject...');
+    console.log(dateNow,'>>editObject...');
     
     if (!req.body) return res.sendStatus(400);     
     const { id, data }  = req.body;  
@@ -342,7 +344,7 @@ exports.editObject = async function(req, res) {
     }   
 }
 exports.getObject = async function(req, res) {
-    console.log('>>getObject()...');
+    console.log(dateNow,'>>getObject()...');
     if (!req.body) return res.sendStatus(400);    
 
     const {id} = req.body;
@@ -360,7 +362,7 @@ exports.getObject = async function(req, res) {
     }
 }
 exports.updateConfig = async function(req, res) {
-    console.log('>>updateConfig(365)...');
+    console.log(dateNow, '>>updateConfig(365)...');
     if (!req.body) return res.sendStatus(400);
 
     let refColumns = {id  : {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},                  
@@ -502,7 +504,7 @@ exports.updateConfig = async function(req, res) {
    
 }
 exports.getSubsystems = async function(req, res) {
-    console.log('>>getSubsystems()...');
+    console.log(dateNow,'>>getSubsystems()...');
     //if (!req.body) return res.sendStatus(400);    
     // console.log(req);
     try {
@@ -514,7 +516,7 @@ exports.getSubsystems = async function(req, res) {
 }
 //eva-app/////////////////////////////////
 exports.getReferences = async function(req, res) {
-    console.log('>>getReferences()...');
+    console.log(dateNow,'>>getReferences()...');
     if (!req.body) return res.sendStatus(400);
     //console.log(req.body);
     const {textId} = req.body;    
@@ -529,7 +531,7 @@ exports.getReferences = async function(req, res) {
     }
 }
 exports.getReference = async function(req, res) {
-    console.log('>>getReference()...');
+    console.log(dateNow,'>>getReference()...');
     if (!req.body) return res.sendStatus(400);
     //console.log(req.body);
     const {textId, id} = req.body;    
@@ -545,13 +547,14 @@ exports.getReference = async function(req, res) {
     }
 }
 exports.createReference = async function(req, res) {
-    console.log('>>createReference(534)...');
+    console.log(dateNow,'>>createReference(549)...');
     if (!req.body) return res.sendStatus(400);
 
     let refColumns = {id  : {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},                  
                       name: {type: DataTypes.STRING}}; 
     
     const {textId, name, reqlist} = req.body;   
+
     // console.log('reqlist: '+reqlist);
     // if (reqlist) {
     //     for (let elem of Object.keys(reqlist)) {
@@ -561,13 +564,14 @@ exports.createReference = async function(req, res) {
     // }
 
     try {
-        // let data = await sequelize.query(`INSERT INTO "`+textId+`s" 
-        //                                   VALUES (DEFAULT, '`+name+`',`+DataTypes.DATE+`,`+DataTypes.DATE+`);`);
+        const now = Date.now()/1000.0;        
+        let data = await sequelize.query(`INSERT INTO "`+textId+`s" 
+                                          VALUES (DEFAULT, '`+name+`',to_timestamp(`+now+`),to_timestamp(`+now+`));`);
 
-        let EvaObject = sequelize.define(textId, refColumns);
-        const data = await EvaObject.create({
-            name : name
-        });
+        // let EvaObject = sequelize.define(textId, refColumns);
+        // const data = await EvaObject.create({
+        //     name : name
+        // });
 
         console.log('Create object: '+data);
         return await res.json(textId);
@@ -576,7 +580,7 @@ exports.createReference = async function(req, res) {
     }
 }
 exports.updateReference = async function(req, res) {
-    console.log('>>updateReference(558)...');
+    console.log(dateNow,'>>updateReference(583)...');
 
     if (!req.body) return res.sendStatus(400);     
 
@@ -596,14 +600,14 @@ exports.updateReference = async function(req, res) {
     }   
 }
 exports.deleteReference = async function(req, res) {
-    console.log('>>deleteReference()...');
+    console.log(dateNow,'>>deleteReference(603)...');
     if (!req.body) return res.sendStatus(400);
     const {textId, id} = req.body;
     try {                      
-        let count = await sequelize.query(`DELETE FROM "`+textId+`s" 
-                                           WHERE "id"=`+id+` RETURNING  id;`);
-        console.log('count:',count);                                  
-        return await res.json(count);
+        let data = await sequelize.query(`DELETE FROM "`+textId+`s" 
+                                           WHERE "id"=`+id+`;`);
+        console.log('Delete object: ',data);                                  
+        return await res.json(data);
     } catch(err) {
         console.log(err);
     }

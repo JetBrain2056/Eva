@@ -35,16 +35,14 @@ async function hashPassword(password, saltRounds = 10) {
     }
 }
 exports.Auth = function(req,res) {
-    console.log('>>Auth()...');
+    console.log(dateNow,'>>Auth()...');
     if (!req.body) return res.sendStatus(400);
     content.logged = false;
     res.render('index.twig', content);
 }
 exports.Signin = async function(req, res) {
-    console.log('>>Signin()...');
+    console.log(dateNow,'>>Signin()...');
     if (!req.body) return res.sendStatus(400);
-
-    //console.log('body: ', req.body);
 
     const operMode = req.body.operation_mode;
 
@@ -120,6 +118,10 @@ exports.Signin = async function(req, res) {
 }
 //Users/////////////////////////////////////////////
 exports.getUsers = async function(req, res) {
+    console.log(dateNow,'>>getUsers()...');
+
+    if (!req.body) return res.sendStatus(400);
+
     try {
         // const data = await User.findAll({raw:true})
         // await res.send(data);
@@ -136,10 +138,8 @@ exports.getUsers = async function(req, res) {
     }
 }
 exports.getUser = async function(req, res) {
-
-    if (!req.body) return res.sendStatus(400);
-
-    // console.log(req);
+    console.log(dateNow,'>>getUser()...');
+    if (!req.body) return res.sendStatus(400);    
 
     const {id} = req.body;
     try {
@@ -160,7 +160,7 @@ exports.getUser = async function(req, res) {
     }
 }
 exports.createUser = async function(req, res) {
-    console.log('>>CreateUser...');
+    console.log(dateNow,'>>CreateUser()...');
 
     if (!req.body) return res.sendStatus(400);
     const {Name, Descr, Password, RoleId, EAuth, Show} = req.body;
@@ -202,7 +202,7 @@ exports.createUser = async function(req, res) {
     }
 }
 exports.updateUser = async function(req, res) {
-    console.log('>>updateUser...');
+    console.log(dateNow,'>>updateUser()...');
     
     if (!req.body) return res.sendStatus(400);     
 
@@ -229,11 +229,10 @@ exports.updateUser = async function(req, res) {
     }   
 }
 exports.deleteUser = async function(req, res) {
-    console.log('>>deleteUser...');
-    try {
-        if (!req.body) return res.sendStatus(400);
-
-        const {id} = req.body;
+    console.log(dateNow,'>>deleteUser()...');
+    if (!req.body) return res.sendStatus(400);
+    const {id} = req.body;
+    try {            
         const data = await User.destroy({where: {id: id, AdmRole: false}});
 
         return await res.json(data);
@@ -242,7 +241,8 @@ exports.deleteUser = async function(req, res) {
     }
 }
 exports.getRoles = async function(req, res) {
-    console.log('getRoles()...');
+    console.log(dateNow,'getRoles()...');
+    if (!req.body) return res.sendStatus(400);
     try {
         const data = await Role.findAll({raw:true});
         await res.send(data);        
@@ -251,7 +251,7 @@ exports.getRoles = async function(req, res) {
     }
 }
 exports.createRole = async function(req, res) {
-    console.log('>>CreateRole...');
+    console.log(dateNow,'>>CreateRole()...');
 
     if (!req.body) return res.sendStatus(400);
     const { Name } = req.body;
@@ -283,6 +283,8 @@ exports.deleteRole = async function(req, res) {
 //Config//////////////////////////////////////////////
 exports.getConfig = async function(req, res) {
     console.log(dateNow,'>>getConfig()...');
+
+    if (!req.body) return res.sendStatus(400);
     try {
         const  data = await Config.findAll({raw:true});
         //console.log(data);
@@ -311,11 +313,10 @@ exports.createConfig = async function(req, res) {
 }
 exports.deleteConfig = async function(req, res) {
     console.log(dateNow,'>>deleteConfig()...');
-    try {
-        if (!req.body) return res.sendStatus(400);
+    if (!req.body) return res.sendStatus(400);
 
-        const {id} = req.body;
-
+    const {id} = req.body;
+    try {    
         const result = await Config.update({ 
             state : 2                     
         }, {
@@ -327,7 +328,7 @@ exports.deleteConfig = async function(req, res) {
     }
 }
 exports.editObject = async function(req, res) {
-    console.log(dateNow,'>>editObject...');
+    console.log(dateNow,'>>editObject()...');
     
     if (!req.body) return res.sendStatus(400);     
     const { id, data }  = req.body;  
@@ -363,7 +364,7 @@ exports.getObject = async function(req, res) {
     }
 }
 exports.updateConfig = async function(req, res) {
-    console.log(dateNow, '>>updateConfig(365)...');
+    console.log(dateNow, '>>updateConfig()...');
     if (!req.body) return res.sendStatus(400);
 
     let refColumns = {id  : {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},                  
@@ -506,8 +507,8 @@ exports.updateConfig = async function(req, res) {
 }
 exports.getSubsystems = async function(req, res) {
     console.log(dateNow,'>>getSubsystems()...');
-    //if (!req.body) return res.sendStatus(400);    
-    // console.log(req);
+    if (!req.body) return res.sendStatus(400);    
+    
     try {
         const data = await Subsystem.findAll({raw:true})
         await res.send(data);        
@@ -519,7 +520,7 @@ exports.getSubsystems = async function(req, res) {
 exports.getReferences = async function(req, res) {
     console.log(dateNow,'>>getReferences()...');
     if (!req.body) return res.sendStatus(400);
-    //console.log(req.body);
+    
     const {textId} = req.body;    
     try {
         const data = await sequelize.query(
@@ -534,7 +535,7 @@ exports.getReferences = async function(req, res) {
 exports.getReference = async function(req, res) {
     console.log(dateNow,'>>getReference()...');
     if (!req.body) return res.sendStatus(400);
-    //console.log(req.body);
+    
     const {textId, id} = req.body;    
     try {
         const data = await sequelize.query(
@@ -581,7 +582,7 @@ exports.createReference = async function(req, res) {
     }
 }
 exports.updateReference = async function(req, res) {
-    console.log(dateNow,'>>updateReference(583)...');
+    console.log(dateNow,'>>updateReference()...');
 
     if (!req.body) return res.sendStatus(400);     
 
@@ -601,7 +602,7 @@ exports.updateReference = async function(req, res) {
     }   
 }
 exports.deleteReference = async function(req, res) {
-    console.log(dateNow,'>>deleteReference(603)...');
+    console.log(dateNow,'>>deleteReference()...');
     if (!req.body) return res.sendStatus(400);
     const {textId, id} = req.body;
     try {                      

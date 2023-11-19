@@ -524,8 +524,7 @@ exports.getReferences = async function(req, res) {
     const {textId} = req.body;    
     try {
         const data = await sequelize.query(
-            `SELECT *
-             FROM "`+textId+`s" as "R";`         
+            `SELECT * FROM "`+textId+`s";`         
         );
         return await res.send(data[0]);        
     } catch(err) {
@@ -540,8 +539,8 @@ exports.getReference = async function(req, res) {
     try {
         const data = await sequelize.query(
             `SELECT *
-             FROM "`+textId+`s" as "R" 
-             WHERE "R"."id"=`+id+`;`         
+             FROM "`+textId+`s" 
+             WHERE "id"=`+id+`;`         
         );
         return await res.send(data[0]);        
     } catch(err) {
@@ -567,8 +566,10 @@ exports.createReference = async function(req, res) {
 
     try {
         const now = Date.now()/1000.0;        
-        let data = await sequelize.query(`INSERT INTO "`+textId+`s" 
-                                          VALUES (DEFAULT, '`+name+`',to_timestamp(`+now+`),to_timestamp(`+now+`));`);
+        let data = await sequelize.query(
+            `INSERT INTO "`+textId+`s" 
+             VALUES (DEFAULT, '`+name+`', to_timestamp(`+now+`), to_timestamp(`+now+`));`
+        );
 
         // let EvaObject = sequelize.define(textId, refColumns);
         // const data = await EvaObject.create({
@@ -593,9 +594,11 @@ exports.updateReference = async function(req, res) {
     // }
     console.log('refColumns: '+refColumns);
     try {
-        let data = await sequelize.query(`UPDATE "`+textId+`s" SET "name" = '`+name+`'
-                                          WHERE "id"=`+id+`;`);
-        console.log('Update object:'+data);
+        let data = await sequelize.query(
+            `UPDATE "`+textId+`s" SET "name" = '`+name+`'
+             WHERE "id"=`+id+`;`
+        );
+        console.log('Update object:', data);
         return await res.json(data); 
     } catch (err) {
         console.log(err); 
@@ -604,11 +607,13 @@ exports.updateReference = async function(req, res) {
 exports.deleteReference = async function(req, res) {
     console.log(dateNow,'>>deleteReference()...');
     if (!req.body) return res.sendStatus(400);
+
     const {textId, id} = req.body;
     try {                      
-        let data = await sequelize.query(`DELETE FROM "`+textId+`s" 
-                                           WHERE "id"=`+id+`;`);
-        console.log('Delete object: ',data[1]);                                  
+        let data = await sequelize.query(
+            `DELETE FROM "`+textId+`s" WHERE "id"=`+id+`;`
+        );
+        console.log('Delete object:',data[1]);                                  
         return await res.json(data);
     } catch(err) {
         console.log(err);

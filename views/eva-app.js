@@ -245,9 +245,8 @@ async function tabDesk(div) {
     for (let row of data) {
         let strJson = row.data; 
         let elements = await JSON.parse(strJson);
-        if (!row.state===0||elements.typeId==='Constant'||elements.typeId==='Subsystem') {
-            console.log(elements.typeId);
-        } else {    
+        if (row.state===0 && (elements.typeId==='Reference'||elements.typeId==='Document'||elements.typeId==='Processing')) {
+            //console.log(elements.typeId); 
             const nav = document.createElement('nav');
             nav.setAttribute("class","nav flex-column");                 
                 navLink(nav, elements.textId);                    

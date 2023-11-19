@@ -1,4 +1,4 @@
-const { User, Role, Config, Subsystem, Constant } = require('../models/models.js');
+const { User, Role, Config, Subsystem, Constant, Modul } = require('../models/models.js');
 const { content }       = require('../index.js');
 const bcrypt            = require('bcrypt');
 const sequelize         = require('../db');
@@ -400,7 +400,11 @@ exports.updateConfig = async function(req, res) {
                     console.log('Create element: '+elem);                       
                 } catch(err) {
                     console.log(err);
-                }                    
+                }  
+            } else if (typeId==='Module') { 
+            } else if (typeId==='Report') { 
+            } else if (typeId==='Processing') { 
+
             } else {                    
                 try {
                     const EvaObject = sequelize.define(objectId, refColumns);

@@ -1,4 +1,4 @@
-const { User, Role, Config, Subsystem, Constant, Modul } = require('../models/models.js');
+const { User, Role, Config, Subsystem, Constant, Module } = require('../models/models.js');
 const { content }       = require('../index.js');
 const bcrypt            = require('bcrypt');
 const sequelize         = require('../db');
@@ -316,6 +316,9 @@ exports.deleteConfig = async function(req, res) {
     if (!req.body) return res.sendStatus(400);
 
     const {id} = req.body;
+
+    //check the previous state=1 !
+
     try {    
         const result = await Config.update({ 
             state : 2                     
@@ -332,6 +335,8 @@ exports.editObject = async function(req, res) {
     
     if (!req.body) return res.sendStatus(400);     
     const { id, data }  = req.body;  
+
+    //check the previous state=1 !
 
     try {
         const result = await Config.update({ 
@@ -388,6 +393,7 @@ exports.updateConfig = async function(req, res) {
                     console.log('Create element: '+elem);                       
                 } catch(err) {
                     console.log(err);
+                    return;
                 }    
             } else if (typeId==='Constant') {   
                 const uuid = uuidv4();                 
@@ -400,11 +406,22 @@ exports.updateConfig = async function(req, res) {
                     console.log('Create element: '+elem);                       
                 } catch(err) {
                     console.log(err);
+                    return;
                 }  
             } else if (typeId==='Module') { 
+                try {
+                    const elem = await Module.create({   
+                        id  :  row.id,    
+                        name:  objectId,     
+                        xbase64: ''                        
+                    });
+                    console.log('Create element: '+elem);                       
+                } catch(err) {
+                    console.log(err);
+                    return;
+                }
             } else if (typeId==='Report') { 
             } else if (typeId==='Processing') { 
-
             } else {                    
                 try {
                     const EvaObject = sequelize.define(objectId, refColumns);
@@ -439,7 +456,15 @@ exports.updateConfig = async function(req, res) {
                     console.log('Deleted row(s): '+count);                      
                 } catch(err) {
                     console.log(err);
-                }                    
+                }  
+            } else if (typeId==='Module') {                                  
+                try {
+                    const count = await Module.destroy({where: {id: row.id}});
+                   
+                    console.log('Deleted row(s): '+count);                      
+                } catch(err) {
+                    console.log(err);
+                }                        
             } else {         
                 try { 
                     await sequelize.query('DROP TABLE IF EXISTS "' + objectId+'s";');
@@ -477,7 +502,20 @@ exports.updateConfig = async function(req, res) {
                     console.log('Update row(s): '+count);                      
                 } catch(err) {
                     console.log(err);
-                }                    
+                }   
+            } else if (typeId==='Module') {                                  
+                try {
+                    const count = await Module.update({
+                        name : objectId,
+                        xbase64  :''                
+                    }, {
+                        where: {id: row.id}
+                    });                            
+                   
+                    console.log('Update row(s): '+count);                      
+                } catch(err) {
+                    console.log(err);
+                }                        
             } else { 
                 console.log('reqlist: '+row.reqlist);
                 if (row.reqlist) {
@@ -494,7 +532,7 @@ exports.updateConfig = async function(req, res) {
                     console.log(err);
                 }  
             }
-            console.log('>>Config.update()...');
+            console.log('>>Config.update()...');         
             try {
                 const result = await Config.update({ 
                     state : 0                     

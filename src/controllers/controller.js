@@ -293,7 +293,7 @@ exports.getConfig = async function(req, res) {
         console.log(err);
     }
 }
-exports.createConfig = async function(req, res) {
+exports.createObject = async function(req, res) {
     console.log(dateNow,'>>createConfig...');
 
     if (!req.body) return res.sendStatus(400);
@@ -311,7 +311,7 @@ exports.createConfig = async function(req, res) {
         console.log(err);
     }
 }
-exports.deleteConfig = async function(req, res) {
+exports.deleteObject = async function(req, res) {
     console.log(dateNow,'>>deleteConfig()...');
     if (!req.body) return res.sendStatus(400);
 

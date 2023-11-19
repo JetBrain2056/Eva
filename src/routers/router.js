@@ -17,8 +17,8 @@ router.post('/createrole', controller.createRole);
 router.post('/delrole', controller.deleteRole);
 
 router.get('/getconfig', controller.getConfig);
-router.post('/createobject', controller.createConfig);
-router.post('/delobject', controller.deleteConfig);
+router.post('/createobject', controller.createObject);
+router.post('/delobject', controller.deleteObject);
 router.post('/editobject', controller.editObject);
 router.post('/getobject', controller.getObject);
 router.post('/updateconf', controller.updateConfig);

@@ -35,19 +35,25 @@ const Subsystem = sequelize.define('Subsystem', {
 const Constant = sequelize.define('Constant', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},    
     name:  {type: DataTypes.STRING, unique: true},
-    uuidType: {type: DataTypes.UUID, unique: true, defaultValue: sequelize.UUIDV4},
+    uuidType: {type: DataTypes.STRING, unique: true, defaultValue: sequelize.UUIDV4},
+})
+
+const Modul = sequelize.define('Modul', {
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},    
+    xbase64:  {type: DataTypes.STRING(5000)}
 })
 
 Role.hasOne(User)
 User.belongsTo(Role)
 
-// sequelize.sync({alter: true});
-sequelize.sync();
+sequelize.sync({alter: true});
+//sequelize.sync();
 
 module.exports = {
     User,
     Role,
     Config,
     Subsystem,
-    Constant
+    Constant,
+    Modul
 }

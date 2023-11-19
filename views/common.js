@@ -152,11 +152,9 @@ function logout() {
 async function listUsers() {
     console.log('>>listUsers()...');           
 
-    let data = await getOnServer('/getusers');
+    data = await getOnServer('/getusers');
 
     const inputUserName = document.getElementById('input-username');
-
-    //console.log(inputUserName);  
 
     for (let rows of data) {
         

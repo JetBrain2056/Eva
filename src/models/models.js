@@ -1,5 +1,5 @@
-const sequelize     = require('../db')
-const { DataTypes } = require('sequelize')
+const sequelize     = require('../db');
+const { DataTypes } = require('sequelize');
 
 //sequelize.sync({ force: true })
 //console.log('DB DROP and CREATE all tables!')
@@ -38,16 +38,17 @@ const Constant = sequelize.define('Constant', {
     uuidType: {type: DataTypes.STRING, unique: true, defaultValue: sequelize.UUIDV4},
 })
 
-const Modul = sequelize.define('Modul', {
+const Module = sequelize.define('Module', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},    
-    xbase64:  {type: DataTypes.STRING(5000)}
+    name:  {type: DataTypes.STRING, unique: true},
+    xbase64: {type: DataTypes.STRING(5000)}
 })
 
-Role.hasOne(User)
-User.belongsTo(Role)
+Role.hasOne(User);
+User.belongsTo(Role);
 
 sequelize.sync({alter: true});
-//sequelize.sync();
+console.log('DB UPDATE all tables!');
 
 module.exports = {
     User,
@@ -55,5 +56,5 @@ module.exports = {
     Config,
     Subsystem,
     Constant,
-    Modul
+    Module
 }

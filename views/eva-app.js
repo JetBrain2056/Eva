@@ -37,10 +37,11 @@ async function refCreate() {
 
     const evaReqs   = document.getElementsByClassName('eva-req');     
     for(let elem of evaReqs) {
-        //console.log(elem);
-        //console.log(elem.name);
-        //console.log(elem.value);
-        data[elem.name] = elem.value;        
+        console.log(elem.name);
+        if (elem.name==='id'&&createMode==='true'){            
+        } else {
+            data[elem.name] = elem.value;    
+        }    
     }
     console.log('data:',data);
     

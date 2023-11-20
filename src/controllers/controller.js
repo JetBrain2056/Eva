@@ -355,13 +355,10 @@ exports.getObject = async function(req, res) {
     if (!req.body) return res.sendStatus(400);    
 
     const {id} = req.body;
-    try {
-  
-        const data = await sequelize.query(
-            `SELECT "Configs"."id", "Configs"."data"
-             FROM "Configs"
-             Where "Configs"."id" = `+ id +`;`
-        );
+    try {                
+        let sqlq = `SELECT "Configs"."id", "Configs"."data"
+                    FROM "Configs Where "Configs"."id" = `+ id +`;`;    
+        const data = await sequelize.query(sqlq);
         return await res.send(data[0]); 
         
     } catch(err) {
@@ -519,8 +516,8 @@ exports.updateConfig = async function(req, res) {
             } else { 
                 console.log('reqlist: '+row.reqlist);
                 if (row.reqlist) {
-                    for (let elem of Object.keys(row.reqlist)) {
-                        refColumns[row.reqlist[elem]] = {type: DataTypes.STRING};
+                    for (let elem of row.reqlist) {
+                        refColumns[elem] = {type: DataTypes.STRING};
                     }
                     console.log(refColumns);
                 }
@@ -590,21 +587,21 @@ exports.getReference = async function(req, res) {
     }
 }
 exports.createReference = async function(req, res) {
-    console.log(dateNow,'>>createReference(549)...');
+    console.log(dateNow,'>>createReference()...');
     if (!req.body) return res.sendStatus(400);
 
     let refColumns = {id  : {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},                  
                       name: {type: DataTypes.STRING}}; 
     
-    const {textId, name, reqlist} = req.body;   
+    const {textId, name, reqList} = req.body;   
 
-    // console.log('reqlist: '+reqlist);
-    // if (reqlist) {
-    //     for (let elem of Object.keys(reqlist)) {
-    //         refColumns[reqlist[elem]] = {type: DataTypes.STRING};
-    //     }
-    //     console.log(refColumns);
-    // }
+    console.log('reqlist: '+reqList);
+    if (reqList) {
+        //for (let elem of Object.keys(reqList)) {
+            refColumns[reqList.evaId] = reqList.value;
+        //}
+        console.log('refColumns:',refColumns);
+    }
 
     try {
         const now = Date.now()/1000.0;        
@@ -634,7 +631,7 @@ exports.updateReference = async function(req, res) {
     // for (let elem of reqlist) {
     //     refColumns[elem.req1] = {type: DataTypes.STRING};
     // }
-    console.log('refColumns: '+refColumns);
+    //console.log('refColumns: '+refColumns);
     try {
         let data = await sequelize.query(
             `UPDATE "`+textId+`s" SET "name" = '`+name+`'

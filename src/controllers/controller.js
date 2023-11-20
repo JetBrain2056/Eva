@@ -356,8 +356,8 @@ exports.getObject = async function(req, res) {
 
     const {id} = req.body;
     try {                
-        let sqlq = `SELECT "Configs"."id", "Configs"."data"
-                    FROM "Configs Where "Configs"."id" = `+ id +`;`;    
+        let sqlq = `SELECT "id", "data"
+                    FROM "Configs" Where "id" = `+ id +`;`;    
         const data = await sequelize.query(sqlq);
         return await res.send(data[0]); 
         

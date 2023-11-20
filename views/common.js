@@ -425,22 +425,26 @@ async function objectCreate() {
     const input_form       = document.getElementById('create-object-form');  
     const createMode = input_form.getAttribute("create-mode");  
 
-    const input_req   = document.getElementById('input-ref-req');
+    const input_req1   = document.getElementById('input-ref-req1');
+    const input_req2   = document.getElementById('input-ref-req2');
     
     if (!input_textId.value) {
         alert('ID not filled in!');
         return;
     }
-
-    let req=[];
-    let requis = { req : [input_req.value]};
+    let reqlist = [];
+    if (input_textId.value==='Reference') {
+        reqlist = [input_req1.value, input_req2.value];
+    } else {
+        reqlist = [];
+    }
     
     let tmp = { 
         typeId    : input_type.value, 
         textId    : input_textId.value,
         subsysId  : input_subsystem.getAttribute("eva-id"),
         subsysName: input_subsystem.value,
-        reqlist   : requis
+        reqlist   : reqlist
     };          
 
     const data =  {
@@ -514,13 +518,13 @@ async function objectEditModal() {
     input_type.setAttribute("disabled","disabled");
     const input_textId    = document.getElementById('input-textId');   
     const input_subsystem = document.getElementById('input-subsystem');   
-    const subsystemBtn    = document.getElementById("subsystemBtn");
+    //const subsystemBtn    = document.getElementById("subsystemBtn");
+    const input_req1 = document.getElementById('input-ref-req1'); 
+    const input_req2 = document.getElementById('input-ref-req2'); 
 
     let data = { 'id': row.cells[0].innerText };
 
-    //console.log(data);
-
-    let res = await postOnServer(data,'/getobject');
+    res = await postOnServer(data,'/getobject');
   
     if (res) {
 
@@ -532,7 +536,15 @@ async function objectEditModal() {
         input_textId.value      = Elements.textId;
         input_subsystem.value   = Elements.subsysName;
         input_subsystem.setAttribute("eva-id", Elements.subsysId);
-        console.log(Elements.typeId);
+        
+        let reqList = Elements.reqlist;
+        console.log(reqList);
+        if (reqList) {
+            input_req1.value = reqList[0];
+            input_req2.value = reqList[1];
+        }
+
+        //console.log(Elements.typeId);
         // if (Elements.typeId==='Subsystem'||Elements.typeId==='Constant') {            
         //     input_subsystem.setAttribute("disabled","disabled"); 
         //     subsystemBtn.setAttribute("disabled","disabled"); 
@@ -586,7 +598,7 @@ async function updateConfig() {
 }
 /////////////////////////////////////////////////////////////////////////////
 async function showSubsystemsTable() {
-    console.log('>>showSubsystemsTable...');
+    console.log('>>showSubsystemsTable()...');
 
     let data = await getOnServer('/subsystems');  
   
@@ -621,6 +633,18 @@ async function objectEditSubsystem() {
     currentModal = getModal(modalForm);
   
     await showSubsystemsTable();
+
+}
+/////////////////////////////////////////////////////////////////////////////
+async function showRequisiteTable() {
+    console.log('>>showRequisiteTable()...');
+
+    let data = await postOnServer('/getobject');  
+  
+    const col = {'id':'Id', 'name':'Name'};  
+    const hide = ['id'];
+    
+    await showTable(tbl[5], hide, col, data);
 
 }
 /////////////////////////////////////////////////////////////////////////////

@@ -593,27 +593,19 @@ exports.createReference = async function(req, res) {
     let refColumns = {id  : {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},                  
                       name: {type: DataTypes.STRING}}; 
     
-    const {textId, name, reqList} = req.body;   
+    const {textId, reqList} = req.body;   
 
     console.log('reqlist: '+reqList);
-    if (reqList) {
-        //for (let elem of Object.keys(reqList)) {
-            refColumns[reqList.evaId] = reqList.value;
-        //}
-        console.log('refColumns:',refColumns);
-    }
 
     try {
-        const now = Date.now()/1000.0;        
-        let data = await sequelize.query(
-            `INSERT INTO "`+textId+`s" 
-             VALUES (DEFAULT, '`+name+`', to_timestamp(`+now+`), to_timestamp(`+now+`));`
-        );
+        // const now = Date.now()/1000.0;        
+        // let data = await sequelize.query(
+        //     `INSERT INTO "`+textId+`s" 
+        //      VALUES (DEFAULT, '`+name+`', to_timestamp(`+now+`), to_timestamp(`+now+`));`
+        // );
 
-        // let EvaObject = sequelize.define(textId, refColumns);
-        // const data = await EvaObject.create({
-        //     name : name
-        // });
+        let EvaObject = sequelize.define(textId, refColumns);
+        const data = await EvaObject.create(reqList);
 
         console.log('Create object: '+data);
         return await res.json(textId);
@@ -626,15 +618,20 @@ exports.updateReference = async function(req, res) {
 
     if (!req.body) return res.sendStatus(400);     
 
-    const {textId, id, name, reqlist} = req.body;  
-    console.log('reqlist:',reqlist);
-    // for (let elem of reqlist) {
-    //     refColumns[elem.req1] = {type: DataTypes.STRING};
-    // }
-    //console.log('refColumns: '+refColumns);
+    const {textId, id} = req.body;  
+    console.log('req.body:',req.body);
+
+    let tmp ='';
+    for (let elem of Object.keys(req.body)) {
+        if(elem==='id'||elem==='textId'||elem==='createdAt'||elem==='updatedAt') {
+        } else {
+            tmp = tmp +` "`+ elem + `"='`+ req.body[elem]+`',`;
+        }
+    }
+    console.log('tmp:',tmp.slice(0,-1));
     try {
         let data = await sequelize.query(
-            `UPDATE "`+textId+`s" SET "name" = '`+name+`'
+            `UPDATE "`+textId+`s" SET `+tmp.slice(0,-1)+`
              WHERE "id"=`+id+`;`
         );
         console.log('Update object:', data);

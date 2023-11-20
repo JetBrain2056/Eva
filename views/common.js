@@ -433,11 +433,9 @@ async function objectCreate() {
         return;
     }
     let reqlist = [];
-    if (input_textId.value==='Reference') {
+    // if (input_textId.value==='Reference') {
         reqlist = [input_req1.value, input_req2.value];
-    } else {
-        reqlist = [];
-    }
+    // }
     
     let tmp = { 
         typeId    : input_type.value, 

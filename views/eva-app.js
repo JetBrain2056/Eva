@@ -29,20 +29,17 @@ async function refCreate() {
     const createMode = refForm.getAttribute("create-mode");  
     const inputName  = document.getElementById('input-ref-name');  
       
-    const evaReqs   = document.getElementsByClassName('eva-req'); 
-    let reqList ={evaId:'',value:''};
-    for(let elem of evaReqs) {
-        reqList.evaId = elem.id;
-        reqList.value = elem.value;
-    }
-    console.log('reqList:',reqList);
-
     const data =  {
         'textId'  : textId,
         'id'      : refForm.getAttribute("eva-id"),
-        'name'    : inputName.value,
-        'reqList' : reqList    
+        'name'    : inputName.value
     };
+
+    const evaReqs   = document.getElementsByClassName('eva-req');     
+    for(let elem of evaReqs) {
+        data[elem.Id] = elem.value;        
+    }
+    console.log('data:',data);
     
     let result;
     console.log('createMode: '+createMode);
@@ -96,8 +93,8 @@ async function refModal() {
     
     let id     = refForm.getAttribute("eva-id");
     let textId = refForm.getAttribute("eva-textId");
-    console.log(id); 
-    console.log(textId); 
+    //console.log(id); 
+    //console.log(textId); 
 
     let data = { 
         'textId': textId
@@ -109,7 +106,7 @@ async function refModal() {
         //refForm.setAttribute("eva-id", col.id);              
         for (let req of Object.keys(col)) {
             const label  = document.createElement("label");
-            label.setAttribute("for","input-"+req);
+            label.setAttribute("for","input-ref-"+req);
             label.innerText = req+":";        
             refForm.appendChild(label);
             const div  = document.createElement("div");
@@ -117,7 +114,7 @@ async function refModal() {
             refForm.appendChild(div);
                 const input  = document.createElement("input");
                 input.setAttribute("type","text");
-                input.id    = "input-"+req;
+                input.id    = "input-ref-"+req;
                 input.value = '';
                 input.setAttribute("class","eva-req form-control");
                 div.appendChild(input); 

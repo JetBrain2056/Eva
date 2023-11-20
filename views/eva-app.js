@@ -26,7 +26,7 @@ async function refCreate() {
 
     const refForm    = document.getElementById("create-ref-form");
     const textId     = refForm.getAttribute("eva-textId");
-    const createMode = refForm.getAttribute("create-mode");      
+    let createMode   = refForm.getAttribute("create-mode");      
       
     let data =  {
         'textId'  : textId                
@@ -87,10 +87,13 @@ async function refModal() {
 
     const refModalLabel  = document.getElementById('refModalLabel');  
     refModalLabel.innerText = 'Add element';    
+
+    let createMode = true;
+
     const refForm        = document.getElementById('create-ref-form');  
     refForm.innerHTML = '';
     refForm.reset();   
-    refForm.setAttribute("create-mode", true);  
+    refForm.setAttribute("create-mode", createMode);  
     
     let textId = refForm.getAttribute("eva-textId");
 
@@ -99,30 +102,7 @@ async function refModal() {
     };
 
     res = await postOnServer(data, '/getrefs');  
-    if (res) {       
-        let col = res[0];  
-        delete col['createdAt'];
-        delete col['updatedAt'];             
-        for (let req of Object.keys(col)) {
-            const label  = document.createElement("label");
-            label.setAttribute("for","input-ref-"+req);
-            label.innerText = req+":";        
-            refForm.appendChild(label);
-            const div  = document.createElement("div");
-            div.class = "input-group";
-            refForm.appendChild(div);
-                const input  = document.createElement("input");
-                input.setAttribute("type","text");
-                input.id    = "input-ref-"+req;
-                input.name  = req;
-                input.value = '';
-                input.setAttribute("class","eva-req form-control");
-                if (req==='id') {
-                    input.setAttribute("disabled","disabled");
-                }
-                div.appendChild(input); 
-        }        
-    }       
+    await refElement(refForm, res, createMode);      
 }
 async function refEditModal() {
     console.log('>>refEditModal...'); 
@@ -133,22 +113,28 @@ async function refEditModal() {
 
     const refModalLabel    = document.getElementById('refModalLabel');  
     refModalLabel.innerText = 'Edit element';   
+
+    let createMode = false;
           
     const refForm    = document.getElementById('create-ref-form');    
     refForm.reset();  
     refForm.innerHTML ='';   
     let textId = refForm.getAttribute("eva-textId");
-    refForm.setAttribute("create-mode", false);  
+    refForm.setAttribute("create-mode", createMode);  
 
     let data = { 
         'textId': textId,
         'id': row.cells[0].innerText
     };
-
     res = await postOnServer(data, '/getref');  
+    await refElement(refForm, res, createMode);     
+}
+//DOM Dynamic Content////////////////////////////////////////////////////////
+async function refElement(refForm, res, createMode) {
+    console.log('>>refElement()...');  
+    
     if (res) {       
-        let col = res[0];  
-        refForm.setAttribute("eva-id", col.id);    
+        let col = res[0];           
         delete col['createdAt'];
         delete col['updatedAt'];                  
         for (let req of Object.keys(col)) {
@@ -163,16 +149,19 @@ async function refEditModal() {
                 input.setAttribute("type","text");
                 input.id    = "input-ref-"+req;
                 input.name  = req;
-                input.value = col[req];
+                if (createMode===true) {
+                    input.value = '';
+                } else if (createMode===false) {
+                    input.value = col[req];
+                }
                 input.setAttribute("class","eva-req form-control");
                 if (req==='id') {
                     input.setAttribute("disabled","disabled");
                 }
                 div.appendChild(input); 
         }        
-    }  
+    } 
 }
-//DOM Dynamic Content////////////////////////////////////////////////////////
 function buildTable(refName) {
     console.log('>>buildTable()...');  
 
@@ -190,7 +179,6 @@ function buildTable(refName) {
     formTbl.appendChild(refTbl);  
 
     return refTbl;
-
 }
 async function showRefTable(refName) {
     console.log('>>showRefTable()...');   

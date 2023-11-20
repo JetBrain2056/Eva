@@ -26,13 +26,10 @@ async function refCreate() {
 
     const refForm    = document.getElementById("create-ref-form");
     const textId     = refForm.getAttribute("eva-textId");
-    const createMode = refForm.getAttribute("create-mode");  
-    // const inputName  = document.getElementById('input-ref-name');  
+    const createMode = refForm.getAttribute("create-mode");      
       
     let data =  {
-        'textId'  : textId
-        //'id'      : refForm.getAttribute("eva-id"),
-        //'name'    : inputName.value
+        'textId'  : textId                
     };
 
     const evaReqs   = document.getElementsByClassName('eva-req');     
@@ -43,7 +40,7 @@ async function refCreate() {
             data[elem.name] = elem.value;    
         }    
     }
-    console.log('data:',data);
+    //console.log('data:',data);
     
     let result;
     console.log('createMode: '+createMode);
@@ -95,10 +92,7 @@ async function refModal() {
     refForm.reset();   
     refForm.setAttribute("create-mode", true);  
     
-    let id     = refForm.getAttribute("eva-id");
     let textId = refForm.getAttribute("eva-textId");
-    //console.log(id); 
-    //console.log(textId); 
 
     let data = { 
         'textId': textId
@@ -107,7 +101,8 @@ async function refModal() {
     res = await postOnServer(data, '/getrefs');  
     if (res) {       
         let col = res[0];  
-        //refForm.setAttribute("eva-id", col.id);              
+        delete col['createdAt'];
+        delete col['updatedAt'];             
         for (let req of Object.keys(col)) {
             const label  = document.createElement("label");
             label.setAttribute("for","input-ref-"+req);
@@ -122,6 +117,9 @@ async function refModal() {
                 input.name  = req;
                 input.value = '';
                 input.setAttribute("class","eva-req form-control");
+                if (req==='id') {
+                    input.setAttribute("disabled","disabled");
+                }
                 div.appendChild(input); 
         }        
     }       
@@ -150,7 +148,9 @@ async function refEditModal() {
     res = await postOnServer(data, '/getref');  
     if (res) {       
         let col = res[0];  
-        refForm.setAttribute("eva-id", col.id);              
+        refForm.setAttribute("eva-id", col.id);    
+        delete col['createdAt'];
+        delete col['updatedAt'];                  
         for (let req of Object.keys(col)) {
             const label  = document.createElement("label");
             label.setAttribute("for","input-ref-"+req);
@@ -165,6 +165,9 @@ async function refEditModal() {
                 input.name  = req;
                 input.value = col[req];
                 input.setAttribute("class","eva-req form-control");
+                if (req==='id') {
+                    input.setAttribute("disabled","disabled");
+                }
                 div.appendChild(input); 
         }        
     }  

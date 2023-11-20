@@ -590,12 +590,13 @@ exports.createReference = async function(req, res) {
     console.log(dateNow,'>>createReference()...');
     if (!req.body) return res.sendStatus(400);
 
-    let refColumns = {id  : {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},                  
-                      name: {type: DataTypes.STRING}}; 
+    // let refColumns = {id  : {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},                  
+    //                   name: {type: DataTypes.STRING}}; 
     
-    const {textId, reqList} = req.body;   
+    const {textId} = req.body;   
 
-    console.log('reqlist: '+reqList);
+    delete req.body["textId"];
+    console.log('req.body: '+req.body);
 
     try {
         // const now = Date.now()/1000.0;        
@@ -604,8 +605,8 @@ exports.createReference = async function(req, res) {
         //      VALUES (DEFAULT, '`+name+`', to_timestamp(`+now+`), to_timestamp(`+now+`));`
         // );
 
-        let EvaObject = sequelize.define(textId, refColumns);
-        const data = await EvaObject.create(reqList);
+        let EvaObject = sequelize.define(textId, req.body);
+        const data = await EvaObject.create(req.body);
 
         console.log('Create object: '+data);
         return await res.json(textId);

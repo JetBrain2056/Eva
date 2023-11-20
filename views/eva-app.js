@@ -29,12 +29,19 @@ async function refCreate() {
     const createMode = refForm.getAttribute("create-mode");  
     const inputName  = document.getElementById('input-ref-name');  
       
-    //const inputReq   = document.getElementById('input-ref-req'); 
+    const evaReqs   = document.getElementsByClassName('eva-req'); 
+    let reqList ={evaId:'',value:''};
+    for(let elem of evaReqs) {
+        reqList.evaId = elem.id;
+        reqList.value = elem.value;
+    }
+    console.log('reqList:',reqList);
 
     const data =  {
         'textId'  : textId,
         'id'      : refForm.getAttribute("eva-id"),
-        'name'    : inputName.value        
+        'name'    : inputName.value,
+        'reqList' : reqList    
     };
     
     let result;
@@ -78,13 +85,44 @@ async function refDelete() {
     if(result) await showRefTable(textId);
 }
 async function refModal() {
-    console.log('>>refEditModal...');      
-          
-    const refModalLabel    = document.getElementById('refModalLabel');  
+    console.log('>>refModal()...');      
+
+    const refModalLabel  = document.getElementById('refModalLabel');  
     refModalLabel.innerText = 'Add element';    
     const refForm        = document.getElementById('create-ref-form');  
+    refForm.innerHTML = '';
     refForm.reset();   
-    refForm.setAttribute("create-mode", true);   
+    refForm.setAttribute("create-mode", true);  
+    
+    let id     = refForm.getAttribute("eva-id");
+    let textId = refForm.getAttribute("eva-textId");
+    console.log(id); 
+    console.log(textId); 
+
+    let data = { 
+        'textId': textId
+    };
+
+    res = await postOnServer(data, '/getrefs');  
+    if (res) {       
+        let col = res[0];  
+        //refForm.setAttribute("eva-id", col.id);              
+        for (let req of Object.keys(col)) {
+            const label  = document.createElement("label");
+            label.setAttribute("for","input-"+req);
+            label.innerText = req+":";        
+            refForm.appendChild(label);
+            const div  = document.createElement("div");
+            div.class = "input-group";
+            refForm.appendChild(div);
+                const input  = document.createElement("input");
+                input.setAttribute("type","text");
+                input.id    = "input-"+req;
+                input.value = '';
+                input.setAttribute("class","eva-req form-control");
+                div.appendChild(input); 
+        }        
+    }       
 }
 async function refEditModal() {
     console.log('>>refEditModal...'); 
@@ -97,36 +135,35 @@ async function refEditModal() {
     refModalLabel.innerText = 'Edit element';   
           
     const refForm    = document.getElementById('create-ref-form');    
-    refForm.reset();     
+    refForm.reset();  
+    refForm.innerHTML ='';   
     let textId = refForm.getAttribute("eva-textId");
-    console.log(textId);    
     refForm.setAttribute("create-mode", false);  
-
-    const input_name     = document.getElementById('input-ref-name');  
-    const input_id      = document.getElementById('input-ref-id');  
 
     let data = { 
         'textId': textId,
         'id': row.cells[0].innerText
     };
 
-    let res;
-    try {    
-        let response = await fetch('/getref', {
-            method  : 'post',    
-            headers : {'Content-Type': 'application/json'},
-            body    : JSON.stringify(data)            
-        });  
-        res = await response.json();     
-       
-    } catch (err) {
-      console.log(err);
-    }
-  
+    res = await postOnServer(data, '/getref');  
     if (res) {       
-        refForm.setAttribute("eva-id", res[0].id);
-        input_name.value      = res[0].name;
-        input_id.value        = res[0].id;        
+        let col = res[0];  
+        refForm.setAttribute("eva-id", col.id);              
+        for (let req of Object.keys(col)) {
+            const label  = document.createElement("label");
+            label.setAttribute("for","input-"+req);
+            label.innerText = req+":";        
+            refForm.appendChild(label);
+            const div  = document.createElement("div");
+            div.class = "input-group";
+            refForm.appendChild(div);
+                const input  = document.createElement("input");
+                input.setAttribute("type","text");
+                input.id    = "input-"+req;
+                input.value = col[req];
+                input.setAttribute("class","eva-req form-control");
+                div.appendChild(input); 
+        }        
     }  
 }
 //DOM Dynamic Content////////////////////////////////////////////////////////

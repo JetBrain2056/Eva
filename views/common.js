@@ -196,6 +196,7 @@ async function getOnServer(link) {
 }
 //////////////////////////////////////////////////////////////////////////////
 async function showUserTable() {
+    console.log('>>showUserTable()...');
     
     let data = await getOnServer('/getusers');   
 
@@ -206,7 +207,7 @@ async function showUserTable() {
 
 }
 async function userCreate() {
-    console.log('>>userCreate...');
+    console.log('>>userCreate()...');
     
     const input_form        = document.getElementById('create-user-form');  
     const createMode = input_form.getAttribute("create-mode");  
@@ -227,8 +228,8 @@ async function userCreate() {
         'Descr'   : input_descr.value,
         'Password': input_password.value,
         'RoleId'  : input_role.getAttribute("eva-id"),
-        'EAuth'   : input_eauth.value,
-        'Show'    : input_show.value
+        'EAuth'   : input_eauth.checked,
+        'Show'    : input_show.checked
     };
     
     let result;
@@ -294,9 +295,17 @@ async function userEditModal() {
         input_role.value        = res[0].Role;           
         input_role.setAttribute("eva-id", res[0].RoleId);
         input_password.value    = '';   
-        input_confirmpass.value = '';    
-        input_show.checked        = res[0].Show;  
-        input_eauth.checked       = res[0].EAuth;       
+        input_confirmpass.value = '';               
+        if (res[0].Show === 'true') {
+            input_show.checked = true;
+        } else {  
+            input_show.checked = false;
+        }  
+        if (res[0].EAuth === 'true') {
+            input_eauth.checked = true;
+        } else {  
+            input_eauth.checked = false;
+        }      
     }         
 
 }
@@ -314,6 +323,7 @@ async function userDelete() {
 }
 /////////////////////////////////////////////////////////////////////////////
 async function showRoleTable() {
+    console.log('>>showRoleTable()...');
     
     let data = await getOnServer('/getroles');   
 

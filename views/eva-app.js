@@ -30,7 +30,7 @@ async function refCreate() {
       
     let data =  {
         'textId'  : textId                
-    };
+    }
 
     const evaReqs   = document.getElementsByClassName('eva-req');     
     for(let elem of evaReqs) {
@@ -39,11 +39,8 @@ async function refCreate() {
         } else {
             data[elem.name] = elem.value;    
         }    
-    }
-    //console.log('data:',data);
-    
-    let result;
-    console.log('createMode: '+createMode);
+    }    
+        
     if (createMode==='true') {
         try {
             result = await postOnServer(data, '/createref')
@@ -64,29 +61,26 @@ async function refCreate() {
 
 }
 async function refDelete() {
-    console.log('>>refDelete...');
+    console.log('>>refDelete()...');
 
     const refForm = document.getElementById("nav-ref-form");
     const textId = refForm.getAttribute("eva-id");
-
-    let result;
-    for (const row of selectRows){
-
-        let data = {
+    
+    for (const row of selectRows) {
+        const data = {
             'textId': textId,
             'id': row.cells[0].innerText
-        };
-
+        }
         result = await postOnServer(data, '/delref');        
     }
 
-    if(result) await showRefTable(textId);
+    if (result) await showRefTable(textId);
 }
 async function refModal() {
     console.log('>>refModal()...');      
 
     const refModalLabel  = document.getElementById('refModalLabel');  
-    refModalLabel.innerText = 'Add element';    
+    refModalLabel.innerText = 'Add element:';    
 
     let createMode = true;
 
@@ -95,11 +89,10 @@ async function refModal() {
     refForm.reset();   
     refForm.setAttribute("create-mode", createMode);  
     
-    let textId = refForm.getAttribute("eva-textId");
-
-    let data = { 
+    const textId = refForm.getAttribute("eva-textId");
+    const data = { 
         'textId': textId
-    };
+    }
 
     res = await postOnServer(data, '/getrefs');  
     await refElement(refForm, res, createMode);      
@@ -112,17 +105,17 @@ async function refEditModal() {
     const row = selectRows[0];      
 
     const refModalLabel    = document.getElementById('refModalLabel');  
-    refModalLabel.innerText = 'Edit element';   
+    refModalLabel.innerText = 'Edit element:';   
 
     let createMode = false;
           
     const refForm    = document.getElementById('create-ref-form');    
     refForm.reset();  
-    refForm.innerHTML ='';   
-    let textId = refForm.getAttribute("eva-textId");
+    refForm.innerHTML ='';     
     refForm.setAttribute("create-mode", createMode);  
 
-    let data = { 
+    const textId = refForm.getAttribute("eva-textId");
+    const data = { 
         'textId': textId,
         'id': row.cells[0].innerText
     };

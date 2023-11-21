@@ -296,12 +296,12 @@ async function userEditModal() {
         input_role.setAttribute("eva-id", res[0].RoleId);
         input_password.value    = '';   
         input_confirmpass.value = '';               
-        if (res[0].Show === 'true') {
+        if (res[0].Show === true) {
             input_show.checked = true;
         } else {  
             input_show.checked = false;
         }  
-        if (res[0].EAuth === 'true') {
+        if (res[0].EAuth === true) {
             input_eauth.checked = true;
         } else {  
             input_eauth.checked = false;

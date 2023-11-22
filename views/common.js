@@ -13,6 +13,14 @@ for (const div of forms) {
     div.appendChild(tbl[n]); 
     n = n + 1;
 }
+const table         = document.getElementsByClassName('eva-table');
+for (const div of table) {                                          
+    div.setAttribute("style", "height: calc(100vh - 300px); overflow-y: scroll;");               
+    tbl[n] = document.createElement('table');
+    tbl[n].setAttribute("class", "table table-striped table-hover table-sm table-responsive");              
+    div.appendChild(tbl[n]); 
+    n = n + 1;
+}
 function rowSelect(e) {
     console.log('>>rowSelect...');
 

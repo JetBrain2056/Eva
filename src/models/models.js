@@ -23,7 +23,7 @@ const Role = sequelize.define('Role', {
 const Config = sequelize.define('Config', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     state: {type: DataTypes.INTEGER},
-    data:  {type: DataTypes.STRING}
+    data:  {type: DataTypes.STRING(1000)}
 })
 
 const Subsystem = sequelize.define('Subsystem', {
@@ -44,6 +44,11 @@ const Module = sequelize.define('Module', {
     xbase64: {type: DataTypes.STRING(5000)}
 })
 
+const Tmp = sequelize.define('Tmp', {
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},    
+    data:  {type: DataTypes.STRING(1000)}
+})
+
 Role.hasOne(User);
 User.belongsTo(Role);
 
@@ -56,5 +61,6 @@ module.exports = {
     Config,
     Subsystem,
     Constant,
-    Module
+    Module, 
+    Tmp
 }

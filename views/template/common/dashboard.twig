@@ -190,7 +190,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="objectModalLabel">Add object*</h5>
+        <h5 class="modal-title" id="objectModalLabel">Add object:</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>          
       </div>
       <ul class="nav nav-tabs" role="tablist" style="background:grey">                
@@ -200,7 +200,7 @@
           </a>
         </li> 
         <li class="nav-item">
-          <a class="nav-link" href="#" id="object-requisite" data-bs-toggle="tab" data-bs-target="#nav-requisite"  role="tab" aria-controls="nav-requisite" aria-selected="false" onclick="">
+          <a class="nav-link" href="#" id="object-requisite" data-bs-toggle="tab" data-bs-target="#nav-requisite"  role="tab" aria-controls="nav-requisite" aria-selected="false" onclick="showRequisiteTable()">
             Requisites
           </a>
         </li> 
@@ -245,11 +245,11 @@
                 <input type="text" placeholder="0" id="input-subsystem" class="form-control" required/>
                 <button class="btn btn-outline-secondary" type="button" onclick="objectEditSubsystem()">...</button>
               </div> 
-              <label for="input-typeId">Type Id:</label>
+              {# <label for="input-typeId">Type Id:</label>
               <div class="input-group input-group-sm">
                 <input type="text" placeholder="0" id="input-typeId" class="form-control"/>
                 <button class="btn btn-outline-secondary" type="button" onclick="objectTypeId()" disabled>...</button>
-              </div> 
+              </div>  #}
               <label for="input-owner">Owner:</label>
               <div class="input-group input-group-sm">
                 <input type="text" placeholder="..." id="input-owner" class="form-control"/>
@@ -270,15 +270,15 @@
                 </button>
               </div>
             </div> 
-            {# <div class="eva-form"></div>   #}
-            <label for="input-ref-req1">requisite1:</label>
+            <div class="eva-table"></div>  
+            {# <label for="input-ref-req1">requisite1:</label>
             <div class="input-group">
               <input type="text" placeholder="" id="input-ref-req1" class="form-control"/>
             </div>
             <label for="input-ref-req2">requisite2:</label>
             <div class="input-group">
               <input type="text" placeholder="" id="input-ref-req2" class="form-control"/>
-            </div>
+            </div> #}
           </div>
           <div class="tab-pane fade" id="nav-tabular" role="tabpanel" aria-labelledby="nav-tabular-tab">
             <div class="btn-toolbar" role="toolbar" aria-label="toolbar group">
@@ -293,10 +293,10 @@
                 </button>
               </div>
             </div> 
-            {# <div class="eva-form"></div>   #}
+            <div class="eva-table"></div>  
           </div>
           <div class="tab-pane fade" id="nav-forms" role="tabpanel" aria-labelledby="nav-forms-tab">
-            <div class="btn-toolbar" role="toolbar" aria-label="toolbar group">
+            {# <div class="btn-toolbar" role="toolbar" aria-label="toolbar group">
               <div class="btn-group btn-group-sm" role="group">
                 <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" data-bs-toggle="modal" data-bs-target="#formsModal">
                   <i class="fa fa-plus-square"></i>
@@ -307,8 +307,20 @@
                   <span>{{ button_delete }}</span>
                 </button>
               </div>
-            </div> 
-            {# <div class="eva-form"></div>   #}
+            </div>  #}
+            {# <div class="eva-table"></div>   #}
+            <label for="input-ref-elem">Element:</label>
+            <div class="input-group">
+              <input type="text" placeholder="" id="input-ref-elem" class="form-control"/>
+            </div>
+            <label for="input-ref-list">List:</label>
+            <div class="input-group">
+              <input type="text" placeholder="" id="input-ref-list" class="form-control"/>
+            </div>
+            <label for="input-ref-sel">Selection:</label>
+            <div class="input-group">
+              <input type="text" placeholder="" id="input-ref-sel" class="form-control"/>
+            </div>
           </div>
         </div>    
       </div>

@@ -655,10 +655,26 @@ async function objectEditSubsystem() {
 async function showRequisiteTable() {
     console.log('>>showRequisiteTable()...');
 
-    let data = await postOnServer('/getobject');  
+    const id = 4//test
+    const getData = {'id': id}
+    let tmp = await postOnServer(getData,'/getobject');  
+
+    let data = [];
+
+    for (const row of tmp) {
+        let strJson = row.data; 
+        let Elements = await JSON.parse(strJson);
+
+        let elem = Object.assign({'id':row.id}, Elements);
+
+        for (let req of elem.reqlist) {
+            data.push({'req':req});
+        }
+        
+    }
   
-    const col = {'id':'Id', 'name':'Name'};  
-    const hide = ['id'];
+    const col = {'req':'requsite'};  
+    const hide = [];
     
     await showTable(tbl[5], hide, col, data);
 

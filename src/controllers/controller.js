@@ -369,8 +369,8 @@ exports.updateConfig = async function(req, res) {
     console.log(dateNow, '>>updateConfig()...');
     if (!req.body) return res.sendStatus(400);
 
-    let refColumns = {id  : {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},                  
-                      name: {type: DataTypes.STRING}}; 
+    let refColumns = {id   : {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+                      name : {type: DataTypes.STRING}}; 
 
     for (let row of req.body) {        
         let objectId = row.textId;        
@@ -513,14 +513,21 @@ exports.updateConfig = async function(req, res) {
                 } catch(err) {
                     console.log(err);
                 }                        
-            } else { 
-                console.log('reqlist: '+row.reqlist);
-                if (row.reqlist) {
-                    for (let elem of row.reqlist) {
-                        refColumns[elem] = {type: DataTypes.STRING};
-                    }
-                    console.log(refColumns);
+            } else {      
+            
+                const reqlist = await Tmp.findAll({ where: { owner: row.id  } });
+                // console.log('reqlist:', reqlist );
+                
+                for (let row of reqlist) { 
+                    let strJson = row.data; 
+                    let Elements = await JSON.parse(strJson);
+                    console.log('524',Elements);                    
+                    // for (let elem of Object.keys(Elements)) {
+                        refColumns[Elements.textId] = {type: DataTypes.STRING};
+                    // }                                            
                 }
+                console.log(refColumns);
+
                 try {                    
                     const EvaObject = sequelize.define(objectId, refColumns);
                     console.log('Create table: '+EvaObject);   
@@ -559,10 +566,10 @@ exports.getTmp = async function(req, res) {
     console.log(dateNow,'>>getTmp()...');
     if (!req.body) return res.sendStatus(400);
 
-    //owner
+    const { owner } = req.body;
 
     try {
-        const  data = await Tmp.findAll({raw:true});
+        const  data = await Tmp.findAll({ where: { owner: owner }});
         //console.log(data);
         await res.send(data);        
     } catch(err) {

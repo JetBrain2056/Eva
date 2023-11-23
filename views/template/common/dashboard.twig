@@ -260,7 +260,7 @@
           <div class="tab-pane fade" id="nav-requisite" role="tabpanel" aria-labelledby="nav-requisite-tab">
             <div class="btn-toolbar" role="toolbar" aria-label="toolbar group">
               <div class="btn-group btn-group-sm" role="group">
-                <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" data-bs-toggle="modal" data-bs-target="#reqModal">
+                <button type="button" class="btn btn-primary d-flex gap-2 align-items-center"  onclick="reqCreate()">
                   <i class="fa fa-plus-square"></i>
                   <span>{{ button_add }}</span>
                 </button>
@@ -325,7 +325,7 @@
         </div>    
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary" onclick="objectSave()"><i class="fa fa-floppy-o"></i></button>        
+        {# <button type="submit" class="btn btn-primary" onclick="objectSave()"><i class="fa fa-floppy-o"></i></button>         #}
         <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" onclick="objectCreate()">{{ button_save }}&{{button_close}}</button>        
       </div>
     </div>
@@ -356,3 +356,33 @@
     </div>
   </div>
 </div> 
+{# Modal Requsite #}
+<div class="modal fade" id="requsiteModal" tabindex="-2" aria-labelledby="requsiteModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="requsiteModalLabel">Add requsite:</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form class="form" id="create-req-form">
+          <label for="input-req-id">Identifier:</label>
+          <div class="input-group">
+            <input type="text" placeholder="" id="input-req-id" class="form-control"/>
+          </div>
+          <label for="input-req-type">Type:</label>
+          <div class="input-group">
+            <input type="text" placeholder="" id="input-req-type" class="form-control"/>
+          </div>  
+          <label for="input-req-descr">Description:</label>
+          <div class="input-group">
+            <input type="text" placeholder="" id="input-req-descr" class="form-control"/>
+          </div>       
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" onclick="reqSave()">{{ button_save }}&{{ button_close }}</button>
+      </div>
+    </div>
+  </div>
+</div>

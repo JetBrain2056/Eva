@@ -1,4 +1,4 @@
-const { User, Role, Config, Subsystem, Constant, Module } = require('../models/models.js');
+const { User, Role, Config, Subsystem, Constant, Module, Tmp } = require('../models/models.js');
 const { content }       = require('../index.js');
 const bcrypt            = require('bcrypt');
 const sequelize         = require('../db');
@@ -555,6 +555,71 @@ exports.getSubsystems = async function(req, res) {
         console.log(err);
     }
 }
+exports.getTmp = async function(req, res) {
+    console.log(dateNow,'>>getTmp()...');
+    if (!req.body) return res.sendStatus(400);
+
+    //owner
+
+    try {
+        const  data = await Tmp.findAll({raw:true});
+        //console.log(data);
+        await res.send(data);        
+    } catch(err) {
+        console.log(err);
+    }
+}
+exports.createReq = async function(req, res) {
+    console.log(dateNow,'>>createReq()...');
+    if (!req.body) return res.sendStatus(400);
+
+    const { owner, data } = req.body;
+    
+    try {                     
+        const result = await Tmp.create({     
+                owner : owner,           
+                data  : data
+        });
+
+        return await res.json(result);   
+    } catch (err){
+        console.log(err);
+    }
+}
+exports.deleteReq = async function(req, res) {
+    console.log(dateNow,'>>deleteReq()...');
+    if (!req.body) return res.sendStatus(400);
+
+    const { id } = req.body;
+
+    try {    
+        const result = await Tmp.destroy(
+        {
+            where: {id : id}
+        })
+        return await res.json(result); 
+    } catch(err) {
+        console.log(err);
+    }
+}
+exports.editReq = async function(req, res) {
+    console.log(dateNow,'>>editReq()...');    
+    if (!req.body) return res.sendStatus(400);     
+
+    const { id, data }  = req.body;  
+
+    try {
+        const result = await Tmp.update({             
+            data  : data            
+        }, {
+            where: {id : id}
+        })        
+        return await res.json(result); 
+    } catch(err) {
+        console.log(err); 
+    }   
+}
+
 //eva-app/////////////////////////////////
 exports.getReferences = async function(req, res) {
     console.log(dateNow,'>>getReferences()...');

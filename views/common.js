@@ -447,32 +447,18 @@ async function objectCreate() {
         alert('ID not filled in!');
         return;
     }
-    let reqlist = [];
-
-    let res = await getOnServer('/gettmp');
-    // console.log(res);
-    for (let req of res) {            
-        let Elements = await JSON.parse(req.data);
-        console.log(Elements);
-        // for (let elem of Object.keys(Elements)) {
-        //     console.log(elem);
-            // reqlist.push(Elements[elem]);
-            reqlist.push(Elements.textId);
-        // }
-    }
     
-    let tmp = { 
+    const tmp = { 
         typeId    : input_type.value, 
         textId    : input_textId.value,
         subsysId  : input_subsystem.getAttribute("eva-id"),
-        subsysName: input_subsystem.value,
-        reqlist   : reqlist
-    };          
+        subsysName: input_subsystem.value        
+    }          
 
     const data =  {
         'id'      : input_form.getAttribute("eva-id"),
         'data'    : JSON.stringify(tmp),
-    };
+    }
     
     let result;
     console.log('createMode: '+createMode);
@@ -541,8 +527,6 @@ async function objectEditModal() {
     const input_textId    = document.getElementById('input-textId');   
     const input_subsystem = document.getElementById('input-subsystem');   
     //const subsystemBtn    = document.getElementById("subsystemBtn");
-    // const input_req1 = document.getElementById('input-ref-req1'); 
-    // const input_req2 = document.getElementById('input-ref-req2'); 
 
     let data = { 'id': row.cells[0].innerText };
 
@@ -559,13 +543,6 @@ async function objectEditModal() {
         input_subsystem.value   = Elements.subsysName;
         input_subsystem.setAttribute("eva-id", Elements.subsysId);
         
-        // let reqList = Elements.reqlist;
-        // console.log(reqList);
-        // if (reqList) {
-        //     input_req1.value = reqList[0];
-        //     input_req2.value = reqList[1];
-        // }
-
         //console.log(Elements.typeId);
         // if (Elements.typeId==='Subsystem'||Elements.typeId==='Constant') {            
         //     input_subsystem.setAttribute("disabled","disabled"); 
@@ -574,7 +551,9 @@ async function objectEditModal() {
         //     input_subsystem.removeAttribute("disabled"); 
         //     subsystemBtn.removeAttribute("disabled"); 
         // }
-    }         
+    }    
+    
+    await showRequisiteTable();
 
 }
 async function objectDelete() {
@@ -661,9 +640,11 @@ async function objectEditSubsystem() {
 async function showRequisiteTable() {
     console.log('>>showRequisiteTable()...');
 
-    const id = 4//test
-    const getData = {'id': id}
-    let tmp = await postOnServer(getData,'/getobject');  
+    const ownerForm     = document.getElementById('create-object-form');  
+    const id = ownerForm.getAttribute("eva-id");
+
+    const getData = {'owner': id}
+    let tmp = await postOnServer(getData,'/gettmp');  
 
     let data = [];
 
@@ -671,15 +652,10 @@ async function showRequisiteTable() {
         let strJson = row.data; 
         let Elements = await JSON.parse(strJson);
 
-        let elem = Object.assign({'id':row.id}, Elements);
-
-        for (let req of elem.reqlist) {
-            data.push({'req':req});
-        }
-        
+        data.push({'req' : Elements.textId});    
     }
   
-    const col = {'req':'requsite'};  
+    const col = {'req':'Identifier'};  
     const hide = [];
     
     await showTable(tbl[5], hide, col, data);
@@ -755,7 +731,7 @@ async function reqCreate() {
 
     if (result) await showRequisiteTable();
     
-    currentModal.hide();
+    //currentModal.hide();
 }
 async function reqDelete() {
 

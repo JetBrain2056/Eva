@@ -442,18 +442,24 @@ async function objectCreate() {
     const input_subsystem  = document.getElementById('input-subsystem');   
     const input_form       = document.getElementById('create-object-form');  
     const createMode = input_form.getAttribute("create-mode");  
-
-    const input_req1   = document.getElementById('input-ref-req1');
-    const input_req2   = document.getElementById('input-ref-req2');
     
     if (!input_textId.value) {
         alert('ID not filled in!');
         return;
     }
     let reqlist = [];
-    // if (input_textId.value==='Reference') {
-        reqlist = [input_req1.value, input_req2.value];
-    // }
+
+    let res = await getOnServer('/gettmp');
+    // console.log(res);
+    for (let req of res) {            
+        let Elements = await JSON.parse(req.data);
+        console.log(Elements);
+        // for (let elem of Object.keys(Elements)) {
+        //     console.log(elem);
+            // reqlist.push(Elements[elem]);
+            reqlist.push(Elements.textId);
+        // }
+    }
     
     let tmp = { 
         typeId    : input_type.value, 
@@ -525,7 +531,7 @@ async function objectEditModal() {
     const row = await selectRows[0];  
 
     const objectModalLabel = document.getElementById('objectModalLabel');  
-    objectModalLabel.innerText = 'Edit object';
+    objectModalLabel.innerText = 'Edit object:';
 
     const input_form      = document.getElementById('create-object-form');  
     input_form.reset();
@@ -535,8 +541,8 @@ async function objectEditModal() {
     const input_textId    = document.getElementById('input-textId');   
     const input_subsystem = document.getElementById('input-subsystem');   
     //const subsystemBtn    = document.getElementById("subsystemBtn");
-    const input_req1 = document.getElementById('input-ref-req1'); 
-    const input_req2 = document.getElementById('input-ref-req2'); 
+    // const input_req1 = document.getElementById('input-ref-req1'); 
+    // const input_req2 = document.getElementById('input-ref-req2'); 
 
     let data = { 'id': row.cells[0].innerText };
 
@@ -553,12 +559,12 @@ async function objectEditModal() {
         input_subsystem.value   = Elements.subsysName;
         input_subsystem.setAttribute("eva-id", Elements.subsysId);
         
-        let reqList = Elements.reqlist;
-        console.log(reqList);
-        if (reqList) {
-            input_req1.value = reqList[0];
-            input_req2.value = reqList[1];
-        }
+        // let reqList = Elements.reqlist;
+        // console.log(reqList);
+        // if (reqList) {
+        //     input_req1.value = reqList[0];
+        //     input_req2.value = reqList[1];
+        // }
 
         //console.log(Elements.typeId);
         // if (Elements.typeId==='Subsystem'||Elements.typeId==='Constant') {            
@@ -679,14 +685,75 @@ async function showRequisiteTable() {
     await showTable(tbl[5], hide, col, data);
 
 }
-async function reqCreate() {
+async function reqModal() {
+    console.log('>>reqModal()...');
+    
+    const modalForm  = document.getElementById("requisiteModal");
+    const inputForm  = document.getElementById("create-req-form");
+    
+    const objectModalLabel = document.getElementById('requisiteModalLabel');  
+    objectModalLabel.innerText = 'Add requisite:';
 
-    const modalForm  = document.getElementById("requsiteModal");
+    inputForm.reset();    
+    inputForm.setAttribute("create-mode",true);  
+
+    currentModal = getModal(modalForm);
+}
+async function reqEditModal() {
+    console.log('>>reqEditModal()...');
+
+    if (selectRows.length === 0) return;
+
+    const modalForm  = document.getElementById("requisiteModal");
+    const inputForm  = document.getElementById("create-req-form");
+    
+    const objectModalLabel = document.getElementById('requisiteModalLabel');  
+    objectModalLabel.innerText = 'Edit requisite:';
+
+    inputForm.reset();    
+    inputForm.setAttribute("create-mode",false);  
+
     currentModal = getModal(modalForm);
 
 }
-async function reqSave() {
+async function reqCreate() {
+    console.log('>>reqCreate()...');
 
+    const ownerForm     = document.getElementById('create-object-form');  
+    const inputForm     = document.getElementById("create-req-form");
+    const inputReqId    = document.getElementById("input-req-id");
+    const inputReqType  = document.getElementById("input-req-type");
+    const inputReqDescr = document.getElementById("input-req-descr");
+
+    let tmp = { 
+        textId    : inputReqId.value, 
+        type      : inputReqType.value,        
+        descr     : inputReqDescr.value
+    };          
+
+    const data =  {
+        'owner'   : ownerForm.getAttribute("eva-id"),
+        'data'    : JSON.stringify(tmp),
+    };
+
+    let result;
+    // if (createMode==='true') {
+        try {
+            result = await postOnServer(data, '/createreq')
+            console.log(result);        
+        } catch (e) {
+            console.log(e);
+        }
+    // } else {
+    //     try {
+    //         result = await postOnServer(data, '/editreq')
+    //         console.log(result);        
+    //     } catch (e) {
+    //         console.log(e);
+    //     }
+    // }
+
+    if (result) await showRequisiteTable();
     
     currentModal.hide();
 }

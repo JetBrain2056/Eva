@@ -45,8 +45,9 @@ const Module = sequelize.define('Module', {
 })
 
 const Tmp = sequelize.define('Tmp', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},    
-    data:  {type: DataTypes.STRING(1000)}
+    id    : {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},  
+    owner : {type: DataTypes.INTEGER},
+    data  : {type: DataTypes.STRING(1000)}
 })
 
 Role.hasOne(User);

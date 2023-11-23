@@ -679,6 +679,22 @@ async function showRequisiteTable() {
     await showTable(tbl[5], hide, col, data);
 
 }
+async function reqCreate() {
+
+    const modalForm  = document.getElementById("requsiteModal");
+    currentModal = getModal(modalForm);
+
+}
+async function reqSave() {
+
+    
+    currentModal.hide();
+}
+async function reqDelete() {
+
+
+}
+
 /////////////////////////////////////////////////////////////////////////////
 window.onload = function() {
     try {

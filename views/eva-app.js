@@ -94,7 +94,8 @@ async function refModal() {
         'textId': textId
     }
 
-    res = await postOnServer(data, '/getrefs');  
+    const res = await postOnServer(data, '/getrefcol');  
+    console.log(res);
     await refElement(refForm, res, createMode);      
 }
 async function refEditModal() {
@@ -126,11 +127,9 @@ async function refEditModal() {
 async function refElement(refForm, res, createMode) {
     console.log('>>refElement()...');  
     
-    if (res) {       
-        let col = res[0];           
-        delete col['createdAt'];
-        delete col['updatedAt'];                  
-        for (let req of Object.keys(col)) {
+    if (res) {                                
+        for (let elem of res) {
+            let req = elem.column_name;
             const label  = document.createElement("label");
             label.setAttribute("for","input-ref-"+req);
             label.innerText = req+":";        

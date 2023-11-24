@@ -44,10 +44,16 @@ const Module = sequelize.define('Module', {
     xbase64: {type: DataTypes.STRING(5000)}
 })
 
-const Tmp = sequelize.define('Tmp', {
+const Requisite = sequelize.define('Requisite', {
     id    : {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},  
     owner : {type: DataTypes.INTEGER},
     data  : {type: DataTypes.STRING(1000)}
+})
+
+const Form = sequelize.define('Form', {
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},    
+    name:  {type: DataTypes.STRING, unique: true},
+    xbase64: {type: DataTypes.STRING(5000)}
 })
 
 Role.hasOne(User);
@@ -63,5 +69,6 @@ module.exports = {
     Subsystem,
     Constant,
     Module, 
-    Tmp
+    Requisite,
+    Form
 }

@@ -644,7 +644,7 @@ async function showRequisiteTable() {
     const id = ownerForm.getAttribute("eva-id");
 
     const getData = {'owner': id}
-    let tmp = await postOnServer(getData,'/gettmp');  
+    let tmp = await postOnServer(getData,'/getreqs');  
 
     let data = [];
 
@@ -652,11 +652,11 @@ async function showRequisiteTable() {
         let strJson = row.data; 
         let Elements = await JSON.parse(strJson);
 
-        data.push({'req' : Elements.textId});    
+        data.push({'id' : row.id,'textId' : Elements.textId});    
     }
   
-    const col = {'req':'Identifier'};  
-    const hide = [];
+    const col = {'id':'Id','textId':'Identifier'};  
+    const hide = ['id'];
     
     await showTable(tbl[5], hide, col, data);
 
@@ -665,6 +665,7 @@ async function reqModal() {
     console.log('>>reqModal()...');
     
     const modalForm  = document.getElementById("requisiteModal");
+    currentModal = getModal(modalForm);
     const inputForm  = document.getElementById("create-req-form");
     
     const objectModalLabel = document.getElementById('requisiteModalLabel');  
@@ -672,8 +673,6 @@ async function reqModal() {
 
     inputForm.reset();    
     inputForm.setAttribute("create-mode",true);  
-
-    currentModal = getModal(modalForm);
 }
 async function reqEditModal() {
     console.log('>>reqEditModal()...');
@@ -681,6 +680,7 @@ async function reqEditModal() {
     if (selectRows.length === 0) return;
 
     const modalForm  = document.getElementById("requisiteModal");
+    currentModal = getModal(modalForm);
     const inputForm  = document.getElementById("create-req-form");
     
     const objectModalLabel = document.getElementById('requisiteModalLabel');  
@@ -689,8 +689,28 @@ async function reqEditModal() {
     inputForm.reset();    
     inputForm.setAttribute("create-mode",false);  
 
-    currentModal = getModal(modalForm);
+    const row = await selectRows[0];  
 
+    let data = { 'id': row.cells[0].innerText };
+
+    let res = await postOnServer(data,'/gettpm');
+
+    const inputReqId    = document.getElementById("input-req-id");
+    const inputReqType  = document.getElementById("input-req-type");
+    const inputReqDescr = document.getElementById("input-req-descr");
+
+    // console.log(res);
+  
+    if (res) {
+
+        let strJson = res.data;                  
+        let Elements = await JSON.parse(strJson);    
+
+        inputForm.setAttribute("eva-id", res.id);
+        inputReqId.value       = Elements.textId;
+        inputReqType.value     = Elements.type;
+        inputReqDescr.value    = Elements.textId;
+    }
 }
 async function reqCreate() {
     console.log('>>reqCreate()...');
@@ -700,6 +720,7 @@ async function reqCreate() {
     const inputReqId    = document.getElementById("input-req-id");
     const inputReqType  = document.getElementById("input-req-type");
     const inputReqDescr = document.getElementById("input-req-descr");
+    const createMode    = inputForm.getAttribute("create-mode"); 
 
     let tmp = { 
         textId    : inputReqId.value, 
@@ -708,36 +729,44 @@ async function reqCreate() {
     };          
 
     const data =  {
+        'id'      : inputForm.getAttribute("eva-id"),
         'owner'   : ownerForm.getAttribute("eva-id"),
         'data'    : JSON.stringify(tmp),
     };
 
     let result;
-    // if (createMode==='true') {
+    if (createMode==='true') {
         try {
             result = await postOnServer(data, '/createreq')
             console.log(result);        
         } catch (e) {
             console.log(e);
         }
-    // } else {
-    //     try {
-    //         result = await postOnServer(data, '/editreq')
-    //         console.log(result);        
-    //     } catch (e) {
-    //         console.log(e);
-    //     }
-    // }
+    } else {
+        try {
+            result = await postOnServer(data, '/editreq')
+            console.log(result);        
+        } catch (e) {
+            console.log(e);
+        }
+    }
 
     if (result) await showRequisiteTable();
     
     //currentModal.hide();
 }
 async function reqDelete() {
+    console.log('>>reqDelete()...');
+    
+    for (const row of selectRows){
 
+        const data = {'id': row.cells[0].innerText};
 
+        res = await postOnServer(data,'/delreq');        
+    }
+
+    if(res) await showRequisiteTable();
 }
-
 /////////////////////////////////////////////////////////////////////////////
 window.onload = function() {
     try {

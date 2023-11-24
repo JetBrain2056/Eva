@@ -22,9 +22,12 @@ router.post('/delobject', controller.deleteObject);
 router.post('/editobject', controller.editObject);
 router.post('/getobject', controller.getObject);
 router.post('/updateconf', controller.updateConfig);
-router.post('/gettmp', controller.getTmp);
+
+router.post('/getreqs', controller.getReqs);
+router.post('/getreq', controller.getReq);
 router.post('/createreq', controller.createReq);
 router.post('/editreq', controller.editReq);
+router.post('/delreq', controller.deleteReq);
 
 //eva-app
 router.get('/subsystems', controller.getSubsystems);

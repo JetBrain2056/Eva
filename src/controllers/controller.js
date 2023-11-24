@@ -1,4 +1,4 @@
-const { User, Role, Config, Subsystem, Constant, Module, Tmp } = require('../models/models.js');
+const { User, Role, Config, Subsystem, Constant, Module, Requisite, Form } = require('../models/models.js');
 const { content }       = require('../index.js');
 const bcrypt            = require('bcrypt');
 const sequelize         = require('../db');
@@ -515,18 +515,14 @@ exports.updateConfig = async function(req, res) {
                 }                        
             } else {      
             
-                const reqlist = await Tmp.findAll({ where: { owner: row.id  } });
-                // console.log('reqlist:', reqlist );
-                
+                const reqlist = await Requisite.findAll({ where: { owner: row.id  } });                
+            
                 for (let row of reqlist) { 
                     let strJson = row.data; 
-                    let Elements = await JSON.parse(strJson);
-                    console.log('524',Elements);                    
-                    // for (let elem of Object.keys(Elements)) {
-                        refColumns[Elements.textId] = {type: DataTypes.STRING};
-                    // }                                            
+                    let Elements = await JSON.parse(strJson);                                        
+                    refColumns[Elements.textId] = {type: DataTypes.STRING};                                               
                 }
-                console.log(refColumns);
+                //console.log(refColumns);
 
                 try {                    
                     const EvaObject = sequelize.define(objectId, refColumns);
@@ -562,14 +558,28 @@ exports.getSubsystems = async function(req, res) {
         console.log(err);
     }
 }
-exports.getTmp = async function(req, res) {
-    console.log(dateNow,'>>getTmp()...');
+exports.getReqs = async function(req, res) {
+    console.log(dateNow,'>>getReqs()...');
     if (!req.body) return res.sendStatus(400);
 
     const { owner } = req.body;
 
     try {
-        const  data = await Tmp.findAll({ where: { owner: owner }});
+        const  data = await Requisite.findAll({ where: { owner: owner }});
+        //console.log(data);
+        await res.send(data);        
+    } catch(err) {
+        console.log(err);
+    }
+}
+exports.getReq = async function(req, res) {
+    console.log(dateNow,'>>getReq()...');
+    if (!req.body) return res.sendStatus(400);
+
+    const { id } = req.body;
+
+    try {
+        const  data = await Requisite.findOne({ where: { id: id }});
         //console.log(data);
         await res.send(data);        
     } catch(err) {
@@ -583,7 +593,7 @@ exports.createReq = async function(req, res) {
     const { owner, data } = req.body;
     
     try {                     
-        const result = await Tmp.create({     
+        const result = await Requisite.create({     
                 owner : owner,           
                 data  : data
         });
@@ -600,7 +610,7 @@ exports.deleteReq = async function(req, res) {
     const { id } = req.body;
 
     try {    
-        const result = await Tmp.destroy(
+        const result = await Requisite.destroy(
         {
             where: {id : id}
         })
@@ -616,7 +626,7 @@ exports.editReq = async function(req, res) {
     const { id, data }  = req.body;  
 
     try {
-        const result = await Tmp.update({             
+        const result = await Requisite.update({             
             data  : data            
         }, {
             where: {id : id}

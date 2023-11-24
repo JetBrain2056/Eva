@@ -668,6 +668,22 @@ exports.getReference = async function(req, res) {
         console.log(err);
     }
 }
+exports.getRefColumns = async function(req, res) {
+    console.log(dateNow,'>>getRefColumns()...');
+    if (!req.body) return res.sendStatus(400);
+    
+    const {textId} = req.body;    
+    try {
+        const data = await sequelize.query(
+            `SELECT column_name FROM information_schema.Columns
+             WHERE table_schema = 'public' and table_name = '`+textId+`s'
+               and not column_name ='updatedAt' and not column_name='createdAt' ;`         
+        );
+        return await res.send(data[0]);        
+    } catch(err) {
+        console.log(err);
+    }
+}
 exports.createReference = async function(req, res) {
     console.log(dateNow,'>>createReference()...');
     if (!req.body) return res.sendStatus(400);

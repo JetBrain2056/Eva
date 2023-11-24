@@ -95,8 +95,12 @@ async function refModal() {
     }
 
     const res = await postOnServer(data, '/getrefcol');  
-    console.log(res);
-    await refElement(refForm, res, createMode);      
+    let obj =[];    
+    for (let elem of res) {
+        let ele = elem.column_name;
+        obj[ele]='';       
+    }
+    await refElement(refForm, obj, createMode);      
 }
 async function refEditModal() {
     console.log('>>refEditModal...'); 
@@ -120,16 +124,17 @@ async function refEditModal() {
         'textId': textId,
         'id': row.cells[0].innerText
     };
-    res = await postOnServer(data, '/getref');  
-    await refElement(refForm, res, createMode);     
+    let res = await postOnServer(data, '/getref');  
+    await refElement(refForm, res[0], createMode);     
 }
 //DOM Dynamic Content////////////////////////////////////////////////////////
-async function refElement(refForm, res, createMode) {
+async function refElement(refForm, col, createMode) {
     console.log('>>refElement()...');  
-    
-    if (res) {                                
-        for (let elem of res) {
-            let req = elem.column_name;
+    // console.log(res);
+    if (col) {                  
+        delete col['createdAt'];
+        delete col['updatedAt'];
+        for (let req of Object.keys(col)) {            
             const label  = document.createElement("label");
             label.setAttribute("for","input-ref-"+req);
             label.innerText = req+":";        

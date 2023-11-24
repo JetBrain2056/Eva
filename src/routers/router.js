@@ -33,6 +33,7 @@ router.post('/delreq', controller.deleteReq);
 router.get('/subsystems', controller.getSubsystems);
 router.post('/getrefs', controller.getReferences);
 router.post('/getref', controller.getReference);
+router.post('/getrefcol', controller.getRefColumns);
 router.post('/createref', controller.createReference);
 router.post('/updateref', controller.updateReference);
 router.post('/delref', controller.deleteReference);

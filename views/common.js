@@ -1,5 +1,6 @@
 let selectRows = [];
 let currentModal;
+let currentModal2;
 let n = 0;
 let tbl = [];
 const inputStatus   = document.getElementById('status');
@@ -22,7 +23,7 @@ for (const div of table) {
     n = n + 1;
 }
 function rowSelect(e) {
-    console.log('>>rowSelect...');
+    console.log('>>rowSelect()...');
 
     const path = e.path || (e.composedPath && e.composedPath());
     const row  = path[1];
@@ -76,33 +77,42 @@ function rowSelect(e) {
         console.log(text);
     }
 }
-async function showTable(showTbl, hide, col, data) {
-    console.log('>>showTable()...'); 
+function dblSelect(e) {
+    console.log('>>dblSelect()...');
 
-    //console.log('table: ' + showTbl); 
+    if (e.target.nodeName  === 'TH') {
+        return;
+    } else {
+        const currentForm = e.currentTarget.parentNode.parentNode;
+            
+        const modalTrigger = currentForm.getElementsByClassName('eva-edit');
+        if (modalTrigger[0]) {
+            console.log('modalTrigger'), modalTrigger;
+            modalTrigger[0].onclick();         
+        }            
+    }
+}
+function addListeners(showTbl) {
+    console.log('>>addListeners()...'); 
 
-    showTbl.innerHTML='';
-   
+    // console.log('table: ' + showTbl); 
+
     if (showTbl) {
         showTbl.addEventListener('click', rowSelect);
   
-        showTbl.addEventListener('dblclick',  (e) => {
-          
-          if (e.target.nodeName  === 'TH') {
-            return;
-          } else {
-            const currentForm = e.currentTarget.parentNode.parentNode;
-              
-            const modalTrigger = currentForm.getElementsByClassName('eva-edit');
-            if (modalTrigger[0]) {
-              modalTrigger[0].click();
-            }
-          }
-        });
+        showTbl.addEventListener('dblclick', dblSelect, {once: false});
+                    
     } else {       
-        //return;
+    //     //return;
     }
-  
+}
+async function showTable(showTbl, hide, col, data) {
+    console.log('>>showTable()...'); 
+
+    showTbl.innerHTML='';
+   
+    addListeners(showTbl);
+
     const thead = document.createElement('thead');
     thead.style.position = 'sticky';  
     thead.style.top      = '0px';
@@ -147,10 +157,11 @@ async function showTable(showTbl, hide, col, data) {
     }
 }
 function getModal(modalForm) {
-    let options =  { focus: true };
+    console.log('>>getModal()...');
+    let options =  { focus: true , keyboard: false};
     currentModal = new bootstrap.Modal(modalForm, options);  
     
-    return currentModal.show();   
+    currentModal.show();
 }
 function logout() {
     console.log('>>Logout()...');
@@ -502,7 +513,7 @@ async function objectModal() {
     const input_subsystem = document.getElementById('input-subsystem');  
     input_subsystem.removeAttribute("disabled");
 
-    currentModal = getModal(modalForm);
+    getModal(modalForm);
 
 }
 async function objectEditModal() {
@@ -511,8 +522,6 @@ async function objectEditModal() {
     if (selectRows.length === 0) return;
 
     const modalForm = document.getElementById("objectModal");
-
-    currentModal = getModal(modalForm);
   
     const row = await selectRows[0];  
 
@@ -528,10 +537,11 @@ async function objectEditModal() {
     const input_subsystem = document.getElementById('input-subsystem');   
     //const subsystemBtn    = document.getElementById("subsystemBtn");
 
+    getModal(modalForm);
+
     let data = { 'id': row.cells[0].innerText };
 
     res = await postOnServer(data,'/getobject');
-  
     if (res) {
 
         let strJson = res[0].data;          
@@ -554,7 +564,6 @@ async function objectEditModal() {
     }    
     
     await showRequisiteTable();
-
 }
 async function objectDelete() {
     console.log('>>objectDelete()...');
@@ -665,7 +674,6 @@ async function reqModal() {
     console.log('>>reqModal()...');
     
     const modalForm  = document.getElementById("requisiteModal");
-    currentModal = getModal(modalForm);
     const inputForm  = document.getElementById("create-req-form");
     
     const objectModalLabel = document.getElementById('requisiteModalLabel');  
@@ -673,14 +681,15 @@ async function reqModal() {
 
     inputForm.reset();    
     inputForm.setAttribute("create-mode",true);  
+
+    getModal(modalForm);
 }
 async function reqEditModal() {
     console.log('>>reqEditModal()...');
 
     if (selectRows.length === 0) return;
 
-    const modalForm  = document.getElementById("requisiteModal");
-    currentModal = getModal(modalForm);
+    const modalForm  = document.getElementById("requisiteModal");    
     const inputForm  = document.getElementById("create-req-form");
     
     const objectModalLabel = document.getElementById('requisiteModalLabel');  
@@ -689,11 +698,13 @@ async function reqEditModal() {
     inputForm.reset();    
     inputForm.setAttribute("create-mode",false);  
 
+    getModal(modalForm);
+
     const row = await selectRows[0];  
 
     let data = { 'id': row.cells[0].innerText };
 
-    let res = await postOnServer(data,'/gettpm');
+    let res = await postOnServer(data,'/getreq');
 
     const inputReqId    = document.getElementById("input-req-id");
     const inputReqType  = document.getElementById("input-req-type");
@@ -753,7 +764,7 @@ async function reqCreate() {
 
     if (result) await showRequisiteTable();
     
-    //currentModal.hide();
+    modalLevel2.hide();
 }
 async function reqDelete() {
     console.log('>>reqDelete()...');

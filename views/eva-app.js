@@ -109,6 +109,8 @@ async function refEditModal() {
 
     const row = selectRows[0];      
 
+    const modalForm  = document.getElementById('refModal');  
+
     const refModalLabel    = document.getElementById('refModalLabel');  
     refModalLabel.innerText = 'Edit element:';   
 
@@ -118,6 +120,8 @@ async function refEditModal() {
     refForm.reset();  
     refForm.innerHTML ='';     
     refForm.setAttribute("create-mode", createMode);  
+
+    getModal(modalForm);
 
     const textId = refForm.getAttribute("eva-textId");
     const data = { 

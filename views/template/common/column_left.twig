@@ -4,7 +4,11 @@
     </h6>
     <ul class="p-2 sidebar-list nav btn-group-vertical">
       {% for element in asideList %}
-        <li class="nav-item"><a class="nav-link btn" href="{{element.href}}">{{ element.title }}</a></li>
+        <li class="nav-item">
+          <a class="nav-link btn" href="{{element.href}}"> 
+            {{ element.title }}
+          </a>
+        </li>
       {% endfor %}
     </ul>  
 </div>

@@ -387,19 +387,16 @@ async function userEditRole() {
 async function roleSelect() {
   console.log('>>roleSelect...'); 
 
-  if (selectRows.length === 0) return;
+    if (selectRows.length === 0) return;
 
-  const row = selectRows[0];  
+    const row = selectRows[0];  
 
-  const input_role        = document.getElementById('input-role');   
-  const input_edit_role   = document.getElementById('input-edit-role');   
+    const input_role        = document.getElementById('input-role');    
 
-  input_role.value        = row.cells[1].innerText;
-  input_role.setAttribute("eva-id", row.cells[0].innerText);
-  input_edit_role.value   = row.cells[1].innerText;
-  input_edit_role.setAttribute("eva-id", row.cells[0].innerText);
+    input_role.value        = row.cells[1].innerText;
+    input_role.setAttribute("eva-id", row.cells[0].innerText);
 
- await currentModal.hide();
+    await currentModal.hide();
            
 }
 async function roleDelete() {
@@ -619,13 +616,10 @@ async function subsystemSelect() {
 
     const row = selectRows[0];  
   
-    const inputSubsystem     = document.getElementById('input-subsystem');       
-    const inputEditSubsystem = document.getElementById('input-edit-subsystem');  
+    const inputSubsystem     = document.getElementById('input-subsystem');            
   
     inputSubsystem.value  = row.cells[1].innerText;
     inputSubsystem.setAttribute("eva-id", row.cells[0].innerText);
-    inputEditSubsystem.value  = row.cells[1].innerText;
-    inputEditSubsystem.setAttribute("eva-id", row.cells[0].innerText);
   
     await currentModal.hide();
 }
@@ -633,7 +627,7 @@ async function objectEditSubsystem() {
 
     let modalForm = document.getElementById("editSubsystemModal");
 
-    currentModal = getModal(modalForm);
+    getModal(modalForm);
   
     await showSubsystemsTable();
 

@@ -1,6 +1,5 @@
 let selectRows = [];
 let currentModal;
-let currentModal2;
 let n = 0;
 let tbl = [];
 const inputStatus   = document.getElementById('status');
@@ -8,7 +7,7 @@ const btnConfigSave = document.getElementById('btn-config-save');
 const content       = document.querySelector('.content');
 const forms         = document.getElementsByClassName('eva-form');
 for (const div of forms) {                                          
-    div.setAttribute("style", "height: calc(100vh - 171px); overflow-y: scroll;");               
+    div.setAttribute("style", "height: calc(100vh - 127px); overflow-y: scroll;");               
     tbl[n] = document.createElement('table');
     tbl[n].setAttribute("class", "table table-striped table-hover table-sm table-responsive");              
     div.appendChild(tbl[n]); 
@@ -95,15 +94,9 @@ function dblSelect(e) {
 function addListeners(showTbl) {
     console.log('>>addListeners()...'); 
 
-    // console.log('table: ' + showTbl); 
-
     if (showTbl) {
         showTbl.addEventListener('click', rowSelect);
-  
-        showTbl.addEventListener('dblclick', dblSelect, {once: false});
-                    
-    } else {       
-    //     //return;
+        showTbl.addEventListener('dblclick', dblSelect,{once:false});                        
     }
 }
 async function showTable(showTbl, hide, col, data) {
@@ -286,7 +279,8 @@ async function userEditModal() {
     if (selectRows.length === 0) { return };
 
     const row = selectRows[0];      
-    
+   
+    const modalForm         = document.getElementById('userModal'); 
     const inputLabel        = document.getElementById("userModalLabel");
     const input_form        = document.getElementById('create-user-form');  
     const input_name        = document.getElementById('input-user-name');  
@@ -301,12 +295,12 @@ async function userEditModal() {
     input_form.setAttribute("create-mode",false);    
     inputLabel.innerText = 'Edit user:';
 
+    getModal(modalForm); 
+
     let data = { 'id': row.cells[0].innerText};
 
     let res = await postOnServer(data,'/getuser');
-  
-    if (res) {
-       
+    if (res) {       
         input_form.setAttribute("eva-id", res[0].id);
         input_name.value        = res[0].Name;
         input_descr.value       = res[0].Descr;   
@@ -325,8 +319,7 @@ async function userEditModal() {
         } else {  
             input_eauth.checked = false;
         }      
-    }         
-
+    }   
 }
 async function userDelete() {
     console.log('>>userDelete...');
@@ -381,7 +374,7 @@ async function userEditRole() {
 
   let modalForm = document.getElementById("editUserRoleModal");
 
-  currentModal = getModal(modalForm);
+  getModal(modalForm);
 
   let data = await getOnServer('/getroles');  
 
@@ -406,7 +399,7 @@ async function roleSelect() {
   input_edit_role.value   = row.cells[1].innerText;
   input_edit_role.setAttribute("eva-id", row.cells[0].innerText);
 
-  await currentModal.hide();
+ await currentModal.hide();
            
 }
 async function roleDelete() {
@@ -615,7 +608,7 @@ async function showSubsystemsTable() {
     const col = {'id':'Id', 'name':'Name', 'display':'Display subsystem'};  
     const hide = ['id'];
     
-    await showTable(tbl[4], hide, col, data);
+    await showTable(tbl[6], hide, col, data);
 
 }
 async function subsystemSelect() {
@@ -667,7 +660,7 @@ async function showRequisiteTable() {
     const col = {'id':'Id','textId':'Identifier'};  
     const hide = ['id'];
     
-    await showTable(tbl[5], hide, col, data);
+    await showTable(tbl[4], hide, col, data);
 
 }
 async function reqModal() {

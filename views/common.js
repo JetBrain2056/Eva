@@ -99,7 +99,7 @@ function addListeners(showTbl) {
         showTbl.addEventListener('dblclick', dblSelect,{once:false});                        
     }
 }
-async function showTable(showTbl, hide, col, data) {
+function showTable(showTbl, hide, col, data) {
     console.log('>>showTable()...'); 
 
     showTbl.innerHTML='';
@@ -151,7 +151,7 @@ async function showTable(showTbl, hide, col, data) {
 }
 function getModal(modalForm) {
     console.log('>>getModal()...');
-    let options =  { focus: true , keyboard: false};
+    let options =  { focus: true };
     currentModal = new bootstrap.Modal(modalForm, options);  
     
     currentModal.show();
@@ -215,7 +215,7 @@ async function showUserTable() {
     const col  = { 'id':'Id', 'Name':'Name', 'Descr':'Descr', 'Role':'Role', 'email':'E-mail', 'Show':'Show', 'EAuth':'EAuth' };  
     const hide = ['id'];  
 
-    await showTable(tbl[1], hide, col, data);
+    showTable(tbl[1], hide, col, data);
 
 }
 async function userCreate() {
@@ -267,6 +267,8 @@ async function userCreate() {
 async function userCreateModal() {
     console.log('>>userCreateModal()...');     
 
+    const modalForm         = document.getElementById('userModal'); 
+    getModal(modalForm); 
     const inputLabel        = document.getElementById("userModalLabel");
     inputLabel.innerText = 'Add user*:';      
     const input_form        = document.getElementById('create-user-form');  
@@ -281,8 +283,10 @@ async function userEditModal() {
     const row = selectRows[0];      
    
     const modalForm         = document.getElementById('userModal'); 
+    getModal(modalForm); 
     const inputLabel        = document.getElementById("userModalLabel");
     const input_form        = document.getElementById('create-user-form');  
+    input_form.reset();  
     const input_name        = document.getElementById('input-user-name');  
     const input_descr       = document.getElementById('input-descr');    
     const input_email       = document.getElementById('input-email');    
@@ -294,8 +298,6 @@ async function userEditModal() {
 
     input_form.setAttribute("create-mode",false);    
     inputLabel.innerText = 'Edit user:';
-
-    getModal(modalForm); 
 
     let data = { 'id': row.cells[0].innerText};
 

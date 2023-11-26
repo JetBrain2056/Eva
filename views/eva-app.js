@@ -32,7 +32,7 @@ async function refCreate() {
         'textId'  : textId                
     }
 
-    const evaReqs   = refForm.querySelector('.eva-req');     
+    const evaReqs   = refForm.getElementsByClassName('eva-req');     
     for(let elem of evaReqs) {
         console.log(elem.name);
         if (elem.name==='id'&&createMode==='true'){            

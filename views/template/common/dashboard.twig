@@ -39,7 +39,7 @@
   <div class="tab-pane fade" id="nav-users" role="tabpanel" aria-labelledby="nav-users-tab">
     <div class="btn-toolbar" role="toolbar" aria-label="toolbar group">
       <div class="btn-group btn-group-sm" role="group">
-        <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" data-bs-toggle="modal" data-bs-target="#userModal" onclick="userCreateModal()">
+        <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" onclick="userCreateModal()">
           <i class="fa fa-user-plus"></i>
           <span>{{ button_add }}</span>
         </button>        
@@ -87,7 +87,7 @@
 </div>  
 
 {# Modal User #}
-<div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
+<div class="modal fade" id="userModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="userModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -138,7 +138,7 @@
   </div>
 </div>
 {# Modal Edit User Role [3] #}
-<div class="modal modal-lg fade" id="editUserRoleModal" tabindex="-2" aria-labelledby="userEditRoleModalLabel" aria-hidden="true">
+<div class="modal modal-lg fade" id="editUserRoleModal" tabindex="-2" data-bs-backdrop="static" aria-labelledby="userEditRoleModalLabel" aria-hidden="true">
   <div class="modal-dialog  modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
@@ -163,7 +163,7 @@
   </div>
 </div> 
 {# Modal Role #}
-<div class="modal fade" id="roleModal" tabindex="-1" aria-labelledby="roleModalLabel" aria-hidden="true">
+<div class="modal fade" id="roleModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="roleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -186,7 +186,7 @@
   </div>
 </div>
 {# Modal Object #}
-<div class="modal fade" id="objectModal" tabindex="-1" data-bs-keyboard="false" aria-labelledby="objectModalLabel" aria-hidden="false">
+<div class="modal fade" id="objectModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="objectModalLabel" aria-hidden="false">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -336,7 +336,7 @@
   </div>
 </div>
 {# Modal Edit Subsystem [6] #}
-<div class="modal modal-lg fade" id="editSubsystemModal" tabindex="-2" aria-labelledby="editSubsystemModalLabel" aria-hidden="true">
+<div class="modal modal-lg fade" id="editSubsystemModal" tabindex="-2" data-bs-backdrop="static" aria-labelledby="editSubsystemModalLabel" aria-hidden="true">
   <div class="modal-dialog  modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
@@ -361,7 +361,7 @@
   </div>
 </div> 
 {# Modal Requsite #}
-<div class="modal fade" id="requisiteModal" tabindex="-2" data-bs-keyboard="false" aria-labelledby="requisiteModalLabel" aria-hidden="false">
+<div class="modal fade" id="requisiteModal" tabindex="-2" data-bs-backdrop="static" aria-labelledby="requisiteModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">

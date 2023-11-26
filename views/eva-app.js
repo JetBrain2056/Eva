@@ -5,20 +5,20 @@ n = 0;
 //Commands on client/////////////////////////////////////////////////////////
 async function openRef(refName) {
     console.log('>>openRef()...');
-    console.log(refName);
+    // console.log(refName);
 
-    const form    = document.getElementById("ref-form");  
-    const refForm = document.getElementById("create-ref-form");  
+    const navForm    = document.getElementById("ref-form");  
+    const refForm    = document.getElementById("create-ref-form");  
     refForm.reset();   
     refForm.setAttribute("eva-id", refName);    
     refForm.setAttribute("eva-textId", refName);
 
-    let tab = new bootstrap.Tab(form);
+    let tab = new bootstrap.Tab(navForm);
     tab.show();    
 
     await showRefTable(refName);
-
-    const status = document.getElementById("status");
+    
+    let status = document.getElementById("status");
     status.value = ">It's work!";
 }
 async function refCreate() {
@@ -32,7 +32,7 @@ async function refCreate() {
         'textId'  : textId                
     }
 
-    const evaReqs   = document.getElementsByClassName('eva-req');     
+    const evaReqs   = refForm.querySelector('.eva-req');     
     for(let elem of evaReqs) {
         console.log(elem.name);
         if (elem.name==='id'&&createMode==='true'){            
@@ -111,12 +111,12 @@ async function refEditModal() {
 
     const modalForm  = document.getElementById('refModal');  
 
-    const refModalLabel    = document.getElementById('refModalLabel');  
+    const refModalLabel    = modalForm.querySelector('#refModalLabel');  
     refModalLabel.innerText = 'Edit element:';   
 
     let createMode = false;
           
-    const refForm    = document.getElementById('create-ref-form');    
+    const refForm    = modalForm.querySelector('#create-ref-form');    
     refForm.reset();  
     refForm.innerHTML ='';     
     refForm.setAttribute("create-mode", createMode);  

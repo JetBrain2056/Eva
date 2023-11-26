@@ -1,12 +1,17 @@
-<footer class="footer d-sm-flex justify-content-between p-1">       
-    <div class="ms-1 col-6">   
-    {% if logged %}   
-        <input class="text col-9" type="text" id="status"  disabled>   
+<footer class="footer d-flex d-sm-flex p-1 justify-content-between">     
+    {% if logged %}               
+        <input class="text text-truncate col-6 ms-1" type="text" id="status"  disabled>               
+    {% else %}   
+        <div></div>
     {% endif %}   
-    </div>    
-    <div class="">
-        <a href="https://eva.brainrs.com">EVA © 2023 Brain Retail Service LLC</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;        
-        <a href="https://github.com/JetBrain2056">Repository GitHub</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-        <span class="text">{{ text_version }}&nbsp;{{ Version }}_{{ lang }}</span>      
-    </div>
+    <div class="d-flex d-sm-flex justify-content-end">
+        <div class="collapse show ms-4" id="target">                           
+            <a class="text-truncate" href="https://eva.brainrs.com">EVA © 2023 Brain Retail Service LLC</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;        
+            <a href="https://github.com/JetBrain2056">Repository GitHub</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+            <span class="text">{{ text_version }}&nbsp;{{ Version }}_{{ lang }}</span>&nbsp;               
+        </div>    
+        <button class="btn btn-primary btn-sm" type="button" style="max-height:23px;" data-bs-toggle="collapse" href="#target" aria-expanded="false" aria-controls="target">
+            <i class="fa fa-angle-up"></i>
+        </button>  
+    </div>           
 </footer>

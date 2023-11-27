@@ -519,10 +519,19 @@ exports.updateConfig = async function(req, res) {
             
                 for (let row of reqlist) { 
                     let strJson = row.data; 
-                    let Elements = await JSON.parse(strJson);                                        
-                    refColumns[Elements.textId] = {type: DataTypes.STRING};                                               
-                }
-                //console.log(refColumns);
+                    let Elements = await JSON.parse(strJson);  
+                    if (Elements.type === 'String') {
+                        refColumns[Elements.textId] = {type: DataTypes.STRING};                                               
+                    } else if (Elements.type === 'Number') {
+                        refColumns[Elements.textId] = {type: DataTypes.DECIMAL};     
+                    } else if (Elements.type === 'Boolean') {
+                        refColumns[Elements.textId] = {type: DataTypes.BOOLEAN};  
+                    } else if (Elements.type === 'Data') {
+                        refColumns[Elements.textId] = {type: DataTypes.DATE};  
+                    } else {
+                        refColumns[Elements.textId] = {type: DataTypes.STRING};  
+                    }
+                }                
 
                 try {                    
                     const EvaObject = sequelize.define(objectId, refColumns);
@@ -637,7 +646,7 @@ exports.editReq = async function(req, res) {
     }   
 }
 
-//eva-app/////////////////////////////////
+//eva-app/////////////////////////////////////////
 exports.getReferences = async function(req, res) {
     console.log(dateNow,'>>getReferences()...');
     if (!req.body) return res.sendStatus(400);

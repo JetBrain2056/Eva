@@ -652,13 +652,13 @@ async function showRequisiteTable() {
         let strJson = row.data; 
         let Elements = await JSON.parse(strJson);
 
-        data.push({'id' : row.id,'textId' : Elements.textId});    
+        data.push({'id':row.id, 'textId':Elements.textId, 'type':Elements.type});    
     }
   
-    const col = {'id':'Id','textId':'Identifier'};  
+    const col = {'id':'Id','textId':'Identifier','type':'Type'};  
     const hide = ['id'];
     
-    await showTable(tbl[4], hide, col, data);
+    showTable(tbl[4], hide, col, data);
 
 }
 async function reqModal() {

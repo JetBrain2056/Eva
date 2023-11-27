@@ -94,7 +94,7 @@ async function refModal() {
         'textId': textId
     }
 
-    const res = await postOnServer(data, '/getrefcol');  
+    const res = await postOnServer(data, '/getrefcol');  //type?
     let obj =[];    
     for (let elem of res) {
         let ele = elem.column_name;
@@ -147,6 +147,7 @@ async function refElement(refForm, col, createMode) {
             div.class = "input-group";
             refForm.appendChild(div);
                 const input  = document.createElement("input");
+                if (req)
                 input.setAttribute("type","text");
                 input.id    = "input-ref-"+req;
                 input.name  = req;

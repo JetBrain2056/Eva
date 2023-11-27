@@ -274,15 +274,7 @@
                 </button>
               </div>
             </div> 
-            <div class="eva-table"></div>  
-            {# <label for="input-ref-req1">requisite1:</label>
-            <div class="input-group">
-              <input type="text" placeholder="" id="input-ref-req1" class="form-control"/>
-            </div>
-            <label for="input-ref-req2">requisite2:</label>
-            <div class="input-group">
-              <input type="text" placeholder="" id="input-ref-req2" class="form-control"/>
-            </div> #}
+            <div class="eva-table"></div> 
           </div>
           <div class="tab-pane fade" id="nav-tabular" role="tabpanel" aria-labelledby="nav-tabular-tab">
             <div class="btn-toolbar" role="toolbar" aria-label="toolbar group">
@@ -300,19 +292,6 @@
             <div class="eva-table"></div>  
           </div>
           <div class="tab-pane fade" id="nav-forms" role="tabpanel" aria-labelledby="nav-forms-tab">
-            {# <div class="btn-toolbar" role="toolbar" aria-label="toolbar group">
-              <div class="btn-group btn-group-sm" role="group">
-                <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" data-bs-toggle="modal" data-bs-target="#formsModal">
-                  <i class="fa fa-plus-square"></i>
-                  <span>{{ button_add }}</span>
-                </button>
-                <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" onclick="formsDelete()">
-                  <i class="fa fa-minus-square"></i>
-                  <span>{{ button_delete }}</span>
-                </button>
-              </div>
-            </div>  #}
-            {# <div class="eva-table"></div>   #}
             <label for="input-ref-elem">Element:</label>
             <div class="input-group">
               <input type="text" placeholder="" id="input-ref-elem" class="form-control"/>
@@ -360,26 +339,33 @@
     </div>
   </div>
 </div> 
-{# Modal Requsite #}
+{# Modal Requisite #}
 <div class="modal fade" id="requisiteModal" tabindex="-2" data-bs-backdrop="static" aria-labelledby="requisiteModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="requisiteModalLabel">Add requisite:</h5>
+        <h5 class="modal-title" id="requisiteModalLabel">*</h5>
         <button type="button" class="btn-close"  aria-label="Close"  data-bs-dismiss="modal" onclick=""></button>
       </div>
       <div class="modal-body">
         <form class="form" id="create-req-form">
           <label for="input-req-id">Identifier:</label>
-          <div class="input-group">
+          <div class="input-group input-group-sm">
             <input type="text" placeholder="" id="input-req-id" class="form-control"/>
           </div>
           <label for="input-req-type">Type:</label>
-          <div class="input-group">
-            <input type="text" placeholder="" id="input-req-type" class="form-control"/>
+          <div class="input-group input-group-sm">
+            <select type="text" name="" value="" class="form-select form-control" id="input-req-type">              
+              <option selected value="String">String</option>                
+              <option value="Number">Number</option> 
+              <option value="Data">Data</option>   
+              <option value="Boolean">Boolean</option>                                                      
+              <option value="Reference">{{text_reference}}</option>              
+              <option value="Document">{{text_document}}</option>                                                              
+            </select>
           </div>  
           <label for="input-req-descr">Description:</label>
-          <div class="input-group">
+          <div class="input-group input-group-sm">
             <input type="text" placeholder="" id="input-req-descr" class="form-control"/>
           </div>       
         </form>

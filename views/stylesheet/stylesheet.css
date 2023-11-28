@@ -61,6 +61,10 @@ footer {
 .form-signin .form-control:focus {
 	z-index: 2;
 }
+input:invalid {
+	border: 1px solid red;
+	border-radius: 8px;
+}
 
 a:hover{
 	color: #00ff93;

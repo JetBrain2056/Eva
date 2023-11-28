@@ -218,11 +218,11 @@
       <div class="modal-body">
         <div class="tab-content">  
           <div class="tab-pane fade active show" id="nav-main" role="tabpanel" aria-labelledby="nav-main-tab">
-            <form class="form needs-validation" id="create-object-form" novalidate>  
-              <label for="input-type">Type object:</label>
-              <div class="input-group input-group-sm">
-                <select type="text" name="type" value="" class="form-select form-control" id="input-type">
-                  <option selected desabled>...</option>
+            <form class="form was-validated" id="create-object-form" novalidation>  
+              <label for="input-type" class="form-label">Type object:</label>
+              {# <div class="input-group input-group-sm"> #}
+                <select class="form-select form-select-sm is-valid" id="input-type" required>
+                  <option selected desabled value="">...</option>
                   <option value="Subsystem">{{text_subsystem}}</option>  
                   <option value="Module">{{text_module}}</option>  
                   <option value="Constant">{{text_constant}}</option>
@@ -232,19 +232,19 @@
                   <option value="Register">{{text_register}}</option>  
                   <option value="Report">{{text_report}}</option>                              
                 </select>
-              </div>         
+              {# </div>          #}
               <label for="input-textId">Identifier:</label>
-              <div class="input-group input-group-sm">
-                <input type="text" placeholder="" id="input-textId" class="form-control" required/>
-                  <div class="invalid-feedback">
-                    Not filled in.
-                  </div>
+              <div class="input-group input-group-sm has-validation">
+                <input type="text" placeholder="[a-zA-Z0-9]" id="input-textId" class="form-control" required pattern="[a-zA-Z0-9]+"/>
+                {# <div class="invalid-feedback">
+                  Not filled in.
+                </div> #}
               </div>  
               <label for="input-subsystem">Subsystem:</label>
-                <div class="input-group input-group-sm">
-                <input type="text" placeholder="0" id="input-subsystem" class="form-control" required/>
+              <div class="input-group input-group-sm">
+                <input type="text" placeholder="..." id="input-subsystem" class="form-control"/>
                 <button class="btn btn-outline-secondary" type="button" onclick="objectEditSubsystem()">...</button>
-              </div> 
+              </div>
               {# <label for="input-typeId">Type Id:</label>
               <div class="input-group input-group-sm">
                 <input type="text" placeholder="0" id="input-typeId" class="form-control"/>
@@ -309,7 +309,7 @@
       </div>
       <div class="modal-footer">
         {# <button type="submit" class="btn btn-primary" onclick="objectSave()"><i class="fa fa-floppy-o"></i></button>         #}
-        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" onclick="objectCreate()">{{ button_save }}&{{button_close}}</button>        
+        <button type="submit" class="btn btn-primary" onclick="objectCreate()">{{ button_save }}&{{button_close}}</button>        
       </div>
     </div>
   </div>
@@ -351,11 +351,11 @@
         <form class="form" id="create-req-form">
           <label for="input-req-id">Identifier:</label>
           <div class="input-group input-group-sm">
-            <input type="text" placeholder="" id="input-req-id" class="form-control"/>
+            <input type="text" placeholder="[a-zA-Z0-9]" id="input-req-id" class="form-control" required pattern="[a-zA-Z0-9]+"/>
           </div>
           <label for="input-req-type">Type:</label>
           <div class="input-group input-group-sm">
-            <select type="text" name="" value="" class="form-select form-control" id="input-req-type">              
+            <select  class="form-select form-control is-valid" id="input-req-type">              
               <option selected value="String">String</option>                
               <option value="Number">Number</option> 
               <option value="Data">Data</option>   

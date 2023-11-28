@@ -669,7 +669,7 @@ exports.getReference = async function(req, res) {
     try {
         const data = await sequelize.query(
             `SELECT *
-             FROM "`+textId+`s" 
+             FROM "`+textId+`s"              
              WHERE "id"=`+id+`;`         
         );
         return await res.send(data[0]);        
@@ -684,7 +684,8 @@ exports.getRefColumns = async function(req, res) {
     const {textId} = req.body;    
     try {
         const data = await sequelize.query(
-            `SELECT column_name FROM information_schema.Columns
+            `SELECT column_name, data_type, dtd_identifier 
+             FROM information_schema.Columns
              WHERE table_schema = 'public' and table_name = '`+textId+`s'
                and not column_name ='updatedAt' and not column_name='createdAt' ;`         
         );

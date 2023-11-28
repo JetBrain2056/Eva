@@ -94,13 +94,19 @@ async function refModal() {
         'textId': textId
     }
 
-    const res = await postOnServer(data, '/getrefcol');  //type?
-    let obj =[];    
+    const res = await postOnServer(data, '/getrefcol');  
+    let arr =[];    
+    let arrCol =[];  
     for (let elem of res) {
-        let ele = elem.column_name;
-        obj[ele]='';       
+        let colName    = elem.column_name;
+        let dataType   = elem.data_type;
+        let identifier = elem.dtd_identifier;
+        let obj = {'colName': colName, 'dataType':dataType, 'identifier': identifier}
+        arr[colName]='';  
+        arrCol[colName] = obj;
     }
-    await refElement(refForm, obj, createMode);      
+    // console.log(arrCol);
+    await refElement(refForm, arr, arrCol, createMode);      
 }
 async function refEditModal() {
     console.log('>>refEditModal...'); 
@@ -128,11 +134,23 @@ async function refEditModal() {
         'textId': textId,
         'id': row.cells[0].innerText
     };
-    let res = await postOnServer(data, '/getref');  
-    await refElement(refForm, res[0], createMode);     
+
+    let res = await postOnServer(data, '/getrefcol');       
+    let arrCol =[];  
+    for (let elem of res) {
+        let colName    = elem.column_name;
+        let dataType   = elem.data_type;
+        let identifier = elem.dtd_identifier;
+        let obj = {'colName': colName, 'dataType':dataType, 'identifier': identifier}         
+        arrCol[colName] = obj;
+    }
+    // console.log(arrCol);
+
+    res = await postOnServer(data, '/getref');  
+    await refElement(refForm, res[0], arrCol, createMode);     
 }
 //DOM Dynamic Content////////////////////////////////////////////////////////
-async function refElement(refForm, col, createMode) {
+async function refElement(refForm, col, arrCol, createMode) {
     console.log('>>refElement()...');  
     // console.log(res);
     if (col) {                  
@@ -146,17 +164,31 @@ async function refElement(refForm, col, createMode) {
             const div  = document.createElement("div");
             div.class = "input-group";
             refForm.appendChild(div);
-                const input  = document.createElement("input");
-                if (req)
-                input.setAttribute("type","text");
+                //type
+                const input  = document.createElement("input");       
+                let type = arrCol[req];
+                if (type.dataType === 'character varying'||type.dataType === 'integer'||type.dataType === 'numeric') {
+                    input.setAttribute("type","text");
+                    input.setAttribute("class","eva-req form-control");                    
+                } else if (type.dataType === 'timestamp with time zone') {
+                    input.setAttribute("type","date");
+                    input.setAttribute("class","eva-req form-control");
+                } else if (type.dataType === 'boolean') {
+                    input.setAttribute("type","checkbox");
+                    input.setAttribute("class","eva-req form-check-input");
+                    //input.setAttribute("checked","checked");
+                } else { 
+                    input.setAttribute("type","text");
+                    input.setAttribute("class","eva-req form-control"); 
+                }
+               
                 input.id    = "input-ref-"+req;
                 input.name  = req;
                 if (createMode===true) {
                     input.value = '';
                 } else if (createMode===false) {
                     input.value = col[req];
-                }
-                input.setAttribute("class","eva-req form-control");
+                }                
                 if (req==='id') {
                     input.setAttribute("disabled","disabled");
                 }
@@ -193,7 +225,7 @@ async function showRefTable(refName) {
     const col  = { 'id':'Id' ,'name':'Name' };  
     const hide = [];      
 
-    await showTable(refTbl, hide, col, data);
+    showTable(refTbl, hide, col, data);
 
 }
 function navItem(navTab, name) {    

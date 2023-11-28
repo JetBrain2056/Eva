@@ -440,7 +440,7 @@ async function showConfigTable() {
     inputStatus.value = '>>Ready...';
 
 }
-async function objectCreate() {
+async function objectCreate(e) {
     console.log('>>configCreate()...');
 
     const input_form   = document.getElementById('create-object-form'); 
@@ -449,10 +449,10 @@ async function objectCreate() {
     const input_subsystem  = input_form.querySelector('#input-subsystem');      
     const createMode = input_form.getAttribute("create-mode");  
     
-    if (!input_textId.value) {
-        alert('ID not filled in!');
-        return;
-    }
+    if (!input_form.checkValidity()) {
+        e.preventDefault();
+        e.stopPropagation();        
+        }
     
     const tmp = { 
         typeId    : input_type.value, 
@@ -484,6 +484,8 @@ async function objectCreate() {
         }
     }
 
+    currentModal.hide();
+
     if (result) await showConfigTable();
 
     //btnConfigSave.removeAttribute("disabled");
@@ -501,6 +503,10 @@ async function objectModal() {
     const input_form      = modalForm.querySelector('#create-object-form'); 
     input_form.reset();    
     input_form.setAttribute("create-mode",true);   
+
+    // await validForm(e, input_form);
+    input_form.classList.add('was-validated');
+    input_form.checkValidity()
 
     const input_type      = input_form.querySelector('#input-type');
     input_type.removeAttribute("disabled");
@@ -524,8 +530,10 @@ async function objectEditModal() {
     objectModalLabel.innerText = 'Edit object:';
 
     const input_form      = modalForm.querySelector('#create-object-form');  
+    
     input_form.reset();
     input_form.setAttribute("create-mode",false);   
+
     const input_type      = input_form.querySelector('#input-type');
     input_type.setAttribute("disabled","disabled");
     const input_textId    = input_form.querySelector('#input-textId');   
@@ -542,7 +550,7 @@ async function objectEditModal() {
         let Elements = await JSON.parse(strJson);        
 
         input_form.setAttribute("eva-id", res[0].id);
-        input_type.value        = Elements.typeId;
+        input_type.value        = Elements.typeId;        
         input_textId.value      = Elements.textId;
         input_subsystem.value   = Elements.subsysName;
         input_subsystem.setAttribute("eva-id", Elements.subsysId);

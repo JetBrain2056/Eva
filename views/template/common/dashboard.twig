@@ -218,10 +218,10 @@
       <div class="modal-body">
         <div class="tab-content">  
           <div class="tab-pane fade active show" id="nav-main" role="tabpanel" aria-labelledby="nav-main-tab">
-            <form class="form was-validated" id="create-object-form" novalidation>  
+            <form class="form" id="create-object-form">  
               <label for="input-type" class="form-label">Type object:</label>
-              {# <div class="input-group input-group-sm"> #}
-                <select class="form-select form-select-sm is-valid" id="input-type" required>
+              <div class="input-group input-group-sm">
+                <select class="form-select form-select-sm" id="input-type" required pattern="[a-zA-Z]+">
                   <option selected desabled value="">...</option>
                   <option value="Subsystem">{{text_subsystem}}</option>  
                   <option value="Module">{{text_module}}</option>  
@@ -232,7 +232,7 @@
                   <option value="Register">{{text_register}}</option>  
                   <option value="Report">{{text_report}}</option>                              
                 </select>
-              {# </div>          #}
+              </div>         
               <label for="input-textId">Identifier:</label>
               <div class="input-group input-group-sm has-validation">
                 <input type="text" placeholder="[a-zA-Z0-9]" id="input-textId" class="form-control" required pattern="[a-zA-Z0-9]+"/>
@@ -354,8 +354,8 @@
             <input type="text" placeholder="[a-zA-Z0-9]" id="input-req-id" class="form-control" required pattern="[a-zA-Z0-9]+"/>
           </div>
           <label for="input-req-type">Type:</label>
-          <div class="input-group input-group-sm">
-            <select  class="form-select form-control is-valid" id="input-req-type">              
+          {# <div class="input-group input-group-sm"> #}
+            <select class="form-select form-select-sm" id="input-req-type">              
               <option selected value="String">String</option>                
               <option value="Number">Number</option> 
               <option value="Data">Data</option>   
@@ -363,7 +363,7 @@
               <option value="Reference">{{text_reference}}</option>              
               <option value="Document">{{text_document}}</option>                                                              
             </select>
-          </div>  
+          {# </div>   #}
           <label for="input-req-descr">Description:</label>
           <div class="input-group input-group-sm">
             <input type="text" placeholder="" id="input-req-descr" class="form-control"/>
@@ -371,7 +371,7 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" onclick="reqCreate()">{{ button_save }}&{{ button_close }}</button>
+        <button type="submit" class="btn btn-primary" onclick="reqCreate()">{{ button_save }}&{{ button_close }}</button>
       </div>
     </div>
   </div>

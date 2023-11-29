@@ -97,42 +97,42 @@
       <div class="modal-body">
         <form class="form" id="create-user-form">
           <label for="input-user-name">Name:</label>
-          <div class="input-group">
-            <input type="text" placeholder="Name" id="input-user-name" class="form-control"/>
+          <div class="input-group input-group-sm has-validation">
+            <input type="text" placeholder="Name" id="input-user-name" class="form-control" required/>
           </div>
           <label for="input-descr">Descr:</label>
-          <div class="input-group">
+          <div class="input-group input-group-sm">
             <input type="text" placeholder="Full name" id="input-descr" class="form-control"/>
           </div>
           <label for="input-role">Role:</label>
-          <div class="input-group">            
-            <input type="text" id="input-role" class="form-control"/>
+          <div class="input-group input-group-sm has-validation">            
+            <input type="text" id="input-role" class="form-control" required/>
             <button class="btn btn-outline-secondary" type="button" onclick="userEditRole()">...</button>
           </div>
           <label for="input-email">E-mail:</label>
-          <div class="input-group">            
+          <div class="input-group input-group-sm">            
             <input type="email" placeholder="email@example.com" id="input-email" class="form-control"/>
           </div>
           <label for="input-password">Password:</label>
-          <div class="input-group">
+          <div class="input-group input-group-sm">
             <input type="password" placeholder="Password" id="input-password" class="form-control"/>
           </div>
           <label for="input-confirmpass">Confirm password:</label>
-          <div class="input-group">
+          <div class="input-group input-group-sm">
             <input type="password" placeholder="Password" id="input-confirmpass" class="form-control"/>
           </div>
           <label for="input-eauth">Show user:</label>
-          <div class="form-group">
+          <div class="form-group input-group-sm">
             <input type="checkbox" class="form-check-input" id="input-show" checked/>
           </div>
           <label for="input-eauth">Enterprise auth:</label>
-          <div class="form-group">
+          <div class="form-group input-group-sm">
             <input type="checkbox" class="form-check-input" id="input-eauth" checked/>
           </div>
         </form>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" onclick="userCreate()">{{ button_save }}&{{ button_close }}</button>
+        <button type="submit" class="btn btn-primary"  onclick="userCreate()">{{ button_save }}&{{ button_close }}</button>
       </div>
     </div>
   </div>
@@ -167,14 +167,14 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="roleModalLabel">Add Role</h5>
+        <h5 class="modal-title" id="roleModalLabel">Add Role:</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
       </div>
       <div class="modal-body">
         <form class="form" id="create-role-form">
           <label for="input-rolename">Name:</label>
-          <div class="input-group">
-            <input type="text" placeholder="Name" id="input-rolename" class="form-control"/>
+          <div class="input-group input-group-sm">
+            <input type="text" placeholder="Name" id="input-rolename" class="form-control" required/>
           </div>                  
         </form>
       </div>
@@ -358,7 +358,7 @@
             <select class="form-select form-select-sm" id="input-req-type">              
               <option selected value="String">String</option>                
               <option value="Number">Number</option> 
-              <option value="Data">Data</option>   
+              <option value="Data">Date</option>   
               <option value="Boolean">Boolean</option>                                                      
               <option value="Reference">{{text_reference}}</option>              
               <option value="Document">{{text_document}}</option>                                                              

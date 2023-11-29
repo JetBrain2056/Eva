@@ -21,12 +21,17 @@ async function openRef(refName) {
     let status = document.getElementById("status");
     status.value = ">It's work!";
 }
-async function refCreate() {
+async function refCreate(e) {
     console.log('>>refCreate()...');
 
     const refForm    = document.getElementById("create-ref-form");
     const textId     = refForm.getAttribute("eva-textId");
-    let createMode   = refForm.getAttribute("create-mode");      
+    let createMode   = refForm.getAttribute("create-mode");     
+    
+    if (!refForm.checkValidity()) {
+        await e.preventDefault();
+        await e.stopPropagation();        
+    }
       
     let data =  {
         'textId'  : textId                
@@ -64,6 +69,8 @@ async function refCreate() {
         }
     }
 
+    await currentModal.hide();
+
     if (result) await showRefTable(textId);
 
 }
@@ -86,12 +93,15 @@ async function refDelete() {
 async function refModal() {
     console.log('>>refModal()...');      
 
-    const refModalLabel  = document.getElementById('refModalLabel');  
+    const modalForm  = document.getElementById('refModal');  
+    currentModal = getModal(modalForm);
+
+    const refModalLabel  = modalForm.querySelector('#refModalLabel');  
     refModalLabel.innerText = 'Add element:';    
 
     let createMode = true;
 
-    const refForm        = document.getElementById('create-ref-form');  
+    const refForm        = modalForm.querySelector('#create-ref-form');  
     refForm.innerHTML = '';
     refForm.reset();   
     refForm.setAttribute("create-mode", createMode);  
@@ -134,7 +144,7 @@ async function refEditModal() {
     refForm.innerHTML ='';     
     refForm.setAttribute("create-mode", createMode);  
 
-    getModal(modalForm);
+    currentModal = getModal(modalForm);
 
     const textId = refForm.getAttribute("eva-textId");
     const data = { 
@@ -169,7 +179,7 @@ async function refElement(refForm, col, arrCol, createMode) {
             label.innerText = req+":";        
             refForm.appendChild(label);
             const div  = document.createElement("div");
-            div.class = "input-group";
+            div.setAttribute("class", "input-group input-group-sm");
             refForm.appendChild(div);
                 //type
                 const input  = document.createElement("input");       
@@ -199,10 +209,16 @@ async function refElement(refForm, col, arrCol, createMode) {
                 input.id    = "input-ref-"+req;
                 input.name  = req;
                 if (createMode===true) {
-                    input.value = '';
+                    if (type.dataType === 'date') {
+                        input.value = dateFormat(Date.now());
+                    } else {
+                        input.value = '';
+                    }
                 } else if (createMode===false) {
                     if (type.dataType === 'boolean') {
                         input.checked = col[req];
+                    } else if (type.dataType === 'date') {
+                        input.value = dateFormat(col[req]);
                     } else {
                         input.value = col[req];
                     }

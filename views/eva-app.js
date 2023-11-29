@@ -37,7 +37,14 @@ async function refCreate() {
         console.log(elem.name);
         if (elem.name==='id'&&createMode==='true'){            
         } else {
-            data[elem.name] = elem.value;    
+            const type = elem.getAttribute("type");
+            if (type === 'checkbox') {                 
+                data[elem.name] = elem.checked; 
+            } else if (type === 'date') {
+                data[elem.name] = new Date(elem.value); 
+            } else {
+                data[elem.name] = String(elem.value);    
+            }
         }    
     }    
         
@@ -181,17 +188,26 @@ async function refElement(refForm, col, arrCol, createMode) {
                     input.setAttribute("type","text");
                     input.setAttribute("class","eva-req form-control"); 
                 }
-               
+             
+                if (req==='id') {
+                    input.setAttribute("disabled","disabled");
+                }
+                if (req==='name') {
+                    input.setAttribute("required", "required");
+                }
+
                 input.id    = "input-ref-"+req;
                 input.name  = req;
                 if (createMode===true) {
                     input.value = '';
                 } else if (createMode===false) {
-                    input.value = col[req];
+                    if (type.dataType === 'boolean') {
+                        input.checked = col[req];
+                    } else {
+                        input.value = col[req];
+                    }
                 }                
-                if (req==='id') {
-                    input.setAttribute("disabled","disabled");
-                }
+             
                 div.appendChild(input); 
         }        
     } 

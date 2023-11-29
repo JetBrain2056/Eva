@@ -1,5 +1,6 @@
 let selectRows = [];
 let currentModal;
+let selectModal;
 let n = 0;
 let tbl = [];
 const inputStatus   = document.getElementById('status');
@@ -218,7 +219,7 @@ async function showUserTable() {
     showTable(tbl[1], hide, col, data);
 
 }
-async function userCreate() {
+async function userCreate(e) {
     console.log('>>userCreate()...');
     
     const input_form        = document.getElementById('create-user-form');  
@@ -231,8 +232,13 @@ async function userCreate() {
     const input_show        = input_form.querySelector('#input-show');
     const input_role        = input_form.querySelector('#input-role');
 
+    if (!input_form.checkValidity()) {
+        await e.preventDefault();
+        await e.stopPropagation();        
+    }
+
     if (input_password.value !== input_confirmpass.value) alert('Incorrect password confirmation!');
-    if (!input_username.value) alert('User name is not filled in!');
+    // if (!input_username.value) alert('User name is not filled in!');
 
     const data =  {
         'id'      : input_form.getAttribute("eva-id"),
@@ -263,6 +269,10 @@ async function userCreate() {
         console.log(e);
         }
     }
+
+   
+    await currentModal.hide();
+
     if (result) await showUserTable();
 
 }
@@ -270,12 +280,14 @@ async function userCreateModal() {
     console.log('>>userCreateModal()...');     
 
     const modalForm         = document.getElementById('userModal'); 
-    getModal(modalForm); 
+  
     const inputLabel        = modalForm.querySelector("#userModalLabel");
-    inputLabel.innerText = 'Add user*:';      
+    inputLabel.innerText = 'Add user:';      
     const input_form        = modalForm.querySelector('#create-user-form');  
     input_form.reset(); 
     input_form.setAttribute("create-mode",true);            
+
+    getModal(modalForm); 
 }
 async function userEditModal() {
     console.log('>>userEditModal()...'); 
@@ -285,7 +297,7 @@ async function userEditModal() {
     const row = selectRows[0];      
    
     const modalForm         = document.getElementById('userModal'); 
-    getModal(modalForm); 
+   
     const inputLabel        = modalForm.querySelector("#userModalLabel");
     const input_form        = modalForm.querySelector('#create-user-form');  
     input_form.reset();  
@@ -323,7 +335,9 @@ async function userEditModal() {
             input_eauth.checked = true;
         } else {  
             input_eauth.checked = false;
-        }      
+        }    
+        
+        getModal(modalForm); 
     }   
 }
 async function userDelete() {
@@ -375,18 +389,21 @@ async function roleCreate() {
 
 }
 async function userEditRole() {
-  console.log('>>userEditRole...'); 
+    console.log('>>userEditRole...'); 
 
-  let modalForm = document.getElementById("editUserRoleModal");
+    let modalForm = document.getElementById("editUserRoleModal");
 
-  getModal(modalForm);
+    //getModal(modalForm);
+    let options =  { focus: true };
+    selectModal = new bootstrap.Modal(modalForm, options);  
+    selectModal.show();
 
-  let data = await getOnServer('/getroles');  
+    let data = await getOnServer('/getroles');  
 
-  const col = {'id':'Id', 'Name':'Name'};  
-  const hide = ['id'];
-  
-  showTable(tbl[3], hide, col, data);
+    const col = {'id':'Id', 'Name':'Name'};  
+    const hide = ['id'];
+
+    showTable(tbl[3], hide, col, data);
  
 }
 async function roleSelect() {
@@ -401,7 +418,7 @@ async function roleSelect() {
     input_role.value        = row.cells[1].innerText;
     input_role.setAttribute("eva-id", row.cells[0].innerText);
 
-    await currentModal.hide();
+    await selectModal.hide();
            
 }
 async function roleDelete() {
@@ -484,7 +501,7 @@ async function objectCreate(e) {
         }
     }
 
-    await currentModal.hide();
+    await e.currentTarget.hide();
 
     if (result) await showConfigTable();
 
@@ -497,10 +514,8 @@ async function objectModal() {
 
     const modalForm = document.getElementById("objectModal");
 
-    getModal(modalForm);
-
     const objectModalLabel = modalForm.querySelector('#objectModalLabel');  
-    objectModalLabel.innerText = 'Add object';
+    objectModalLabel.innerText = 'Add object:';
 
     const input_form      = modalForm.querySelector('#create-object-form'); 
     input_form.reset();    
@@ -511,6 +526,13 @@ async function objectModal() {
 
     const input_subsystem = input_form.querySelector('#input-subsystem');  
     input_subsystem.removeAttribute("disabled");     
+
+
+    const navReq = modalForm.querySelector("#nav-requisite");
+    const evaTbl = navReq.querySelector(".eva-table");
+    evaTbl.innerHTML = '';
+
+    getModal(modalForm);
 
 }
 async function objectEditModal() {
@@ -535,7 +557,6 @@ async function objectEditModal() {
     const input_textId    = input_form.querySelector('#input-textId');   
     const input_subsystem = input_form.querySelector('#input-subsystem');  
 
-    getModal(modalForm);
 
     let data = { 'id': row.cells[0].innerText };
 
@@ -560,6 +581,8 @@ async function objectEditModal() {
         //     subsystemBtn.removeAttribute("disabled"); 
         // }
     }    
+
+    getModal(modalForm);
 
     await showRequisiteTable();
 }

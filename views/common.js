@@ -667,6 +667,12 @@ async function showRequisiteTable() {
 }
 async function reqModal() {
     console.log('>>reqModal()...');
+
+    const inputOwnerForm  = document.querySelector('#create-object-form'); 
+    if (!inputOwnerForm.checkValidity()) {    
+        alert('The main identifier is not valid!')
+        return;
+    }
     
     const modalForm  = document.getElementById("requisiteModal");
     const objectModalLabel = modalForm.querySelector('#requisiteModalLabel');  

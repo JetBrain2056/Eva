@@ -450,9 +450,9 @@ async function objectCreate(e) {
     const createMode = input_form.getAttribute("create-mode");  
     
     if (!input_form.checkValidity()) {
-        e.preventDefault();
-        e.stopPropagation();        
-        }
+        await e.preventDefault();
+        await e.stopPropagation();        
+    }
     
     const tmp = { 
         typeId    : input_type.value, 
@@ -484,7 +484,7 @@ async function objectCreate(e) {
         }
     }
 
-    currentModal.hide();
+    await currentModal.hide();
 
     if (result) await showConfigTable();
 
@@ -497,6 +497,8 @@ async function objectModal() {
 
     const modalForm = document.getElementById("objectModal");
 
+    getModal(modalForm);
+
     const objectModalLabel = modalForm.querySelector('#objectModalLabel');  
     objectModalLabel.innerText = 'Add object';
 
@@ -504,17 +506,11 @@ async function objectModal() {
     input_form.reset();    
     input_form.setAttribute("create-mode",true);   
 
-    // await validForm(e, input_form);
-    input_form.classList.add('was-validated');
-    input_form.checkValidity()
-
     const input_type      = input_form.querySelector('#input-type');
     input_type.removeAttribute("disabled");
 
     const input_subsystem = input_form.querySelector('#input-subsystem');  
-    input_subsystem.removeAttribute("disabled");
-
-    getModal(modalForm);
+    input_subsystem.removeAttribute("disabled");     
 
 }
 async function objectEditModal() {
@@ -529,13 +525,13 @@ async function objectEditModal() {
     const objectModalLabel = modalForm.querySelector('#objectModalLabel');  
     objectModalLabel.innerText = 'Edit object:';
 
-    const input_form      = modalForm.querySelector('#create-object-form');  
+    const input_form      = modalForm.querySelector('#create-object-form');    
     
     input_form.reset();
     input_form.setAttribute("create-mode",false);   
 
     const input_type      = input_form.querySelector('#input-type');
-    input_type.setAttribute("disabled","disabled");
+    input_type.setAttribute("disabled","disabled");    
     const input_textId    = input_form.querySelector('#input-textId');   
     const input_subsystem = input_form.querySelector('#input-subsystem');  
 
@@ -564,7 +560,7 @@ async function objectEditModal() {
         //     subsystemBtn.removeAttribute("disabled"); 
         // }
     }    
-    
+
     await showRequisiteTable();
 }
 async function objectDelete() {
@@ -721,7 +717,7 @@ async function reqEditModal() {
         inputReqDescr.value    = Elements.descr;
     }
 }
-async function reqCreate() {
+async function reqCreate(e) {
     console.log('>>reqCreate()...');
 
     const ownerForm     = document.getElementById('create-object-form');  
@@ -730,6 +726,11 @@ async function reqCreate() {
     const inputReqType  = inputForm.querySelector("#input-req-type");
     const inputReqDescr = inputForm.querySelector("#input-req-descr");
     const createMode    = inputForm.getAttribute("create-mode"); 
+
+    if (!inputForm.checkValidity()) {
+        await e.preventDefault();
+        await e.stopPropagation();        
+    }
 
     let tmp = { 
         textId    : inputReqId.value, 
@@ -759,6 +760,8 @@ async function reqCreate() {
             console.log(e);
         }
     }
+
+    await currentModal.hide();
 
     if (result) await showRequisiteTable();    
 }

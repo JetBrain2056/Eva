@@ -526,7 +526,7 @@ exports.updateConfig = async function(req, res) {
                         refColumns[Elements.textId] = {type: DataTypes.DECIMAL};     
                     } else if (Elements.type === 'Boolean') {
                         refColumns[Elements.textId] = {type: DataTypes.BOOLEAN};  
-                    } else if (Elements.type === 'Data') {
+                    } else if (Elements.type === 'Date') {
                         refColumns[Elements.textId] = {type: DataTypes.DATE};  
                     } else {
                         refColumns[Elements.textId] = {type: DataTypes.STRING};  

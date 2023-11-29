@@ -153,9 +153,9 @@ function showTable(showTbl, hide, col, data) {
 function getModal(modalForm) {
     console.log('>>getModal()...');
     let options =  { focus: true };
-    currentModal = new bootstrap.Modal(modalForm, options);  
-    
-    currentModal.show();
+    Modal = new bootstrap.Modal(modalForm, options);  
+    Modal.show();
+    return Modal;
 }
 function logout() {
     console.log('>>Logout()...');
@@ -287,7 +287,7 @@ async function userCreateModal() {
     input_form.reset(); 
     input_form.setAttribute("create-mode",true);            
 
-    getModal(modalForm); 
+    currentModal = getModal(modalForm); 
 }
 async function userEditModal() {
     console.log('>>userEditModal()...'); 
@@ -337,7 +337,7 @@ async function userEditModal() {
             input_eauth.checked = false;
         }    
         
-        getModal(modalForm); 
+        currentModal = getModal(modalForm); 
     }   
 }
 async function userDelete() {
@@ -393,10 +393,7 @@ async function userEditRole() {
 
     let modalForm = document.getElementById("editUserRoleModal");
 
-    //getModal(modalForm);
-    let options =  { focus: true };
-    selectModal = new bootstrap.Modal(modalForm, options);  
-    selectModal.show();
+    selectModal = getModal(modalForm);
 
     let data = await getOnServer('/getroles');  
 
@@ -501,7 +498,7 @@ async function objectCreate(e) {
         }
     }
 
-    await e.currentTarget.hide();
+    await currentModal.hide();
 
     if (result) await showConfigTable();
 
@@ -532,7 +529,7 @@ async function objectModal() {
     const evaTbl = navReq.querySelector(".eva-table");
     evaTbl.innerHTML = '';
 
-    getModal(modalForm);
+    currentModal = getModal(modalForm);
 
 }
 async function objectEditModal() {
@@ -582,7 +579,7 @@ async function objectEditModal() {
         // }
     }    
 
-    getModal(modalForm);
+    currentModal = getModal(modalForm);
 
     await showRequisiteTable();
 }
@@ -705,7 +702,7 @@ async function reqModal() {
     inputForm.reset();    
     inputForm.setAttribute("create-mode",true);  
 
-    getModal(modalForm);
+    selectModal = getModal(modalForm);
 }
 async function reqEditModal() {
     console.log('>>reqEditModal()...');
@@ -721,7 +718,7 @@ async function reqEditModal() {
     inputForm.reset();    
     inputForm.setAttribute("create-mode",false);  
 
-    getModal(modalForm);
+    selectModal = getModal(modalForm);
 
     const row = await selectRows[0];  
 
@@ -790,7 +787,7 @@ async function reqCreate(e) {
         }
     }
 
-    await currentModal.hide();
+    await selectModal.hide();
 
     if (result) await showRequisiteTable();    
 }

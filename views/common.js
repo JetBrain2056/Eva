@@ -180,6 +180,10 @@ async function listUsers() {
         }        
     }    
 }
+function dateFormat(date) {
+    const newDate = new Date(date - (new Date()).getTimezoneOffset() * 60000);
+    return newDate.toISOString().slice(0, 19).replace('T', ' ');
+}
 //Get/post on Server//////////////////////////////////////////////////////////
 async function postOnServer(data, link) {
     console.log('>>postOnServer()...');

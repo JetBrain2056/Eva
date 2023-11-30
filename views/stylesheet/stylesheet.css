@@ -122,3 +122,8 @@ h1, h2, h3, h4, h5, h6, p {
 .dropdown-item:active{
 	background-color: #26282f;
 }
+
+.accordion-button {
+	/* color: #00ff93;
+	background-color: grey; */
+	padding: 8px;}

@@ -731,13 +731,17 @@ async function reqEditModal() {
     let res = await postOnServer(data,'/getreq');
 
     const inputReqId    = inputForm.querySelector("#input-req-id");
-    const inputReqType  = inputForm.querySelector("#input-req-type");
+    const inputReqType  = inputForm.querySelector("#input-req-type");    
+    const inputReqSyn   = inputForm.querySelector("#input-req-synonum");
+    const inputReqLen   = inputForm.querySelector("#input-req-length");  
+    const inputReqLAcc  = inputForm.querySelector("#input-req-accuracy");    
+    const inputReqLPat  = inputForm.querySelector("#input-req-pattern");  
+    const inputReqLValid= inputForm.querySelector("#input-req-valid");             
     const inputReqDescr = inputForm.querySelector("#input-req-descr");
 
     // console.log(res);
   
     if (res) {
-
         let strJson = res.data;                  
         let Elements = await JSON.parse(strJson);    
 
@@ -745,6 +749,11 @@ async function reqEditModal() {
         inputReqId.value       = Elements.textId;
         inputReqType.value     = Elements.type;
         inputReqDescr.value    = Elements.descr;
+        inputReqSyn.value      = Elements.synonum;
+        inputReqLen.value      = Elements.length;
+        inputReqLAcc.value     = Elements.accuracy;
+        inputReqLPat.value     = Elements.pattern;
+        inputReqLValid.checked = Elements.validation;
     }
 }
 async function reqCreate(e) {
@@ -754,6 +763,11 @@ async function reqCreate(e) {
     const inputForm     = document.getElementById("create-req-form");
     const inputReqId    = inputForm.querySelector("#input-req-id");
     const inputReqType  = inputForm.querySelector("#input-req-type");
+    const inputReqSyn   = inputForm.querySelector("#input-req-synonum");
+    const inputReqLen   = inputForm.querySelector("#input-req-length");  
+    const inputReqLAcc  = inputForm.querySelector("#input-req-accuracy");    
+    const inputReqLPat  = inputForm.querySelector("#input-req-pattern");  
+    const inputReqLValid= inputForm.querySelector("#input-req-valid");              
     const inputReqDescr = inputForm.querySelector("#input-req-descr");
     const createMode    = inputForm.getAttribute("create-mode"); 
 
@@ -764,7 +778,12 @@ async function reqCreate(e) {
 
     let tmp = { 
         textId    : inputReqId.value, 
-        type      : inputReqType.value,        
+        type      : inputReqType.value,  
+        synonum   : inputReqSyn.value,      
+        length    : inputReqLen.value, 
+        accuracy  : inputReqLAcc.value,
+        pattern   : inputReqLPat.value,
+        validation: inputReqLValid.checked,
         descr     : inputReqDescr.value
     };          
 

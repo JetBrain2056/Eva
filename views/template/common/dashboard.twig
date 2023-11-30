@@ -348,26 +348,68 @@
         <button type="button" class="btn-close"  aria-label="Close"  data-bs-dismiss="modal" onclick=""></button>
       </div>
       <div class="modal-body">
-        <form class="form" id="create-req-form">
-          <label for="input-req-id">Identifier:</label>
-          <div class="input-group input-group-sm">
-            <input type="text" placeholder="[a-zA-Z0-9]" id="input-req-id" class="form-control" required pattern="[a-zA-Z0-9]+"/>
-          </div>
-          <label for="input-req-type">Type:</label>
-          {# <div class="input-group input-group-sm"> #}
-            <select class="form-select form-select-sm" id="input-req-type">              
-              <option selected value="String">String</option>                
-              <option value="Number">Number</option> 
-              <option value="Date">Date</option>   
-              <option value="Boolean">Boolean</option>                                                      
-              <option value="Reference">{{text_reference}}</option>              
-              <option value="Document">{{text_document}}</option>                                                              
-            </select>
-          {# </div>   #}
-          <label for="input-req-descr">Description:</label>
-          <div class="input-group input-group-sm">
-            <input type="text" placeholder="" id="input-req-descr" class="form-control"/>
-          </div>       
+        <form class="form" id="create-req-form">        
+        {# <div class="accordion" id="accordionPanels">
+          <div class="accordion-item">
+            <h4 class="accordion-header">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                Basic
+              </button>
+            </h4>
+            <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show">
+              <div class="accordion-body"> #}
+                <label for="input-req-id">Identifier:</label>
+                <div class="input-group input-group-sm">
+                  <input type="text" placeholder="[a-zA-Z0-9]" id="input-req-id" class="form-control" required pattern="[a-zA-Z0-9]+"/>
+                </div>             
+                <label for="input-req-synonym">Synonym:</label>
+                <div class="input-group input-group-sm">
+                  <input type="text" placeholder="" id="input-req-synonum" class="form-control"/>
+                </div>                
+              {# </div>
+            </div>
+          </div>         
+          <div class="accordion-item">
+            <h4 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+                Performance
+              </button>
+            </h4>
+            <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse show">
+              <div class="accordion-body"> #}
+                <label for="input-req-type">Type:</label>          
+                <select class="form-select form-select-sm" id="input-req-type">              
+                  <option selected value="String">String</option>                
+                  <option value="Number">Number</option> 
+                  <option value="Date">Date</option>   
+                  <option value="Boolean">Boolean</option>                                                      
+                  <option value="Reference">{{text_reference}}</option>              
+                  <option value="Document">{{text_document}}</option>                                                              
+                </select>  
+                <label for="input-req-length">Length:</label>
+                <div class="input-group input-group-sm">
+                  <input type="number" placeholder="" id="input-req-length" class="form-control"/>
+                </div>
+                <label for="input-req-accuracy">Accuracy:</label>
+                <div class="input-group input-group-sm">
+                  <input type="number" placeholder="" id="input-req-accuracy" class="form-control" max="4"/>
+                </div>                     
+                <label for="input-req-pattern">Pattern:</label>
+                <div class="input-group input-group-sm">
+                  <input type="text" placeholder="" id="input-req-pattern" class="form-control"/>
+                </div>                   
+                <label for="input-req-valid">Validation check:</label>
+                <div class="input-group input-group-sm">
+                  <input type="checkbox" class="form-check-input" id="input-req-valid"/>
+                </div>  
+                <label for="input-req-descr">Description:</label>
+                <div class="input-group input-group-sm">
+                  <input type="text" placeholder="" id="input-req-descr" class="form-control"/>
+                </div> 
+              {# </div>
+            </div>
+          </div>            
+        </div>   #}
         </form>
       </div>
       <div class="modal-footer">

@@ -521,9 +521,17 @@ exports.updateConfig = async function(req, res) {
                     let strJson = row.data; 
                     let Elements = await JSON.parse(strJson);  
                     if (Elements.type === 'String') {
-                        refColumns[Elements.textId] = {type: DataTypes.STRING};                                               
+                        if (Elements.length === 0) {
+                            refColumns[Elements.textId] = {type: DataTypes.STRING}; 
+                        } else {
+                            refColumns[Elements.textId] = {type: DataTypes.STRING(Elements.length)}; 
+                        }                                              
                     } else if (Elements.type === 'Number') {
-                        refColumns[Elements.textId] = {type: DataTypes.DECIMAL};     
+                        if (Elements.accuracy === 0) {
+                            refColumns[Elements.textId] = {type: DataTypes.INTEGER};     
+                        } else {
+                            refColumns[Elements.textId] = {type: DataTypes.DECIMAL(14, Elements.accuracy)};  
+                        }
                     } else if (Elements.type === 'Boolean') {
                         refColumns[Elements.textId] = {type: DataTypes.BOOLEAN};  
                     } else if (Elements.type === 'Date') {
@@ -732,9 +740,14 @@ exports.updateReference = async function(req, res) {
 
     let tmp ='';
     for (let elem of Object.keys(req.body)) {
-        if(elem==='id'||elem==='textId'||elem==='createdAt'||elem==='updatedAt') {
+        if(elem==='id'||elem==='textId'||elem==='createdAt'||elem==='updatedAt') {            
         } else {
-            tmp = tmp +` "`+ elem + `"='`+ req.body[elem]+`',`;
+            console.log(elem, typeof(req.body[elem]));
+            if (typeof(req.body[elem]) ==='number') {
+                tmp = tmp +` "`+ elem + `"=`+ req.body[elem]+`,`;
+            } else {
+                tmp = tmp +` "`+ elem + `"='`+ req.body[elem]+`',`;
+            }
         }
     }
     console.log('tmp:',tmp.slice(0,-1));

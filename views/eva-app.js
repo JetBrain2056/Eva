@@ -16,6 +16,8 @@ async function openRef(refName) {
     let tab = new bootstrap.Tab(navForm);
     tab.show();    
 
+    selectRows = [];
+
     await showRefTable(refName);
     
     let status = document.getElementById("status");
@@ -42,13 +44,18 @@ async function refCreate(e) {
         console.log(elem.name);
         if (elem.name==='id'&&createMode==='true'){            
         } else {
-            const type = elem.getAttribute("type");
+            const type     = elem.getAttribute("type");
+            const dataType = elem.getAttribute("data-type");
             if (type === 'checkbox') {                 
                 data[elem.name] = elem.checked; 
             } else if (type === 'date') {
-                data[elem.name] = new Date(elem.value); 
+                data[elem.name] = new Date(elem.value);                           
             } else {
-                data[elem.name] = String(elem.value);    
+                if (dataType === 'numeric') {
+                    data[elem.name] = Number(elem.value);  
+                } else {    
+                    data[elem.name] = String(elem.value);    
+                }
             }
         }    
     }    
@@ -176,28 +183,41 @@ async function refElement(refForm, col, arrCol, createMode) {
         for (let req of Object.keys(col)) {            
             const label  = document.createElement("label");
             label.setAttribute("for","input-ref-"+req);
-            label.innerText = req+":";        
+            //synonum
+            label.innerText = req+":";                 
             refForm.appendChild(label);
             const div  = document.createElement("div");
-            div.setAttribute("class", "input-group input-group-sm");
-            refForm.appendChild(div);
-                //type
+            div.setAttribute("class", "input-group input-group-sm col-auto");
+            refForm.appendChild(div);                
                 const input  = document.createElement("input");       
                 let type = arrCol[req];
-                if (type.dataType === 'character varying'||type.dataType === 'integer'||type.dataType === 'numeric') {
-                    input.setAttribute("type","text");
-                    input.setAttribute("class","eva-req form-control");                    
+                if (type.dataType === 'character varying') {
+                    input.setAttribute("type","text");                    
+                    input.setAttribute("class","eva-req form-control");    
+                } else if (type.dataType === 'integer') {
+                    input.setAttribute("type","number");                    
+                    input.setAttribute("class","eva-req form-control");   
+                    input.setAttribute("required", "required");        
+                } else if (type.dataType === 'numeric') {
+                    input.setAttribute("type","text");                    
+                    input.setAttribute("inputmode","decimal");
+                    input.setAttribute("class","eva-req form-control");              
+                    input.setAttribute("pattern", "[0-9.]+");   
+                    input.setAttribute("maxlength", "15");          
+                    input.setAttribute("placeholder", "0.00");  
+                    input.style = "text-align:right;";
                 } else if (type.dataType === 'timestamp with time zone') {
                     input.setAttribute("type","date");
                     input.setAttribute("class","eva-req form-control");
                 } else if (type.dataType === 'boolean') {
                     input.setAttribute("type","checkbox");
-                    input.setAttribute("class","eva-req form-check-input");
-                    //input.setAttribute("checked","checked");
+                    input.setAttribute("class","eva-req form-check-input");                    
                 } else { 
                     input.setAttribute("type","text");
                     input.setAttribute("class","eva-req form-control"); 
                 }
+
+                input.setAttribute("data-type", type.dataType);
              
                 if (req==='id') {
                     input.setAttribute("disabled","disabled");
@@ -210,7 +230,7 @@ async function refElement(refForm, col, arrCol, createMode) {
                 input.name  = req;
                 if (createMode===true) {
                     if (type.dataType === 'date') {
-                        input.value = dateFormat(Date.now());
+                        input.value = dateFormat(new Date(Date.now()));
                     } else {
                         input.value = '';
                     }

@@ -41,7 +41,7 @@ const Constant = sequelize.define('Constant', {
 const Module = sequelize.define('Module', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},    
     name:  {type: DataTypes.STRING, unique: true},
-    xbase64: {type: DataTypes.STRING(5000)}
+    xbase64: {type: DataTypes.TEXT}
 })
 
 const Requisite = sequelize.define('Requisite', {
@@ -53,7 +53,7 @@ const Requisite = sequelize.define('Requisite', {
 const Form = sequelize.define('Form', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},    
     name:  {type: DataTypes.STRING, unique: true},
-    xbase64: {type: DataTypes.STRING(5000)}
+    xbase64: {type: DataTypes.TEXT}
 })
 
 Role.hasOne(User);

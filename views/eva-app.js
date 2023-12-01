@@ -76,6 +76,7 @@ async function refCreate(e) {
                 if (elem.value === '') {
                     data[elem.name] = new Date('1,1,1');  
                 } else {
+                    console.log(elem.value);
                     data[elem.name] = new Date(elem.value);                           
                 }
             } else {
@@ -216,10 +217,10 @@ async function refElement(refForm, col, arrCol, arrSyn, createMode) {
         for (let req of Object.keys(col)) {            
             const label  = document.createElement("label");
             label.setAttribute("for","input-ref-"+req);
-            //synonum
+            //synonym
             let synom = arrSyn[req];
-            console.log('arr',arrSyn[req]);
-            console.log('synom',synom);
+            // console.log('arr',arrSyn[req]);
+            // console.log('synom',synom);
             if (synom) {
                 label.innerText = synom+":";  
             } else {
@@ -270,15 +271,17 @@ async function refElement(refForm, col, arrCol, arrSyn, createMode) {
                 input.name  = req;
                 if (createMode===true) {
                     if (type.dataType === 'date') {
-                        input.value = dateFormat(new Date(Date.now()));
+                        input.value = dateFormat(new Date(Date.now())).slice(0, 9);
                     } else {
                         input.value = '';
                     }
                 } else if (createMode===false) {
                     if (type.dataType === 'boolean') {
                         input.checked = col[req];
-                    } else if (type.dataType === 'date') {
-                        input.value = dateFormat(col[req]);
+                    } else if (type.dataType === 'timestamp with time zone') {
+                        const date = col[req];
+                        console.log('date', date);                        
+                        input.value = date.slice(0, 9);
                     } else {
                         input.value = col[req];
                     }

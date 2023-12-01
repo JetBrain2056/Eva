@@ -370,7 +370,7 @@ exports.updateConfig = async function(req, res) {
     if (!req.body) return res.sendStatus(400);
 
     let refColumns = {id   : {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-                      name : {type: DataTypes.STRING}}; 
+                      name : {type: DataTypes.STRING(150)}}; 
 
     for (let row of req.body) {        
         let objectId = row.textId;        

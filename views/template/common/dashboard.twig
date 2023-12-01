@@ -219,8 +219,8 @@
         <div class="tab-content">  
           <div class="tab-pane fade active show" id="nav-main" role="tabpanel" aria-labelledby="nav-main-tab">
             <form class="form" id="create-object-form">  
-              <label for="input-type" class="form-label">Type object:</label>
-              <div class="input-group input-group-sm">
+              <label for="input-type">Type object:</label>
+              {# <div class="input-group input-group-sm"> #}
                 <select class="form-select form-select-sm" id="input-type" required pattern="[a-zA-Z]+">
                   <option selected desabled value="">...</option>
                   <option value="Subsystem">{{text_subsystem}}</option>  
@@ -232,24 +232,37 @@
                   <option value="Register">{{text_register}}</option>  
                   <option value="Report">{{text_report}}</option>                              
                 </select>
-              </div>         
+              {# </div>          #}
               <label for="input-textId">Identifier:</label>
               <div class="input-group input-group-sm has-validation">
                 <input type="text" placeholder="[a-zA-Z0-9]" id="input-textId" class="form-control" required pattern="[a-zA-Z0-9]+"/>
-                {# <div class="invalid-feedback">
-                  Not filled in.
-                </div> #}
+              </div>  
+              <label for="input-object-rep">Object representation:</label>
+              <div class="input-group input-group-sm">
+                <input type="text" placeholder="" id="input-object-rep" class="form-control"/>
+              </div> 
+              <label for="input-list-rep">List representation:</label>
+              <div class="input-group input-group-sm">
+                <input type="text" placeholder="" id="input-list-rep" class="form-control"/>
               </div>  
               <label for="input-subsystem">Subsystem:</label>
               <div class="input-group input-group-sm">
                 <input type="text" placeholder="..." id="input-subsystem" class="form-control"/>
                 <button class="btn btn-outline-secondary" type="button" onclick="objectEditSubsystem()">...</button>
               </div>
-              {# <label for="input-typeId">Type Id:</label>
+              {# <label for="input-сode-type">Code type:</label>
+              <select class="form-select form-select-sm"  id="input-сode-type" required>
+                <option selected value="Number">Number</option>  
+                <option value="String">String</option>                
+              </select> #}
+              {# <label for="input-сode-length">Code length:</label>
               <div class="input-group input-group-sm">
-                <input type="text" placeholder="0" id="input-typeId" class="form-control"/>
-                <button class="btn btn-outline-secondary" type="button" onclick="objectTypeId()" disabled>...</button>
-              </div>  #}
+                <input type="number" placeholder="0" id="input-сode-length" value=10 max=10  class="form-control"/>                
+              </div> #}
+              {# <label for="input-name-length">Name length:</label>
+              <div class="input-group input-group-sm">
+                <input type="number" placeholder="0" id="input-name-length" value=250 max=250 class="form-control"/>                
+              </div> #}
               <label for="input-owner">Owner:</label>
               <div class="input-group input-group-sm">
                 <input type="text" placeholder="..." id="input-owner" class="form-control"/>

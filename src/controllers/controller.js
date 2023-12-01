@@ -137,6 +137,18 @@ exports.getUsers = async function(req, res) {
         console.log(err);
     }
 }
+exports.getListUsers = async function(req, res) {
+    console.log(dateNow,'>>getListUsers()...');
+
+    if (!req.body) return res.sendStatus(400);
+
+    try {
+        const data = await User.findAll({raw:true})        
+        await res.send(data);         
+    } catch(err) {
+        console.log(err);
+    }
+}
 exports.getUser = async function(req, res) {
     console.log(dateNow,'>>getUser()...');
     if (!req.body) return res.sendStatus(400);    

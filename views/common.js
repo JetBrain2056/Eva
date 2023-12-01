@@ -165,7 +165,7 @@ function logout() {
 async function listUsers() {
     console.log('>>listUsers()...');           
 
-    data = await getOnServer('/getusers');
+    data = await getOnServer('/getlistusers');
 
     const inputUserName = document.getElementById('input-username');
 

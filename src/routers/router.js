@@ -7,6 +7,7 @@ router.get('/', controller.Auth);
 router.post('/', controller.Signin);
 
 router.get('/getusers', controller.getUsers);
+router.get('/getlistusers', controller.getUsers);
 router.post('/getuser', controller.getUser);
 router.post('/createuser', controller.createUser);
 router.post('/updateuser', controller.updateUser);

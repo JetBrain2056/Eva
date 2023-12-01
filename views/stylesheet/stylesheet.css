@@ -48,9 +48,9 @@ footer {
 
 .form-signin .form-control {
 	position: relative;
-	box-sizing: border-box;
-	height: auto;
-	padding: 10px;
+	/* box-sizing: border-box;  */
+	height: 38px;
+	/* padding: 10px;  */
 	font-size: 16px;
 	
 }

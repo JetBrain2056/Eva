@@ -5,12 +5,15 @@ n = 0;
 //Commands on client/////////////////////////////////////////////////////////
 async function openRef(refName) {
     console.log('>>openRef()...');
-    // console.log(refName);
-
+    
+    const navRefForm    = document.getElementById("nav-References");
     const navForm    = document.getElementById("ref-form");  
     const refForm    = document.getElementById("create-ref-form");  
-    refForm.reset();   
-    refForm.setAttribute("eva-id", refName);    
+    refForm.reset();             
+    const refLink = navRefForm.querySelector("#"+refName);
+    const refId = refLink.getAttribute("eva-id");
+    // console.log('refId',refId);
+    refForm.setAttribute("eva-id", refId);
     refForm.setAttribute("eva-textId", refName);
 
     let tab = new bootstrap.Tab(navForm);
@@ -22,6 +25,27 @@ async function openRef(refName) {
     
     let status = document.getElementById("status");
     status.value = ">It's work!";
+}
+async function getSynonyms(refForm) {
+    console.log('>>getSynonyms()...');
+
+    const id = refForm.getAttribute("eva-id");
+    const datareq = { 
+        'owner': id
+    }
+    const resreq = await postOnServer(datareq, '/getreqs');  
+
+    let arrSyn =[];  
+    arrSyn['id'] = 'Id';
+    arrSyn['name'] = 'Name';
+    for (let elem of resreq) {
+
+        let strJson = elem.data;          
+        let Elements = await JSON.parse(strJson);  
+        let colName = Elements.textId;
+        arrSyn[colName] = Elements.synonum;
+    }
+    return arrSyn;
 }
 async function refCreate(e) {
     console.log('>>refCreate()...');
@@ -49,7 +73,11 @@ async function refCreate(e) {
             if (type === 'checkbox') {                 
                 data[elem.name] = elem.checked; 
             } else if (type === 'date') {
-                data[elem.name] = new Date(elem.value);                           
+                if (elem.value === '') {
+                    data[elem.name] = new Date('1,1,1');  
+                } else {
+                    data[elem.name] = new Date(elem.value);                           
+                }
             } else {
                 if (dataType === 'numeric') {
                     data[elem.name] = Number(elem.value);  
@@ -84,8 +112,8 @@ async function refCreate(e) {
 async function refDelete() {
     console.log('>>refDelete()...');
 
-    const refForm = document.getElementById("nav-ref-form");
-    const textId = refForm.getAttribute("eva-id");
+    const refForm = document.getElementById("nav-ref-form");    
+    const textId  = refForm.getAttribute("eva-textId");
     
     for (const row of selectRows) {
         const data = {
@@ -113,6 +141,9 @@ async function refModal() {
     refForm.reset();   
     refForm.setAttribute("create-mode", createMode);  
     
+    let arrSyn = await getSynonyms(refForm);   
+    // console.log('arrSyn',arrSyn);
+
     const textId = refForm.getAttribute("eva-textId");
     const data = { 
         'textId': textId
@@ -130,7 +161,7 @@ async function refModal() {
         arrCol[colName] = obj;
     }
     // console.log(arrCol);
-    await refElement(refForm, arr, arrCol, createMode);      
+    await refElement(refForm, arr, arrCol, arrSyn, createMode);      
 }
 async function refEditModal() {
     console.log('>>refEditModal...'); 
@@ -150,6 +181,8 @@ async function refEditModal() {
     refForm.reset();  
     refForm.innerHTML ='';     
     refForm.setAttribute("create-mode", createMode);  
+
+    arrSyn = await getSynonyms(refForm);   
 
     currentModal = getModal(modalForm);
 
@@ -171,10 +204,10 @@ async function refEditModal() {
     // console.log(arrCol);
 
     res = await postOnServer(data, '/getref');  
-    await refElement(refForm, res[0], arrCol, createMode);     
+    await refElement(refForm, res[0], arrCol, arrSyn, createMode);     
 }
 //DOM Dynamic Content////////////////////////////////////////////////////////
-async function refElement(refForm, col, arrCol, createMode) {
+async function refElement(refForm, col, arrCol, arrSyn, createMode) {
     console.log('>>refElement()...');  
     // console.log(res);
     if (col) {                  
@@ -184,7 +217,14 @@ async function refElement(refForm, col, arrCol, createMode) {
             const label  = document.createElement("label");
             label.setAttribute("for","input-ref-"+req);
             //synonum
-            label.innerText = req+":";                 
+            let synom = arrSyn[req];
+            console.log('arr',arrSyn[req]);
+            console.log('synom',synom);
+            if (synom) {
+                label.innerText = synom+":";  
+            } else {
+                label.innerText = req+":";  
+            }                           
             refForm.appendChild(label);
             const div  = document.createElement("div");
             div.setAttribute("class", "input-group input-group-sm col-auto");
@@ -252,7 +292,7 @@ function buildTable(refName) {
     console.log('>>buildTable()...');  
 
     const refForm = document.getElementById("nav-ref-form");
-    refForm.setAttribute("eva-id", refName);
+    refForm.setAttribute("eva-textId", refName);
 
     const refFormLabel = document.getElementById("refFormLabel"); 
     refFormLabel.innerText = refName+'s';
@@ -319,11 +359,12 @@ function navItem(navTab, name) {
     subsys.appendChild(h5);    
     evaSubsys.appendChild(subsys);                   
 }
-function navLink(nav, name) {
+function navLink(nav, name, id) {
     console.log('>>navLink()...');
     const a = document.createElement('a');
     a.setAttribute("class","nav-link eva-link");        
     a.setAttribute("id", name);           
+    a.setAttribute("eva-id", id);  
     a.innerText = name+'s';
     a.href="#";
     a.setAttribute("style","color: grey;font-size: 19px;");       
@@ -360,13 +401,14 @@ async function tabDesk(div) {
 
     let data = await getOnServer('/getconfig');
     for (let row of data) {
-        let strJson = row.data; 
+        let id       = row.id;
+        let strJson  = row.data; 
         let elements = await JSON.parse(strJson);
         if (row.state===0 && (elements.typeId==='Reference'||elements.typeId==='Document'||elements.typeId==='Processing')) {
             //console.log(elements.typeId); 
             const nav = document.createElement('nav');
             nav.setAttribute("class","nav flex-column");                 
-                navLink(nav, elements.textId);                    
+                navLink(nav, elements.textId, id);                    
             div.appendChild(nav);          
         }
     }        
@@ -376,13 +418,14 @@ async function tabRef(div) {
 
     let data = await getOnServer('/getconfig');
     for (let row of data) {
-        let strJson = row.data; 
+        let id       = row.id;
+        let strJson  = row.data;         
         let elements = await JSON.parse(strJson);
         if (row.state===0 && elements.typeId==='Reference') {
                     
             const nav = document.createElement('nav');
             nav.setAttribute("class","nav flex-column");                 
-                navLink(nav, elements.textId);                    
+                navLink(nav, elements.textId, id);                    
             div.appendChild(nav);          
         }
     }        

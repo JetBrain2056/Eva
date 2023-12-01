@@ -270,8 +270,10 @@ async function refElement(refForm, col, arrCol, arrSyn, createMode) {
                 input.id    = "input-ref-"+req;
                 input.name  = req;
                 if (createMode===true) {
-                    if (type.dataType === 'date') {
-                        input.value = dateFormat(new Date(Date.now())).slice(0, 9);
+                    if (type.dataType === 'timestamp with time zone') {
+                        const date = new Date('1,1,1');
+                        // console.log('date', date);                        
+                        input.value = dateFormat(date).slice(0, 10);
                     } else {
                         input.value = '';
                     }
@@ -280,8 +282,8 @@ async function refElement(refForm, col, arrCol, arrSyn, createMode) {
                         input.checked = col[req];
                     } else if (type.dataType === 'timestamp with time zone') {
                         const date = col[req];
-                        console.log('date', date);                        
-                        input.value = date.slice(0, 9);
+                        // console.log('date', date);                        
+                        input.value = date.slice(0, 10);
                     } else {
                         input.value = col[req];
                     }

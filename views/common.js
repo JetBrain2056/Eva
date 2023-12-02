@@ -85,10 +85,10 @@ function dblSelect(e) {
     } else {
         const currentForm = e.currentTarget.parentNode.parentNode;
             
-        const modalTrigger = currentForm.getElementsByClassName('eva-edit');
-        if (modalTrigger[0]) {
-            console.log('modalTrigger'), modalTrigger;
-            modalTrigger[0].onclick();         
+        const btnTrigger = currentForm.querySelector('.eva-edit');
+        if (btnTrigger) {
+            // console.log('btnTrigger');
+            btnTrigger.onclick();         
         }            
     }
 }

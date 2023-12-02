@@ -307,14 +307,22 @@ async function refElement(refForm, col, arrCol, arrSyn, createMode) {
         }        
     } 
 }
+function closeTabRef(e) {
+    console.log('>>closeTabRef()...');  
+
+    const Desktop = document.getElementById("Desktop");
+    if (Desktop) {
+        Desktop.click();
+    }
+}
 function buildTable(refName) {
     console.log('>>buildTable()...');  
 
     const refForm = document.getElementById("nav-ref-form");
     refForm.setAttribute("eva-textId", refName);
 
-
-    const ul = refForm.querySelector("#eva-nav-tabs");       
+    const ul = refForm.querySelector("#eva-nav-tabs");   
+    ul.innerHTML = '';    
         const li = document.createElement("li");        
         li.setAttribute("class","nav-item");
             // li.setAttribute("hidden","hidden");
@@ -322,19 +330,13 @@ function buildTable(refName) {
             a.setAttribute("class","nav-link active");                
             a.setAttribute("aria-current","page");
             a.setAttribute("href","#");  
-            // a.setAttribute("onclick",openTabRef()) ; 
-            // a.setAttribute("data-bs-toggle","tab");
-            // a.setAttribute("data-bs-target","#nav-ref-form");
-            // a.setAttribute("role","tab");
-            // a.setAttribute("aria-controls","nav-ref-form");
-            // a.setAttribute("aria-selected","false");            
-            a.innerText = refName;  
+            // a.setAttribute("onclick",openTabRef()) ;           
+            a.innerText = refName+'s '; 
                 const button = document.createElement("button");
                 button.setAttribute("type","button");
-                button.setAttribute("class","btn-close");
-                // button.setAttribute("data-bs-dismiss","tabpanel");
-                // button.setAttribute("aria-label","Close");
-                // button.setAttribute("onclick",closeTabRef()) ; 
+                button.setAttribute("class","btn-close eva-btn-tab-close");                
+                button.setAttribute("aria-label","Close");
+                button.addEventListener("click", closeTabRef);
                 a.appendChild(button);
         li.appendChild(a);    
     ul.appendChild(li);    

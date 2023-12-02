@@ -6,17 +6,31 @@ n = 0;
 async function openRef(refName) {
     console.log('>>openRef()...');
     
-    const navRefForm    = document.getElementById("nav-References");
-    const navForm    = document.getElementById("ref-form");  
+    const evaNav   = document.getElementById("eva-nav"); 
+        const li = document.createElement("li");        
+        li.setAttribute("class","nav-item");
+        li.setAttribute("hidden","hidden");
+            const a = document.createElement("a");
+            a.setAttribute("class","nav-link eva-link2");
+            a.setAttribute("id","ref-form");
+            a.setAttribute("data-bs-toggle","tab");
+            a.setAttribute("data-bs-target","#nav-ref-form");
+            a.setAttribute("role","tab");
+            a.setAttribute("aria-controls","nav-ref-form");
+            a.setAttribute("aria-selected","false");
+        li.appendChild(a);    
+    evaNav.appendChild(li);
+
+    const navRefForm = document.getElementById("nav-References");
+    // const navForm    = document.getElementById("ref-form");  
     const refForm    = document.getElementById("create-ref-form");  
     refForm.reset();             
     const refLink = navRefForm.querySelector("#"+refName);
-    const refId = refLink.getAttribute("eva-id");
-    // console.log('refId',refId);
+    const refId = refLink.getAttribute("eva-id");    
     refForm.setAttribute("eva-id", refId);
     refForm.setAttribute("eva-textId", refName);
 
-    let tab = new bootstrap.Tab(navForm);
+    let tab = new bootstrap.Tab(a);
     tab.show();    
 
     selectRows = [];
@@ -299,12 +313,38 @@ function buildTable(refName) {
     const refForm = document.getElementById("nav-ref-form");
     refForm.setAttribute("eva-textId", refName);
 
-    const refFormLabel = document.getElementById("refFormLabel"); 
+
+    const ul = refForm.querySelector("#eva-nav-tabs");       
+        const li = document.createElement("li");        
+        li.setAttribute("class","nav-item");
+            // li.setAttribute("hidden","hidden");
+            const a = document.createElement("a");
+            a.setAttribute("class","nav-link active");                
+            a.setAttribute("aria-current","page");
+            a.setAttribute("href","#");  
+            // a.setAttribute("onclick",openTabRef()) ; 
+            // a.setAttribute("data-bs-toggle","tab");
+            // a.setAttribute("data-bs-target","#nav-ref-form");
+            // a.setAttribute("role","tab");
+            // a.setAttribute("aria-controls","nav-ref-form");
+            // a.setAttribute("aria-selected","false");            
+            a.innerText = refName;  
+                const button = document.createElement("button");
+                button.setAttribute("type","button");
+                button.setAttribute("class","btn-close");
+                // button.setAttribute("data-bs-dismiss","tabpanel");
+                // button.setAttribute("aria-label","Close");
+                // button.setAttribute("onclick",closeTabRef()) ; 
+                a.appendChild(button);
+        li.appendChild(a);    
+    ul.appendChild(li);    
+
+    const refFormLabel = refForm.querySelector("#refFormLabel"); 
     refFormLabel.innerText = refName+'s';
 
-    const formTbl = document.getElementById("eva-ref-form");    
+    const formTbl = refForm.querySelector(".eva-ref-form");    
     formTbl.innerHTML='';
-    formTbl.setAttribute("style", "height: calc(100vh - 171px); overflow-y: scroll;");               
+    formTbl.setAttribute("style", "height: calc(100vh - 208px); overflow-y: scroll;");               
         const refTbl = document.createElement('table');
         refTbl.setAttribute("class", "table table-striped table-hover table-sm table-responsive");              
     formTbl.appendChild(refTbl);  

@@ -249,12 +249,7 @@
               <div class="input-group input-group-sm">
                 <input type="text" placeholder="..." id="input-subsystem" class="form-control"/>
                 <button class="btn btn-outline-secondary" type="button" onclick="objectEditSubsystem()">...</button>
-              </div>
-              {# <label for="input-сode-type">Code type:</label>
-              <select class="form-select form-select-sm"  id="input-сode-type" required>
-                <option selected value="Number">Number</option>  
-                <option value="String">String</option>                
-              </select> #}
+              </div>                  
               {# <label for="input-сode-length">Code length:</label>
               <div class="input-group input-group-sm">
                 <input type="number" placeholder="0" id="input-сode-length" value=10 max=10  class="form-control"/>                
@@ -268,6 +263,12 @@
                 <input type="text" placeholder="..." id="input-owner" class="form-control"/>
                 <button class="btn btn-outline-secondary" type="button" onclick="objectOwner()" disabled>...</button>
               </div>  
+              <label for="input-module">Others:</label>
+              <div class="input-group input-group-sm">
+                <button type="button" id="input-module" class="btn btn-secondary">                              
+                    <span>Object module</span>
+                </button>
+              </div>
             </form>
           </div>   
           <div class="tab-pane fade" id="nav-requisite" role="tabpanel" aria-labelledby="nav-requisite-tab">

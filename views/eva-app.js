@@ -307,13 +307,19 @@ async function refElement(refForm, col, arrCol, arrSyn, createMode) {
         }        
     } 
 }
-function closeTabRef(e) {
+function closeTabRef() {
     console.log('>>closeTabRef()...');  
 
     const Desktop = document.getElementById("Desktop");
     if (Desktop) {
         Desktop.click();
     }
+}
+function openTabRef(refName) {
+    console.log('>>openTabRef()...');  
+    
+    // openRef(refName);
+
 }
 function buildTable(refName) {
     console.log('>>buildTable()...');  
@@ -324,21 +330,21 @@ function buildTable(refName) {
     const ul = refForm.querySelector("#eva-nav-tabs");   
     ul.innerHTML = '';    
         const li = document.createElement("li");        
-        li.setAttribute("class","nav-item");
-            // li.setAttribute("hidden","hidden");
-            const a = document.createElement("a");
-            a.setAttribute("class","nav-link active");                
-            a.setAttribute("aria-current","page");
-            a.setAttribute("href","#");  
-            // a.setAttribute("onclick",openTabRef()) ;           
-            a.innerText = refName+'s '; 
-                const button = document.createElement("button");
-                button.setAttribute("type","button");
-                button.setAttribute("class","btn-close eva-btn-tab-close");                
-                button.setAttribute("aria-label","Close");
-                button.addEventListener("click", closeTabRef);
-                a.appendChild(button);
-        li.appendChild(a);    
+        li.setAttribute("class","nav-item");                      
+                const a = document.createElement("a");
+                a.setAttribute("class","nav-link active");                                
+                a.setAttribute("href","#");                    
+                a.setAttribute("name", refName);   
+                a.setAttribute("onclick", "openTabRef(name)");   
+                a.innerText = refName+'s '; 
+                    const button = document.createElement("button");
+                    button.setAttribute("type","button");
+                    button.setAttribute("class","btn-close");                
+                    button.setAttribute("href","#");  
+                    button.setAttribute("style","z-index:2");
+                    button.setAttribute("onclick", "closeTabRef()");                                     
+            li.appendChild(a);                             
+            a.appendChild(button); 
     ul.appendChild(li);    
 
     const refFormLabel = refForm.querySelector("#refFormLabel"); 

@@ -318,7 +318,7 @@ function closeTabRef() {
 function openTabRef(refName) {
     console.log('>>openTabRef()...');  
     
-    // openRef(refName);
+    openRef(refName);
 
 }
 function buildTable(refName) {
@@ -330,21 +330,20 @@ function buildTable(refName) {
     const ul = refForm.querySelector("#eva-nav-tabs");   
     ul.innerHTML = '';    
         const li = document.createElement("li");        
-        li.setAttribute("class","nav-item");                      
+        li.setAttribute("class","nav-item d-flex justify-content-end");                      
                 const a = document.createElement("a");
-                a.setAttribute("class","nav-link active");                                
+                a.setAttribute("class","nav-link active p-1 pe-4");                                
                 a.setAttribute("href","#");                    
-                a.setAttribute("name", refName);   
+                a.setAttribute("name", refName);                   
                 a.setAttribute("onclick", "openTabRef(name)");   
                 a.innerText = refName+'s '; 
                     const button = document.createElement("button");
                     button.setAttribute("type","button");
-                    button.setAttribute("class","btn-close");                
-                    button.setAttribute("href","#");  
-                    button.setAttribute("style","z-index:2");
+                    button.setAttribute("class","btn-close position-absolute p-2");                
+                    button.setAttribute("href","#");               
                     button.setAttribute("onclick", "closeTabRef()");                                     
             li.appendChild(a);                             
-            a.appendChild(button); 
+            li.appendChild(button); 
     ul.appendChild(li);    
 
     const refFormLabel = refForm.querySelector("#refFormLabel"); 

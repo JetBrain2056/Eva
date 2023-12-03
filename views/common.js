@@ -641,6 +641,22 @@ async function updateConfig() {
     inputStatus.value = '>> Config update completed!';
        
 }
+function openModule() {
+    console.log('>>openModule()...'); 
+
+    const modalForm = document.getElementById("moduleModal");
+
+    const modalLabel = modalForm.querySelector('#moduleModalLabel');  
+    modalLabel.innerText = 'Edit module:';
+
+    // const inputForm      = modalForm.querySelector('#create-module'); 
+    //inputForm.reset();    
+    //inputForm.setAttribute("create-mode",true);   
+  
+
+    selectModal = getModal(modalForm);
+
+}
 /////////////////////////////////////////////////////////////////////////////
 async function showSubsystemsTable() {
     console.log('>>showSubsystemsTable()...');

@@ -457,6 +457,12 @@ async function showConfigTable() {
         }
     }
 
+    data.sort(function(a, b) {
+        if(a.typeId < b.typeId) { return -1; }
+        if(a.typeId > b.typeId) { return 1; }
+        return 0;
+      });
+
     const col  = { 'id':'Id', 'typeId':'Type',  'textId': 'Identifier'};  
     const hide = ['id'];  
 

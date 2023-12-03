@@ -1,8 +1,6 @@
 let selectRows = [];
 let currentModal;
 let selectModal;
-let n = 0;
-let tbl = [];
 const inputStatus   = document.getElementById('status');
 const btnConfigSave = document.getElementById('btn-config-save');
 const content       = document.querySelector('.content');
@@ -169,24 +167,12 @@ function dateFormat(date) {
     const newDate = new Date(date - (new Date()).getTimezoneOffset() * 60000);
     return newDate.toISOString().slice(0, 19).replace('T', ' ');
 }
-function buildTabpanel(refForm) {
+function buildTabpanel(refForm, indent) {
     console.log('>>buildTabpanel()...');  
 
     const formTbl = refForm.querySelector(".eva-table");    
-    formTbl.innerHTML='';
-    formTbl.setAttribute("style", "height: calc(100vh - 127px); overflow-y: scroll;");               
-        const refTbl = document.createElement('table');
-        refTbl.setAttribute("class", "table table-striped table-hover table-sm table-responsive");              
-    formTbl.appendChild(refTbl);  
-
-    return refTbl;
-}
-function buildTabpanel300(refForm) {
-    console.log('>>buildTabpanel()...');  
-
-    const formTbl = refForm.querySelector(".eva-table");    
-    formTbl.innerHTML='';
-    formTbl.setAttribute("style", "height: calc(100vh - 300px); overflow-y: scroll;");               
+    formTbl.innerHTML='';      
+        formTbl.setAttribute("style", "height: calc(100vh - "+indent+"px); overflow-y: scroll;");               
         const refTbl = document.createElement('table');
         refTbl.setAttribute("class", "table table-striped table-hover table-sm table-responsive");              
     formTbl.appendChild(refTbl);  
@@ -226,7 +212,7 @@ async function showUserTable() {
 
     const refForm = document.getElementById("nav-users");
 
-    resTbl = buildTabpanel(refForm);
+    resTbl = buildTabpanel(refForm, "127");
     
     let data = await getOnServer('/getusers');   
 
@@ -375,7 +361,7 @@ async function showRoleTable() {
     
     const refForm = document.getElementById("nav-roles");
 
-    resTbl = buildTabpanel(refForm);
+    resTbl = buildTabpanel(refForm, "127");
 
     let data = await getOnServer('/getroles');   
 
@@ -412,7 +398,7 @@ async function userEditRole() {
 
     const modalForm = document.getElementById("editUserRoleModal");    
 
-    resTbl = buildTabpanel300(modalForm);
+    resTbl = buildTabpanel(modalForm, "300");
 
     selectModal = getModal(modalForm);
 
@@ -421,7 +407,7 @@ async function userEditRole() {
     const col = {'id':'Id', 'Name':'Name'};  
     const hide = ['id'];
 
-    showTable(tbl[3], hide, col, data);
+    showTable(resTbl, hide, col, data);
  
 }
 async function roleSelect() {
@@ -457,7 +443,7 @@ async function showConfigTable() {
 
     const refForm = document.getElementById("nav-config");
 
-    resTbl = buildTabpanel(refForm);
+    resTbl = buildTabpanel(refForm,"127");
     
     let tmp  = await getOnServer('/getconfig');     
     let data = [];
@@ -655,7 +641,7 @@ async function showSubsystemsTable() {
 
     const modalForm = document.getElementById("editSubsystemModal");
 
-    resTbl = buildTabpanel300(modalForm);
+    resTbl = buildTabpanel(modalForm, "300");
 
     let data = await getOnServer('/subsystems');  
   
@@ -695,7 +681,7 @@ async function showRequisiteTable() {
    
     const modalForm = document.getElementById("nav-requisite");
 
-    resTbl = buildTabpanel300(modalForm);
+    resTbl = buildTabpanel(modalForm, "300");
 
     const ownerForm     = document.getElementById('create-object-form');  
     const id = ownerForm.getAttribute("eva-id");

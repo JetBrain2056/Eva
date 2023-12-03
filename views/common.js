@@ -172,7 +172,7 @@ function dateFormat(date) {
 function buildTabpanel(refForm) {
     console.log('>>buildTabpanel()...');  
 
-    const formTbl = refForm.querySelector(".eva-form");    
+    const formTbl = refForm.querySelector(".eva-table");    
     formTbl.innerHTML='';
     formTbl.setAttribute("style", "height: calc(100vh - 127px); overflow-y: scroll;");               
         const refTbl = document.createElement('table');

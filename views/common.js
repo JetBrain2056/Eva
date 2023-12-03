@@ -6,22 +6,7 @@ let tbl = [];
 const inputStatus   = document.getElementById('status');
 const btnConfigSave = document.getElementById('btn-config-save');
 const content       = document.querySelector('.content');
-const forms         = document.getElementsByClassName('eva-form');
-for (const div of forms) {                                          
-    div.setAttribute("style", "height: calc(100vh - 127px); overflow-y: scroll;");               
-    tbl[n] = document.createElement('table');
-    tbl[n].setAttribute("class", "table table-striped table-hover table-sm table-responsive");              
-    div.appendChild(tbl[n]); 
-    n = n + 1;
-}
-const table         = document.getElementsByClassName('eva-table');
-for (const div of table) {                                          
-    div.setAttribute("style", "height: calc(100vh - 300px); overflow-y: scroll;");               
-    tbl[n] = document.createElement('table');
-    tbl[n].setAttribute("class", "table table-striped table-hover table-sm table-responsive");              
-    div.appendChild(tbl[n]); 
-    n = n + 1;
-}
+
 function rowSelect(e) {
     console.log('>>rowSelect()...');
 
@@ -184,6 +169,30 @@ function dateFormat(date) {
     const newDate = new Date(date - (new Date()).getTimezoneOffset() * 60000);
     return newDate.toISOString().slice(0, 19).replace('T', ' ');
 }
+function buildTabpanel(refForm) {
+    console.log('>>buildTabpanel()...');  
+
+    const formTbl = refForm.querySelector(".eva-form");    
+    formTbl.innerHTML='';
+    formTbl.setAttribute("style", "height: calc(100vh - 127px); overflow-y: scroll;");               
+        const refTbl = document.createElement('table');
+        refTbl.setAttribute("class", "table table-striped table-hover table-sm table-responsive");              
+    formTbl.appendChild(refTbl);  
+
+    return refTbl;
+}
+function buildTabpanel300(refForm) {
+    console.log('>>buildTabpanel()...');  
+
+    const formTbl = refForm.querySelector(".eva-table");    
+    formTbl.innerHTML='';
+    formTbl.setAttribute("style", "height: calc(100vh - 300px); overflow-y: scroll;");               
+        const refTbl = document.createElement('table');
+        refTbl.setAttribute("class", "table table-striped table-hover table-sm table-responsive");              
+    formTbl.appendChild(refTbl);  
+
+    return refTbl;
+}
 //Get/post on Server//////////////////////////////////////////////////////////
 async function postOnServer(data, link) {
     console.log('>>postOnServer()...');
@@ -214,13 +223,17 @@ async function getOnServer(link) {
 //////////////////////////////////////////////////////////////////////////////
 async function showUserTable() {
     console.log('>>showUserTable()...');
+
+    const refForm = document.getElementById("nav-users");
+
+    resTbl = buildTabpanel(refForm);
     
     let data = await getOnServer('/getusers');   
 
     const col  = { 'id':'Id', 'Name':'Name', 'Descr':'Descr', 'Role':'Role', 'email':'E-mail', 'Show':'Show', 'EAuth':'EAuth' };  
     const hide = ['id'];  
 
-    showTable(tbl[1], hide, col, data);
+    showTable(resTbl, hide, col, data);
 
 }
 async function userCreate(e) {
@@ -360,14 +373,16 @@ async function userDelete() {
 async function showRoleTable() {
     console.log('>>showRoleTable()...');
     
-    let data = await getOnServer('/getroles');   
+    const refForm = document.getElementById("nav-roles");
 
-    // console.log(data);
+    resTbl = buildTabpanel(refForm);
+
+    let data = await getOnServer('/getroles');   
 
     const col  = { 'id':'Id', 'Name':'Name' };  
     const hide = ['id'];  
 
-    showTable(tbl[2], hide, col, data);
+    showTable(resTbl, hide, col, data);
 
 }
 async function roleCreate() {
@@ -395,7 +410,9 @@ async function roleCreate() {
 async function userEditRole() {
     console.log('>>userEditRole...'); 
 
-    let modalForm = document.getElementById("editUserRoleModal");
+    const modalForm = document.getElementById("editUserRoleModal");    
+
+    resTbl = buildTabpanel300(modalForm);
 
     selectModal = getModal(modalForm);
 
@@ -437,13 +454,17 @@ async function roleDelete() {
 /////////////////////////////////////////////////////////////////////////////
 async function showConfigTable() {
     console.log('>>showConfigTable...');
+
+    const refForm = document.getElementById("nav-config");
+
+    resTbl = buildTabpanel(refForm);
     
     let tmp  = await getOnServer('/getconfig');     
     let data = [];
 
     for (const row of tmp) {
         let strJson = row.data; 
-        let Elements = await JSON.parse(strJson);
+        let Elements = JSON.parse(strJson);
 
         if (row.state===0||row.state===1||row.state===3) {
             data.push(Object.assign({'id':row.id}, Elements));
@@ -453,7 +474,7 @@ async function showConfigTable() {
     const col  = { 'id':'Id', 'typeId':'Type',  'textId': 'Identifier'};  
     const hide = ['id'];  
 
-    await showTable(tbl[0], hide, col, data);
+    showTable(resTbl, hide, col, data);
 
     inputStatus.value = '>>Ready...';
 
@@ -632,12 +653,16 @@ async function updateConfig() {
 async function showSubsystemsTable() {
     console.log('>>showSubsystemsTable()...');
 
+    const modalForm = document.getElementById("editSubsystemModal");
+
+    resTbl = buildTabpanel300(modalForm);
+
     let data = await getOnServer('/subsystems');  
   
     const col = {'id':'Id', 'name':'Name', 'display':'Display subsystem'};  
     const hide = ['id'];
     
-    await showTable(tbl[6], hide, col, data);
+    showTable(resTbl, hide, col, data);
 
 }
 async function subsystemSelect() {
@@ -667,6 +692,10 @@ async function objectEditSubsystem() {
 /////////////////////////////////////////////////////////////////////////////
 async function showRequisiteTable() {
     console.log('>>showRequisiteTable()...');
+   
+    const modalForm = document.getElementById("nav-requisite");
+
+    resTbl = buildTabpanel300(modalForm);
 
     const ownerForm     = document.getElementById('create-object-form');  
     const id = ownerForm.getAttribute("eva-id");
@@ -686,7 +715,7 @@ async function showRequisiteTable() {
     const col = {'id':'Id','textId':'Identifier','type':'Type'};  
     const hide = ['id'];
     
-    showTable(tbl[4], hide, col, data);
+    showTable(resTbl, hide, col, data);
 
 }
 async function reqModal() {

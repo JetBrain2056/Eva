@@ -250,14 +250,6 @@
                 <input type="text" placeholder="..." id="input-subsystem" class="form-control"/>
                 <button class="btn btn-outline-secondary" type="button" onclick="objectEditSubsystem()">...</button>
               </div>                  
-              {# <label for="input-сode-length">Code length:</label>
-              <div class="input-group input-group-sm">
-                <input type="number" placeholder="0" id="input-сode-length" value=10 max=10  class="form-control"/>                
-              </div> #}
-              {# <label for="input-name-length">Name length:</label>
-              <div class="input-group input-group-sm">
-                <input type="number" placeholder="0" id="input-name-length" value=250 max=250 class="form-control"/>                
-              </div> #}
               <label for="input-owner">Owner:</label>
               <div class="input-group input-group-sm">
                 <input type="text" placeholder="..." id="input-owner" class="form-control"/>
@@ -265,7 +257,7 @@
               </div>  
               <label for="input-module">Others:</label>
               <div class="input-group input-group-sm">
-                <button type="button" id="input-module" class="btn btn-secondary">                              
+                <button type="button" id="input-module" class="btn btn-secondary" onclick="openModule()">                              
                     <span>Object module</span>
                 </button>
               </div>
@@ -424,6 +416,25 @@
             </div>
           </div>            
         </div>   #}
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" onclick="reqCreate()">{{ button_save }}&{{ button_close }}</button>
+      </div>
+    </div>
+  </div>
+</div>
+{# Modal Module #}
+<div class="modal modal-lg fade" id="moduleModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="moduleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="moduleModalLabel">Module</h5>
+        <button type="button" class="btn-close"  aria-label="Close"  data-bs-dismiss="modal" onclick=""></button>
+      </div>
+      <div class="modal-body">
+        <form class="form" id="create-module-form"> 
+          <textarea  class="text/javascript form-control" id="input-module" type="text/javascript" rows="18" style="height: calc(100vh - 230px);"></textarea>
         </form>
       </div>
       <div class="modal-footer">

@@ -5,6 +5,37 @@ const inputStatus   = document.getElementById('status');
 const btnConfigSave = document.getElementById('btn-config-save');
 const content       = document.querySelector('.content');
 
+function mainSelect() {
+    console.log('>>mainSelect()...');
+
+    const inputType      = $objectModal.querySelector('#input-type');
+    const inputSubsystem = $objectModal.querySelector("#input-subsystem");    
+    const inputModule    = $objectModal.querySelector("#input-module");    
+    const navRequisite   = $objectModal.querySelector("#object-requisite");
+    const navTabular     = $objectModal.querySelector("#object-tabular");    
+    const navForms       = $objectModal.querySelector("#object-forms");    
+    if (inputType.value == "Subsystem") {                     
+        inputSubsystem.setAttribute("disabled","disabled");        
+        inputModule   .setAttribute("disabled","disabled");        
+        navRequisite  .setAttribute("hidden","hidden");        
+        navTabular    .setAttribute("hidden","hidden");
+        navForms      .setAttribute("hidden","hidden");                        
+    } else if (inputType.value == "Module"||inputType.value == "Constant") {                         
+        navRequisite  .setAttribute("hidden","hidden");        
+        navTabular    .setAttribute("hidden","hidden");
+        navForms      .setAttribute("hidden","hidden"); 
+    } else {
+        inputSubsystem.removeAttribute("disabled");        
+        inputModule   .removeAttribute("disabled");        
+        navRequisite  .removeAttribute("hidden");        
+        navTabular    .removeAttribute("hidden");        
+        navForms      .removeAttribute("hidden");       
+    }
+}
+let $objectModal  = document.getElementById("objectModal");
+let inputType = $objectModal.querySelector('#input-type');
+inputType.addEventListener('change', mainSelect);
+
 function rowSelect(e) {
     console.log('>>rowSelect()...');
 
@@ -597,6 +628,8 @@ async function objectEditModal() {
     }    
 
     currentModal = getModal(modalForm);
+
+    mainSelect();
 
     await showRequisiteTable();
 }

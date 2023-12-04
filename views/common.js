@@ -4,35 +4,49 @@ let selectModal;
 const inputStatus   = document.getElementById('status');
 const btnConfigSave = document.getElementById('btn-config-save');
 const content       = document.querySelector('.content');
+const $objectModal  = document.getElementById("objectModal");
 
 function mainSelect() {
     console.log('>>mainSelect()...');
 
     const inputType      = $objectModal.querySelector('#input-type');
     const inputSubsystem = $objectModal.querySelector("#input-subsystem");    
-    const inputModule    = $objectModal.querySelector("#input-module");    
+    const inputSubsysBtn = $objectModal.querySelector("#input-subsystem-btn");  
+    const inputModule    = $objectModal.querySelector("#input-module"); 
+    const inputOwner     = $objectModal.querySelector("#input-owner");
+    const inputOwnerBtn  = $objectModal.querySelector("#input-owner-btn");
+    const navMain        = $objectModal.querySelector("#object-main");
     const navRequisite   = $objectModal.querySelector("#object-requisite");
     const navTabular     = $objectModal.querySelector("#object-tabular");    
-    const navForms       = $objectModal.querySelector("#object-forms");    
-    if (inputType.value == "Subsystem") {                     
-        inputSubsystem.setAttribute("disabled","disabled");        
-        inputModule   .setAttribute("disabled","disabled");        
+    const navForms       = $objectModal.querySelector("#object-forms");      
+    
+    navMain.click();
+    if (inputType.value == "Subsystem"||inputType.value == "") {                     
+        inputSubsystem.setAttribute("disabled","disabled");  
+        inputSubsysBtn.setAttribute("disabled","disabled");       
+        inputModule   .setAttribute("disabled","disabled");
+        inputOwner    .setAttribute("disabled","disabled");       
+        inputOwnerBtn .setAttribute("disabled","disabled");   
         navRequisite  .setAttribute("hidden","hidden");        
         navTabular    .setAttribute("hidden","hidden");
-        navForms      .setAttribute("hidden","hidden");                        
-    } else if (inputType.value == "Module"||inputType.value == "Constant") {                         
+        navForms      .setAttribute("hidden","hidden");                                
+    } else if (inputType.value == "Module"||inputType.value == "Constant") {   
+        inputOwner    .setAttribute("disabled","disabled");       
+        inputOwnerBtn .setAttribute("disabled","disabled");                       
         navRequisite  .setAttribute("hidden","hidden");        
         navTabular    .setAttribute("hidden","hidden");
         navForms      .setAttribute("hidden","hidden"); 
     } else {
         inputSubsystem.removeAttribute("disabled");        
+        inputSubsysBtn.removeAttribute("disabled");
+        inputOwner    .setAttribute("disabled","disabled");       
+        inputOwnerBtn .setAttribute("disabled","disabled"); 
         inputModule   .removeAttribute("disabled");        
         navRequisite  .removeAttribute("hidden");        
         navTabular    .removeAttribute("hidden");        
         navForms      .removeAttribute("hidden");       
     }
 }
-let $objectModal  = document.getElementById("objectModal");
 let inputType = $objectModal.querySelector('#input-type');
 inputType.addEventListener('change', mainSelect);
 
@@ -579,6 +593,8 @@ async function objectModal() {
 
     currentModal = getModal(modalForm);
 
+    mainSelect();
+
 }
 async function objectEditModal() {
     console.log('>>objectEditModal...'); 
@@ -698,7 +714,6 @@ async function showSubsystemsTable() {
 }
 async function subsystemSelect() {
     console.log('>>selectSubsystem...');
-    inputStatus.value = '>> Select subsystem...';
 
     if (selectRows.length === 0) return;
 
@@ -709,13 +724,13 @@ async function subsystemSelect() {
     inputSubsystem.value  = row.cells[1].innerText;
     inputSubsystem.setAttribute("eva-id", row.cells[0].innerText);
   
-    await currentModal.hide();
+    await selectModal.hide();
 }
 async function objectEditSubsystem() {
 
     let modalForm = document.getElementById("editSubsystemModal");
 
-    getModal(modalForm);
+    selectModal = getModal(modalForm);
   
     await showSubsystemsTable();
 

@@ -47,9 +47,6 @@ function mainSelect() {
         navForms      .removeAttribute("hidden");       
     }
 }
-let inputType = $objectModal.querySelector('#input-type');
-inputType.addEventListener('change', mainSelect);
-
 function rowSelect(e) {
     console.log('>>rowSelect()...');
 
@@ -916,11 +913,11 @@ function loginMode() {
 
     const logged = content.getAttribute("data-logged");   
     const mode   = content.getAttribute("data-mode");
-
-    //console.log('logged: ' + logged);
  
     if (mode==='true'&&logged==='true') {           
         showConfigTable();
+        let inputType = $objectModal.querySelector('#input-type');
+        inputType.addEventListener('change', mainSelect);
     } else {
         return;
     }    

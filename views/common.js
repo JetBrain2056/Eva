@@ -607,7 +607,6 @@ async function objectEditModal() {
 
     res = await postOnServer(data,'/getobject');
     if (res) {
-
         let strJson = res[0].data;          
         let Elements = await JSON.parse(strJson);        
 
@@ -616,15 +615,6 @@ async function objectEditModal() {
         input_textId.value      = Elements.textId;
         input_subsystem.value   = Elements.subsysName;
         input_subsystem.setAttribute("eva-id", Elements.subsysId);
-        
-        //console.log(Elements.typeId);
-        // if (Elements.typeId==='Subsystem'||Elements.typeId==='Constant') {            
-        //     input_subsystem.setAttribute("disabled","disabled"); 
-        //     subsystemBtn.setAttribute("disabled","disabled"); 
-        // } else {
-        //     input_subsystem.removeAttribute("disabled"); 
-        //     subsystemBtn.removeAttribute("disabled"); 
-        // }
     }    
 
     currentModal = getModal(modalForm);

@@ -312,6 +312,7 @@ function closeTabRef() {
 
     const Desktop = document.getElementById("Desktop");
     if (Desktop) {
+        //tabDesk(Desktop);
         Desktop.click();
     }
 }
@@ -340,7 +341,9 @@ function buildTable(refName) {
                     const button = document.createElement("button");
                     button.setAttribute("type","button");
                     button.setAttribute("class","btn-close position-absolute p-2");                
-                    button.setAttribute("href","#");               
+                    button.setAttribute("href","#");   
+                    // button.setAttribute("data-bs-toggle","tab"); 
+                    // button.setAttribute("data-bs-target","#nav-Desktop");              
                     button.setAttribute("onclick", "closeTabRef()");                                     
             li.appendChild(a);                             
             li.appendChild(button); 
@@ -414,7 +417,7 @@ function navItem(navTab, name) {
 function navLink(nav, name, id) {
     console.log('>>navLink()...');
     const a = document.createElement('a');
-    a.setAttribute("class","nav-link eva-link");        
+    a.setAttribute("class","nav-link eva-link"); //icon-link
     a.setAttribute("id", name);           
     a.setAttribute("eva-id", id);  
     a.innerText = name+'s';
@@ -422,6 +425,7 @@ function navLink(nav, name, id) {
     a.setAttribute("style","color: grey;font-size: 19px;");       
     a.setAttribute("onclick", "openRef(id)");         
     nav.appendChild(a); 
+    return a;
 }
 async function header() {
     console.log('>>header()...');
@@ -451,17 +455,45 @@ async function header() {
 async function tabDesk(div) {
     console.log('>>tabDesk()...');
 
+    // div.setAttribute("class","flex-column");
+
+    const a = document.createElement('a');
+    a.setAttribute("class","text");    
+    a.setAttribute("style","color: #555555;font-size: 19px;");     
+    a.setAttribute("data-bs-toggle","collapse"); 
+    a.setAttribute("data-bs-target","#collapse-link");     
+    a.href="#";
+    a.innerText = 'References';
+    div.appendChild(a);   
+
+    // const a1 = document.createElement('a');
+    // a1.setAttribute("class","text");    
+    // a1.setAttribute("style","color: #555555;font-size: 19px;"); 
+    // a1.setAttribute("data-bs-toggle","collapse"); 
+    // a1.setAttribute("data-bs-target","#collapse-link1");   
+    // a1.href="#";  
+    // a1.innerText = 'Reports';
+    // div.appendChild(a1);  
+
+    const nav = document.createElement('nav');
+    nav.setAttribute("class","nav flex-column collapse show");    
+    nav.setAttribute("id","collapse-link");    
+
+    // const nav1 = document.createElement('nav');
+    // nav1.setAttribute("class","nav flex-column collapse");    
+    // nav1.setAttribute("id","collapse-link1");  
+
     let data = await getOnServer('/getconfig');
     for (let row of data) {
         let id       = row.id;
         let strJson  = row.data; 
         let elements = await JSON.parse(strJson);
-        if (row.state===0 && (elements.typeId==='Reference'||elements.typeId==='Document'||elements.typeId==='Processing')) {
-            //console.log(elements.typeId); 
-            const nav = document.createElement('nav');
-            nav.setAttribute("class","nav flex-column");                 
-                navLink(nav, elements.textId, id);                    
-            div.appendChild(nav);          
+        if (row.state===0 && elements.typeId==='Reference') {                                                   
+            navLink(nav, elements.textId, id);                    
+            a.appendChild(nav);    
+        } else if ((row.state===0 && elements.typeId==='Report') ) {    
+            // navLink(nav1, elements.textId, id);                    
+            // a1.appendChild(nav1);                 
         }
     }        
 }

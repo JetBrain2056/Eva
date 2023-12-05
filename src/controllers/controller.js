@@ -2,12 +2,14 @@ const { User, Role, Config, Subsystem, Constant, Module, Requisite, Form } = req
 const { content }       = require('../index.js');
 const bcrypt            = require('bcrypt');
 const sequelize         = require('../db');
-const { DataTypes}      = require('sequelize');
+const { Sequelize, DataTypes } = require('sequelize');
 const { v4: uuidv4 }    = require('uuid');
 //const jwt              = require('jsonwebtoken');
 
-const newDate = new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000);
-const dateNow = newDate.toISOString().slice(0, 19).replace('T', ' ');
+function dateNow() {
+    let date = new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000);
+    return date.toISOString().slice(0, 19).replace('T', ' ');
+}
 
 /* const generateJwt = (id, login, role) => {
      return jwt.sign(
@@ -35,13 +37,13 @@ async function hashPassword(password, saltRounds = 10) {
     }
 }
 exports.Auth = function(req,res) {
-    console.log(dateNow,'>>Auth()...');
+    console.log(dateNow(),'>>Auth()...');
     if (!req.body) return res.sendStatus(400);
     content.logged = false;
     res.render('index.twig', content);
 }
 exports.Signin = async function(req, res) {
-    console.log(dateNow,'>>Signin()...');
+    console.log(dateNow(),'>>Signin()...');
     if (!req.body) return res.sendStatus(400);
 
     const operMode = req.body.operation_mode;
@@ -118,7 +120,7 @@ exports.Signin = async function(req, res) {
 }
 //Users/////////////////////////////////////////////
 exports.getUsers = async function(req, res) {
-    console.log(dateNow,'>>getUsers()...');
+    console.log(dateNow(),'>>getUsers()...');
 
     if (!req.body) return res.sendStatus(400);
 
@@ -138,7 +140,7 @@ exports.getUsers = async function(req, res) {
     }
 }
 exports.getListUsers = async function(req, res) {
-    console.log(dateNow,'>>getListUsers()...');
+    console.log(dateNow(),'>>getListUsers()...');
 
     if (!req.body) return res.sendStatus(400);
 
@@ -150,7 +152,7 @@ exports.getListUsers = async function(req, res) {
     }
 }
 exports.getUser = async function(req, res) {
-    console.log(dateNow,'>>getUser()...');
+    console.log(dateNow(),'>>getUser()...');
     if (!req.body) return res.sendStatus(400);    
 
     const {id} = req.body;
@@ -172,7 +174,7 @@ exports.getUser = async function(req, res) {
     }
 }
 exports.createUser = async function(req, res) {
-    console.log(dateNow,'>>CreateUser()...');
+    console.log(dateNow(),'>>CreateUser()...');
 
     if (!req.body) return res.sendStatus(400);
     const {Name, Descr, Password, RoleId, EAuth, Show} = req.body;
@@ -214,7 +216,7 @@ exports.createUser = async function(req, res) {
     }
 }
 exports.updateUser = async function(req, res) {
-    console.log(dateNow,'>>updateUser()...');
+    console.log(dateNow(),'>>updateUser()...');
     
     if (!req.body) return res.sendStatus(400);     
 
@@ -241,7 +243,7 @@ exports.updateUser = async function(req, res) {
     }   
 }
 exports.deleteUser = async function(req, res) {
-    console.log(dateNow,'>>deleteUser()...');
+    console.log(dateNow(),'>>deleteUser()...');
     if (!req.body) return res.sendStatus(400);
     const {id} = req.body;
     try {            
@@ -253,7 +255,7 @@ exports.deleteUser = async function(req, res) {
     }
 }
 exports.getRoles = async function(req, res) {
-    console.log(dateNow,'getRoles()...');
+    console.log(dateNow(),'getRoles()...');
     if (!req.body) return res.sendStatus(400);
     try {
         const data = await Role.findAll({raw:true});
@@ -263,7 +265,7 @@ exports.getRoles = async function(req, res) {
     }
 }
 exports.createRole = async function(req, res) {
-    console.log(dateNow,'>>CreateRole()...');
+    console.log(dateNow(),'>>CreateRole()...');
 
     if (!req.body) return res.sendStatus(400);
     const { Name } = req.body;
@@ -280,7 +282,7 @@ exports.createRole = async function(req, res) {
     }
 }
 exports.deleteRole = async function(req, res) {
-    console.log(dateNow, '>>deleteRole()...');
+    console.log(dateNow(), '>>deleteRole()...');
     try {
         if (!req.body) return res.sendStatus(400);
 
@@ -294,7 +296,7 @@ exports.deleteRole = async function(req, res) {
 }
 //Config//////////////////////////////////////////////
 exports.getConfig = async function(req, res) {
-    console.log(dateNow,'>>getConfig()...');
+    console.log(dateNow(),'>>getConfig()...');
 
     if (!req.body) return res.sendStatus(400);
     try {
@@ -306,7 +308,7 @@ exports.getConfig = async function(req, res) {
     }
 }
 exports.createObject = async function(req, res) {
-    console.log(dateNow,'>>createConfig...');
+    console.log(dateNow(),'>>createConfig...');
 
     if (!req.body) return res.sendStatus(400);
     const { data } = req.body;
@@ -324,7 +326,7 @@ exports.createObject = async function(req, res) {
     }
 }
 exports.deleteObject = async function(req, res) {
-    console.log(dateNow,'>>deleteConfig()...');
+    console.log(dateNow(),'>>deleteConfig()...');
     if (!req.body) return res.sendStatus(400);
 
     const {id} = req.body;
@@ -343,12 +345,12 @@ exports.deleteObject = async function(req, res) {
     }
 }
 exports.editObject = async function(req, res) {
-    console.log(dateNow,'>>editObject()...');
+    console.log(dateNow(),'>>editObject()...');
     
     if (!req.body) return res.sendStatus(400);     
     const { id, data }  = req.body;  
 
-    //check the previous state=1 !
+    //check the previous state=1 !!!
 
     try {
         const result = await Config.update({ 
@@ -363,7 +365,7 @@ exports.editObject = async function(req, res) {
     }   
 }
 exports.getObject = async function(req, res) {
-    console.log(dateNow,'>>getObject()...');
+    console.log(dateNow(),'>>getObject()...');
     if (!req.body) return res.sendStatus(400);    
 
     const {id} = req.body;
@@ -378,7 +380,7 @@ exports.getObject = async function(req, res) {
     }
 }
 exports.updateConfig = async function(req, res) {
-    console.log(dateNow, '>>updateConfig()...');
+    console.log(dateNow(), '>>updateConfig()...');
     if (!req.body) return res.sendStatus(400);
 
     let refColumns = {id   : {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
@@ -577,7 +579,7 @@ exports.updateConfig = async function(req, res) {
    
 }
 exports.getSubsystems = async function(req, res) {
-    console.log(dateNow,'>>getSubsystems()...');
+    console.log(dateNow(),'>>getSubsystems()...');
     if (!req.body) return res.sendStatus(400);    
     
     try {
@@ -588,7 +590,7 @@ exports.getSubsystems = async function(req, res) {
     }
 }
 exports.getReqs = async function(req, res) {
-    console.log(dateNow,'>>getReqs()...');
+    console.log(dateNow(),'>>getReqs()...');
     if (!req.body) return res.sendStatus(400);
 
     const { owner } = req.body;
@@ -602,7 +604,7 @@ exports.getReqs = async function(req, res) {
     }
 }
 exports.getReq = async function(req, res) {
-    console.log(dateNow,'>>getReq()...');
+    console.log(dateNow(),'>>getReq()...');
     if (!req.body) return res.sendStatus(400);
 
     const { id } = req.body;
@@ -616,7 +618,7 @@ exports.getReq = async function(req, res) {
     }
 }
 exports.createReq = async function(req, res) {
-    console.log(dateNow,'>>createReq()...');
+    console.log(dateNow(),'>>createReq()...');
     if (!req.body) return res.sendStatus(400);
 
     const { owner, data } = req.body;
@@ -633,7 +635,7 @@ exports.createReq = async function(req, res) {
     }
 }
 exports.deleteReq = async function(req, res) {
-    console.log(dateNow,'>>deleteReq()...');
+    console.log(dateNow(),'>>deleteReq()...');
     if (!req.body) return res.sendStatus(400);
 
     const { id } = req.body;
@@ -649,7 +651,7 @@ exports.deleteReq = async function(req, res) {
     }
 }
 exports.editReq = async function(req, res) {
-    console.log(dateNow,'>>editReq()...');    
+    console.log(dateNow(),'>>editReq()...');    
     if (!req.body) return res.sendStatus(400);     
 
     const { id, data }  = req.body;  
@@ -668,7 +670,7 @@ exports.editReq = async function(req, res) {
 
 //eva-app/////////////////////////////////////////
 exports.getReferences = async function(req, res) {
-    console.log(dateNow,'>>getReferences()...');
+    console.log(dateNow(),'>>getReferences()...');
     if (!req.body) return res.sendStatus(400);
     
     const {textId} = req.body;    
@@ -682,7 +684,7 @@ exports.getReferences = async function(req, res) {
     }
 }
 exports.getReference = async function(req, res) {
-    console.log(dateNow,'>>getReference()...');
+    console.log(dateNow(),'>>getReference()...');
     if (!req.body) return res.sendStatus(400);
     
     const {textId, id} = req.body;    
@@ -698,7 +700,7 @@ exports.getReference = async function(req, res) {
     }
 }
 exports.getRefColumns = async function(req, res) {
-    console.log(dateNow,'>>getRefColumns()...');
+    console.log(dateNow(),'>>getRefColumns()...');
     if (!req.body) return res.sendStatus(400);
     
     const {textId} = req.body;    
@@ -715,7 +717,7 @@ exports.getRefColumns = async function(req, res) {
     }
 }
 exports.createReference = async function(req, res) {
-    console.log(dateNow,'>>createReference()...');
+    console.log(dateNow(),'>>createReference()...');
     if (!req.body) return res.sendStatus(400);
 
     // let refColumns = {id  : {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},                  
@@ -743,7 +745,7 @@ exports.createReference = async function(req, res) {
     }
 }
 exports.updateReference = async function(req, res) {
-    console.log(dateNow,'>>updateReference()...');
+    console.log(dateNow(),'>>updateReference()...');
 
     if (!req.body) return res.sendStatus(400);     
 
@@ -775,7 +777,7 @@ exports.updateReference = async function(req, res) {
     }   
 }
 exports.deleteReference = async function(req, res) {
-    console.log(dateNow,'>>deleteReference()...');
+    console.log(dateNow(),'>>deleteReference()...');
     if (!req.body) return res.sendStatus(400);
 
     const {textId, id} = req.body;

@@ -10,19 +10,6 @@ function dateNow() {
     let date = new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000);
     return date.toISOString().slice(0, 19).replace('T', ' ');
 }
-
-/* const generateJwt = (id, login, role) => {
-     return jwt.sign(
-         {id, login, role},
-         process.env.SECRET_KEY,
-         {expiresIn: '24h'}
-     )
- } */
-
-// exports.check = (req, res, next) => {
-//     const token = generateJwt(req.user.id, req.user.login, req.user.role)
-//     return res.json({token})
-// }
 async function hashPassword(password, saltRounds = 10) {
     try {
         // Generate a salt
@@ -36,6 +23,17 @@ async function hashPassword(password, saltRounds = 10) {
         console.log(err);
     }
 }
+/* function generateJwt(id, login, role) => {
+     return jwt.sign(
+         {id, login, role},
+         process.env.SECRET_KEY,
+         {expiresIn: '24h'}
+     )
+ }
+exports.check = function(req, res, next) {
+     const token = generateJwt(req.user.id, req.user.login, req.user.role)
+    return res.json({token})
+} */
 exports.Auth = function(req,res) {
     console.log(dateNow(),'>>Auth()...');
     if (!req.body) return res.sendStatus(400);

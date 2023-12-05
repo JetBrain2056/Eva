@@ -417,7 +417,7 @@ function navItem(navTab, name) {
 function navLink(nav, name, id) {
     console.log('>>navLink()...');
     const a = document.createElement('a');
-    a.setAttribute("class","nav-link eva-link"); //icon-link
+    a.setAttribute("class","nav-link eva-link p-1"); //icon-link
     a.setAttribute("id", name);           
     a.setAttribute("eva-id", id);  
     a.innerText = name+'s';
@@ -455,15 +455,17 @@ async function header() {
 async function tabDesk(div) {
     console.log('>>tabDesk()...');
 
-    // div.setAttribute("class","flex-column");
-
-    const a = document.createElement('a');
-    a.setAttribute("class","text");    
+    const a = document.createElement('div');
+    a.setAttribute("class","icon-link");    
     a.setAttribute("style","color: #555555;font-size: 19px;");     
     a.setAttribute("data-bs-toggle","collapse"); 
     a.setAttribute("data-bs-target","#collapse-link");     
     a.href="#";
-    a.innerText = 'References';
+    a.innerText = 'References ';
+    const i = document.createElement("i");
+    i.setAttribute("class","fa fa-caret-down");
+    i.setAttribute("aria-hidden","true");    
+    a.appendChild(i);
     div.appendChild(a);   
 
     // const a1 = document.createElement('a');
@@ -475,8 +477,9 @@ async function tabDesk(div) {
     // a1.innerText = 'Reports';
     // div.appendChild(a1);  
 
-    const nav = document.createElement('nav');
-    nav.setAttribute("class","nav flex-column collapse show");    
+    const nav = document.createElement('div');
+    // nav.setAttribute("class","nav flex-column collapse show");    
+    nav.setAttribute("class","collapse show");    
     nav.setAttribute("id","collapse-link");    
 
     // const nav1 = document.createElement('nav');

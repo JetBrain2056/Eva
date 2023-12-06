@@ -307,20 +307,35 @@ async function refElement(refForm, col, arrCol, arrSyn, createMode) {
         }        
     } 
 }
-function closeTabRef() {
+function closeTabRef(id) {
     console.log('>>closeTabRef()...');  
 
-    const Desktop = document.getElementById("Desktop");
-    if (Desktop) {
-        //tabDesk(Desktop);
-        Desktop.click();
+    const refForm = document.getElementById("nav-ref-form");
+    const ul = refForm.querySelector("#eva-nav-tabs");   
+
+    let navItem = ul.getElementsByClassName("nav-item");
+    console.log('childElementCount',navItem.length);
+    const evaLink = document.getElementById(id);   
+    if (evaLink) {   
+        if (navItem.length > 1) {            
+            evaLink.parentElement.remove();  
+        } else {
+            const Desktop = document.getElementById("Desktop");
+            if (Desktop) { 
+                evaLink.parentElement.remove();
+                Desktop.click();
+            }
+        }
     }
 }
-function openTabRef(refName) {
+function openTabRef(id, refName) {
     console.log('>>openTabRef()...');  
-    
-    openRef(refName);
 
+    const ul = document.querySelector("#eva-nav-tabs");   
+    const evaLink = document.getElementById(id);   
+    if (evaLink) {    
+        openRef(refName);
+    }
 }
 function buildTable(refName) {
     console.log('>>buildTable()...');  
@@ -329,37 +344,53 @@ function buildTable(refName) {
     refForm.setAttribute("eva-textId", refName);
 
     const ul = refForm.querySelector("#eva-nav-tabs");   
-    ul.innerHTML = '';    
-        const li = document.createElement("li");        
-        li.setAttribute("class","nav-item d-flex justify-content-end");                      
-                const a = document.createElement("a");
-                a.setAttribute("class","nav-link active p-1 pe-4");                                
-                a.setAttribute("href","#");                    
-                a.setAttribute("name", refName);                   
-                a.setAttribute("onclick", "openTabRef(name)");   
-                a.innerText = refName+'s '; 
-                    const button = document.createElement("button");
-                    button.setAttribute("type","button");
-                    button.setAttribute("class","btn-close position-absolute p-2");                
-                    button.setAttribute("href","#");   
-                    // button.setAttribute("data-bs-toggle","tab"); 
-                    // button.setAttribute("data-bs-target","#nav-Desktop");              
-                    button.setAttribute("onclick", "closeTabRef()");                                     
+    const evaLink = ul.querySelector("#eva-item-"+refName);   
+    console.log('evaLink', evaLink);
+    if (evaLink) {                           
+        const refFormLabel = refForm.querySelector("#refFormLabel"); 
+        refFormLabel.innerText = refName+'s';
+
+        const formTbl = refForm.querySelector(".eva-ref-form");    
+        formTbl.innerHTML='';
+        formTbl.setAttribute("style", "height: calc(100vh - 208px); overflow-y: scroll;");               
+            const refTbl = document.createElement('table');
+            refTbl.setAttribute("class", "table table-striped table-hover table-sm table-responsive");              
+        formTbl.appendChild(refTbl);  
+
+        return refTbl;
+    } else {
+            const li = document.createElement("li");        
+            li.setAttribute("class","nav-item d-flex justify-content-end");                      
+            li.setAttribute("id", "eva-item-"+refName);  
+                    const a = document.createElement("a");
+                    a.setAttribute("class","nav-link active p-1 pe-4");                                
+                    a.setAttribute("href","#");                    
+                    a.setAttribute("name", refName);  
+                    a.setAttribute("id", "eva-link-"+refName);                                               
+                    a.setAttribute("onclick", "openTabRef(id,name)");   
+                    a.innerText = refName+'s '; 
+                        const button = document.createElement("button");
+                        button.setAttribute("type","button");
+                        button.setAttribute("class","btn-close position-absolute p-2");                
+                        button.setAttribute("href","#");   
+                        button.setAttribute("id", "eva-btn-"+refName);            
+                        button.setAttribute("onclick", "closeTabRef(id)");                                     
             li.appendChild(a);                             
             li.appendChild(button); 
-    ul.appendChild(li);    
+        ul.appendChild(li);    
 
-    const refFormLabel = refForm.querySelector("#refFormLabel"); 
-    refFormLabel.innerText = refName+'s';
+        const refFormLabel = refForm.querySelector("#refFormLabel"); 
+        refFormLabel.innerText = refName+'s';
 
-    const formTbl = refForm.querySelector(".eva-ref-form");    
-    formTbl.innerHTML='';
-    formTbl.setAttribute("style", "height: calc(100vh - 208px); overflow-y: scroll;");               
-        const refTbl = document.createElement('table');
-        refTbl.setAttribute("class", "table table-striped table-hover table-sm table-responsive");              
-    formTbl.appendChild(refTbl);  
+        const formTbl = refForm.querySelector(".eva-ref-form");    
+        formTbl.innerHTML='';
+        formTbl.setAttribute("style", "height: calc(100vh - 208px); overflow-y: scroll;");               
+            const refTbl = document.createElement('table');
+            refTbl.setAttribute("class", "table table-striped table-hover table-sm table-responsive");              
+        formTbl.appendChild(refTbl);  
 
-    return refTbl;
+        return refTbl;
+    }
 }
 async function showRefTable(refName) {
     console.log('>>showRefTable()...');   
@@ -438,19 +469,22 @@ async function header() {
     navItem(navTab, 'Reports');    
 
     //DYNAMIC    
-    data = await getOnServer('/subsystems');
-    //console.log(data);
-    for (let row of data) {
-        //console.log(row.name);
+    data = await getOnServer('/subsystems');    
+    for (let row of data) {        
         navItem(navTab, row.name);           
     }      
 
-    let div = document.getElementById("nav-Desktop");
+    let div = document.querySelector("#nav-Desktop");
     tabDesk(div);  
-    div = document.getElementById("nav-References");
+    div = document.querySelector("#nav-References");
     tabRef(div);  
-    div = document.getElementById("nav-Reports");
-    //tabRep(div);    
+    div = document.querySelector("#nav-Reports");
+    //tabRep(div);   
+    //Subsystems
+    for (let row of data) {                
+        div = navTab.querySelector("#nav-"+row.name);
+        //tabSubsys(div);
+    }  
 }
 async function tabDesk(div) {
     console.log('>>tabDesk()...');

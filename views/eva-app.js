@@ -313,12 +313,13 @@ function closeTabRef(id) {
     const refForm = document.getElementById("nav-ref-form");
     const ul = refForm.querySelector("#eva-nav-tabs");   
 
-    let navItem = ul.getElementsByClassName("nav-item");
-    console.log('childElementCount',navItem.length);
+    let navItem = ul.getElementsByClassName("nav-item");    
     const evaLink = document.getElementById(id);   
     if (evaLink) {   
         if (navItem.length > 1) {            
             evaLink.parentElement.remove();  
+            const refName = navItem[navItem.length-1].getAttribute("name");   
+            openRef(refName);
         } else {
             const Desktop = document.getElementById("Desktop");
             if (Desktop) { 
@@ -362,6 +363,7 @@ function buildTable(refName) {
             const li = document.createElement("li");        
             li.setAttribute("class","nav-item d-flex justify-content-end");                      
             li.setAttribute("id", "eva-item-"+refName);  
+            li.setAttribute("name", refName);  
                     const a = document.createElement("a");
                     a.setAttribute("class","nav-link active p-1 pe-4");                                
                     a.setAttribute("href","#");                    
@@ -369,12 +371,12 @@ function buildTable(refName) {
                     a.setAttribute("id", "eva-link-"+refName);                                               
                     a.setAttribute("onclick", "openTabRef(id,name)");   
                     a.innerText = refName+'s '; 
-                        const button = document.createElement("button");
-                        button.setAttribute("type","button");
-                        button.setAttribute("class","btn-close position-absolute p-2");                
-                        button.setAttribute("href","#");   
-                        button.setAttribute("id", "eva-btn-"+refName);            
-                        button.setAttribute("onclick", "closeTabRef(id)");                                     
+                    const button = document.createElement("button");
+                    button.setAttribute("type","button");
+                    button.setAttribute("class","btn-close position-absolute p-2");                
+                    button.setAttribute("href","#");               
+                    button.setAttribute("id", "eva-btn-"+refName);            
+                    button.setAttribute("onclick", "closeTabRef(id)");                                     
             li.appendChild(a);                             
             li.appendChild(button); 
         ul.appendChild(li);    

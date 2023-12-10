@@ -367,12 +367,9 @@ exports.getObject = async function(req, res) {
     if (!req.body) return res.sendStatus(400);    
 
     const {id} = req.body;
-    try {                
-        let sqlq = `SELECT "id", "data"
-                    FROM "Configs" Where "id" = `+ id +`;`;    
-        const data = await sequelize.query(sqlq);
-        return await res.send(data[0]); 
-        
+    try {                          
+        const data = await Config.findOne({ where: { id: id }});        
+        return await res.send(data);         
     } catch(err) {
         console.log(err);
     }
@@ -594,8 +591,7 @@ exports.getReqs = async function(req, res) {
     const { owner } = req.body;
 
     try {
-        const  data = await Requisite.findAll({ where: { owner: owner }});
-        //console.log(data);
+        const  data = await Requisite.findAll({ where: { owner: owner }});        
         await res.send(data);        
     } catch(err) {
         console.log(err);
@@ -608,8 +604,7 @@ exports.getReq = async function(req, res) {
     const { id } = req.body;
 
     try {
-        const  data = await Requisite.findOne({ where: { id: id }});
-        //console.log(data);
+        const  data = await Requisite.findOne({ where: { id: id }});        
         await res.send(data);        
     } catch(err) {
         console.log(err);
@@ -626,9 +621,8 @@ exports.createReq = async function(req, res) {
                 owner : owner,           
                 data  : data
         });
-
         return await res.json(result);   
-    } catch (err){
+    } catch (err) {
         console.log(err);
     }
 }
@@ -736,7 +730,7 @@ exports.createReference = async function(req, res) {
         let EvaObject = sequelize.define(textId, req.body);
         const data = await EvaObject.create(req.body);
 
-        console.log('Create object: '+data);
+        console.log('Create object:', data);
         return await res.json(textId);
     } catch(err) {
         console.log(err);
@@ -748,7 +742,7 @@ exports.updateReference = async function(req, res) {
     if (!req.body) return res.sendStatus(400);     
 
     const {textId, id} = req.body;  
-    console.log('req.body:',req.body);
+    console.log('req.body:', req.body);
 
     let tmp ='';
     for (let elem of Object.keys(req.body)) {
@@ -762,7 +756,7 @@ exports.updateReference = async function(req, res) {
             }
         }
     }
-    console.log('tmp:',tmp.slice(0,-1));
+    // console.log('tmp:', tmp.slice(0,-1));
     try {
         let data = await sequelize.query(
             `UPDATE "`+textId+`s" SET `+tmp.slice(0,-1)+`
@@ -783,7 +777,7 @@ exports.deleteReference = async function(req, res) {
         let data = await sequelize.query(
             `DELETE FROM "`+textId+`s" WHERE "id"=`+id+`;`
         );
-        console.log('Delete object:',data[1]);                                  
+        console.log('Delete object:', data[1]);                                  
         return await res.json(data);
     } catch(err) {
         console.log(err);

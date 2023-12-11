@@ -282,8 +282,7 @@ async function userCreate(e) {
         await e.stopPropagation();        
     }
 
-    if (input_password.value !== input_confirmpass.value) alert('Incorrect password confirmation!');
-    // if (!input_username.value) alert('User name is not filled in!');
+    if (input_password.value !== input_confirmpass.value) alert('Incorrect password confirmation!');    
 
     const data =  {
         'id'      : input_form.getAttribute("eva-id"),
@@ -293,29 +292,25 @@ async function userCreate(e) {
         'RoleId'  : input_role.getAttribute("eva-id"),
         'EAuth'   : input_eauth.checked,
         'Show'    : input_show.checked
-    };
-
-    // console.log(data);
-    
-    let result;
-    // console.log('createMode: '+createMode);
+    }
+        
+    let result;    
     if (createMode==='true') {
         try {
             result = await postOnServer(data, '/createuser')
             console.log('create: '+result);        
-        } catch (e) {
-            console.log(e);
+        } catch (err) {
+            console.log(err);
         }
     } else {
         try {
-        result = await postOnServer(data, '/updateuser');
-        console.log('create: '+result);          
+            result = await postOnServer(data, '/updateuser');
+            console.log('create: '+result);          
         } catch (e) {
-        console.log(e);
+            console.log(err);
         }
     }
-
-   
+  
     await currentModal.hide();
 
     if (result) await showUserTable();
@@ -413,24 +408,40 @@ async function showRoleTable() {
     showTable(resTbl, hide, col, data);
 
 }
-async function roleCreate() {
+async function roleCreateModal() {
+    console.log('>>roleCreateModal()...');     
+
+    const modalForm         = document.getElementById('roleModal'); 
+  
+    const inputLabel        = modalForm.querySelector("#roleModalLabel");
+    inputLabel.innerText = 'Add role:';      
+    const input_form        = modalForm.querySelector('#create-role-form');  
+    input_form.reset(); 
+    input_form.setAttribute("create-mode",true);            
+
+    currentModal = getModal(modalForm); 
+}
+async function roleCreate(e) {
     console.log('>>roleCreate...');
 
-    const input_rolename    = document.getElementById('input-rolename')
-    
-    if (!input_rolename.value) alert('The name is not filled in!');
+    const inputRolename    = document.getElementById('input-rolename');
+
+    if (!inputRolename.checkValidity()) {
+        await e.preventDefault();
+        await e.stopPropagation();        
+    }
 
     const data =  {
-        'Name'    : input_rolename.value,
-    };
-    
-    let result;
-    try {
-        result = await postOnServer(data,'/createrole')
-        //console.log(result);        
-    } catch (e) {
-        console.log(e);
+        'Name'    : inputRolename.value,
     }
+        
+    try {
+        result = await postOnServer(data,'/createrole')              
+    } catch (err) {
+        console.log(err);
+    }    
+
+    currentModal.hide();    
 
     if (result) await showRoleTable();
 

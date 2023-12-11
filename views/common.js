@@ -620,10 +620,10 @@ async function objectEditModal() {
 
     res = await postOnServer(data,'/getobject');
     if (res) {
-        let strJson = res[0].data;          
+        let strJson = res.data;          
         let Elements = await JSON.parse(strJson);        
 
-        input_form.setAttribute("eva-id", res[0].id);
+        input_form.setAttribute("eva-id", res.id);
         input_type.value        = Elements.typeId;        
         input_textId.value      = Elements.textId;
         input_subsystem.value   = Elements.subsysName;

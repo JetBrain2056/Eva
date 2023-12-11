@@ -72,7 +72,7 @@
   <div class="tab-pane fade" id="nav-roles" role="tabpanel" aria-labelledby="nav-roles-tab">
     <div class="btn-toolbar" role="toolbar" aria-label="toolbar group">
       <div class="btn-group btn-group-sm" role="group">
-        <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" data-bs-toggle="modal" data-bs-target="#roleModal">
+        <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" onclick="roleCreateModal()">
           <i class="fa fa-plus-square"></i>
           <span>{{ button_add }}</span>
         </button>
@@ -137,7 +137,7 @@
     </div>
   </div>
 </div>
-{# Modal Edit User Role [3] #}
+{# Modal Edit User Role #}
 <div class="modal modal-lg fade" id="editUserRoleModal" tabindex="-2" data-bs-backdrop="static" aria-labelledby="userEditRoleModalLabel" aria-hidden="true">
   <div class="modal-dialog  modal-dialog-scrollable">
     <div class="modal-content">
@@ -178,9 +178,8 @@
           </div>                  
         </form>
       </div>
-      <div class="modal-footer">
-        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" onclick="roleCreate()">{{ button_save }}</button>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{button_close}}</button>
+      <div class="modal-footer">          
+        <button type="submit" class="btn btn-primary" onclick="roleCreate()">{{ button_save }}&{{ button_close }}</button>
       </div>
     </div>
   </div>
@@ -252,8 +251,8 @@
               </div>                  
               <label for="input-owner">Owner:</label>
               <div class="input-group input-group-sm">
-                <input type="text" placeholder="..." id="input-owner" class="form-control" disabled/>
-                <button class="btn btn-outline-secondary" id="input-owner-btn" type="button" onclick="objectOwner()" disabled>...</button>
+                <input type="text" placeholder="..." id="input-owner" class="form-control"/>
+                <button class="btn btn-outline-secondary" id="input-owner-btn" type="button" onclick="objectOwner()">...</button>
               </div>  
               <label for="input-module">Others:</label>
               <div class="input-group input-group-sm">

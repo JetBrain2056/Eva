@@ -293,25 +293,25 @@ async function userCreate(e) {
         'EAuth'   : input_eauth.checked,
         'Show'    : input_show.checked
     }
-        
-    let result;    
+               
     if (createMode==='true') {
         try {
             result = await postOnServer(data, '/createuser')
-            console.log('create: '+result);        
+            console.log('create:', result);        
         } catch (err) {
             console.log(err);
         }
     } else {
         try {
             result = await postOnServer(data, '/updateuser');
-            console.log('create: '+result);          
-        } catch (e) {
+            console.log('create:',result);          
+        } catch (err) {
             console.log(err);
         }
     }
   
     await currentModal.hide();
+    input_form.reset();
 
     if (result) await showUserTable();
 
@@ -324,7 +324,6 @@ async function userCreateModal() {
     const inputLabel        = modalForm.querySelector("#userModalLabel");
     inputLabel.innerText = 'Add user:';      
     const input_form        = modalForm.querySelector('#create-user-form');  
-    input_form.reset(); 
     input_form.setAttribute("create-mode",true);            
 
     currentModal = getModal(modalForm); 
@@ -339,8 +338,7 @@ async function userEditModal() {
     const modalForm         = document.getElementById('userModal'); 
    
     const inputLabel        = modalForm.querySelector("#userModalLabel");
-    const input_form        = modalForm.querySelector('#create-user-form');  
-    input_form.reset();  
+    const input_form        = modalForm.querySelector('#create-user-form');   
     const input_name        = input_form.querySelector('#input-user-name');  
     const input_descr       = input_form.querySelector('#input-descr');    
     const input_email       = input_form.querySelector('#input-email');    
@@ -350,12 +348,12 @@ async function userEditModal() {
     const input_show        = input_form.querySelector('#input-show');
     const input_eauth       = input_form.querySelector('#input-eauth');
 
-    input_form.setAttribute("create-mode",false);    
+    input_form.setAttribute("create-mode", false);    
     inputLabel.innerText = 'Edit user:';
 
-    let data = { 'id': row.cells[0].innerText};
+    let data = { 'id': row.cells[0].innerText }
 
-    let result = await postOnServer(data,'/getuser');    
+    let result = await postOnServer(data, '/getuser');    
     if (result) {       
         let elem = result[0];
         input_form.setAttribute("eva-id", elem.id);
@@ -365,29 +363,21 @@ async function userEditModal() {
         input_role.value        = elem.Role;           
         input_role.setAttribute("eva-id", elem.RoleId);
         input_password.value    = '';   
-        input_confirmpass.value = '';               
-        if (elem.Show === true) {
-            input_show.checked = true;
-        } else {  
-            input_show.checked = false;
-        }  
-        if (elem.EAuth === true) {
-            input_eauth.checked = true;
-        } else {  
-            input_eauth.checked = false;
-        }    
+        input_confirmpass.value = '';                
+        input_show.checked      = elem.Show;
+        input_eauth.checked     = elem.EAuth; 
         
         currentModal = getModal(modalForm); 
     }   
 }
 async function userDelete() {
-    console.log('>>userDelete...');
-    let result;
-    for (const row of selectRows){
+    console.log('>>userDelete()...');
+  
+    for (const row of selectRows) {
 
-        let data = {'id': row.cells[0].innerText};
+        let data = {'id': row.cells[0].innerText}
 
-        result = await postOnServer(data,'/deluser');        
+        result = await postOnServer(data, '/deluser');        
     }
 
     if (result) await showUserTable();
@@ -422,7 +412,7 @@ async function roleCreateModal() {
     currentModal = getModal(modalForm); 
 }
 async function roleCreate(e) {
-    console.log('>>roleCreate...');
+    console.log('>>roleCreate()...');
 
     const inputRolename    = document.getElementById('input-rolename');
 
@@ -480,15 +470,15 @@ async function roleSelect() {
 }
 async function roleDelete() {
     console.log('>>roleDelete...');
-    let result;
-    for (const row of selectRows){
+    
+    for (const row of selectRows) {
 
         let data = {'id': row.cells[0].innerText};
 
-        result = await postOnServer(data,'/delrole');        
+        result = await postOnServer(data, '/delrole');        
     }
 
-    if(result) await showRoleTable();
+    if (result) await showRoleTable();
 }
 /////////////////////////////////////////////////////////////////////////////
 async function showConfigTable() {
@@ -514,7 +504,7 @@ async function showConfigTable() {
         if(a.typeId < b.typeId) { return -1; }
         if(a.typeId > b.typeId) { return 1; }
         return 0;
-      });
+    });
 
     const col  = { 'id':'Id', 'typeId':'Type',  'textId': 'Identifier'};  
     const hide = ['id'];  
@@ -550,25 +540,25 @@ async function objectCreate(e) {
         'data'    : JSON.stringify(tmp),
     }
     
-    let result;
     console.log('createMode: '+createMode);
     if (createMode==='true') {
         try {
             result = await postOnServer(data, '/createobject')
             console.log(result);        
-        } catch (e) {
-            console.log(e);
+        } catch (err) {
+            console.log(err);
         }
     } else {
         try {
             result = await postOnServer(data, '/editobject')
             console.log(result);        
-        } catch (e) {
-            console.log(e);
+        } catch (err) {
+            console.log(err);
         }
     }
 
     await currentModal.hide();
+    input_form.reset();
 
     if (result) await showConfigTable();
 
@@ -584,8 +574,7 @@ async function objectModal() {
     const objectModalLabel = modalForm.querySelector('#objectModalLabel');  
     objectModalLabel.innerText = 'Add object:';
 
-    const input_form      = modalForm.querySelector('#create-object-form'); 
-    input_form.reset();    
+    const input_form      = modalForm.querySelector('#create-object-form');     
     input_form.setAttribute("create-mode",true);   
 
     const input_type      = input_form.querySelector('#input-type');
@@ -605,7 +594,7 @@ async function objectModal() {
 
 }
 async function objectEditModal() {
-    console.log('>>objectEditModal...'); 
+    console.log('>>objectEditModal()...'); 
   
     if (selectRows.length === 0) return;
 
@@ -617,8 +606,6 @@ async function objectEditModal() {
     objectModalLabel.innerText = 'Edit object:';
 
     const input_form      = modalForm.querySelector('#create-object-form');    
-    
-    input_form.reset();
     input_form.setAttribute("create-mode",false);   
 
     const input_type      = input_form.querySelector('#input-type');
@@ -627,7 +614,7 @@ async function objectEditModal() {
     const input_subsystem = input_form.querySelector('#input-subsystem');  
 
 
-    let data = { 'id': row.cells[0].innerText };
+    let data = { 'id': row.cells[0].innerText }
 
     res = await postOnServer(data,'/getobject');
     if (res) {
@@ -649,20 +636,20 @@ async function objectEditModal() {
 }
 async function objectDelete() {
     console.log('>>objectDelete()...');
-    let result;
-    for (const row of selectRows){
+    
+    for (const row of selectRows) {
 
-        let data = {'id': row.cells[0].innerText};
+        let data = {'id': row.cells[0].innerText}
 
         result = await postOnServer(data,'/delobject');        
     }
 
-    if(result) await showConfigTable();
+    if (result) await showConfigTable();
 
     btnConfigSave.style.backgroundColor = 'red';
 }
 async function updateConfig() {
-    console.log('>>updateConfig...');
+    console.log('>>updateConfig()...');
     inputStatus.value = '>> Update config in DB...';
 
     let tmp  = await getOnServer('/getconfig');     
@@ -679,11 +666,11 @@ async function updateConfig() {
         }
     }
 
-    result = postOnServer(data, '/updateconf');
+    result = await postOnServer(data, '/updateconf');
 
     btnConfigSave.style.backgroundColor = '#282c34';
 
-    if(result) await showConfigTable();
+    if (result) await showConfigTable();
 
     inputStatus.value = '>> Config update completed!';
        
@@ -785,8 +772,7 @@ async function reqModal() {
     const objectModalLabel = modalForm.querySelector('#requisiteModalLabel');  
     objectModalLabel.innerText = 'Add requisite:';
 
-    const inputForm  = modalForm.querySelector("#create-req-form");
-    inputForm.reset();    
+    const inputForm  = modalForm.querySelector("#create-req-form");   
     inputForm.setAttribute("create-mode",true);  
 
     selectModal = getModal(modalForm);
@@ -801,15 +787,14 @@ async function reqEditModal() {
     const objectModalLabel = modalForm.querySelector('#requisiteModalLabel');  
     objectModalLabel.innerText = 'Edit requisite:';
 
-    const inputForm  = modalForm.querySelector("#create-req-form");
-    inputForm.reset();    
+    const inputForm  = modalForm.querySelector("#create-req-form");   
     inputForm.setAttribute("create-mode",false);  
 
     selectModal = getModal(modalForm);
 
     const row = await selectRows[0];  
 
-    let data = { 'id': row.cells[0].innerText };
+    let data = { 'id': row.cells[0].innerText }
 
     let res = await postOnServer(data,'/getreq');
 
@@ -821,8 +806,6 @@ async function reqEditModal() {
     const inputReqLPat  = inputForm.querySelector("#input-req-pattern");  
     const inputReqLValid= inputForm.querySelector("#input-req-valid");             
     const inputReqDescr = inputForm.querySelector("#input-req-descr");
-
-    // console.log(res);
   
     if (res) {
         let strJson = res.data;                  
@@ -868,32 +851,32 @@ async function reqCreate(e) {
         pattern   : inputReqLPat.value,
         validation: inputReqLValid.checked,
         descr     : inputReqDescr.value
-    };          
+    }          
 
     const data =  {
         'id'      : inputForm.getAttribute("eva-id"),
         'owner'   : ownerForm.getAttribute("eva-id"),
         'data'    : JSON.stringify(tmp),
-    };
+    }
 
-    let result;
     if (createMode==='true') {
         try {
             result = await postOnServer(data, '/createreq')
             console.log(result);        
-        } catch (e) {
-            console.log(e);
+        } catch (err) {
+            console.log(err);
         }
     } else {
         try {
             result = await postOnServer(data, '/editreq')
             console.log(result);        
-        } catch (e) {
-            console.log(e);
+        } catch (err) {
+            console.log(err);
         }
     }
 
     await selectModal.hide();
+    inputForm.reset();
 
     if (result) await showRequisiteTable();    
 }

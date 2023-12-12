@@ -311,7 +311,6 @@ async function userCreate(e) {
     }
   
     await currentModal.hide();
-    input_form.reset();
 
     if (result) await showUserTable();
 
@@ -323,7 +322,8 @@ async function userCreateModal() {
   
     const inputLabel        = modalForm.querySelector("#userModalLabel");
     inputLabel.innerText = 'Add user:';      
-    const input_form        = modalForm.querySelector('#create-user-form');  
+    const input_form        = modalForm.querySelector('#create-user-form'); 
+    input_form.reset(); 
     input_form.setAttribute("create-mode",true);            
 
     currentModal = getModal(modalForm); 
@@ -349,6 +349,7 @@ async function userEditModal() {
     const input_eauth       = input_form.querySelector('#input-eauth');
 
     input_form.setAttribute("create-mode", false);    
+    input_form.reset();
     inputLabel.innerText = 'Edit user:';
 
     let data = { 'id': row.cells[0].innerText }
@@ -558,7 +559,6 @@ async function objectCreate(e) {
     }
 
     await currentModal.hide();
-    input_form.reset();
 
     if (result) await showConfigTable();
 
@@ -574,7 +574,8 @@ async function objectModal() {
     const objectModalLabel = modalForm.querySelector('#objectModalLabel');  
     objectModalLabel.innerText = 'Add object:';
 
-    const input_form      = modalForm.querySelector('#create-object-form');     
+    const input_form      = modalForm.querySelector('#create-object-form');  
+    input_form.reset();   
     input_form.setAttribute("create-mode",true);   
 
     const input_type      = input_form.querySelector('#input-type');
@@ -605,7 +606,8 @@ async function objectEditModal() {
     const objectModalLabel = modalForm.querySelector('#objectModalLabel');  
     objectModalLabel.innerText = 'Edit object:';
 
-    const input_form      = modalForm.querySelector('#create-object-form');    
+    const input_form      = modalForm.querySelector('#create-object-form');  
+    input_form.reset();  
     input_form.setAttribute("create-mode",false);   
 
     const input_type      = input_form.querySelector('#input-type');
@@ -773,6 +775,7 @@ async function reqModal() {
     objectModalLabel.innerText = 'Add requisite:';
 
     const inputForm  = modalForm.querySelector("#create-req-form");   
+    inputForm.reset();
     inputForm.setAttribute("create-mode",true);  
 
     selectModal = getModal(modalForm);
@@ -788,6 +791,7 @@ async function reqEditModal() {
     objectModalLabel.innerText = 'Edit requisite:';
 
     const inputForm  = modalForm.querySelector("#create-req-form");   
+    inputForm.reset();
     inputForm.setAttribute("create-mode",false);  
 
     selectModal = getModal(modalForm);
@@ -876,7 +880,6 @@ async function reqCreate(e) {
     }
 
     await selectModal.hide();
-    inputForm.reset();
 
     if (result) await showRequisiteTable();    
 }

@@ -67,6 +67,7 @@ async function refCreate(e) {
     const refForm    = document.getElementById("create-ref-form");
     const textId     = refForm.getAttribute("eva-textId");
     let createMode   = refForm.getAttribute("create-mode");     
+    let copyMode     = refForm.getAttribute("copy-mode");   
     
     if (!refForm.checkValidity()) {
         await e.preventDefault();
@@ -79,8 +80,8 @@ async function refCreate(e) {
 
     const evaReqs   = refForm.getElementsByClassName('eva-req');     
     for(let elem of evaReqs) {
-        console.log(elem.name);
-        if (elem.name==='id'&&createMode==='true'){            
+        // console.log(elem.name);
+        if ((createMode==='true'||copyMode==='true')&&elem.name==="id") {            
         } else {
             const type     = elem.getAttribute("type");
             const dataType = elem.getAttribute("data-type");
@@ -88,9 +89,9 @@ async function refCreate(e) {
                 data[elem.name] = elem.checked; 
             } else if (type === 'date') {
                 if (elem.value === '') {
-                    data[elem.name] = new Date('1,1,1');  
+                    data[elem.name] = new Date('01,01,0001');  
                 } else {
-                    console.log(elem.value);
+                    // console.log(elem.value);
                     data[elem.name] = new Date(elem.value);                           
                 }
             } else {
@@ -102,21 +103,19 @@ async function refCreate(e) {
             }
         }    
     }    
-        
-    if (createMode==='true') {
-        try {
-            result = await postOnServer(data, '/createref')
-            console.log(result);        
-        } catch (e) {
-            console.log(e);
+    console.log(data);  
+    try {
+        if (createMode==='true'&&copyMode==='false') {
+            result = await postOnServer(data, '/createref');                  
+        } else if (createMode==='false'&&copyMode==='true') {   
+            console.log(copyMode);           
+            result = await postOnServer(data, '/createref');                           
+        } else {    
+            result = await postOnServer(data, '/updateref');
         }
-    } else {
-        try {
-            result = await postOnServer(data, '/updateref')
-            console.log(result);        
-        } catch (e) {
-            console.log(e);
-        }
+        console.log(result);  
+    } catch (err) {
+        console.log(err);
     }
 
     await currentModal.hide();
@@ -150,11 +149,13 @@ async function refModal() {
     refModalLabel.innerText = 'Add element:';    
 
     let createMode = true;
+    let copyMode   = false;
 
     const refForm        = modalForm.querySelector('#create-ref-form');  
     refForm.innerHTML = '';
     refForm.reset();   
     refForm.setAttribute("create-mode", createMode);  
+    refForm.setAttribute("copy-mode", copyMode);  
     
     let arrSyn = await getSynonyms(refForm);   
     // console.log('arrSyn',arrSyn);
@@ -176,10 +177,54 @@ async function refModal() {
         arrCol[colName] = obj;
     }
     // console.log(arrCol);
-    await refElement(refForm, arr, arrCol, arrSyn, createMode);      
+    await refElement(refForm, arr, arrCol, arrSyn, createMode, copyMode);      
+}
+async function refCopy() {
+    console.log('>>refCopy()...'); 
+  
+    if (selectRows.length === 0) { return };
+
+    const row = selectRows[0];      
+
+    const modalForm  = document.getElementById('refModal');  
+
+    const refModalLabel    = modalForm.querySelector('#refModalLabel');  
+    refModalLabel.innerText = 'Copy element:';   
+
+    let createMode = false;
+    let copyMode   = true;
+          
+    const refForm    = modalForm.querySelector('#create-ref-form');    
+    refForm.reset();  
+    refForm.innerHTML ='';     
+    refForm.setAttribute("create-mode", createMode);  
+    refForm.setAttribute("copy-mode", copyMode); 
+
+    arrSyn = await getSynonyms(refForm);   
+
+    currentModal = getModal(modalForm);
+
+    const textId = refForm.getAttribute("eva-textId");
+    const data = { 
+        'textId': textId,
+        'id': row.cells[0].innerText
+    };
+
+    let res = await postOnServer(data, '/getrefcol');       
+    let arrCol =[];  
+    for (let elem of res) {
+        let colName    = elem.column_name;
+        let dataType   = elem.data_type;
+        let identifier = elem.dtd_identifier;
+        let obj = {'colName': colName, 'dataType':dataType, 'identifier': identifier}         
+        arrCol[colName] = obj;
+    }    
+
+    res = await postOnServer(data, '/getref');  
+    await refElement(refForm, res[0], arrCol, arrSyn, createMode, copyMode);     
 }
 async function refEditModal() {
-    console.log('>>refEditModal...'); 
+    console.log('>>refEditModal()...'); 
   
     if (selectRows.length === 0) { return };
 
@@ -191,11 +236,13 @@ async function refEditModal() {
     refModalLabel.innerText = 'Edit element:';   
 
     let createMode = false;
+    let copyMode   = false;
           
     const refForm    = modalForm.querySelector('#create-ref-form');    
     refForm.reset();  
     refForm.innerHTML ='';     
     refForm.setAttribute("create-mode", createMode);  
+    refForm.setAttribute("copy-mode", copyMode);  
 
     arrSyn = await getSynonyms(refForm);   
 
@@ -219,10 +266,10 @@ async function refEditModal() {
     // console.log(arrCol);
 
     res = await postOnServer(data, '/getref');  
-    await refElement(refForm, res[0], arrCol, arrSyn, createMode);     
+    await refElement(refForm, res[0], arrCol, arrSyn, createMode, copyMode);     
 }
 //DOM Dynamic Content////////////////////////////////////////////////////////
-async function refElement(refForm, col, arrCol, arrSyn, createMode) {
+async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode) {
     console.log('>>refElement()...');  
     // console.log(res);
     if (col) {                  
@@ -233,8 +280,6 @@ async function refElement(refForm, col, arrCol, arrSyn, createMode) {
             label.setAttribute("for","input-ref-"+req);
             //synonym
             let synom = arrSyn[req];
-            // console.log('arr',arrSyn[req]);
-            // console.log('synom',synom);
             if (synom) {
                 label.innerText = synom+":";  
             } else {
@@ -285,8 +330,7 @@ async function refElement(refForm, col, arrCol, arrSyn, createMode) {
                 input.name  = req;
                 if (createMode===true) {
                     if (type.dataType === 'timestamp with time zone') {
-                        const date = new Date('1,1,1');
-                        // console.log('date', date);                        
+                        const date = new Date('1,1,0001');                        
                         input.value = dateFormat(date).slice(0, 10);
                     } else {
                         input.value = '';
@@ -295,11 +339,13 @@ async function refElement(refForm, col, arrCol, arrSyn, createMode) {
                     if (type.dataType === 'boolean') {
                         input.checked = col[req];
                     } else if (type.dataType === 'timestamp with time zone') {
-                        const date = col[req];
-                        // console.log('date', date);                        
+                        const date = col[req];                                               
                         input.value = date.slice(0, 10);
                     } else {
                         input.value = col[req];
+                    }                    
+                    if (copyMode===true&&input.name==="id") {
+                        input.value = '';
                     }
                 }                
              

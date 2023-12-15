@@ -179,51 +179,7 @@ async function refModal() {
     // console.log(arrCol);
     await refElement(refForm, arr, arrCol, arrSyn, createMode, copyMode);      
 }
-async function refCopy() {
-    console.log('>>refCopy()...'); 
-  
-    if (selectRows.length === 0) { return };
-
-    const row = selectRows[0];      
-
-    const modalForm  = document.getElementById('refModal');  
-
-    const refModalLabel    = modalForm.querySelector('#refModalLabel');  
-    refModalLabel.innerText = 'Copy element:';   
-
-    let createMode = false;
-    let copyMode   = true;
-          
-    const refForm    = modalForm.querySelector('#create-ref-form');    
-    refForm.reset();  
-    refForm.innerHTML ='';     
-    refForm.setAttribute("create-mode", createMode);  
-    refForm.setAttribute("copy-mode", copyMode); 
-
-    arrSyn = await getSynonyms(refForm);   
-
-    currentModal = getModal(modalForm);
-
-    const textId = refForm.getAttribute("eva-textId");
-    const data = { 
-        'textId': textId,
-        'id': row.cells[0].innerText
-    };
-
-    let res = await postOnServer(data, '/getrefcol');       
-    let arrCol =[];  
-    for (let elem of res) {
-        let colName    = elem.column_name;
-        let dataType   = elem.data_type;
-        let identifier = elem.dtd_identifier;
-        let obj = {'colName': colName, 'dataType':dataType, 'identifier': identifier}         
-        arrCol[colName] = obj;
-    }    
-
-    res = await postOnServer(data, '/getref');  
-    await refElement(refForm, res[0], arrCol, arrSyn, createMode, copyMode);     
-}
-async function refEditModal() {
+async function refEditModal(copyMode) {
     console.log('>>refEditModal()...'); 
   
     if (selectRows.length === 0) { return };
@@ -235,8 +191,7 @@ async function refEditModal() {
     const refModalLabel    = modalForm.querySelector('#refModalLabel');  
     refModalLabel.innerText = 'Edit element:';   
 
-    let createMode = false;
-    let copyMode   = false;
+    let createMode = false;    
           
     const refForm    = modalForm.querySelector('#create-ref-form');    
     refForm.reset();  

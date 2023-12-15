@@ -46,9 +46,9 @@ exports.Signin = async function(req, res) {
 
     const operMode = req.body.operation_mode;
 
-    if ( operMode=== 'on') {
+    if (operMode === 'on') {
         content.mode = true;
-    } else if (operMode=== 'off') {
+    } else if (operMode === 'off') {
         content.mode = false;
     }
 
@@ -87,20 +87,25 @@ exports.Signin = async function(req, res) {
             res.render('index.twig', content);
         } else {
             if (username === Users.Name) {
-                console.log('true user name : ', Users.Name);
-                if (Users.Password && Users.Password) {
+                console.log('True user name :', Users.Name);                
+                if (Users.Password) {
                     console.log('user password: ', password);
                     console.log('hash password: ', Users.Password);
                     const comparePassword = await bcrypt.compare(password, Users.Password)
                     console.log(comparePassword)
-                    if (!comparePassword) {
+                    if (comparePassword) {
+                        if ((operMode=== 'on' && Users.RoleId===1) || operMode=== 'off') {
+                            content.logged    = true;
+                            content.username  = Users.Name;
+                            content.firstname = Users.Descr;
+                            console.log('Good password and role!');
+                        } else {
+                            content.logged = false;
+                            console.log('Wrong role!');
+                        }
+                    } else {                        
                         content.logged = false;
                         console.log('Wrong password!');
-                    } else {
-                        content.logged    = true;
-                        content.username  = Users.Name;
-                        content.firstname = Users.Descr;
-                        console.log('Good password!');
                     }
                     res.render('index.twig', content);
                 } else {

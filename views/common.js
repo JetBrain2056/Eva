@@ -192,7 +192,7 @@ async function listUsers() {
 
     data = await getOnServer('/getlistusers');
 
-    const inputUserName = document.getElementById('input-username');
+    const inputUserName = document.getElementById('input-username');    
 
     for (let rows of data) {
         

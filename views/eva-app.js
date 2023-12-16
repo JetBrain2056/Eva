@@ -363,32 +363,29 @@ function buildTable(refName) {
 
     resTbl = buildTabpanel(refForm, "208");
 
-    if (evaLink) {                           
-        return resTbl;
-    } else {
-            const li = document.createElement("li");        
-            li.setAttribute("class","nav-item d-flex justify-content-end");                      
-            li.setAttribute("id", "eva-item-"+refName);  
-            li.setAttribute("name", refName);  
-                    const a = document.createElement("a");
-                    a.setAttribute("class","nav-link active p-1 pe-4");                                
-                    a.setAttribute("href","#");                    
-                    a.setAttribute("name", refName);  
-                    a.setAttribute("id", "eva-link-"+refName);                                               
-                    a.setAttribute("onclick", "openTabRef(id,name)");   
-                    a.innerText = refName+'s '; 
-                    const button = document.createElement("button");
-                    button.setAttribute("type","button");
-                    button.setAttribute("class","btn-close position-absolute p-2");                
-                    button.setAttribute("href","#");               
-                    button.setAttribute("id", "eva-btn-"+refName);            
-                    button.setAttribute("onclick", "closeTabRef(id)");                                     
-            li.appendChild(a);                             
-            li.appendChild(button); 
-        ul.appendChild(li);  
-
-        return resTbl;
+    if (!evaLink) {                                   
+        const li = document.createElement("li");        
+        li.setAttribute("class","nav-item d-flex justify-content-end");                      
+        li.setAttribute("id", "eva-item-"+refName);  
+        li.setAttribute("name", refName);  
+            const a = document.createElement("a");
+            a.setAttribute("class","nav-link active p-1 pe-4");                                
+            a.setAttribute("href","#");                    
+            a.setAttribute("name", refName);  
+            a.setAttribute("id", "eva-link-"+refName);                                               
+            a.setAttribute("onclick", "openTabRef(id,name)");   
+            a.innerText = refName+'s '; 
+            const button = document.createElement("button");
+            button.setAttribute("type","button");
+            button.setAttribute("class","btn-close position-absolute p-2");                
+            button.setAttribute("href","#");               
+            button.setAttribute("id", "eva-btn-"+refName);            
+            button.setAttribute("onclick", "closeTabRef(id)");                                     
+        li.appendChild(a);                             
+        li.appendChild(button); 
+        ul.appendChild(li);          
     }
+    return resTbl;
 }
 async function showConstTable() {
     console.log('>>showConstTable()...');   

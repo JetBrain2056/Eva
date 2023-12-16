@@ -717,9 +717,6 @@ exports.createReference = async function(req, res) {
     console.log(dateNow(),'>>createReference()...');
     if (!req.body) return res.sendStatus(400);
 
-    // let refColumns = {id  : {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},                  
-    //                   name: {type: DataTypes.STRING}}; 
-    
     const {textId} = req.body;   
 
     delete req.body["textId"];

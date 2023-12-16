@@ -393,14 +393,14 @@ async function showConstTable() {
     
     let formTbl = document.getElementById("nav-const-form");    
 
-    resTbl = buildTabpanel(formTbl, "230");
+    resTbl = buildTabpanel(formTbl, "210");
 
     let tmp = {'textId': 'Constant'}
     let data = await postOnServer(tmp, '/getrefs');   
     console.log(data);   
 
-    const col  = {'id':'Id', 'name':'Name'} 
-    const hide = [];      
+    const col  = {'id':'Id', 'name':'Name', 'value':'Value'} 
+    const hide = ['id'];      
 
     showTable(resTbl, hide, col, data);
 

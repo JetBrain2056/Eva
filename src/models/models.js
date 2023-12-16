@@ -36,6 +36,7 @@ const Constant = sequelize.define('Constant', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},    
     name:  {type: DataTypes.STRING(150), unique: true},
     uuidType: {type: DataTypes.STRING(37), unique: true, defaultValue: sequelize.UUIDV4},
+    value   : {type: DataTypes.STRING(250)}
 })
 
 const Module = sequelize.define('Module', {

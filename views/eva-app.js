@@ -3,34 +3,41 @@ selectRows = [];
 n = 0;
 
 //Commands on client/////////////////////////////////////////////////////////
+async function openConst() {
+    console.log('>>openRef()...');
+    
+    // const navRefForm = document.getElementById("nav-References");    
+    const refForm    = document.getElementById("create-const-form");  
+    const tabForm    = document.getElementById("const-form");      
+    refForm.reset();             
+    // const refLink = navRefForm.querySelector("#"+refName);
+    // const refId = refLink.getAttribute("eva-id");    
+    refForm.setAttribute("eva-id", "Constant");
+    refForm.setAttribute("eva-textId", "Constant");
+
+    let tab = new bootstrap.Tab(tabForm);
+    tab.show();    
+
+    selectRows = [];
+
+    await showConstTable();
+    
+    let status = document.getElementById("status");
+    status.value = ">It's work!";
+}
 async function openRef(refName) {
     console.log('>>openRef()...');
     
-    const evaNav   = document.getElementById("eva-nav"); 
-        const li = document.createElement("li");        
-        li.setAttribute("class","nav-item");
-        li.setAttribute("hidden","hidden");
-            const a = document.createElement("a");
-            a.setAttribute("class","nav-link eva-link2");
-            a.setAttribute("id","ref-form");
-            a.setAttribute("data-bs-toggle","tab");
-            a.setAttribute("data-bs-target","#nav-ref-form");
-            a.setAttribute("role","tab");
-            a.setAttribute("aria-controls","nav-ref-form");
-            a.setAttribute("aria-selected","false");
-        li.appendChild(a);    
-    evaNav.appendChild(li);
-
-    const navRefForm = document.getElementById("nav-References");
-    // const navForm    = document.getElementById("ref-form");  
+    const navRefForm = document.getElementById("nav-References");    
     const refForm    = document.getElementById("create-ref-form");  
+    const tabForm    = document.getElementById("ref-form");      
     refForm.reset();             
     const refLink = navRefForm.querySelector("#"+refName);
     const refId = refLink.getAttribute("eva-id");    
     refForm.setAttribute("eva-id", refId);
     refForm.setAttribute("eva-textId", refName);
 
-    let tab = new bootstrap.Tab(a);
+    let tab = new bootstrap.Tab(tabForm);
     tab.show();    
 
     selectRows = [];
@@ -189,13 +196,17 @@ async function refEditModal(copyMode) {
     const modalForm  = document.getElementById('refModal');  
 
     const refModalLabel    = modalForm.querySelector('#refModalLabel');  
-    refModalLabel.innerText = 'Edit element:';   
+    if (copyMode) {
+        refModalLabel.innerText = 'Add element:';
+    } else {
+        refModalLabel.innerText = 'Edit element:';
+    }   
 
     let createMode = false;    
           
     const refForm    = modalForm.querySelector('#create-ref-form');    
     refForm.reset();  
-    refForm.innerHTML ='';     
+    refForm.innerHTML = '';     
     refForm.setAttribute("create-mode", createMode);  
     refForm.setAttribute("copy-mode", copyMode);  
 
@@ -332,8 +343,7 @@ function closeTabRef(id) {
 }
 function openTabRef(id, refName) {
     console.log('>>openTabRef()...');  
-
-    const ul = document.querySelector("#eva-nav-tabs");   
+      
     const evaLink = document.getElementById(id);   
     if (evaLink) {    
         openRef(refName);
@@ -346,20 +356,15 @@ function buildTable(refName) {
     refForm.setAttribute("eva-textId", refName);
 
     const ul = refForm.querySelector("#eva-nav-tabs");   
-    const evaLink = ul.querySelector("#eva-item-"+refName);   
-    console.log('evaLink', evaLink);
+    let evaLink = ul.querySelector("#eva-item-"+refName);   
+    
+    const refFormLabel = refForm.querySelector("#refFormLabel"); 
+    refFormLabel.innerText = refName+'s';
+
+    resTbl = buildTabpanel(refForm, "208");
+
     if (evaLink) {                           
-        const refFormLabel = refForm.querySelector("#refFormLabel"); 
-        refFormLabel.innerText = refName+'s';
-
-        const formTbl = refForm.querySelector(".eva-ref-form");    
-        formTbl.innerHTML='';
-        formTbl.setAttribute("style", "height: calc(100vh - 208px); overflow-y: scroll;");               
-            const refTbl = document.createElement('table');
-            refTbl.setAttribute("class", "table table-striped table-hover table-sm table-responsive");              
-        formTbl.appendChild(refTbl);  
-
-        return refTbl;
+        return resTbl;
     } else {
             const li = document.createElement("li");        
             li.setAttribute("class","nav-item d-flex justify-content-end");                      
@@ -380,20 +385,28 @@ function buildTable(refName) {
                     button.setAttribute("onclick", "closeTabRef(id)");                                     
             li.appendChild(a);                             
             li.appendChild(button); 
-        ul.appendChild(li);    
+        ul.appendChild(li);  
 
-        const refFormLabel = refForm.querySelector("#refFormLabel"); 
-        refFormLabel.innerText = refName+'s';
-
-        const formTbl = refForm.querySelector(".eva-ref-form");    
-        formTbl.innerHTML='';
-        formTbl.setAttribute("style", "height: calc(100vh - 208px); overflow-y: scroll;");               
-            const refTbl = document.createElement('table');
-            refTbl.setAttribute("class", "table table-striped table-hover table-sm table-responsive");              
-        formTbl.appendChild(refTbl);  
-
-        return refTbl;
+        return resTbl;
     }
+}
+async function showConstTable() {
+    console.log('>>showConstTable()...');   
+    
+    
+    let formTbl = document.getElementById("nav-const-form");    
+
+    resTbl = buildTabpanel(formTbl, "230");
+
+    let tmp = {'textId': 'Constant'}
+    let data = await postOnServer(tmp, '/getrefs');   
+    console.log(data);   
+
+    const col  = {'id':'Id', 'name':'Name'} 
+    const hide = [];      
+
+    showTable(resTbl, hide, col, data);
+
 }
 async function showRefTable(refName) {
     console.log('>>showRefTable()...');   
@@ -426,8 +439,7 @@ function navItem(navTab, name) {
             a[name].setAttribute("aria-selected", false);
         }
         a[name].innerText = name;    
-        a[name].href="#";  
-        //a[name].onclick = openNav();           
+        a[name].href="#";                 
     li.appendChild(a[name]);     
     navTab.appendChild(li);  
 
@@ -450,21 +462,109 @@ function navItem(navTab, name) {
 }
 function navLink(nav, name, id) {
     console.log('>>navLink()...');
-    const a = document.createElement('a');
-    a.setAttribute("class","nav-link eva-link p-1"); //icon-link
-    a.setAttribute("id", name);           
-    a.setAttribute("eva-id", id);  
-    a.innerText = name+'s';
+    const li = document.createElement('div');
+        const a = document.createElement('a');
+        a.setAttribute("class","icon-link eva-link p-1");
+        a.setAttribute("id", name);           
+        a.setAttribute("eva-id", id);  
+        a.innerText = name+'s';
+        a.href="#";
+        a.setAttribute("style","color: grey;font-size: 19px;");       
+        a.setAttribute("onclick", "openRef(id)");  
+    li.appendChild(a);           
+    nav.appendChild(li);     
+}
+async function tabDesk(div) {
+    console.log('>>tabDesk()...');
+
+    const a1 = document.createElement('a');
+    a1.setAttribute("class","link icon-link");    
+    a1.setAttribute("style","color: #555555;font-size: 19px;");  
+    a1.href="#";  
+    a1.innerText = 'Constants';
+    a1.setAttribute("id", "Constants");           
+    a1.setAttribute("eva-id", "Constants");  
+    a1.setAttribute("onclick", "openConst()");  
+    div.appendChild(a1);  
+    
+    const a = document.createElement('div');
+    a.setAttribute("class","icon-link");    
+    a.setAttribute("style","color: #555555;font-size: 19px;");     
+    a.setAttribute("data-bs-toggle","collapse"); 
+    a.setAttribute("data-bs-target","#collapse-link");     
     a.href="#";
-    a.setAttribute("style","color: grey;font-size: 19px;");       
-    a.setAttribute("onclick", "openRef(id)");         
-    nav.appendChild(a); 
-    return a;
+    a.innerText = 'References ';
+        const i = document.createElement("i");
+        i.setAttribute("class","fa fa-caret-down");
+        i.setAttribute("aria-hidden","true");    
+    a.appendChild(i);
+    div.appendChild(a);   
+
+    const nav = document.createElement('nav');       
+    nav.setAttribute("class","collapse show container-fluid");    
+    nav.setAttribute("id","collapse-link");    
+    
+    let data = await getOnServer('/getconfig');
+    for (let row of data) {
+        let id       = row.id;
+        let strJson  = row.data; 
+        let elements = await JSON.parse(strJson);
+        if (row.state===0 && elements.typeId==='Reference') {                                                   
+            navLink(nav, elements.textId, id);                    
+            a.appendChild(nav);    
+        } else if ((row.state===0 && elements.typeId==='Reports') ) {    
+            // navLink(nav1, elements.textId, id);                    
+            // a1.appendChild(nav1);                 
+        }
+    }        
+}
+async function tabRef(div) {
+    console.log('>>tabRef()...');
+
+    let data = await getOnServer('/getconfig');
+    for (let row of data) {
+        let id       = row.id;
+        let strJson  = row.data;         
+        let elements = await JSON.parse(strJson);
+        if (row.state===0 && elements.typeId==='Reference') {
+                    
+            const nav = document.createElement('nav');
+            nav.setAttribute("class","nav flex-column");                 
+                navLink(nav, elements.textId, id);                    
+            div.appendChild(nav);          
+        }
+    }        
 }
 async function header() {
     console.log('>>header()...');
 
-    const navTab = document.getElementById("eva-nav");  
+    const navTab = document.getElementById("eva-nav");      
+        const li = document.createElement("li");        
+        li.setAttribute("class","nav-item");
+        li.setAttribute("hidden","hidden");
+            const a = document.createElement("a");
+            a.setAttribute("class","nav-link eva-link-ref");
+            a.setAttribute("id","ref-form");
+            a.setAttribute("data-bs-toggle","tab");
+            a.setAttribute("data-bs-target","#nav-ref-form");
+            a.setAttribute("role","tab");
+            a.setAttribute("aria-controls","nav-ref-form");
+            a.setAttribute("aria-selected","false");
+        li.appendChild(a);    
+    navTab.appendChild(li);
+        const li2 = document.createElement("li");        
+        li2.setAttribute("class","nav-item");
+        li2.setAttribute("hidden","hidden");
+            const a2 = document.createElement("a");
+            a2.setAttribute("class","nav-link eva-link-const");
+            a2.setAttribute("id","const-form");
+            a2.setAttribute("data-bs-toggle","tab");
+            a2.setAttribute("data-bs-target","#nav-const-form");
+            a2.setAttribute("role","tab");
+            a2.setAttribute("aria-controls","nav-const-form");
+            a2.setAttribute("aria-selected","false");
+        li2.appendChild(a2);    
+    navTab.appendChild(li2);
     
     //MAIN
     navItem(navTab, 'Desktop'); 
@@ -489,71 +589,6 @@ async function header() {
         //tabSubsys(div);
     }  
 }
-async function tabDesk(div) {
-    console.log('>>tabDesk()...');
-
-    const a = document.createElement('div');
-    a.setAttribute("class","icon-link");    
-    a.setAttribute("style","color: #555555;font-size: 19px;");     
-    a.setAttribute("data-bs-toggle","collapse"); 
-    a.setAttribute("data-bs-target","#collapse-link");     
-    a.href="#";
-    a.innerText = 'References ';
-    const i = document.createElement("i");
-    i.setAttribute("class","fa fa-caret-down");
-    i.setAttribute("aria-hidden","true");    
-    a.appendChild(i);
-    div.appendChild(a);   
-
-    // const a1 = document.createElement('a');
-    // a1.setAttribute("class","text");    
-    // a1.setAttribute("style","color: #555555;font-size: 19px;"); 
-    // a1.setAttribute("data-bs-toggle","collapse"); 
-    // a1.setAttribute("data-bs-target","#collapse-link1");   
-    // a1.href="#";  
-    // a1.innerText = 'Reports';
-    // div.appendChild(a1);  
-
-    const nav = document.createElement('div');
-    // nav.setAttribute("class","nav flex-column collapse show");    
-    nav.setAttribute("class","collapse show");    
-    nav.setAttribute("id","collapse-link");    
-
-    // const nav1 = document.createElement('nav');
-    // nav1.setAttribute("class","nav flex-column collapse");    
-    // nav1.setAttribute("id","collapse-link1");  
-
-    let data = await getOnServer('/getconfig');
-    for (let row of data) {
-        let id       = row.id;
-        let strJson  = row.data; 
-        let elements = await JSON.parse(strJson);
-        if (row.state===0 && elements.typeId==='Reference') {                                                   
-            navLink(nav, elements.textId, id);                    
-            a.appendChild(nav);    
-        } else if ((row.state===0 && elements.typeId==='Report') ) {    
-            // navLink(nav1, elements.textId, id);                    
-            // a1.appendChild(nav1);                 
-        }
-    }        
-}
-async function tabRef(div) {
-    console.log('>>tabRef()...');
-
-    let data = await getOnServer('/getconfig');
-    for (let row of data) {
-        let id       = row.id;
-        let strJson  = row.data;         
-        let elements = await JSON.parse(strJson);
-        if (row.state===0 && elements.typeId==='Reference') {
-                    
-            const nav = document.createElement('nav');
-            nav.setAttribute("class","nav flex-column");                 
-                navLink(nav, elements.textId, id);                    
-            div.appendChild(nav);          
-        }
-    }        
-}
 /////////////////////////////////////////////////////////////////////////////
 function appContent() {
 
@@ -567,10 +602,8 @@ function appContent() {
 function init() {
     
     const mode   = document.querySelector('.content').dataset.mode;
-    const logged = document.querySelector('.content').dataset.logged;
-    //console.log('mode: ' + mode);   
-    if (mode==='false'&&logged==='true') {      
-                    
+    const logged = document.querySelector('.content').dataset.logged;      
+    if (mode==='false'&&logged==='true') {                          
         appContent();
         header();                                           
     } 

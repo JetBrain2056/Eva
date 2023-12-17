@@ -57,7 +57,7 @@ const Form = sequelize.define('Form', {
     xbase64: {type: DataTypes.TEXT}
 })
 
-Role.hasOne(User);
+Role.hasMany(User);
 User.belongsTo(Role);
 
 sequelize.sync({alter: true});

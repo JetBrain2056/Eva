@@ -1,7 +1,7 @@
 let selectRows = [];
 let currentModal;
 let selectModal;
-const inputStatus   = document.getElementById('status');
+let inputStatus     = document.getElementById('status');
 const btnConfigSave = document.getElementById('btn-config-save');
 const content       = document.querySelector('.content');
 const $objectModal  = document.getElementById("objectModal");
@@ -10,6 +10,8 @@ function mainSelect() {
     console.log('>>mainSelect()...');
 
     const inputType      = $objectModal.querySelector('#input-type');
+    const inputObjectRep = $objectModal.querySelector('#input-object-rep');
+    const inputListRep   = $objectModal.querySelector('#input-list-rep');
     const inputSubsystem = $objectModal.querySelector("#input-subsystem");    
     const inputSubsysBtn = $objectModal.querySelector("#input-subsystem-btn");  
     const inputModule    = $objectModal.querySelector("#input-module"); 
@@ -31,6 +33,8 @@ function mainSelect() {
         navTabular    .setAttribute("hidden","hidden");
         navForms      .setAttribute("hidden","hidden");                                
     } else if (inputType.value == "Module"||inputType.value == "Constant") {   
+        inputObjectRep.setAttribute("disabled","disabled");   
+        inputListRep  .setAttribute("disabled","disabled");   
         inputOwner    .setAttribute("disabled","disabled");       
         inputOwnerBtn .setAttribute("disabled","disabled");                       
         navRequisite  .setAttribute("hidden","hidden");        
@@ -534,14 +538,22 @@ async function objectCreate(e) {
         textId    : input_textId.value,
         subsysId  : input_subsystem.getAttribute("eva-id"),
         subsysName: input_subsystem.value        
-    }          
+    }
+    
+    resCheck = await postOnServer(tmp,'/checkobject');    
+    console.log(resCheck);
+    if (resCheck) {
+        //alert('The identifier is not unique!');
+        // await e.preventDefault();
+        // await e.stopPropagation();            
+    }
 
     const data =  {
         'id'      : input_form.getAttribute("eva-id"),
         'data'    : JSON.stringify(tmp),
     }
     
-    console.log('createMode: '+createMode);
+    console.log('createMode:', createMode);
     if (createMode==='true') {
         try {
             result = await postOnServer(data, '/createobject')
@@ -653,28 +665,19 @@ async function objectDelete() {
 async function updateConfig() {
     console.log('>>updateConfig()...');
     inputStatus.value = '>> Update config in DB...';
-
-    let tmp  = await getOnServer('/getconfig');     
-    let data = [];
-
-    for (const row of tmp) {
-        console.log(row.state);
-        if (row.state===1||row.state===2||row.state===3) {
-            let strJson = row.data; 
-            let Elements = await JSON.parse(strJson);
-            console.log(Elements);
-            
-            data.push(Object.assign({'id':row.id, 'state':row.state}, Elements));
-        }
-    }
+  
+    let data = {};
 
     result = await postOnServer(data, '/updateconf');
 
-    btnConfigSave.style.backgroundColor = '#282c34';
-
-    if (result) await showConfigTable();
-
-    inputStatus.value = '>> Config update completed!';
+    console.log(result);
+    if (result===1) { 
+        await showConfigTable();        
+        btnConfigSave.style.backgroundColor = '#282c34';
+        inputStatus.value = '>> Config update completed!';
+    } else {
+        inputStatus.value = '>> Config update error!!!';
+    }
        
 }
 function openModule() {

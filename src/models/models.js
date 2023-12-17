@@ -6,7 +6,7 @@ const { DataTypes } = require('sequelize');
 
 const User = sequelize.define('User', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    Name: {type: DataTypes.STRING(50), unique: true},
+    Name: {type: DataTypes.STRING(50)},
     Descr: {type: DataTypes.STRING(150)},    
     EAuth: {type: DataTypes.BOOLEAN},
     Show: {type: DataTypes.BOOLEAN},
@@ -17,7 +17,7 @@ const User = sequelize.define('User', {
 
 const Role = sequelize.define('Role', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    Name: {type: DataTypes.STRING(50), unique: true}
+    Name: {type: DataTypes.STRING(50)}
 })
 
 const Config = sequelize.define('Config', {
@@ -28,20 +28,20 @@ const Config = sequelize.define('Config', {
 
 const Subsystem = sequelize.define('Subsystem', {
     id:   {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},    
-    name: {type: DataTypes.STRING(50), unique: true},
+    name: {type: DataTypes.STRING(50)},
     display: {type: DataTypes.BOOLEAN, defaultValue: 'true'}
 })
 
 const Constant = sequelize.define('Constant', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},    
-    name:  {type: DataTypes.STRING(150), unique: true},
-    uuidType: {type: DataTypes.STRING(37), unique: true, defaultValue: sequelize.UUIDV4},
+    name:  {type: DataTypes.STRING(150)},
+    uuidType: {type: DataTypes.STRING(37), defaultValue: sequelize.UUIDV4},
     value   : {type: DataTypes.STRING(250)}
 })
 
 const Module = sequelize.define('Module', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},    
-    name:  {type: DataTypes.STRING, unique: true},
+    name:  {type: DataTypes.STRING},
     xbase64: {type: DataTypes.TEXT}
 })
 
@@ -53,7 +53,7 @@ const Requisite = sequelize.define('Requisite', {
 
 const Form = sequelize.define('Form', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},    
-    name:  {type: DataTypes.STRING, unique: true},
+    name:  {type: DataTypes.STRING},
     xbase64: {type: DataTypes.TEXT}
 })
 

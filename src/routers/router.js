@@ -22,6 +22,7 @@ router.post('/createobject', controller.createObject);
 router.post('/delobject', controller.deleteObject);
 router.post('/editobject', controller.editObject);
 router.post('/getobject', controller.getObject);
+router.post('/checkobject', controller.checkObject);
 router.post('/updateconf', controller.updateConfig);
 
 router.post('/getreqs', controller.getReqs);

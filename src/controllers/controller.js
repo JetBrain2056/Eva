@@ -379,6 +379,23 @@ exports.getObject = async function(req, res) {
         console.log(err);
     }
 }
+exports.checkObject = async function(req, res) {
+    console.log(dateNow(),'>>checkObject()...');
+    if (!req.body) return res.sendStatus(400);    
+
+    const {typeId, textId} = req.body;
+    try {
+        const data = await sequelize.query(
+            `SELECT *
+             FROM "`+typeId+`s"              
+             WHERE "name"='`+textId+`';`         
+        );
+        return await res.send(data[0]);        
+    } catch(err) {
+        console.log(err);
+        return await res.send('0');    
+    }
+}
 exports.updateConfig = async function(req, res) {
     console.log(dateNow(), '>>updateConfig()...');
     if (!req.body) return res.sendStatus(400);
@@ -386,11 +403,22 @@ exports.updateConfig = async function(req, res) {
     let refColumns = {id   : {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
                       name : {type: DataTypes.STRING(150)}}; 
 
-    for (let row of req.body) {        
-        let objectId = row.textId;        
+    let data;
+    try {                          
+        data = await Config.findAll({ where: { state: [1,2,3] }});                        
+    } catch(err) {
+        console.log(err);
+        return await res.send('0');
+    }
+
+    // console.log(data);
+    for (let row of data) {    
+        let strJson = row.data;          
+        let Elements = await JSON.parse(strJson);      
+        let objectId = Elements.textId;        
         
-        console.log(row);
-        let typeId = row.typeId;
+        // console.log(row);
+        let typeId = Elements.typeId;
         
         if (row.state === 0) {
             continue;
@@ -401,10 +429,10 @@ exports.updateConfig = async function(req, res) {
                         id  : row.id,                     
                         name: objectId
                     });
-                    console.log('Create element: '+elem);                       
+                    console.log('Create element:', elem);                       
                 } catch(err) {
                     console.log(err);
-                    return;
+                    return await res.send('0');
                 }    
             } else if (typeId==='Constant') {   
                 const uuid = uuidv4();                 
@@ -414,10 +442,10 @@ exports.updateConfig = async function(req, res) {
                         name: objectId,
                         uuidType: uuid
                     });
-                    console.log('Create element: '+elem);                       
+                    console.log('Create element:', elem);                       
                 } catch(err) {
                     console.log(err);
-                    return;
+                    return await res.send('0');
                 }  
             } else if (typeId==='Module') { 
                 try {
@@ -426,20 +454,21 @@ exports.updateConfig = async function(req, res) {
                         name:  objectId,     
                         xbase64: ''                        
                     });
-                    console.log('Create element: '+elem);                       
+                    console.log('Create element:', elem);                       
                 } catch(err) {
                     console.log(err);
-                    return;
+                    return await res.send('0');
                 }
             } else if (typeId==='Report') { 
             } else if (typeId==='Processing') { 
             } else {                    
                 try {
                     const EvaObject = sequelize.define(objectId, refColumns);
-                    console.log('Create table: '+EvaObject);   
+                    console.log('Create table:', EvaObject);   
                     await EvaObject.sync({alter: true});
                 } catch(err) {
                     console.log(err);
+                    return await res.send('0');
                 }        
             }
             try {
@@ -448,47 +477,52 @@ exports.updateConfig = async function(req, res) {
                 }, {
                     where: {id: row.id}
                 }) 
-                console.log('Update table: '+result);                           
+                console.log('Update table:', result);                           
             } catch(err) {
                 console.log(err);
+                return await res.send('0');
             }
         } else if (row.state === 2) {  
             if (typeId==='Subsystem') {            
                 try {
-                    const count = await Subsystem.destroy({where: {name: objectId}});                    
-                    console.log('Deleted row(s): '+count);                     
+                    const count = await Subsystem.destroy({where: {id: row.id}});                    
+                    console.log('Deleted row(s):', count);                     
                 } catch(err) {
                     console.log(err);
+                    return await res.send('0');
                 }    
             } else if (typeId==='Constant') {                                  
                 try {
-                    const count = await Constant.destroy({where: {name: objectId}});
+                    const count = await Constant.destroy({where: {id: row.id}});
                    
-                    console.log('Deleted row(s): '+count);                      
+                    console.log('Deleted row(s):', count);                      
                 } catch(err) {
                     console.log(err);
+                    return await res.send('0');
                 }  
             } else if (typeId==='Module') {                                  
                 try {
                     const count = await Module.destroy({where: {id: row.id}});
                    
-                    console.log('Deleted row(s): '+count);                      
+                    console.log('Deleted row(s):', count);                      
                 } catch(err) {
                     console.log(err);
                 }                        
             } else {         
                 try { 
-                    await sequelize.query('DROP TABLE IF EXISTS "' + objectId+'s";');
-                    console.log('Deleted table: '+objectId);                           
+                    await sequelize.query('DROP TABLE IF EXISTS "'+objectId+'s";');
+                    console.log('Deleted table:', objectId);                           
                 } catch(err) {
                     console.log(err);
+                    return await res.send('0');
                 }
             }    
             try {                                        
                 const count = await Config.destroy({where: {id: row.id}});
-                console.log('Deleted row(s): '+count);
+                console.log('Deleted row(s):', count);
             } catch(err) {
                 console.log(err);
+                return await res.send('0');
             }                
         } else if (row.state === 3) {  
             if (typeId==='Subsystem') {            
@@ -508,11 +542,11 @@ exports.updateConfig = async function(req, res) {
                         name : objectId                    
                     }, {
                         where: {id: row.id}
-                    });                            
-                   
-                    console.log('Update row(s): '+count);                      
+                    });                                               
+                    console.log('Update row(s):', count);                      
                 } catch(err) {
                     console.log(err);
+                    return await res.send('0');
                 }   
             } else if (typeId==='Module') {                                  
                 try {
@@ -521,11 +555,11 @@ exports.updateConfig = async function(req, res) {
                         xbase64  :''                
                     }, {
                         where: {id: row.id}
-                    });                            
-                   
-                    console.log('Update row(s): '+count);                      
+                    });                                               
+                    console.log('Update row(s):', count);                      
                 } catch(err) {
                     console.log(err);
+                    return await res.send('0');
                 }                        
             } else {      
             
@@ -557,10 +591,11 @@ exports.updateConfig = async function(req, res) {
 
                 try {                    
                     const EvaObject = sequelize.define(objectId, refColumns);
-                    console.log('Create table: '+EvaObject);   
+                    console.log('Create table:', EvaObject);   
                     await EvaObject.sync({ alter: true });                    
                 } catch(err) {
                     console.log(err);
+                    return await res.send('0');
                 }  
             }
             console.log('>>Config.update()...');         
@@ -570,13 +605,14 @@ exports.updateConfig = async function(req, res) {
                 }, {
                     where: {id: row.id}
                 }) 
-                console.log('Update table: '+result);                           
+                console.log('Update table:', result);                           
             } catch(err) {
                 console.log(err);
+                return await res.send('0');
             }
         }    
     }
-   
+   return await res.send('1');
 }
 exports.getSubsystems = async function(req, res) {
     console.log(dateNow(),'>>getSubsystems()...');

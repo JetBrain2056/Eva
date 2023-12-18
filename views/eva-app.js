@@ -234,6 +234,62 @@ async function refEditModal(copyMode) {
     res = await postOnServer(data, '/getref');  
     await refElement(refForm, res[0], arrCol, arrSyn, createMode, copyMode);     
 }
+async function constEditModal() {
+    console.log('>>refEditModal()...'); 
+  
+    if (selectRows.length === 0) { return };
+
+    const row = selectRows[0];      
+
+    const modalForm  = document.getElementById('constModal');             
+    const inputForm  = modalForm.querySelector('#create-const-form');    
+    inputForm.reset();        
+      
+    const inputName     = inputForm.querySelector('#input-const-name');  
+    const inputValue    = inputForm.querySelector('#input-const-value');       
+
+    inputForm.reset();    
+
+    let data = { 
+        'textId' : 'Constant',
+        'id'     : row.cells[0].innerText
+    }
+
+    let result = await postOnServer(data, '/getref');    
+    if (result) {       
+        let elem = result[0];
+        inputForm.setAttribute("eva-id", elem.id);
+        inputName.value        = elem.name;
+        inputValue.value       = elem.value;       
+        
+        currentModal = getModal(modalForm); 
+    }    
+}
+async function constSave() {
+    console.log('>>constSave()...');
+
+    const inputForm  = document.getElementById("create-const-form");    
+    const inputId    = inputForm.getAttribute("eva-id"); 
+    const inputValue = inputForm.querySelector("#input-const-value"); 
+      
+    const data =  {
+        'textId'  : 'Constant',
+        'id'      : inputId,        
+        'value'   : inputValue.value
+    }
+
+    try {  
+        result = await postOnServer(data, '/updateref');
+        // console.log(result);  
+    } catch (err) {
+        console.log(err);
+    }
+
+    await currentModal.hide();
+
+    if (result) await showConstTable();
+
+}
 //DOM Dynamic Content////////////////////////////////////////////////////////
 async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode) {
     console.log('>>refElement()...');  

@@ -10,6 +10,9 @@ function mainSelect() {
     console.log('>>mainSelect()...');
 
     const inputType      = $objectModal.querySelector('#input-type');
+    const labelObjectType= $objectModal.querySelector("label[for=input-object-type]"); 
+    const inputObjectType= $objectModal.querySelector('#input-object-type');
+    const inputTypeBtn   = $objectModal.querySelector('#input-type-btn');
     const inputObjectRep = $objectModal.querySelector('#input-object-rep');
     const inputListRep   = $objectModal.querySelector('#input-list-rep');
     const inputSubsystem = $objectModal.querySelector("#input-subsystem");    
@@ -31,7 +34,10 @@ function mainSelect() {
         inputOwnerBtn .setAttribute("disabled","disabled");   
         navRequisite  .setAttribute("hidden","hidden");        
         navTabular    .setAttribute("hidden","hidden");
-        navForms      .setAttribute("hidden","hidden");                                
+        navForms      .setAttribute("hidden","hidden"); 
+        labelObjectType.setAttribute("hidden","hidden");   
+        inputObjectType.setAttribute("hidden","hidden");   
+        inputTypeBtn   .setAttribute("hidden","hidden");                             
     } else if (inputType.value == "Module"||inputType.value == "Constant") {   
         inputObjectRep.setAttribute("disabled","disabled");   
         inputListRep  .setAttribute("disabled","disabled");   
@@ -40,6 +46,15 @@ function mainSelect() {
         navRequisite  .setAttribute("hidden","hidden");        
         navTabular    .setAttribute("hidden","hidden");
         navForms      .setAttribute("hidden","hidden"); 
+        if (inputType.value == "Constant") {           
+            labelObjectType.removeAttribute("hidden");  
+            inputObjectType.removeAttribute("hidden");  
+            inputTypeBtn   .removeAttribute("hidden"); 
+        } else {           
+            labelObjectType.setAttribute("hidden","hidden");   
+            inputObjectType.setAttribute("hidden","hidden");  
+            inputTypeBtn   .setAttribute("hidden","hidden"); 
+        }
     } else {
         inputSubsystem.removeAttribute("disabled");        
         inputSubsysBtn.removeAttribute("disabled");
@@ -48,7 +63,10 @@ function mainSelect() {
         inputModule   .removeAttribute("disabled");        
         navRequisite  .removeAttribute("hidden");        
         navTabular    .removeAttribute("hidden");        
-        navForms      .removeAttribute("hidden");       
+        navForms      .removeAttribute("hidden");    
+        labelObjectType.setAttribute("hidden","hidden");   
+        inputObjectType.setAttribute("hidden","hidden");  
+        inputTypeBtn   .setAttribute("hidden","hidden");    
     }
 }
 function rowSelect(e) {
@@ -696,6 +714,47 @@ function openModule() {
     selectModal = getModal(modalForm);
 
 }
+async function showTypeTable() {
+    console.log('>>showTypeTable()...');
+
+    const modalForm = document.getElementById("selectTypeModal");
+
+    resTbl = buildTabpanel(modalForm, "300");
+
+    let tmp  = await getOnServer('/getconfig');     
+    let data = [];
+
+    for (const row of tmp) {
+        let strJson = row.data; 
+        let Elements = JSON.parse(strJson);
+
+        if (row.state===0&&(Elements.typeId==='Reference'||Elements.typeId==='Document')) {
+            data.push(Object.assign({'id':row.id}, Elements));
+        }
+    }
+
+    data.sort(function(a, b) {
+        if(a.typeId < b.typeId) { return -1; }
+        if(a.typeId > b.typeId) { return 1; }
+        return 0;
+    });
+
+    const col  = { 'id':'Id', 'typeId':'Type',  'textId': 'Identifier'};  
+    const hide = ['id'];  
+    
+    showTable(resTbl, hide, col, data);
+
+}
+async function selectType() {
+    console.log('>>selectType()...'); 
+
+    const modalForm = document.getElementById("selectTypeModal");
+
+    selectModal = getModal(modalForm);
+
+    await showTypeTable();
+
+}
 /////////////////////////////////////////////////////////////////////////////
 async function showSubsystemsTable() {
     console.log('>>showSubsystemsTable()...');
@@ -728,7 +787,7 @@ async function subsystemSelect() {
 }
 async function objectEditSubsystem() {
 
-    let modalForm = document.getElementById("editSubsystemModal");
+    const modalForm = document.getElementById("editSubsystemModal");
 
     selectModal = getModal(modalForm);
   

@@ -234,13 +234,15 @@
               <div class="input-group input-group-sm has-validation">
                 <input type="text" placeholder="[a-zA-Z0-9]" id="input-textId" class="form-control" required pattern="[a-zA-Z0-9]+"/>
               </div>  
-              <label for="input-object-type" hidden>Type:</label>
+              <label for="input-const-type" hidden>Type:</label>
               <div class="input-group input-group-sm">
-                <select class="form-select form-select-sm" id="input-object-type" required pattern="[a-zA-Z]+" hidden>
+                <select class="form-select form-select-sm" id="input-const-type" required pattern="[a-zA-Z]+" hidden>
                   <option value="String" selected>String</option>
                   <option value="Number">Number</option>
+                  <option value="Boolean">Boolean</option>
+                  <option value="Date">Date</option>
                 </select> 
-                <button class="btn btn-outline-secondary" id="input-type-btn" type="button" onclick="selectType()">...</button>
+                <button class="btn btn-outline-secondary" id="input-type-btn" type="button" onclick="selectType()" hidden>...</button>
               </div>
               <label for="input-object-rep">Object representation:</label>
               <div class="input-group input-group-sm">

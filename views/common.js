@@ -10,8 +10,8 @@ function mainSelect() {
     console.log('>>mainSelect()...');
 
     const inputType      = $objectModal.querySelector('#input-type');
-    const labelObjectType= $objectModal.querySelector("label[for=input-object-type]"); 
-    const inputObjectType= $objectModal.querySelector('#input-object-type');
+    const labelConstType= $objectModal.querySelector("label[for=input-const-type]"); 
+    const inputConstType = $objectModal.querySelector('#input-const-type');
     const inputTypeBtn   = $objectModal.querySelector('#input-type-btn');
     const inputObjectRep = $objectModal.querySelector('#input-object-rep');
     const inputListRep   = $objectModal.querySelector('#input-list-rep');
@@ -26,19 +26,19 @@ function mainSelect() {
     const navForms       = $objectModal.querySelector("#object-forms");      
     
     navMain.click();
-    if (inputType.value == "Subsystem"||inputType.value == "") {                     
-        inputSubsystem.setAttribute("disabled","disabled");  
-        inputSubsysBtn.setAttribute("disabled","disabled");       
-        inputModule   .setAttribute("disabled","disabled");
-        inputOwner    .setAttribute("disabled","disabled");       
-        inputOwnerBtn .setAttribute("disabled","disabled");   
-        navRequisite  .setAttribute("hidden","hidden");        
-        navTabular    .setAttribute("hidden","hidden");
-        navForms      .setAttribute("hidden","hidden"); 
-        labelObjectType.setAttribute("hidden","hidden");   
-        inputObjectType.setAttribute("hidden","hidden");   
+    if (inputType.value === "Subsystem"||inputType.value === "") {                     
+        inputSubsystem .setAttribute("disabled","disabled");  
+        inputSubsysBtn .setAttribute("disabled","disabled");       
+        inputModule    .setAttribute("disabled","disabled");
+        inputOwner     .setAttribute("disabled","disabled");       
+        inputOwnerBtn  .setAttribute("disabled","disabled");   
+        navRequisite   .setAttribute("hidden","hidden");        
+        navTabular     .setAttribute("hidden","hidden");
+        navForms       .setAttribute("hidden","hidden"); 
+        labelConstType.setAttribute("hidden","hidden");   
+        inputConstType .setAttribute("hidden","hidden");   
         inputTypeBtn   .setAttribute("hidden","hidden");                             
-    } else if (inputType.value == "Module"||inputType.value == "Constant") {   
+    } else if (inputType.value === "Module"||inputType.value === "Constant") {   
         inputObjectRep.setAttribute("disabled","disabled");   
         inputListRep  .setAttribute("disabled","disabled");   
         inputOwner    .setAttribute("disabled","disabled");       
@@ -46,13 +46,13 @@ function mainSelect() {
         navRequisite  .setAttribute("hidden","hidden");        
         navTabular    .setAttribute("hidden","hidden");
         navForms      .setAttribute("hidden","hidden"); 
-        if (inputType.value == "Constant") {           
-            labelObjectType.removeAttribute("hidden");  
-            inputObjectType.removeAttribute("hidden");  
+        if (inputType.value === "Constant") {           
+            labelConstType.removeAttribute("hidden");  
+            inputConstType .removeAttribute("hidden");  
             inputTypeBtn   .removeAttribute("hidden"); 
         } else {           
-            labelObjectType.setAttribute("hidden","hidden");   
-            inputObjectType.setAttribute("hidden","hidden");  
+            labelConstType.setAttribute("hidden","hidden");   
+            inputConstType .setAttribute("hidden","hidden");  
             inputTypeBtn   .setAttribute("hidden","hidden"); 
         }
     } else {
@@ -64,8 +64,8 @@ function mainSelect() {
         navRequisite  .removeAttribute("hidden");        
         navTabular    .removeAttribute("hidden");        
         navForms      .removeAttribute("hidden");    
-        labelObjectType.setAttribute("hidden","hidden");   
-        inputObjectType.setAttribute("hidden","hidden");  
+        labelConstType.setAttribute("hidden","hidden");   
+        inputConstType .setAttribute("hidden","hidden");  
         inputTypeBtn   .setAttribute("hidden","hidden");    
     }
 }
@@ -745,6 +745,26 @@ async function showTypeTable() {
     showTable(resTbl, hide, col, data);
 
 }
+async function typeSelect() {
+    console.log('>>typeSelect()...');
+
+    if (selectRows.length === 0) return;
+
+    const row = selectRows[0];  
+  
+    const inputElement = document.getElementById('input-const-type');      
+    
+    const option = document.createElement('option');
+    option.value = row.cells[2].innerText;
+    option.text  = row.cells[1].innerText+'.'+row.cells[2].innerText;
+    option.setAttribute("selected","selected"); 
+    inputElement.appendChild(option);
+  
+    // inputElement.value  = row.cells[1].innerText;
+    //inputElement.setAttribute("eva-id", row.cells[0].innerText);
+  
+    await selectModal.hide();
+}
 async function selectType() {
     console.log('>>selectType()...'); 
 
@@ -753,7 +773,6 @@ async function selectType() {
     selectModal = getModal(modalForm);
 
     await showTypeTable();
-
 }
 /////////////////////////////////////////////////////////////////////////////
 async function showSubsystemsTable() {
@@ -772,16 +791,16 @@ async function showSubsystemsTable() {
 
 }
 async function subsystemSelect() {
-    console.log('>>selectSubsystem...');
+    console.log('>>selectSubsystem()...');
 
     if (selectRows.length === 0) return;
 
     const row = selectRows[0];  
   
-    const inputSubsystem     = document.getElementById('input-subsystem');            
+    const inputElement = document.getElementById('input-subsystem');            
   
-    inputSubsystem.value  = row.cells[1].innerText;
-    inputSubsystem.setAttribute("eva-id", row.cells[0].innerText);
+    inputElement.value  = row.cells[1].innerText;
+    inputElement.setAttribute("eva-id", row.cells[0].innerText);
   
     await selectModal.hide();
 }

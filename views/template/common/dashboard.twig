@@ -189,7 +189,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="objectModalLabel">Add object:</h5>
+        <h5 class="modal-title" id="objectModalLabel">Add an object:</h5>
         <button type="button" class="btn-close"  aria-label="Close" data-bs-dismiss="modal"></button>          
       </div>
       <ul class="nav nav-tabs" role="tablist" style="background:grey">                
@@ -218,24 +218,30 @@
         <div class="tab-content">  
           <div class="tab-pane fade active show" id="nav-main" role="tabpanel" aria-labelledby="nav-main-tab">
             <form class="form" id="create-object-form">  
-              <label for="input-type">Type object:</label>
-              {# <div class="input-group input-group-sm"> #}
-                <select class="form-select form-select-sm" id="input-type" required pattern="[a-zA-Z]+">
-                  <option selected desabled value="">...</option>
-                  <option value="Subsystem">{{text_subsystem}}</option>  
-                  <option value="Module">{{text_module}}</option>  
-                  <option value="Constant">{{text_constant}}</option>
-                  <option value="Reference">{{text_reference}}</option>              
-                  <option value="Document">{{text_document}}</option>  
-                  <option value="Processing">{{text_processing}}</option>  
-                  <option value="Register">{{text_register}}</option>  
-                  <option value="Report">{{text_report}}</option>                              
-                </select>
-              {# </div>          #}
+              <label for="input-type">Object type:</label>              
+              <select class="form-select form-select-sm" id="input-type" required pattern="[a-zA-Z]+">
+                <option selected desabled value="">...</option>
+                <option value="Subsystem">{{text_subsystem}}</option>  
+                <option value="Module">{{text_module}}</option>  
+                <option value="Constant">{{text_constant}}</option>
+                <option value="Reference">{{text_reference}}</option>              
+                <option value="Document">{{text_document}}</option>  
+                <option value="Processing">{{text_processing}}</option>  
+                <option value="Register">{{text_register}}</option>  
+                <option value="Report">{{text_report}}</option>                              
+              </select>      
               <label for="input-textId">Identifier:</label>
               <div class="input-group input-group-sm has-validation">
                 <input type="text" placeholder="[a-zA-Z0-9]" id="input-textId" class="form-control" required pattern="[a-zA-Z0-9]+"/>
               </div>  
+              <label for="input-object-type" hidden>Type:</label>
+              <div class="input-group input-group-sm">
+                <select class="form-select form-select-sm" id="input-object-type" required pattern="[a-zA-Z]+" hidden>
+                  <option value="String" selected>String</option>
+                  <option value="Number">Number</option>
+                </select> 
+                <button class="btn btn-outline-secondary" id="input-type-btn" type="button" onclick="selectType()">...</button>
+              </div>
               <label for="input-object-rep">Object representation:</label>
               <div class="input-group input-group-sm">
                 <input type="text" placeholder="" id="input-object-rep" class="form-control"/>
@@ -319,13 +325,13 @@
     </div>
   </div>
 </div>
-{# Modal Edit Subsystem #}
+{# Modal Select Subsystem #}
 <div class="modal modal-lg fade" id="editSubsystemModal" tabindex="-2" data-bs-backdrop="static" aria-labelledby="editSubsystemModalLabel" aria-hidden="true">
   <div class="modal-dialog  modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Select subsystem</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+        <h5 class="modal-title">Select subsystem:</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">          
         <div class="btn-toolbar" role="toolbar" aria-label="toolbar group">          
@@ -350,7 +356,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="requisiteModalLabel">*</h5>
-        <button type="button" class="btn-close"  aria-label="Close"  data-bs-dismiss="modal" onclick=""></button>
+        <button type="button" class="btn-close" aria-label="Close" data-bs-dismiss="modal" onclick=""></button>
       </div>
       <div class="modal-body">
         <form class="form" id="create-req-form">        
@@ -442,3 +448,28 @@
     </div>
   </div>
 </div>
+{# Modal Select Type #}
+<div class="modal modal-lg fade" id="selectTypeModal" tabindex="-2" data-bs-backdrop="static" aria-labelledby="selectTypeModalLabel" aria-hidden="true">
+  <div class="modal-dialog  modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Select type:</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">          
+        <div class="btn-toolbar" role="toolbar" aria-label="toolbar group">          
+          <div class="btn-group btn-group-sm" role="group">
+            <button type="submit" class="btn btn-primary d-flex gap-2 align-items-center eva-edit" onclick="typeSelect()">
+              <i class=""></i>
+              <span>Select</span>
+            </button>    
+          </div>
+        </div>
+        <div class="eva-table"></div>          
+      </div>
+      <div class="modal-footer">        
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{button_close}}</button>
+      </div>
+    </div>
+  </div>
+</div> 

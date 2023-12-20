@@ -52,4 +52,29 @@
     </div>
   </div>
 </div> 
+{# Modal Select Const #}
+<div class="modal modal-lg fade" id="selectConstModal" tabindex="-2" data-bs-backdrop="static" aria-labelledby="selectConstModalLabel" aria-hidden="true">
+  <div class="modal-dialog  modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Select element:</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">          
+        <div class="btn-toolbar" role="toolbar" aria-label="toolbar group">          
+          <div class="btn-group btn-group-sm" role="group">
+            <button type="submit" class="btn btn-primary d-flex gap-2 align-items-center eva-edit" onclick="constSelect()">
+              <i class=""></i>
+              <span>Select</span>
+            </button>    
+          </div>
+        </div>
+        <div class="eva-table"></div>          
+      </div>
+      <div class="modal-footer">        
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{button_close}}</button>
+      </div>
+    </div>
+  </div>
+</div> 
 {% endblock %}

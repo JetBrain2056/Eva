@@ -35,8 +35,8 @@ const Subsystem = sequelize.define('Subsystem', {
 const Constant = sequelize.define('Constant', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},    
     name:  {type: DataTypes.STRING(150)},
-    uuidType: {type: DataTypes.STRING(37), defaultValue: sequelize.UUIDV4},
-    value   : {type: DataTypes.STRING(250)}
+    type:  {type: DataTypes.STRING(50)},
+    value : {type: DataTypes.STRING(250)}
 })
 
 const Module = sequelize.define('Module', {

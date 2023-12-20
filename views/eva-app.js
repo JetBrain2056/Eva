@@ -332,6 +332,39 @@ async function constSave() {
     if (result) await showConstTable();
 
 }
+async function constBtn() {
+    console.log('>>constBtn()...');
+    const modalForm       = document.getElementById("selectConstModal");
+    const inputConstValue = document.getElementById("input-const-value");
+    const inputConstType  = inputConstValue.getAttribute("data-type");
+
+    const refName = inputConstType.split('.')[1];
+
+    selectModal = getModal(modalForm);
+
+    refTbl = buildTabpanel(modalForm, "270");
+
+    let tmp = {'textId': refName };
+    let data = await postOnServer(tmp, '/getrefs');   
+
+    const col  = { 'id':'Id' ,'name':'Name' };  
+    const hide = [];      
+
+    showTable(refTbl, hide, col, data);
+}
+async function constSelect() {
+    console.log('>>constSelect()...');
+    if (selectRows.length === 0) return;
+
+    const row = selectRows[0];  
+
+    const inputConstValue  = document.getElementById('input-const-value');    
+
+    inputConstValue.value        = row.cells[1].innerText;
+    inputConstValue.setAttribute("eva-id", row.cells[0].innerText);
+
+    await selectModal.hide();
+}
 //DOM Dynamic Content////////////////////////////////////////////////////////
 async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode) {
     console.log('>>refElement()...');  

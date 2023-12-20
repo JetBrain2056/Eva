@@ -246,7 +246,8 @@ async function constEditModal() {
     inputForm.reset();        
       
     const inputName     = inputForm.querySelector('#input-const-name');  
-    const inputValue    = inputForm.querySelector('#input-const-value');       
+    const inputValue    = inputForm.querySelector('#input-const-value');  
+    const constValueBtn = inputForm.querySelector('#input-const-value-btn');     
 
     inputForm.reset();    
 
@@ -260,7 +261,40 @@ async function constEditModal() {
         let elem = result[0];
         inputForm.setAttribute("eva-id", elem.id);
         inputName.value        = elem.name;
-        inputValue.value       = elem.value;       
+        inputValue.setAttribute("data-type",elem.type);
+         
+        inputValue.removeAttribute("disabled"); 
+        constValueBtn.setAttribute("hidden","hidden");
+
+        if (elem.type==='String') {
+            inputValue.setAttribute("type","text");
+            inputValue.setAttribute("class","eva-req form-control"); 
+            inputValue.value       = elem.value;              
+        } else if (elem.type === 'Numeric') {
+            inputValue.setAttribute("type","text");                    
+            inputValue.setAttribute("inputmode","decimal");
+            inputValue.setAttribute("class","eva-req form-control");              
+            inputValue.setAttribute("pattern", "[0-9.]+");   
+            inputValue.setAttribute("maxlength", "15");          
+            inputValue.setAttribute("placeholder", "0.00");  
+            inputValue.style = "text-align:right;";
+            inputValue.value       = elem.value;  
+        } else if (elem.type === 'Date') {
+            inputValue.setAttribute("type","date");
+            inputValue.setAttribute("class","eva-req form-control");            
+            const date = new Date(elem.value);                        
+            inputValue.value = dateFormat(date).slice(0, 10);
+        } else if (elem.type === 'Boolean') {
+            inputValue.setAttribute("type","checkbox");
+            inputValue.setAttribute("class","eva-req form-check-input");                         
+            inputValue.checked       = (elem.value === 'true');                                                     
+        } else { 
+            inputValue.setAttribute("type","text");
+            inputValue.setAttribute("disabled","disabled");
+            inputValue.setAttribute("class","eva-req form-control");   
+            inputValue.value       = elem.value;  
+            constValueBtn.removeAttribute("hidden");          
+        }
         
         currentModal = getModal(modalForm); 
     }    
@@ -271,11 +305,19 @@ async function constSave() {
     const inputForm  = document.getElementById("create-const-form");    
     const inputId    = inputForm.getAttribute("eva-id"); 
     const inputValue = inputForm.querySelector("#input-const-value"); 
+    const type       = inputValue.getAttribute("data-type");
+
+    let value;
+    if (type==='Boolean') {        
+        value = inputValue.checked;
+    } else {
+        value = inputValue.value;
+    }
       
     const data =  {
         'textId'  : 'Constant',
         'id'      : inputId,        
-        'value'   : inputValue.value
+        'value'   : value
     }
 
     try {  

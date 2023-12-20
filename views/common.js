@@ -542,6 +542,7 @@ async function objectCreate(e) {
 
     const input_form   = document.getElementById('create-object-form'); 
     const input_type   = input_form.querySelector('#input-type');
+    const input_const_type  = input_form.querySelector('#input-const-type');
     const input_textId = input_form.querySelector('#input-textId');    
     const input_subsystem  = input_form.querySelector('#input-subsystem');      
     const createMode = input_form.getAttribute("create-mode");  
@@ -555,7 +556,8 @@ async function objectCreate(e) {
         typeId    : input_type.value, 
         textId    : input_textId.value,
         subsysId  : input_subsystem.getAttribute("eva-id"),
-        subsysName: input_subsystem.value        
+        subsysName: input_subsystem.value,
+        constType : input_const_type.value        
     }
     
     resCheck = await postOnServer(tmp,'/checkobject');    
@@ -644,7 +646,7 @@ async function objectEditModal() {
     input_type.setAttribute("disabled","disabled");    
     const input_textId    = input_form.querySelector('#input-textId');   
     const input_subsystem = input_form.querySelector('#input-subsystem');  
-
+    const inputConstType  = input_form.querySelector('#input-const-type'); 
 
     let data = { 'id': row.cells[0].innerText }
 
@@ -658,6 +660,21 @@ async function objectEditModal() {
         input_textId.value      = Elements.textId;
         input_subsystem.value   = Elements.subsysName;
         input_subsystem.setAttribute("eva-id", Elements.subsysId);
+        if (Elements.typeId === "Constant") {  
+
+            // const data = {'id':res.id, 'textId':'Constant'};
+            // tmp = await postOnServer(data,'/getref');
+            
+            // console.log(tmp[0].uuidType);
+            
+            const option = document.createElement('option');
+            option.value = Elements.constType;
+            option.text  = Elements.constType;
+            option.setAttribute("selected","selected"); 
+            inputConstType.appendChild(option);
+          
+            inputConstType.setAttribute("eva-id", row.cells[0].innerText);
+        }
     }    
 
     currentModal = getModal(modalForm);
@@ -755,13 +772,12 @@ async function typeSelect() {
     const inputElement = document.getElementById('input-const-type');      
     
     const option = document.createElement('option');
-    option.value = row.cells[2].innerText;
+    option.value = row.cells[1].innerText+'.'+row.cells[2].innerText;
     option.text  = row.cells[1].innerText+'.'+row.cells[2].innerText;
     option.setAttribute("selected","selected"); 
     inputElement.appendChild(option);
   
-    // inputElement.value  = row.cells[1].innerText;
-    //inputElement.setAttribute("eva-id", row.cells[0].innerText);
+    inputElement.setAttribute("eva-id", row.cells[0].innerText);
   
     await selectModal.hide();
 }

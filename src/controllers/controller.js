@@ -438,9 +438,9 @@ exports.updateConfig = async function(req, res) {
                 const uuid = uuidv4();                 
                 try {
                     const elem = await Constant.create({   
-                        id  :  row.id,              
+                        id  : row.id,              
                         name: objectId,
-                        uuidType: uuid
+                        type: Elements.constType
                     });
                     console.log('Create element:', elem);                       
                 } catch(err) {
@@ -539,7 +539,8 @@ exports.updateConfig = async function(req, res) {
             } else if (typeId==='Constant') {                                  
                 try {
                     const count = await Constant.update({
-                        name : objectId                    
+                        name : objectId,
+                        type : Elements.constType                  
                     }, {
                         where: {id: row.id}
                     });                                               

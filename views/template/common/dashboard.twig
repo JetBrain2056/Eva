@@ -242,7 +242,7 @@
                   <option value="Boolean">Boolean</option>
                   <option value="Date">Date</option>
                 </select> 
-                <button class="btn btn-outline-secondary" id="input-type-btn" type="button" onclick="selectType()" hidden>...</button>
+                <button class="btn btn-outline-secondary" id="input-const-type_btn" type="button" onclick="selectType(id)" hidden>...</button>
               </div>
               <label for="input-object-rep">Object representation:</label>
               <div class="input-group input-group-sm">
@@ -390,15 +390,18 @@
             </h4>
             <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse show">
               <div class="accordion-body"> #}
-                <label for="input-req-type">Type:</label>          
-                <select class="form-select form-select-sm" id="input-req-type">              
-                  <option selected value="String">String</option>                
-                  <option value="Number">Number</option> 
-                  <option value="Date">Date</option>   
-                  <option value="Boolean">Boolean</option>                                                      
-                  <option value="Reference">{{text_reference}}</option>              
-                  <option value="Document">{{text_document}}</option>                                                              
-                </select>  
+                <label for="input-req-type">Type:</label>   
+                <div class="input-group input-group-sm">       
+                  <select class="form-select form-select-sm" id="input-req-type">              
+                    <option selected value="String">String</option>                
+                    <option value="Number">Number</option> 
+                    <option value="Date">Date</option>   
+                    <option value="Boolean">Boolean</option>                                                      
+                    {# <option value="Reference">{{text_reference}}</option>              
+                    <option value="Document">{{text_document}}</option>                                                               #}
+                  </select>  
+                  <button class="btn btn-outline-secondary" id="input-req-type_btn" type="button" onclick="selectType(id)">...</button>
+                </div>
                 <label for="input-req-length">Length:</label>
                 <div class="input-group input-group-sm">
                   <input type="number" placeholder="" id="input-req-length" class="form-control"/>

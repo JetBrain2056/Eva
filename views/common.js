@@ -12,7 +12,7 @@ function mainSelect() {
     const inputType      = $objectModal.querySelector('#input-type');
     const labelConstType= $objectModal.querySelector("label[for=input-const-type]"); 
     const inputConstType = $objectModal.querySelector('#input-const-type');
-    const inputTypeBtn   = $objectModal.querySelector('#input-type-btn');
+    const inputTypeBtn   = $objectModal.querySelector('#input-const-type_btn');
     const inputObjectRep = $objectModal.querySelector('#input-object-rep');
     const inputListRep   = $objectModal.querySelector('#input-list-rep');
     const inputSubsystem = $objectModal.querySelector("#input-subsystem");    
@@ -768,8 +768,12 @@ async function typeSelect() {
     if (selectRows.length === 0) return;
 
     const row = selectRows[0];  
-  
-    const inputElement = document.getElementById('input-const-type');      
+
+    const modalForm = document.getElementById("selectTypeModal");
+
+    const id = modalForm.getAttribute("eva-id");     
+    console.log(id);
+    const inputElement = document.querySelector("#"+id);
     
     const option = document.createElement('option');
     option.value = row.cells[1].innerText+'.'+row.cells[2].innerText;
@@ -781,10 +785,13 @@ async function typeSelect() {
   
     await selectModal.hide();
 }
-async function selectType() {
+async function selectType(id) {
     console.log('>>selectType()...'); 
 
+    // console.log(id);
+
     const modalForm = document.getElementById("selectTypeModal");
+    modalForm.setAttribute("eva-id", id.split('_')[0]);
 
     selectModal = getModal(modalForm);
 

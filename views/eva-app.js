@@ -292,7 +292,12 @@ async function constEditModal() {
             inputValue.setAttribute("type","text");
             inputValue.setAttribute("disabled","disabled");
             inputValue.setAttribute("class","eva-req form-control");   
-            inputValue.value       = elem.value;  
+            const refName = elem.type.split('.');
+            // console.log(refName);
+            const ref = await postOnServer({'id':elem.value, 'textId':refName[1]}, '/getref');   
+            // console.log(ref);
+            inputValue.value       = ref[0].name;  
+            inputValue.setAttribute("eva-id",ref[0].id)
             constValueBtn.removeAttribute("hidden");          
         }
         
@@ -310,8 +315,10 @@ async function constSave() {
     let value;
     if (type==='Boolean') {        
         value = inputValue.checked;
-    } else {
+    } else if (type==='String'||type==='Number'||type==='Date') {
         value = inputValue.value;
+    } else {
+        value = inputValue.getAttribute("eva-id");
     }
       
     const data =  {
@@ -526,10 +533,20 @@ async function showConstTable() {
 
     resTbl = buildTabpanel(formTbl, "210");
 
-    let tmp = {'textId': 'Constant'}
-    let data = await postOnServer(tmp, '/getrefs');   
-    console.log(data);   
-
+    const tmp = {'textId': 'Constant'}
+    result = await postOnServer(tmp, '/getrefs');   
+   
+    let data = [];
+    for (let row of result) {
+        let refName = row.type.split('.');
+        if (refName[0]==='Reference') {
+            ref = await postOnServer({'id':row.value, 'textId':refName[1]}, '/getref');                       
+            data.push(Object.assign(row,{'value':ref[0].name}));
+        } else {
+            data.push(row);
+        }
+    }
+    // console.log(data); 
     const col  = {'id':'Id', 'name':'Name', 'value':'Value'} 
     const hide = ['id'];      
 

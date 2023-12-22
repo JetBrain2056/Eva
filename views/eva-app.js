@@ -473,8 +473,12 @@ async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode) {
                         input.value = date.slice(0, 10);
                     } else {
                         if (req.split('.').length > 1) {
-                            resRef = await postOnServer({'id': col[req], 'textId':req.split('.')[1]}, '/getref');  
-                            input.value = resRef[0].name;
+                            resRef = await postOnServer({'id': col[req], 'textId':req.split('.')[1]}, '/getref');
+                            if (resRef.length===1) {
+                                input.value = resRef[0].name;
+                            } else {
+                                input.value = '';
+                            }
                         } else {
                             input.value = col[req];
                         }

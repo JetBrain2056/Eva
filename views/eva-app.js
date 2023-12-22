@@ -86,26 +86,33 @@ async function refCreate(e) {
     }
 
     const evaReqs   = refForm.getElementsByClassName('eva-req');     
-    for(let elem of evaReqs) {
-        // console.log(elem.name);
+    for(let elem of evaReqs) {      
         if ((createMode==='true'||copyMode==='true')&&elem.name==="id") {            
         } else {
             const type     = elem.getAttribute("type");
             const dataType = elem.getAttribute("data-type");
+            console.log(elem.name);
+            console.log(dataType);
+            console.log(type);
             if (type === 'checkbox') {                 
                 data[elem.name] = elem.checked; 
             } else if (type === 'date') {
                 if (elem.value === '') {
                     data[elem.name] = new Date('01,01,0001');  
-                } else {
-                    // console.log(elem.value);
+                } else {                    
                     data[elem.name] = new Date(elem.value);                           
                 }
-            } else {
+            } else if (type === 'number') {
+                data[elem.name] = Number(elem.value); 
+            } else if (type === 'text') {
                 if (dataType === 'numeric') {
                     data[elem.name] = Number(elem.value);  
-                } else {    
-                    data[elem.name] = String(elem.value);    
+                } else if (dataType === 'integer') { 
+                    data[elem.name] = Number(elem.value);  
+                } else if (dataType === 'character varying') {  
+                    data[elem.name] = String(elem.value);                   
+                } else {                            
+                    data[elem.name] = elem.getAttribute("eva-id");    
                 }
             }
         }    
@@ -115,7 +122,7 @@ async function refCreate(e) {
         if (createMode==='true'&&copyMode==='false') {
             result = await postOnServer(data, '/createref');                  
         } else if (createMode==='false'&&copyMode==='true') {   
-            console.log(copyMode);           
+            // console.log(copyMode);           
             result = await postOnServer(data, '/createref');                           
         } else {    
             result = await postOnServer(data, '/updateref');
@@ -215,27 +222,29 @@ async function refEditModal(copyMode) {
     currentModal = getModal(modalForm);
 
     const textId = refForm.getAttribute("eva-textId");
+    const id     = row.cells[0].innerText;
     const data = { 
         'textId': textId,
-        'id': row.cells[0].innerText
+        'id': id
     };
 
     let res = await postOnServer(data, '/getrefcol');       
     let arrCol =[];  
-    for (let elem of res) {
-        let colName    = elem.column_name;
-        let dataType   = elem.data_type;
-        let identifier = elem.dtd_identifier;
+    for (let elem of res) {        
+        const colName    = elem.column_name;
+        const dataType   = elem.data_type;
+        const identifier = elem.dtd_identifier;
+      
         let obj = {'colName': colName, 'dataType':dataType, 'identifier': identifier}         
-        arrCol[colName] = obj;
+        arrCol[colName] = obj;            
     }
-    // console.log(arrCol);
+    console.log(arrCol);
 
     res = await postOnServer(data, '/getref');  
     await refElement(refForm, res[0], arrCol, arrSyn, createMode, copyMode);     
 }
 async function constEditModal() {
-    console.log('>>refEditModal()...'); 
+    console.log('>>constEditModal()...'); 
   
     if (selectRows.length === 0) { return };
 
@@ -247,7 +256,7 @@ async function constEditModal() {
       
     const inputName     = inputForm.querySelector('#input-const-name');  
     const inputValue    = inputForm.querySelector('#input-const-value');  
-    const constValueBtn = inputForm.querySelector('#input-const-value-btn');     
+    const constValueBtn = inputForm.querySelector('#input-const-value_btn');     
 
     inputForm.reset();    
 
@@ -339,13 +348,16 @@ async function constSave() {
     if (result) await showConstTable();
 
 }
-async function constBtn() {
-    console.log('>>constBtn()...');
-    const modalForm       = document.getElementById("selectConstModal");
-    const inputConstValue = document.getElementById("input-const-value");
-    const inputConstType  = inputConstValue.getAttribute("data-type");
+async function elementBtn(idBtn) {
+    console.log('>>elementBtn()...');
+    // console.log(idBtn);
+    const modalForm      = document.getElementById("selectElemModal");
+    const inputElemValue = document.querySelector("#"+idBtn.split('_')[0]);
+    const inputElemType  = inputElemValue.getAttribute("data-type");
 
-    const refName = inputConstType.split('.')[1];
+    modalForm.setAttribute("eva-id", idBtn.split('_')[0]);
+    // console.log(inputElemType);
+    const refName = inputElemType.split('.')[1];
 
     selectModal = getModal(modalForm);
 
@@ -359,23 +371,25 @@ async function constBtn() {
 
     showTable(refTbl, hide, col, data);
 }
-async function constSelect() {
-    console.log('>>constSelect()...');
+async function elemSelect() {
+    console.log('>>elemSelect()...');
     if (selectRows.length === 0) return;
 
     const row = selectRows[0];  
 
-    const inputConstValue  = document.getElementById('input-const-value');    
+    const modalForm       = document.getElementById("selectElemModal");
+    const id              = modalForm.getAttribute("eva-id");
+    const inputElemValue  = document.querySelector('#'+id);    
 
-    inputConstValue.value        = row.cells[1].innerText;
-    inputConstValue.setAttribute("eva-id", row.cells[0].innerText);
+    inputElemValue.value        = row.cells[1].innerText;
+    inputElemValue.setAttribute("eva-id", row.cells[0].innerText);    
 
     await selectModal.hide();
 }
 //DOM Dynamic Content////////////////////////////////////////////////////////
 async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode) {
     console.log('>>refElement()...');  
-    // console.log(res);
+    console.log(col);
     if (col) {                  
         delete col['createdAt'];
         delete col['updatedAt'];
@@ -394,34 +408,48 @@ async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode) {
             div.setAttribute("class", "input-group input-group-sm col-auto");
             refForm.appendChild(div);                
                 const input  = document.createElement("input");       
+                const btn    = document.createElement("button");
                 let type = arrCol[req];
-                if (type.dataType === 'character varying') {
-                    input.setAttribute("type","text");                    
-                    input.setAttribute("class","eva-req form-control");    
-                } else if (type.dataType === 'integer') {
-                    input.setAttribute("type","number");                    
-                    input.setAttribute("class","eva-req form-control");   
-                    input.setAttribute("required", "required");        
-                } else if (type.dataType === 'numeric') {
-                    input.setAttribute("type","text");                    
-                    input.setAttribute("inputmode","decimal");
-                    input.setAttribute("class","eva-req form-control");              
-                    input.setAttribute("pattern", "[0-9.]+");   
-                    input.setAttribute("maxlength", "15");          
-                    input.setAttribute("placeholder", "0.00");  
-                    input.style = "text-align:right;";
-                } else if (type.dataType === 'timestamp with time zone') {
-                    input.setAttribute("type","date");
-                    input.setAttribute("class","eva-req form-control");
-                } else if (type.dataType === 'boolean') {
-                    input.setAttribute("type","checkbox");
-                    input.setAttribute("class","eva-req form-check-input");                    
-                } else { 
+                if (req.split('.').length > 1) {
                     input.setAttribute("type","text");
                     input.setAttribute("class","eva-req form-control"); 
+                    input.setAttribute("disabled","disabled");
+                    input.setAttribute("data-type", req);
+                    const reqName = req.split('.')[1].toLowerCase();
+                    input.id    = "input-ref-"+reqName;
+                    input.name  = req;
+                    btn.setAttribute("class","btn btn-outline-secondary");
+                    btn.setAttribute("id","input-ref-"+reqName+"_btn");
+                    btn.setAttribute("type","button");
+                    btn.setAttribute("onclick","elementBtn(id)");      
+                    btn.innerText ="...";
+                } else {
+                    if (type.dataType === 'character varying') {
+                        input.setAttribute("type","text");                    
+                        input.setAttribute("class","eva-req form-control");    
+                    } else if (type.dataType === 'integer') {
+                        input.setAttribute("type","number");                    
+                        input.setAttribute("class","eva-req form-control");   
+                        input.setAttribute("required", "required");        
+                    } else if (type.dataType === 'numeric') {
+                        input.setAttribute("type","text");                    
+                        input.setAttribute("inputmode","decimal");
+                        input.setAttribute("class","eva-req form-control");              
+                        input.setAttribute("pattern", "[0-9.]+");   
+                        input.setAttribute("maxlength", "15");          
+                        input.setAttribute("placeholder", "0.00");  
+                        input.style = "text-align:right;";
+                    } else if (type.dataType === 'timestamp with time zone') {
+                        input.setAttribute("type","date");
+                        input.setAttribute("class","eva-req form-control");
+                    } else if (type.dataType === 'boolean') {
+                        input.setAttribute("type","checkbox");
+                        input.setAttribute("class","eva-req form-check-input");     
+                    }
+                    input.setAttribute("data-type", type.dataType);
+                    input.id    = "input-ref-"+req;
+                    input.name  = req;
                 }
-
-                input.setAttribute("data-type", type.dataType);
              
                 if (req==='id') {
                     input.setAttribute("disabled","disabled");
@@ -429,9 +457,7 @@ async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode) {
                 if (req==='name') {
                     input.setAttribute("required", "required");
                 }
-
-                input.id    = "input-ref-"+req;
-                input.name  = req;
+                
                 if (createMode===true) {
                     if (type.dataType === 'timestamp with time zone') {
                         const date = new Date('1,1,0001');                        
@@ -446,7 +472,12 @@ async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode) {
                         const date = col[req];                                               
                         input.value = date.slice(0, 10);
                     } else {
-                        input.value = col[req];
+                        if (req.split('.').length > 1) {
+                            resRef = await postOnServer({'id': col[req], 'textId':req.split('.')[1]}, '/getref');  
+                            input.value = resRef[0].name;
+                        } else {
+                            input.value = col[req];
+                        }
                     }                    
                     if (copyMode===true&&input.name==="id") {
                         input.value = '';
@@ -454,6 +485,7 @@ async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode) {
                 }                
              
                 div.appendChild(input); 
+                if (req.split('.').length > 1) div.appendChild(btn);
         }        
     } 
 }

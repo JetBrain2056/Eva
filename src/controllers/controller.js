@@ -586,7 +586,7 @@ exports.updateConfig = async function(req, res) {
                     } else if (Elements.type === 'Date') {
                         refColumns[Elements.textId] = {type: DataTypes.DATE};  
                     } else {
-                        refColumns[Elements.textId] = {type: DataTypes.STRING};  
+                        refColumns[Elements.type] = {type: DataTypes.INTEGER};  
                     }
                 }                
 

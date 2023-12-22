@@ -42,7 +42,7 @@
           <label for="input-const-value">Value:</label>
           <div class="input-group input-group-sm">
             <input id="input-const-value"/>
-            <button class="btn btn-outline-secondary" id="input-const-value-btn" type="button" onclick="constBtn()" hidden>...</button>
+            <button class="btn btn-outline-secondary" id="input-const-value_btn" type="button" onclick="elementBtn(id)" hidden>...</button>
           </div> 
         </form>
       </div>
@@ -52,8 +52,8 @@
     </div>
   </div>
 </div> 
-{# Modal Select Const #}
-<div class="modal modal-lg fade" id="selectConstModal" tabindex="-2" data-bs-backdrop="static" aria-labelledby="selectConstModalLabel" aria-hidden="true">
+{# Modal Select Element #}
+<div class="modal modal-lg fade" id="selectElemModal" tabindex="-2" data-bs-backdrop="static" aria-labelledby="selectElemModalLabel" aria-hidden="true">
   <div class="modal-dialog  modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
@@ -63,7 +63,7 @@
       <div class="modal-body">          
         <div class="btn-toolbar" role="toolbar" aria-label="toolbar group">          
           <div class="btn-group btn-group-sm" role="group">
-            <button type="submit" class="btn btn-primary d-flex gap-2 align-items-center eva-edit" onclick="constSelect()">
+            <button type="submit" class="btn btn-primary d-flex gap-2 align-items-center eva-edit" onclick="elemSelect()">
               <i class=""></i>
               <span>Select</span>
             </button>    

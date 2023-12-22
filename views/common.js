@@ -788,7 +788,7 @@ async function typeSelect() {
 async function selectType(id) {
     console.log('>>selectType()...'); 
 
-    // console.log(id);
+    console.log(id);
 
     const modalForm = document.getElementById("selectTypeModal");
     modalForm.setAttribute("eva-id", id.split('_')[0]);

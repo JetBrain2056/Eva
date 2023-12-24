@@ -1,5 +1,6 @@
 let selectRows = [];
 let currentModal;
+let requisiteModal;
 let selectModal;
 let inputStatus     = document.getElementById('status');
 const btnConfigSave = document.getElementById('btn-config-save');
@@ -850,7 +851,7 @@ async function showRequisiteTable() {
 
     resTbl = buildTabpanel(modalForm, "300");
 
-    const ownerForm     = document.getElementById('create-object-form');  
+    const ownerForm     = document.getElementById("create-object-form");  
     const id = ownerForm.getAttribute("eva-id");
 
     const getData = {'owner': id}
@@ -865,7 +866,7 @@ async function showRequisiteTable() {
         data.push({'id':row.id, 'textId':Elements.textId, 'type':Elements.type});    
     }
   
-    const col = {'id':'Id','textId':'Identifier','type':'Type'};  
+    const col = {'id':'Id','textId':'Identifier','type':'Type'} 
     const hide = ['id'];
     
     showTable(resTbl, hide, col, data);
@@ -874,21 +875,21 @@ async function showRequisiteTable() {
 async function reqModal() {
     console.log('>>reqModal()...');
 
-    const inputOwnerForm  = document.querySelector('#create-object-form'); 
+    const inputOwnerForm  = document.querySelector("#create-object-form"); 
     if (!inputOwnerForm.checkValidity()) {    
         alert('The main identifier is not valid!')
         return;
     }
     
     const modalForm  = document.getElementById("requisiteModal");
-    const objectModalLabel = modalForm.querySelector('#requisiteModalLabel');  
+    const objectModalLabel = modalForm.querySelector("#requisiteModalLabel");  
     objectModalLabel.innerText = 'Add requisite:';
 
     const inputForm  = modalForm.querySelector("#create-req-form");   
     inputForm.reset();
     inputForm.setAttribute("create-mode",true);  
 
-    selectModal = getModal(modalForm);
+    requisiteModal = getModal(modalForm);
 }
 async function reqEditModal() {
     console.log('>>reqEditModal()...');
@@ -904,7 +905,7 @@ async function reqEditModal() {
     inputForm.reset();
     inputForm.setAttribute("create-mode",false);  
 
-    selectModal = getModal(modalForm);
+    requisiteModal = getModal(modalForm);
 
     const row = await selectRows[0];  
 
@@ -939,7 +940,7 @@ async function reqEditModal() {
 async function reqCreate(e) {
     console.log('>>reqCreate()...');
 
-    const ownerForm     = document.getElementById('create-object-form');  
+    const ownerForm     = document.getElementById("create-object-form");  
     const inputForm     = document.getElementById("create-req-form");
     const inputReqId    = inputForm.querySelector("#input-req-id");
     const inputReqType  = inputForm.querySelector("#input-req-type");
@@ -989,21 +990,21 @@ async function reqCreate(e) {
         }
     }
 
-    await selectModal.hide();
+    await requisiteModal.hide();
 
     if (result) await showRequisiteTable();    
 }
 async function reqDelete() {
     console.log('>>reqDelete()...');
     
-    for (const row of selectRows){
+    for (const row of selectRows) {
 
         const data = {'id': row.cells[0].innerText};
 
         res = await postOnServer(data,'/delreq');        
     }
 
-    if(res) await showRequisiteTable();
+    if (res) await showRequisiteTable();
 }
 /////////////////////////////////////////////////////////////////////////////
 window.onload = function() {

@@ -279,7 +279,7 @@ async function constEditModal() {
             inputValue.setAttribute("type","text");
             inputValue.setAttribute("class","eva-req form-control"); 
             inputValue.value       = elem.value;              
-        } else if (elem.type === 'Numeric') {
+        } else if (elem.type === 'Number') {
             inputValue.setAttribute("type","text");                    
             inputValue.setAttribute("inputmode","decimal");
             inputValue.setAttribute("class","eva-req form-control");              
@@ -303,11 +303,19 @@ async function constEditModal() {
             inputValue.setAttribute("class","eva-req form-control");   
             const refName = elem.type.split('.');
             // console.log(refName);
-            const ref = await postOnServer({'id':elem.value, 'textId':refName[1]}, '/getref');   
+            const ref = undefined;
+            if (elem.value>0) {
+                ref = await postOnServer({'id':elem.value, 'textId':refName[1]}, '/getref');                               
+            }
             // console.log(ref);
-            inputValue.value       = ref[0].name;  
-            inputValue.setAttribute("eva-id",ref[0].id)
-            constValueBtn.removeAttribute("hidden");          
+            if (ref) {
+                inputValue.value       = ref[0].name;  
+                inputValue.setAttribute("eva-id", ref[0].id)
+                constValueBtn.removeAttribute("hidden");  
+            } else {        
+                inputValue.value       = '';  
+                constValueBtn.removeAttribute("hidden"); 
+            }
         }
         
         currentModal = getModal(modalForm); 
@@ -575,9 +583,9 @@ async function showConstTable() {
     let data = [];
     for (let row of result) {
         let refName = row.type.split('.');
-        if (refName[0]==='Reference') {
+        if (refName[0]==='Reference'&&row.value>0) {            
             ref = await postOnServer({'id':row.value, 'textId':refName[1]}, '/getref');                       
-            data.push(Object.assign(row,{'value':ref[0].name}));
+            data.push(Object.assign(row,{'value':ref[0].name}));            
         } else {
             data.push(row);
         }

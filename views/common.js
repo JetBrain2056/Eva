@@ -10,7 +10,7 @@ function mainSelect() {
     console.log('>>mainSelect()...');
 
     const inputType      = $objectModal.querySelector('#input-type');
-    const labelConstType= $objectModal.querySelector("label[for=input-const-type]"); 
+    const labelConstType = $objectModal.querySelector("label[for=input-const-type]"); 
     const inputConstType = $objectModal.querySelector('#input-const-type');
     const inputTypeBtn   = $objectModal.querySelector('#input-const-type_btn');
     const inputObjectRep = $objectModal.querySelector('#input-object-rep');
@@ -772,14 +772,20 @@ async function typeSelect() {
     const modalForm = document.getElementById("selectTypeModal");
 
     const id = modalForm.getAttribute("eva-id");     
-    console.log(id);
+    // console.log(id);
     const inputElement = document.querySelector("#"+id);
+    console.log(inputElement);
+    const value = row.cells[1].innerText+'.'+row.cells[2].innerText;
     
-    const option = document.createElement('option');
-    option.value = row.cells[1].innerText+'.'+row.cells[2].innerText;
-    option.text  = row.cells[1].innerText+'.'+row.cells[2].innerText;
-    option.setAttribute("selected","selected"); 
-    inputElement.appendChild(option);
+    const elem = inputElement.querySelector("option[value='"+value+"']");
+    console.log(elem);
+    if (!elem) {
+        const option = document.createElement('option');
+        option.value = value;
+        option.text  = value;
+        option.setAttribute("selected","selected"); 
+        inputElement.appendChild(option);
+    }
   
     inputElement.setAttribute("eva-id", row.cells[0].innerText);
   

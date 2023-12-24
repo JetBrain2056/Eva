@@ -303,18 +303,18 @@ async function constEditModal() {
             inputValue.setAttribute("class","eva-req form-control");   
             const refName = elem.type.split('.');
             // console.log(refName);
-            const ref = undefined;
+            
             if (elem.value>0) {
-                ref = await postOnServer({'id':elem.value, 'textId':refName[1]}, '/getref');                               
-            }
-            // console.log(ref);
-            if (ref) {
-                inputValue.value       = ref[0].name;  
-                inputValue.setAttribute("eva-id", ref[0].id)
-                constValueBtn.removeAttribute("hidden");  
-            } else {        
-                inputValue.value       = '';  
-                constValueBtn.removeAttribute("hidden"); 
+                const ref = await postOnServer({'id':elem.value, 'textId':refName[1]}, '/getref');                                          
+                // console.log(ref);
+                if (ref) {
+                    inputValue.value       = ref[0].name;  
+                    inputValue.setAttribute("eva-id", ref[0].id)
+                    constValueBtn.removeAttribute("hidden");  
+                } else {        
+                    inputValue.value       = '';  
+                    constValueBtn.removeAttribute("hidden"); 
+                }
             }
         }
         

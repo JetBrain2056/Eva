@@ -536,11 +536,17 @@ exports.updateConfig = async function(req, res) {
                 } catch(err) {
                     console.log(err);
                 }    
-            } else if (typeId==='Constant') {                                  
+            } else if (typeId==='Constant') {    
+                if (Elements.constType.split('.')[0]==='Reference') {
+                    value = '';
+                } else {
+                    value = Elements.value;
+                }
                 try {
                     const count = await Constant.update({
                         name : objectId,
-                        type : Elements.constType                  
+                        type : Elements.constType,
+                        value : value             
                     }, {
                         where: {id: row.id}
                     });                                               

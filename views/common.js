@@ -244,6 +244,20 @@ function buildTabpanel(refForm, indent) {
 
     return refTbl;
 }
+function tblFilter(name) {
+    console.log('>>tblFilter()...');  
+    const navConfig = document.getElementById("nav-config");
+    const tbl       = navConfig.getElementsByTagName("tr");
+    
+    for (const row of tbl) {
+        console.log(row.rowIndex);    
+        if (row.childNodes[1].innerText+'s' === name||row.rowIndex===0) {            
+            row.removeAttribute("hidden"); 
+        } else {
+            row.setAttribute("hidden", "hidden");
+        }
+    }    
+}
 //Get/post on Server//////////////////////////////////////////////////////////
 async function postOnServer(data, link) {
     console.log('>>postOnServer()...');

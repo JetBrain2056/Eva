@@ -1,11 +1,11 @@
 <div id="column-left" style="height:calc(100vh - 99.5px);">  
-    <h6 class="justify-content-between">
+    <h6 class="justify-content-between" >
       <span class="p-3 menu-title">{{ text_configmenu }}</span>
     </h6>
     <ul class="p-2 sidebar-list nav btn-group-vertical">
       {% for element in asideList %}
         <li class="nav-item">
-          <a class="nav-link btn" href="{{element.href}}"> 
+          <a class="nav-link btn" href="{{element.href}}" name={{element.title}} onclick="tblFilter(name)"> 
             {{ element.title }}
           </a>
         </li>

@@ -682,16 +682,33 @@ async function tabDesk(div) {
     a.setAttribute("data-bs-toggle","collapse"); 
     a.setAttribute("data-bs-target","#collapse-link");     
     a.href="#";
-    a.innerText = 'References ';
+    a.innerText = 'References';
         const i = document.createElement("i");
         i.setAttribute("class","fa fa-caret-down");
         i.setAttribute("aria-hidden","true");    
     a.appendChild(i);
     div.appendChild(a);   
 
+    const a3 = document.createElement('div');
+    a3.setAttribute("class","icon-link");    
+    a3.setAttribute("style","color: #555555;font-size: 19px;");     
+    a3.setAttribute("data-bs-toggle","collapse"); 
+    a3.setAttribute("data-bs-target","#collapse-link3");     
+    a3.href="#";
+    a3.innerText = 'Documents';
+        const i3 = document.createElement("i");
+        i3.setAttribute("class","fa fa-caret-down");
+        i3.setAttribute("aria-hidden","true");    
+    a3.appendChild(i3);
+    div.appendChild(a3); 
+
     const nav = document.createElement('nav');       
     nav.setAttribute("class","collapse show container-fluid");    
     nav.setAttribute("id","collapse-link");    
+
+    const nav3 = document.createElement('nav');       
+    nav3.setAttribute("class","collapse show container-fluid");    
+    nav3.setAttribute("id","collapse-link3");  
     
     let data = await getOnServer('/getconfig');
     for (let row of data) {
@@ -701,9 +718,9 @@ async function tabDesk(div) {
         if (row.state===0 && elements.typeId==='Reference') {                                                   
             navLink(nav, elements.textId, id);                    
             a.appendChild(nav);    
-        } else if ((row.state===0 && elements.typeId==='Reports') ) {    
-            // navLink(nav1, elements.textId, id);                    
-            // a1.appendChild(nav1);                 
+        } else if ((row.state===0 && elements.typeId==='Document') ) {    
+            navLink(nav3, elements.textId, id);                    
+            a3.appendChild(nav3);                 
         }
     }        
 }
@@ -717,6 +734,23 @@ async function tabRef(div) {
         let elements = await JSON.parse(strJson);
         if (row.state===0 && elements.typeId==='Reference') {
                     
+            const nav = document.createElement('nav');
+            nav.setAttribute("class","nav flex-column");                 
+                navLink(nav, elements.textId, id);                    
+            div.appendChild(nav);          
+        }
+    }        
+}
+async function tabSubsys(div, name) {
+    console.log('>>tabSubsys()...');
+
+    let data = await getOnServer('/getconfig');
+    for (let row of data) {
+        let id       = row.id;
+        let strJson  = row.data;         
+        let elements = await JSON.parse(strJson);
+        if (row.state===0 && elements.typeId==='Document' && elements.subsysName===name) {
+            console.log(elements.textId);        
             const nav = document.createElement('nav');
             nav.setAttribute("class","nav flex-column");                 
                 navLink(nav, elements.textId, id);                    
@@ -773,9 +807,10 @@ async function header() {
     div = document.querySelector("#nav-Reports");
     //tabRep(div);   
     //Subsystems
-    for (let row of data) {                
-        div = navTab.querySelector("#nav-"+row.name);
-        //tabSubsys(div);
+    for (let row of data) {     
+        console.log('name', row.name);           
+        div = document.querySelector("#nav-"+row.name);
+        tabSubsys(div, row.name);
     }  
 }
 /////////////////////////////////////////////////////////////////////////////

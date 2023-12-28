@@ -250,7 +250,7 @@ function tblFilter(name) {
     const tbl       = navConfig.getElementsByTagName("tr");
     
     for (const row of tbl) {
-        console.log(row.rowIndex);    
+        // console.log(row.rowIndex);    
         if (row.childNodes[1].innerText+'s' === name||row.rowIndex===0) {            
             row.removeAttribute("hidden"); 
         } else {

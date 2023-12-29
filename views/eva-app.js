@@ -5,13 +5,10 @@ n = 0;
 //Commands on client/////////////////////////////////////////////////////////
 async function openConst() {
     console.log('>>openRef()...');
-    
-    // const navRefForm = document.getElementById("nav-References");    
+        
     const refForm    = document.getElementById("create-const-form");  
     const tabForm    = document.getElementById("const-form");      
-    refForm.reset();             
-    // const refLink = navRefForm.querySelector("#"+refName);
-    // const refId = refLink.getAttribute("eva-id");    
+    refForm.reset();               
     refForm.setAttribute("eva-id", "Constant");
     refForm.setAttribute("eva-textId", "Constant");
 
@@ -32,7 +29,7 @@ async function openRef(refName) {
     const refForm    = document.getElementById("create-ref-form");  
     const tabForm    = document.getElementById("ref-form");      
     refForm.reset();             
-    const refLink = navRefForm.querySelector("#"+refName);
+    const refLink = document.querySelector("#"+refName);
     const refId = refLink.getAttribute("eva-id");    
     refForm.setAttribute("eva-id", refId);
     refForm.setAttribute("eva-textId", refName);
@@ -649,8 +646,8 @@ function navItem(navTab, name) {
     subsys.appendChild(h5);    
     evaSubsys.appendChild(subsys);                   
 }
-function navLink(nav, name, id) {
-    console.log('>>navLink()...');
+function navLink(nav, name, id, type) {
+    console.log('>>navLink()...', type);
     const li = document.createElement('div');
         const a = document.createElement('a');
         a.setAttribute("class","icon-link eva-link p-1");
@@ -658,8 +655,12 @@ function navLink(nav, name, id) {
         a.setAttribute("eva-id", id);  
         a.innerText = name+'s';
         a.href="#";
-        a.setAttribute("style","color: grey;font-size: 19px;");       
-        a.setAttribute("onclick", "openRef(id)");  
+        a.setAttribute("style","color: grey;font-size: 19px;");  
+        if (type==='Reference') {     
+            a.setAttribute("onclick", "openRef(id)");  
+        } else if (type==='Document') {
+            a.setAttribute("onclick", "openRef(id)"); 
+        }
     li.appendChild(a);           
     nav.appendChild(li);     
 }
@@ -715,11 +716,12 @@ async function tabDesk(div) {
         let id       = row.id;
         let strJson  = row.data; 
         let elements = await JSON.parse(strJson);
+        console.log(elements.typeId);
         if (row.state===0 && elements.typeId==='Reference') {                                                   
-            navLink(nav, elements.textId, id);                    
+            navLink(nav, elements.textId, id, elements.typeId);                    
             a.appendChild(nav);    
-        } else if ((row.state===0 && elements.typeId==='Document') ) {    
-            navLink(nav3, elements.textId, id);                    
+        } else if (row.state===0 && elements.typeId==='Document') {    
+            navLink(nav3, elements.textId, id, elements.typeId);                    
             a3.appendChild(nav3);                 
         }
     }        
@@ -736,7 +738,7 @@ async function tabRef(div) {
                     
             const nav = document.createElement('nav');
             nav.setAttribute("class","nav flex-column");                 
-                navLink(nav, elements.textId, id);                    
+                navLink(nav, elements.textId, id, elements.typeId);                    
             div.appendChild(nav);          
         }
     }        
@@ -749,11 +751,11 @@ async function tabSubsys(div, name) {
         let id       = row.id;
         let strJson  = row.data;         
         let elements = await JSON.parse(strJson);
-        if (row.state===0 && elements.typeId==='Document' && elements.subsysName===name) {
-            console.log(elements.textId);        
+        if (row.state===0 && (elements.typeId==='Document'||elements.typeId==='Reference') && elements.subsysName===name) {
+            // console.log(elements.textId);        
             const nav = document.createElement('nav');
             nav.setAttribute("class","nav flex-column");                 
-                navLink(nav, elements.textId, id);                    
+                navLink(nav, elements.textId, id, elements.typeId);                    
             div.appendChild(nav);          
         }
     }        
@@ -787,7 +789,7 @@ async function header() {
             a2.setAttribute("aria-controls","nav-const-form");
             a2.setAttribute("aria-selected","false");
         li2.appendChild(a2);    
-    navTab.appendChild(li2);
+    navTab.appendChild(li2);        
     
     //MAIN
     navItem(navTab, 'Desktop'); 

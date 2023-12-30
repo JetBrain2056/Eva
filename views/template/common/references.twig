@@ -4,30 +4,30 @@
   <ul class="nav nav-tabs" id="eva-nav-tabs">
   </ul>
   <h5 class="title" id="refFormLabel">Reference*</h5>     
-  <div class="btn-toolbar" role="toolbar" aria-label="toolbar group">
+  <div class="btn-toolbar" role="toolbar" aria-label="toolbar group">    
     <div class="btn-group btn-group-sm" role="group">
-      <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" onclick="refModal()">
-        <i class="fa fa-plus-square"></i>
-        <span>{{ button_add }}</span>
+      <button type="button" class="btn btn-primary d-flex gap-2 align-items-center eva-add">
+          <i class="fa fa-plus-square"></i>
+          <span>{{ button_add }}</span>
       </button>
-      <button type="button" class="btn btn-primary d-flex gap-2 align-items-center eva-edit" onclick="refEditModal(false)">
-        <i class="fa fa-edit"></i>
-        <span>{{ button_edit }}</span>
+      <button type="button" class="btn btn-primary d-flex gap-2 align-items-center eva-edit">
+          <i class="fa fa-edit"></i>
+          <span>{{ button_edit }}</span>
       </button>
-      <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" onclick="refEditModal(true)">
-        <i class="fa fa-clone" aria-hidden="true"></i>
-        <span>{{ button_copy }}</span>
+      <button type="button" class="btn btn-primary d-flex gap-2 align-items-center eva-copy">
+          <i class="fa fa-clone" aria-hidden="true"></i>
+          <span>{{ button_copy }}</span>
       </button>
-      <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" onclick="refDelete()">
-        <i class="fa fa-minus-square"></i>
-        <span>{{ button_delete }}</span>
+      <button type="button" class="btn btn-primary d-flex gap-2 align-items-center eva-del">
+          <i class="fa fa-minus-square"></i>
+          <span>{{ button_delete }}</span>
       </button>
       <div class="btn-group btn-group-sm" role="group">
         <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></button>
         <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">           
-          <li><a class="dropdown-item">{{ button_etc}}</a></li>
-          <li><hr class="dropdown-divider"></li>
-          <li><a class="dropdown-item">...</a></li>
+            <li><a class="dropdown-item">{{ button_etc}}</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item">...</a></li>
         </ul>
       </div>
     </div>

@@ -3,6 +3,11 @@ selectRows = [];
 n = 0;
 
 //Commands on client/////////////////////////////////////////////////////////
+async function modalShow() {
+    console.log('>>modalShow()...');   
+    await selectModal.hide();     
+    await currentModal.show();   
+}
 async function openConst() {
     console.log('>>openRef()...');
         
@@ -88,9 +93,9 @@ async function refCreate(e) {
         } else {
             const type     = elem.getAttribute("type");
             const dataType = elem.getAttribute("data-type");
-            console.log(elem.name);
-            console.log(dataType);
-            console.log(type);
+            // console.log(elem.name);
+            // console.log(dataType);
+            // console.log(type);
             if (type === 'checkbox') {                 
                 data[elem.name] = elem.checked; 
             } else if (type === 'date') {
@@ -108,8 +113,13 @@ async function refCreate(e) {
                     data[elem.name] = Number(elem.value);  
                 } else if (dataType === 'character varying') {  
                     data[elem.name] = String(elem.value);                   
-                } else {                            
-                    data[elem.name] = elem.getAttribute("eva-id");    
+                } else {         
+                    const id = elem.getAttribute("eva-id");  
+                    if (id) {
+                        data[elem.name] = id;    
+                    } else {
+                        data[elem.name] = 0;   
+                    }
                 }
             }
         }    
@@ -364,6 +374,9 @@ async function elementBtn(idBtn) {
     // console.log(inputElemType);
     const refName = inputElemType.split('.')[1];
 
+
+    currentModal.hide();
+
     selectModal = getModal(modalForm);
 
     refTbl = buildTabpanel(modalForm, "270");
@@ -390,6 +403,7 @@ async function elemSelect() {
     inputElemValue.setAttribute("eva-id", row.cells[0].innerText);    
 
     await selectModal.hide();
+    await currentModal.show();
 }
 //DOM Dynamic Content////////////////////////////////////////////////////////
 async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode) {

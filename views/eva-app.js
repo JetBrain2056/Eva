@@ -30,15 +30,14 @@ async function openConst() {
 async function openRef(refName) {
     console.log('>>openRef()...');
     
-    const navRefForm = document.getElementById("nav-References");    
-    const refForm    = document.getElementById("create-ref-form");  
-    const tabForm    = document.getElementById("ref-form");      
-    refForm.reset();             
+    // const navRefForm = document.getElementById("nav-References");        
+    const tabForm = document.getElementById("ref-form");                      
     const refLink = document.querySelector("#"+refName);
     const refId   = refLink.getAttribute("eva-id");    
     const refType = refLink.getAttribute("eva-type");    
-    refForm.setAttribute("eva-id", refId);
-    refForm.setAttribute("eva-textId", refName);
+    const evaForm    = document.getElementById("eva-ref-form");  
+    evaForm.setAttribute("eva-id", refId);
+    evaForm.setAttribute("eva-textId", refName);
 
     let tab = new bootstrap.Tab(tabForm);
     tab.show();    
@@ -180,16 +179,14 @@ async function refModal() {
     refForm.setAttribute("copy-mode", copyMode);  
     
     let arrSyn = await getSynonyms(refForm);   
-    // console.log('arrSyn',arrSyn);
 
-    const textId = refForm.getAttribute("eva-textId");
-    const data = { 
-        'textId': textId
-    }
+    const evaForm        = document.querySelector('#eva-ref-form');  
 
-    const res = await postOnServer(data, '/getrefcol');  
-    let arr =[];    
-    let arrCol =[];  
+    const textId = evaForm.getAttribute("eva-textId");
+    
+    const res = await postOnServer({ 'textId': textId }, '/getrefcol');  
+    let arr = [];    
+    let arrCol = [];  
     for (let elem of res) {
         let colName    = elem.column_name;
         let dataType   = elem.data_type;
@@ -229,7 +226,8 @@ async function refEditModal(copyMode) {
 
     currentModal = getModal(modalForm);
 
-    const textId = refForm.getAttribute("eva-textId");
+    const evaForm    = document.querySelector('#eva-ref-form');   
+    const textId = evaForm.getAttribute("eva-textId");
     const id     = row.cells[0].innerText;
     const data = { 
         'textId': textId,
@@ -426,12 +424,10 @@ async function docModal() {
     
     let arrSyn = await getSynonyms(refForm);       
 
-    const textId = refForm.getAttribute("eva-textId");
-    const data = { 
-        'textId': textId
-    }
+    const evaForm = document.querySelector('#eva-ref-form'); 
+    const textId = evaForm.getAttribute("eva-textId");
 
-    const res = await postOnServer(data, '/getrefcol');  
+    const res = await postOnServer({ 'textId': textId }, '/getrefcol');  
     let arr =[];    
     let arrCol =[];  
     for (let elem of res) {

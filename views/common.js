@@ -942,7 +942,18 @@ async function reqEditModal() {
 
         inputForm.setAttribute("eva-id", res.id);
         inputReqId.value       = Elements.textId;
-        inputReqType.value     = Elements.type;
+        const type = inputReqType.querySelector("option[value='"+Elements.type+"']");
+        if (Elements.type.split('.').length>1 && !type) { 
+            const option = document.createElement("option");
+            // option.setAttribute("selected","selected");
+            option.innerText = Elements.type;  
+            option.value     = Elements.type;
+            inputReqType.appendChild(option);
+            inputReqType.value     = Elements.type;
+                      
+        } else {
+            inputReqType.value     = Elements.type;
+        }
         inputReqDescr.value    = Elements.descr;
         inputReqSyn.value      = Elements.synonum;
         inputReqLen.value      = Elements.length;

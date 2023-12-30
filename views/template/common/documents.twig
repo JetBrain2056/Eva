@@ -1,0 +1,24 @@
+{% block doc %} 
+{# Document #}
+
+{# Modal Doc #}  
+<div class="modal fade" id="docModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="docModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="docModalLabel"></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form class="form" id="create-doc-form"> 
+          {# Dynamic form #}
+        </form>
+      </div>
+      <div class="modal-footer">
+        {# <button type="submit" class="btn btn-primary" onclick="refSave()"><i class="fa fa-floppy-o"></i></button> #}
+        <button type="submit" class="btn btn-primary" onclick="docCreate()">{{ button_save }}&{{button_close}}</button>        
+      </div>
+    </div>
+  </div>
+</div> 
+{% endblock %}

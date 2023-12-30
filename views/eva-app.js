@@ -35,7 +35,8 @@ async function openRef(refName) {
     const tabForm    = document.getElementById("ref-form");      
     refForm.reset();             
     const refLink = document.querySelector("#"+refName);
-    const refId = refLink.getAttribute("eva-id");    
+    const refId   = refLink.getAttribute("eva-id");    
+    const refType = refLink.getAttribute("eva-type");    
     refForm.setAttribute("eva-id", refId);
     refForm.setAttribute("eva-textId", refName);
 
@@ -44,7 +45,7 @@ async function openRef(refName) {
 
     selectRows = [];
 
-    await showRefTable(refName);
+    await showRefTable(refName, refType);
     
     let status = document.getElementById("status");
     status.value = ">It's work!";
@@ -405,6 +406,45 @@ async function elemSelect() {
     await selectModal.hide();
     await currentModal.show();
 }
+async function docModal() {
+    console.log('>>docModal()...');      
+
+    const modalForm  = document.getElementById('docModal');  
+    currentModal = getModal(modalForm);
+
+    const refModalLabel  = modalForm.querySelector('#docModalLabel');  
+    refModalLabel.innerText = 'Add document:';    
+
+    let createMode = true;
+    let copyMode   = false;
+
+    const refForm        = modalForm.querySelector('#create-doc-form');  
+    refForm.innerHTML = '';
+    refForm.reset();   
+    refForm.setAttribute("create-mode", createMode);  
+    refForm.setAttribute("copy-mode", copyMode);  
+    
+    let arrSyn = await getSynonyms(refForm);       
+
+    const textId = refForm.getAttribute("eva-textId");
+    const data = { 
+        'textId': textId
+    }
+
+    const res = await postOnServer(data, '/getrefcol');  
+    let arr =[];    
+    let arrCol =[];  
+    for (let elem of res) {
+        let colName    = elem.column_name;
+        let dataType   = elem.data_type;
+        let identifier = elem.dtd_identifier;
+        let obj = {'colName': colName, 'dataType':dataType, 'identifier': identifier}
+        arr[colName]='';  
+        arrCol[colName] = obj;
+    }
+    // console.log(arrCol);
+    await refElement(refForm, arr, arrCol, arrSyn, createMode, copyMode);      
+}
 //DOM Dynamic Content////////////////////////////////////////////////////////
 async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode) {
     console.log('>>refElement()...');  
@@ -542,7 +582,7 @@ function openTabRef(id, refName) {
         openRef(refName);
     }
 }
-function buildTable(refName) {
+function buildTable(refName, refType) {
     console.log('>>buildTable()...');  
 
     const refForm = document.getElementById("nav-ref-form");
@@ -551,11 +591,6 @@ function buildTable(refName) {
     const ul = refForm.querySelector("#eva-nav-tabs");   
     let evaLink = ul.querySelector("#eva-item-"+refName);   
     
-    const refFormLabel = refForm.querySelector("#refFormLabel"); 
-    refFormLabel.innerText = refName+'s';
-
-    resTbl = buildTabpanel(refForm, "208");
-
     if (!evaLink) {                                   
         const li = document.createElement("li");        
         li.setAttribute("class","nav-item d-flex justify-content-end");                      
@@ -578,6 +613,28 @@ function buildTable(refName) {
         li.appendChild(button); 
         ul.appendChild(li);          
     }
+
+    const refFormLabel = refForm.querySelector("#refFormLabel"); 
+    refFormLabel.innerText = refName+'s';
+    
+    const btnToolbar = refForm.querySelector(".btn-toolbar");     
+    const evaAdd  = btnToolbar.querySelector(".eva-add");
+    const evaEdit = btnToolbar.querySelector(".eva-edit");
+    const evaCopy = btnToolbar.querySelector(".eva-copy");
+    const evaDel  = btnToolbar.querySelector(".eva-del");
+    if (refType==='Reference') {           
+        evaAdd .setAttribute("onclick","refModal()");
+        evaEdit.setAttribute("onclick","refEditModal(false)");
+        evaCopy.setAttribute("onclick","refEditModal(true)");
+        evaDel .setAttribute("onclick","refDelete()");
+    } else  if (refType==='Document') {
+        evaAdd .setAttribute("onclick","docModal()");
+        evaEdit.setAttribute("onclick","docEditModal(false)");
+        evaCopy.setAttribute("onclick","docEditModal(true)");
+        evaDel .setAttribute("onclick","docDelete()");
+    }
+
+    resTbl = buildTabpanel(refForm, "208");
     return resTbl;
 }
 async function showConstTable() {
@@ -608,10 +665,10 @@ async function showConstTable() {
     showTable(resTbl, hide, col, data);
 
 }
-async function showRefTable(refName) {
-    console.log('>>showRefTable()...');   
+async function showRefTable(refName, refType) {
+    console.log('>>showRefTable()...', refName, refType);   
 
-    refTbl = buildTable(refName);
+    refTbl = buildTable(refName, refType);
 
     let tmp = {'textId': refName };
     let data = await postOnServer(tmp, '/getrefs');   
@@ -667,14 +724,11 @@ function navLink(nav, name, id, type) {
         a.setAttribute("class","icon-link eva-link p-1");
         a.setAttribute("id", name);           
         a.setAttribute("eva-id", id);  
+        a.setAttribute("eva-type", type);
         a.innerText = name+'s';
         a.href="#";
-        a.setAttribute("style","color: grey;font-size: 19px;");  
-        if (type==='Reference') {     
-            a.setAttribute("onclick", "openRef(id)");  
-        } else if (type==='Document') {
-            a.setAttribute("onclick", "openRef(id)"); 
-        }
+        a.setAttribute("style","color: grey;font-size: 19px;");          
+        a.setAttribute("onclick", "openRef(id)");  
     li.appendChild(a);           
     nav.appendChild(li);     
 }

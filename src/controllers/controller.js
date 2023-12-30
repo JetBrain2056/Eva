@@ -763,7 +763,7 @@ exports.createReference = async function(req, res) {
     const {textId} = req.body;   
 
     delete req.body["textId"];
-    console.log('req.body: '+req.body);
+    console.log('req.body:', typeof(req.body));
 
     try {
         // const now = Date.now()/1000.0;        

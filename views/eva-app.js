@@ -183,6 +183,7 @@ async function refModal() {
     const evaForm        = document.querySelector('#eva-ref-form');  
 
     const textId = evaForm.getAttribute("eva-textId");
+    refForm.setAttribute("eva-textId",textId);
     
     const res = await postOnServer({ 'textId': textId }, '/getrefcol');  
     let arr = [];    
@@ -228,6 +229,8 @@ async function refEditModal(copyMode) {
 
     const evaForm    = document.querySelector('#eva-ref-form');   
     const textId = evaForm.getAttribute("eva-textId");
+    refForm.setAttribute("eva-textId", textId);
+
     const id     = row.cells[0].innerText;
     const data = { 
         'textId': textId,
@@ -530,9 +533,11 @@ async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode) {
                         if (req.split('.').length > 1) {
                             resRef = await postOnServer({'id': col[req], 'textId':req.split('.')[1]}, '/getref');
                             if (resRef.length===1) {
-                                input.value = resRef[0].name;
+                                input.value = resRef[0].name;                                
+                                input.setAttribute("eva-id", resRef[0].id);
                             } else {
                                 input.value = '';
+                                input.setAttribute("eva-id", 0);
                             }
                         } else {
                             input.value = col[req];

@@ -444,11 +444,13 @@
       </div>
       <div class="modal-body">
         <form class="form" id="create-module-form"> 
-          <textarea  class="text/javascript form-control" id="input-module-form" type="text/javascript" rows="18" style="height: calc(100vh - 230px);"></textarea>
+          {# <textarea  class="text/javascript form-control" id="input-module-form" type="text/javascript" rows="18" style="height: calc(100vh - 230px);"> #}
+          <textarea id="editor" class="text/javascript form-control" type="text/javascript" rows="18" style="height: calc(100vh - 230px);">      
+          </textarea>                    
         </form>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary" onclick="reqCreate()">{{ button_save }}&{{ button_close }}</button>
+        <button type="submit" class="btn btn-primary" onclick="moduleCreate()">{{ button_save }}&{{ button_close }}</button>
       </div>
     </div>
   </div>

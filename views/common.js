@@ -148,7 +148,7 @@ function addListeners(showTbl) {
         showTbl.addEventListener('dblclick', dblSelect,{once:false});                        
     }
 }
-function showTable(showTbl, hide, col, data) {
+async function showTable(showTbl, hide, col, data) {
     console.log('>>showTable()...'); 
 
     showTbl.innerHTML='';
@@ -185,8 +185,18 @@ function showTable(showTbl, hide, col, data) {
             tbody.appendChild(tr);             
             for (let p of Object.keys(col)) {            
                 const td = document.createElement('td');    
-                tr.appendChild(td);              
-                td.textContent = rows[p];    
+                tr.appendChild(td);    
+                // console.log(p.split('.').length); 
+                if (p.split('.').length>1) {
+                    ref = await postOnServer({'id':rows[p], 'textId':p.split('.')[1]}, '/getref');  
+                    if (rows[p]===0) {
+                        td.textContent = ''; 
+                    } else {
+                        td.textContent = ref[0].name; 
+                    }
+                } else {
+                    td.textContent = rows[p];    
+                }
                 for (const h of hide) {   
                     if (p===h)     
                     td.style.display = "none";        

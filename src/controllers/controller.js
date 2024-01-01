@@ -435,7 +435,7 @@ exports.updateConfig = async function(req, res) {
                     return await res.send('0');
                 }    
             } else if (typeId==='Constant') {   
-                const uuid = uuidv4();                 
+                // const uuid = uuidv4();                 
                 try {
                     const elem = await Constant.create({   
                         id  : row.id,              
@@ -459,8 +459,16 @@ exports.updateConfig = async function(req, res) {
                     console.log(err);
                     return await res.send('0');
                 }
-            } else if (typeId==='Report') { 
-            } else if (typeId==='Processing') { 
+            } else if (typeId==='Document') { 
+                delete refColumns['name'];
+                try {
+                    const EvaObject = sequelize.define(objectId, refColumns);
+                    console.log('Create table:', EvaObject);   
+                    await EvaObject.sync({alter: true});
+                } catch(err) {
+                    console.log(err);
+                    return await res.send('0');
+                } 
             } else {                    
                 try {
                     const EvaObject = sequelize.define(objectId, refColumns);
@@ -570,8 +578,7 @@ exports.updateConfig = async function(req, res) {
                 }                        
             } else {      
             
-                const reqlist = await Requisite.findAll({ where: { owner: row.id  } });                
-            
+                const reqlist = await Requisite.findAll({ where: { owner: row.id } });                            
                 for (let row of reqlist) { 
                     let strJson = row.data; 
                     let Elements = await JSON.parse(strJson);  
@@ -595,7 +602,7 @@ exports.updateConfig = async function(req, res) {
                         refColumns[Elements.type] = {type: DataTypes.INTEGER};  
                     }
                 }                
-
+                if (typeId==='Document') { delete refColumns['name'] }
                 try {                    
                     const EvaObject = sequelize.define(objectId, refColumns);
                     console.log('Create table:', EvaObject);   

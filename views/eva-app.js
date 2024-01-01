@@ -730,7 +730,18 @@ async function showDocTable(refName, refType) {
     let tmp = {'textId': refName };
     let data = await postOnServer(tmp, '/getrefs');   
 
-    const col  = { 'id':'Id', 'Number':'Number', 'Date': 'Date' };  
+    console.log(data);
+
+    const res = await postOnServer(tmp, '/getrefcol');  
+    let col = {};        
+    for (let elem of res) {
+        let colName  = elem.column_name;
+        //add synonyms
+        col[colName] = colName; 
+    }
+    console.log(col);
+
+    // const col  = { 'id':'Id', 'Number':'Number', 'Date': 'Date' };  
     const hide = ['id'];      
 
     showTable(refTbl, hide, col, data);

@@ -38,14 +38,17 @@ async function openRef(refName) {
     const evaForm    = document.getElementById("eva-ref-form");  
     evaForm.setAttribute("eva-id", refId);
     evaForm.setAttribute("eva-textId", refName);
+    evaForm.setAttribute("eva-typeId", refType);
 
     let tab = new bootstrap.Tab(tabForm);
     tab.show();    
 
     selectRows = [];
-
-    await showRefTable(refName, refType);
-    
+    if (refType==='Reference') {
+        await showRefTable(refName, refType);
+    } else {
+        await showDocTable(refName, refType);
+    }
     let status = document.getElementById("status");
     status.value = ">It's work!";
 }
@@ -83,58 +86,16 @@ async function refCreate(e) {
         await e.stopPropagation();        
     }
       
-    let data =  {
-        'textId'  : textId                
-    }
-
-    const evaReqs   = refForm.getElementsByClassName('eva-req');     
-    for(let elem of evaReqs) {      
-        if ((createMode==='true'||copyMode==='true')&&elem.name==="id") {            
-        } else {
-            const type     = elem.getAttribute("type");
-            const dataType = elem.getAttribute("data-type");
-            // console.log(elem.name);
-            // console.log(dataType);
-            // console.log(type);
-            if (type === 'checkbox') {                 
-                data[elem.name] = elem.checked; 
-            } else if (type === 'date') {
-                if (elem.value === '') {
-                    data[elem.name] = new Date('01,01,0001');  
-                } else {                    
-                    data[elem.name] = new Date(elem.value);                           
-                }
-            } else if (type === 'number') {
-                data[elem.name] = Number(elem.value); 
-            } else if (type === 'text') {
-                if (dataType === 'numeric') {
-                    data[elem.name] = Number(elem.value);  
-                } else if (dataType === 'integer') { 
-                    data[elem.name] = Number(elem.value);  
-                } else if (dataType === 'character varying') {  
-                    data[elem.name] = String(elem.value);                   
-                } else {         
-                    const id = elem.getAttribute("eva-id");  
-                    if (id) {
-                        data[elem.name] = id;    
-                    } else {
-                        data[elem.name] = 0;   
-                    }
-                }
-            }
-        }    
-    }    
-    console.log(data);  
+    data = await createReq(refForm, textId, createMode, copyMode); 
     try {
         if (createMode==='true'&&copyMode==='false') {
             result = await postOnServer(data, '/createref');                  
-        } else if (createMode==='false'&&copyMode==='true') {   
-            // console.log(copyMode);           
+        } else if (createMode==='false'&&copyMode==='true') {             
             result = await postOnServer(data, '/createref');                           
         } else {    
             result = await postOnServer(data, '/updateref');
         }
-        console.log(result);  
+        // console.log(result);  
     } catch (err) {
         console.log(err);
     }
@@ -183,6 +144,7 @@ async function refModal() {
     const evaForm        = document.querySelector('#eva-ref-form');  
 
     const textId = evaForm.getAttribute("eva-textId");
+    const typeId = evaForm.getAttribute("eva-typeId");
     refForm.setAttribute("eva-textId",textId);
     
     const res = await postOnServer({ 'textId': textId }, '/getrefcol');  
@@ -197,7 +159,7 @@ async function refModal() {
         arrCol[colName] = obj;
     }
     // console.log(arrCol);
-    await refElement(refForm, arr, arrCol, arrSyn, createMode, copyMode);      
+    await refElement(refForm, arr, arrCol, arrSyn, createMode, copyMode, typeId);      
 }
 async function refEditModal(copyMode) {
     console.log('>>refEditModal()...'); 
@@ -429,6 +391,8 @@ async function docModal() {
 
     const evaForm = document.querySelector('#eva-ref-form'); 
     const textId = evaForm.getAttribute("eva-textId");
+    const typeId = evaForm.getAttribute("eva-typeId");
+    refForm.setAttribute("eva-textId", textId);  
 
     const res = await postOnServer({ 'textId': textId }, '/getrefcol');  
     let arr =[];    
@@ -442,10 +406,84 @@ async function docModal() {
         arrCol[colName] = obj;
     }
     // console.log(arrCol);
-    await refElement(refForm, arr, arrCol, arrSyn, createMode, copyMode);      
+    await refElement(refForm, arr, arrCol, arrSyn, createMode, copyMode, typeId);      
+}
+async function createReq(refForm, textId, createMode, copyMode) {
+    console.log('>>createReq()...');   
+    let data =  { 'textId' : textId }
+
+    const evaReqs   = refForm.getElementsByClassName('eva-req');     
+    for(let elem of evaReqs) {      
+        if ((createMode==='true'||copyMode==='true')&&elem.name==="id") {            
+        } else {
+            const type     = elem.getAttribute("type");
+            const dataType = elem.getAttribute("data-type");
+            if (type === 'checkbox') {                 
+                data[elem.name] = elem.checked; 
+            } else if (type === 'date') {
+                if (elem.value === '') {
+                    data[elem.name] = new Date('01,01,0001');  
+                } else {                    
+                    data[elem.name] = new Date(elem.value);                           
+                }
+            } else if (type === 'number') {
+                data[elem.name] = Number(elem.value); 
+            } else if (type === 'text') {
+                if (dataType === 'numeric') {
+                    data[elem.name] = Number(elem.value);  
+                } else if (dataType === 'integer') { 
+                    data[elem.name] = Number(elem.value);  
+                } else if (dataType === 'character varying') {  
+                    data[elem.name] = String(elem.value);                   
+                } else {         
+                    const id = elem.getAttribute("eva-id");  
+                    if (id) {
+                        data[elem.name] = id;    
+                    } else {
+                        data[elem.name] = 0;   
+                    }
+                }
+            }
+        }    
+    } 
+    return data;
+}
+async function docCreate(e) {
+    console.log('>>docCreate()...');
+
+    const refForm    = document.getElementById("create-doc-form");
+    const textId     = refForm.getAttribute("eva-textId");
+    let createMode   = refForm.getAttribute("create-mode");     
+    let copyMode     = refForm.getAttribute("copy-mode");   
+    
+    if (!refForm.checkValidity()) {
+        await e.preventDefault();
+        await e.stopPropagation();        
+    }
+      
+    data = await createReq(refForm, textId, createMode, copyMode);   
+    console.log(data);  
+    try {
+        if (createMode==='true'&&copyMode==='false') {
+            result = await postOnServer(data, '/createref');                  
+        } else if (createMode==='false'&&copyMode==='true') {   
+            // console.log(copyMode);           
+            result = await postOnServer(data, '/createref');                           
+        } else {    
+            result = await postOnServer(data, '/updateref');
+        }
+        // console.log(result);  
+    } catch (err) {
+        console.log(err);
+    }
+
+    await currentModal.hide();
+
+    if (result) await showDocTable(textId);
+
 }
 //DOM Dynamic Content////////////////////////////////////////////////////////
-async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode) {
+async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode, typeId) {
     console.log('>>refElement()...');  
     console.log(col);
     if (col) {                  
@@ -510,7 +548,11 @@ async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode) {
                 }
              
                 if (req==='id') {
-                    input.setAttribute("disabled","disabled");
+                    input.setAttribute("disabled","disabled");                    
+                    if (typeId==='Document') {
+                        label.setAttribute("hidden", "hidden");
+                        input.setAttribute("hidden", "hidden");
+                    }
                 }
                 if (req==='name') {
                     input.setAttribute("required", "required");
@@ -676,6 +718,20 @@ async function showRefTable(refName, refType) {
 
     const col  = { 'id':'Id' ,'name':'Name' };  
     const hide = [];      
+
+    showTable(refTbl, hide, col, data);
+
+}
+async function showDocTable(refName, refType) {
+    console.log('>>showDocTable()...', refName, refType);   
+
+    refTbl = buildTable(refName, refType);
+
+    let tmp = {'textId': refName };
+    let data = await postOnServer(tmp, '/getrefs');   
+
+    const col  = { 'id':'Id', 'Number':'Number', 'Date': 'Date' };  
+    const hide = ['id'];      
 
     showTable(refTbl, hide, col, data);
 

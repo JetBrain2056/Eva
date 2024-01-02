@@ -56,16 +56,13 @@ async function getSynonyms(refForm) {
     console.log('>>getSynonyms()...');
 
     const id = refForm.getAttribute("eva-id");
-    const datareq = { 
-        'owner': id
-    }
+    const datareq = { 'owner': id }
     const resreq = await postOnServer(datareq, '/getreqs');  
 
-    let arrSyn =[];  
+    let arrSyn = [];  
     arrSyn['id'] = 'Id';
     arrSyn['name'] = 'Name';
     for (let elem of resreq) {
-
         let strJson = elem.data;          
         let Elements = await JSON.parse(strJson);  
         let colName = Elements.textId;
@@ -329,15 +326,14 @@ async function constSave() {
 }
 async function elementBtn(idBtn) {
     console.log('>>elementBtn()...');
-    // console.log(idBtn);
+  
     const modalForm      = document.getElementById("selectElemModal");
     const inputElemValue = document.querySelector("#"+idBtn.split('_')[0]);
     const inputElemType  = inputElemValue.getAttribute("data-type");
 
     modalForm.setAttribute("eva-id", idBtn.split('_')[0]);
-    // console.log(inputElemType);
-    const refName = inputElemType.split('.')[1];
 
+    const refName = inputElemType.split('.')[1];
 
     currentModal.hide();
 
@@ -714,9 +710,25 @@ async function showRefTable(refName, refType) {
     refTbl = buildTable(refName, refType);
 
     let tmp = {'textId': refName };
-    let data = await postOnServer(tmp, '/getrefs');   
+    let data = await postOnServer(tmp, '/getrefs');
 
-    const col  = { 'id':'Id' ,'name':'Name' };  
+    const refForm = document.querySelector('#create-ref-form');    
+    
+    arrSyn = await getSynonyms(refForm);  
+
+    // const col  = { 'id':'Id', 'name':'Name' };  
+    const res = await postOnServer(tmp, '/getrefcol');  
+    let col = {};        
+    for (let elem of res) {
+        let colName  = elem.column_name;            
+        let synom = arrSyn[elem];
+        if (synom) {
+            col[colName] = synom;  
+        } else {
+            col[colName] = colName;  
+        } 
+    }
+
     const hide = [];      
 
     showTable(refTbl, hide, col, data);
@@ -730,18 +742,23 @@ async function showDocTable(refName, refType) {
     let tmp = {'textId': refName };
     let data = await postOnServer(tmp, '/getrefs');   
 
-    console.log(data);
+    const refForm = document.querySelector('#create-doc-form');    
+    
+    arrSyn = await getSynonyms(refForm);  
 
+    // const col  = { 'id':'Id', 'name':'Name' };  
     const res = await postOnServer(tmp, '/getrefcol');  
     let col = {};        
     for (let elem of res) {
-        let colName  = elem.column_name;
-        //add synonyms
-        col[colName] = colName; 
+        let colName  = elem.column_name;            
+        let synom = arrSyn[elem];
+        if (synom) {
+            col[colName] = synom;  
+        } else {
+            col[colName] = colName;  
+        } 
     }
-    console.log(col);
-
-    // const col  = { 'id':'Id', 'Number':'Number', 'Date': 'Date' };  
+    
     const hide = ['id'];      
 
     showTable(refTbl, hide, col, data);

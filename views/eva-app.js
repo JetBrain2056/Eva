@@ -52,13 +52,13 @@ async function openRef(refName) {
     let status = document.getElementById("status");
     status.value = ">It's work!";
 }
-async function getSynonyms(refForm) {
+async function getSynonyms(evaForm) {
     console.log('>>getSynonyms()...');
 
-    const id = refForm.getAttribute("eva-id");
+    const id = evaForm.getAttribute("eva-id");
     const datareq = { 'owner': id }
     const resreq = await postOnServer(datareq, '/getreqs');  
-
+    console.log(resreq);
     let arrSyn = [];  
     arrSyn['id'] = 'Id';
     arrSyn['name'] = 'Name';
@@ -75,6 +75,8 @@ async function refCreate(e) {
 
     const refForm    = document.getElementById("create-ref-form");
     const textId     = refForm.getAttribute("eva-textId");
+    const typeId     = refForm.getAttribute("eva-typeId");
+    const id         = refForm.getAttribute("eva-id");
     let createMode   = refForm.getAttribute("create-mode");     
     let copyMode     = refForm.getAttribute("copy-mode");   
     
@@ -99,7 +101,7 @@ async function refCreate(e) {
 
     await currentModal.hide();
 
-    if (result) await showRefTable(textId);
+    if (result) await showRefTable(textId, typeId, id);
 
 }
 async function refDelete() {
@@ -134,15 +136,14 @@ async function refModal() {
     refForm.innerHTML = '';
     refForm.reset();   
     refForm.setAttribute("create-mode", createMode);  
-    refForm.setAttribute("copy-mode", copyMode);  
-    
-    let arrSyn = await getSynonyms(refForm);   
+    refForm.setAttribute("copy-mode", copyMode);   
 
-    const evaForm        = document.querySelector('#eva-ref-form');  
-
+    const evaForm = document.querySelector('#eva-ref-form');  
     const textId = evaForm.getAttribute("eva-textId");
     const typeId = evaForm.getAttribute("eva-typeId");
-    refForm.setAttribute("eva-textId",textId);
+    refForm.setAttribute("eva-textId", textId);
+
+    let arrSyn = await getSynonyms(evaForm);  
     
     const res = await postOnServer({ 'textId': textId }, '/getrefcol');  
     let arr = [];    
@@ -152,7 +153,7 @@ async function refModal() {
         let dataType   = elem.data_type;
         let identifier = elem.dtd_identifier;
         let obj = {'colName': colName, 'dataType':dataType, 'identifier': identifier}
-        arr[colName]='';  
+        arr[colName] = '';  
         arrCol[colName] = obj;
     }
     // console.log(arrCol);
@@ -180,15 +181,15 @@ async function refEditModal(copyMode) {
     refForm.reset();  
     refForm.innerHTML = '';     
     refForm.setAttribute("create-mode", createMode);  
-    refForm.setAttribute("copy-mode", copyMode);  
-
-    arrSyn = await getSynonyms(refForm);   
+    refForm.setAttribute("copy-mode", copyMode);   
 
     currentModal = getModal(modalForm);
 
     const evaForm    = document.querySelector('#eva-ref-form');   
     const textId = evaForm.getAttribute("eva-textId");
     refForm.setAttribute("eva-textId", textId);
+
+    arrSyn = await getSynonyms(evaForm);  
 
     const id     = row.cells[0].innerText;
     const data = { 
@@ -381,18 +382,18 @@ async function docModal() {
     refForm.innerHTML = '';
     refForm.reset();   
     refForm.setAttribute("create-mode", createMode);  
-    refForm.setAttribute("copy-mode", copyMode);  
-    
-    let arrSyn = await getSynonyms(refForm);       
+    refForm.setAttribute("copy-mode", copyMode);       
 
     const evaForm = document.querySelector('#eva-ref-form'); 
     const textId = evaForm.getAttribute("eva-textId");
     const typeId = evaForm.getAttribute("eva-typeId");
     refForm.setAttribute("eva-textId", textId);  
 
+    let arrSyn = await getSynonyms(evaForm);  
+
     const res = await postOnServer({ 'textId': textId }, '/getrefcol');  
-    let arr =[];    
-    let arrCol =[];  
+    let arr = [];    
+    let arrCol = [];  
     for (let elem of res) {
         let colName    = elem.column_name;
         let dataType   = elem.data_type;
@@ -709,19 +710,22 @@ async function showRefTable(refName, refType) {
 
     refTbl = buildTable(refName, refType);
 
-    let tmp = {'textId': refName };
+    let tmp = { 'textId': refName };
     let data = await postOnServer(tmp, '/getrefs');
 
-    const refForm = document.querySelector('#create-ref-form');    
+    const evaForm = document.querySelector('#eva-ref-form');    
     
-    arrSyn = await getSynonyms(refForm);  
+    arrSyn = await getSynonyms(evaForm);  
+    console.log(arrSyn);
 
     // const col  = { 'id':'Id', 'name':'Name' };  
     const res = await postOnServer(tmp, '/getrefcol');  
     let col = {};        
     for (let elem of res) {
         let colName  = elem.column_name;            
-        let synom = arrSyn[elem];
+        let synom = arrSyn[colName];
+        console.log(colName);
+        console.log(synom);
         if (synom) {
             col[colName] = synom;  
         } else {
@@ -742,23 +746,23 @@ async function showDocTable(refName, refType) {
     let tmp = {'textId': refName };
     let data = await postOnServer(tmp, '/getrefs');   
 
-    const refForm = document.querySelector('#create-doc-form');    
+    const evaForm = document.querySelector('#eva-ref-form');    
     
-    arrSyn = await getSynonyms(refForm);  
+    arrSyn = await getSynonyms(evaForm);  
 
     // const col  = { 'id':'Id', 'name':'Name' };  
     const res = await postOnServer(tmp, '/getrefcol');  
-    let col = {};        
+    let col = {};            
     for (let elem of res) {
         let colName  = elem.column_name;            
-        let synom = arrSyn[elem];
+        let synom = arrSyn[colName];
         if (synom) {
             col[colName] = synom;  
         } else {
             col[colName] = colName;  
         } 
     }
-    
+
     const hide = ['id'];      
 
     showTable(refTbl, hide, col, data);

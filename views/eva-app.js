@@ -198,7 +198,7 @@ async function refEditModal(copyMode) {
     };
 
     let res = await postOnServer(data, '/getrefcol');       
-    let arrCol =[];  
+    let arrCol = [];  
     for (let elem of res) {        
         const colName    = elem.column_name;
         const dataType   = elem.data_type;
@@ -207,7 +207,6 @@ async function refEditModal(copyMode) {
         let obj = {'colName': colName, 'dataType':dataType, 'identifier': identifier}         
         arrCol[colName] = obj;            
     }
-    console.log(arrCol);
 
     res = await postOnServer(data, '/getref');  
     await refElement(refForm, res[0], arrCol, arrSyn, createMode, copyMode);     
@@ -366,45 +365,6 @@ async function elemSelect() {
     await selectModal.hide();
     await currentModal.show();
 }
-async function docModal() {
-    console.log('>>docModal()...');      
-
-    const modalForm  = document.getElementById('docModal');  
-    currentModal = getModal(modalForm);
-
-    const refModalLabel  = modalForm.querySelector('#docModalLabel');  
-    refModalLabel.innerText = 'Add document:';    
-
-    let createMode = true;
-    let copyMode   = false;
-
-    const refForm        = modalForm.querySelector('#create-doc-form');  
-    refForm.innerHTML = '';
-    refForm.reset();   
-    refForm.setAttribute("create-mode", createMode);  
-    refForm.setAttribute("copy-mode", copyMode);       
-
-    const evaForm = document.querySelector('#eva-ref-form'); 
-    const textId = evaForm.getAttribute("eva-textId");
-    const typeId = evaForm.getAttribute("eva-typeId");
-    refForm.setAttribute("eva-textId", textId);  
-
-    let arrSyn = await getSynonyms(evaForm);  
-
-    const res = await postOnServer({ 'textId': textId }, '/getrefcol');  
-    let arr = [];    
-    let arrCol = [];  
-    for (let elem of res) {
-        let colName    = elem.column_name;
-        let dataType   = elem.data_type;
-        let identifier = elem.dtd_identifier;
-        let obj = {'colName': colName, 'dataType':dataType, 'identifier': identifier}
-        arr[colName]='';  
-        arrCol[colName] = obj;
-    }
-    // console.log(arrCol);
-    await refElement(refForm, arr, arrCol, arrSyn, createMode, copyMode, typeId);      
-}
 async function createReq(refForm, textId, createMode, copyMode) {
     console.log('>>createReq()...');   
     let data =  { 'textId' : textId }
@@ -445,6 +405,45 @@ async function createReq(refForm, textId, createMode, copyMode) {
     } 
     return data;
 }
+async function docModal() {
+    console.log('>>docModal()...');      
+
+    const modalForm  = document.getElementById('docModal');  
+    currentModal = getModal(modalForm);
+
+    const refModalLabel  = modalForm.querySelector('#docModalLabel');  
+    refModalLabel.innerText = 'Add document:';    
+
+    let createMode = true;
+    let copyMode   = false;
+
+    const refForm        = modalForm.querySelector('#create-doc-form');  
+    refForm.innerHTML = '';
+    refForm.reset();   
+    refForm.setAttribute("create-mode", createMode);  
+    refForm.setAttribute("copy-mode", copyMode);       
+
+    const evaForm = document.querySelector('#eva-ref-form'); 
+    const textId = evaForm.getAttribute("eva-textId");
+    const typeId = evaForm.getAttribute("eva-typeId");
+    refForm.setAttribute("eva-textId", textId);  
+
+    let arrSyn = await getSynonyms(evaForm);  
+
+    const res = await postOnServer({ 'textId': textId }, '/getrefcol');  
+    let arr = [];    
+    let arrCol = [];  
+    for (let elem of res) {
+        let colName    = elem.column_name;
+        let dataType   = elem.data_type;
+        let identifier = elem.dtd_identifier;
+        let obj = {'colName': colName, 'dataType':dataType, 'identifier': identifier}
+        arr[colName] = '';  
+        arrCol[colName] = obj;
+    }
+
+    await refElement(refForm, arr, arrCol, arrSyn, createMode, copyMode, typeId);      
+}
 async function docCreate(e) {
     console.log('>>docCreate()...');
 
@@ -478,6 +477,58 @@ async function docCreate(e) {
 
     if (result) await showDocTable(textId);
 
+}
+async function docEditModal(copyMode) {
+    console.log('>>refEditModal()...'); 
+  
+    if (selectRows.length === 0) { return };
+
+    const row = selectRows[0];      
+
+    const modalForm  = document.getElementById('docModal');  
+
+    const refModalLabel    = modalForm.querySelector('#docModalLabel');  
+    if (copyMode) {
+        refModalLabel.innerText = 'Add document:';
+    } else {
+        refModalLabel.innerText = 'Edit document:';
+    }   
+
+    let createMode = false;    
+          
+    const refForm    = modalForm.querySelector('#create-doc-form');    
+    refForm.reset();  
+    refForm.innerHTML = '';     
+    refForm.setAttribute("create-mode", createMode);  
+    refForm.setAttribute("copy-mode", copyMode);   
+
+    currentModal = getModal(modalForm);
+
+    const evaForm    = document.querySelector('#eva-ref-form');   
+    const textId = evaForm.getAttribute("eva-textId");
+    const typeId = evaForm.getAttribute("eva-typeId");
+    refForm.setAttribute("eva-textId", textId);
+
+    arrSyn = await getSynonyms(evaForm);  
+
+    const id     = row.cells[0].innerText;
+    const data = { 
+        'textId': textId,
+        'id': id
+    };
+
+    let res = await postOnServer({ 'textId': textId }, '/getrefcol');         
+    let arrCol = [];  
+    for (let elem of res) {
+        const colName    = elem.column_name;
+        const dataType   = elem.data_type;
+        const identifier = elem.dtd_identifier;
+
+        let obj = {'colName': colName, 'dataType':dataType, 'identifier': identifier}          
+        arrCol[colName] = obj;
+    }
+    res = await postOnServer(data, '/getref');  
+    await refElement(refForm, res[0], arrCol, arrSyn, createMode, copyMode, typeId);     
 }
 //DOM Dynamic Content////////////////////////////////////////////////////////
 async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode, typeId) {

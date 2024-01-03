@@ -148,7 +148,7 @@ function addListeners(showTbl) {
         showTbl.addEventListener('dblclick', dblSelect,{once:false});                        
     }
 }
-async function showTable(showTbl, hide, col, data) {
+async function showTable(showTbl, hide, col, data, colType) {
     console.log('>>showTable()...'); 
 
     showTbl.innerHTML='';
@@ -194,8 +194,8 @@ async function showTable(showTbl, hide, col, data) {
                     } else {                        
                         td.textContent = ref[0].name;                        
                     }
-                } else {
-                    if (p==='Date') {
+                } else {                
+                    if (colType&&colType[p]==='timestamp with time zone') {
                         td.textContent = rows[p].split('T')[0];   
                     } else {
                         td.textContent = rows[p]; 

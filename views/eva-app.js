@@ -787,22 +787,23 @@ async function showRefTable(refName, refType) {
 
     // const col  = { 'id':'Id', 'name':'Name' };  
     const res = await postOnServer(tmp, '/getrefcol');  
-    let col = {};        
-    for (let elem of res) {
-        let colName  = elem.column_name;            
-        let synom = arrSyn[colName];
-        console.log(colName);
-        console.log(synom);
+    let col = {};   
+    let colType = {};           
+    for (const elem of res) {
+        const colName  = elem.column_name;            
+        const dataType = elem.data_type;            
+        const synom = arrSyn[colName];
         if (synom) {
             col[colName] = synom;  
         } else {
             col[colName] = colName;  
         } 
+        colType[colName] = dataType;
     }
 
     const hide = [];      
 
-    showTable(refTbl, hide, col, data);
+    showTable(refTbl, hide, col, data, colType);
 
 }
 async function showDocTable(refName, refType) {
@@ -819,20 +820,23 @@ async function showDocTable(refName, refType) {
 
     // const col  = { 'id':'Id', 'name':'Name' };  
     const res = await postOnServer(tmp, '/getrefcol');  
-    let col = {};            
-    for (let elem of res) {
-        let colName  = elem.column_name;            
-        let synom = arrSyn[colName];
+    let col = {};   
+    let colType = {};           
+    for (const elem of res) {
+        const colName  = elem.column_name;            
+        const dataType = elem.data_type;            
+        const synom = arrSyn[colName];
         if (synom) {
             col[colName] = synom;  
         } else {
             col[colName] = colName;  
         } 
+        colType[colName] = dataType;
     }
 
     const hide = ['id'];      
 
-    showTable(refTbl, hide, col, data);
+    showTable(refTbl, hide, col, data, colType);
 
 }
 function navItem(navTab, name) {    

@@ -169,14 +169,13 @@ async function showTable(showTbl, hide, col, data, colType) {
     thead.appendChild(tr);
     
     for (const e of Object.keys(col)) {             
-      const th = document.createElement('th');    
-      th.setAttribute("sort-attr", "");                        
-      for (const h of hide) {   
-        if (e===h)     
-        th.style.display = "none";        
-      }
-      tr.appendChild(th);        
-      th.textContent = col[e];      
+        const th = document.createElement('th');    
+        th.setAttribute("sort-attr", "");                                    
+        if (hide.includes(e)) {
+            th.style.display = "none";        
+        }
+        tr.appendChild(th);        
+        th.textContent = col[e];      
     }       
   
     if (data) {
@@ -200,15 +199,14 @@ async function showTable(showTbl, hide, col, data, colType) {
                     } else {
                         td.textContent = rows[p]; 
                     }
-                }
-                for (const h of hide) {   
-                    if (p===h)     
+                }                                    
+                if (hide.includes(p)) {
                     td.style.display = "none";        
                 }
             }
         } 
     } else {
-        console.log('data: '+data)
+        console.log('data:', data);
         return;   
     }
 }

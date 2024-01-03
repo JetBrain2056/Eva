@@ -479,7 +479,7 @@ async function docCreate(e) {
 
 }
 async function docEditModal(copyMode) {
-    console.log('>>refEditModal()...'); 
+    console.log('>>docEditModal()...'); 
   
     if (selectRows.length === 0) { return };
 
@@ -529,6 +529,22 @@ async function docEditModal(copyMode) {
     }
     res = await postOnServer(data, '/getref');  
     await refElement(refForm, res[0], arrCol, arrSyn, createMode, copyMode, typeId);     
+}
+async function docDelete() {
+    console.log('>>docDelete()...');
+
+    const refForm = document.getElementById("nav-ref-form");    
+    const textId  = refForm.getAttribute("eva-textId");
+    
+    for (const row of selectRows) {
+        const data = {
+            'textId': textId,
+            'id': row.cells[0].innerText
+        }
+        result = await postOnServer(data, '/delref');        
+    }
+
+    if (result) await showDocTable(textId);
 }
 //DOM Dynamic Content////////////////////////////////////////////////////////
 async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode, typeId) {

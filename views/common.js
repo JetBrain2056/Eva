@@ -167,8 +167,9 @@ async function showTable(showTbl, hide, col, data, colType) {
   
     const tr = document.createElement('tr'); 
     thead.appendChild(tr);
-    
-    for (const e of Object.keys(col)) {             
+
+    const keysCol = Object.keys(col);    
+    for (const e of keysCol) {             
         const th = document.createElement('th');    
         th.setAttribute("sort-attr", "");                                    
         if (hide.includes(e)) {
@@ -182,10 +183,9 @@ async function showTable(showTbl, hide, col, data, colType) {
         for (const rows of data) {                  
             const tr = document.createElement('tr');
             tbody.appendChild(tr);             
-            for (let p of Object.keys(col)) {            
+            for (const p of keysCol) {        
                 const td = document.createElement('td');    
-                tr.appendChild(td);    
-                // console.log(p); 
+                tr.appendChild(td);   
                 if (p.split('.').length>1) {
                     ref = await postOnServer({'id':rows[p], 'textId':p.split('.')[1]}, '/getref');  
                     if (rows[p]===0) {

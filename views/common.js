@@ -186,16 +186,20 @@ async function showTable(showTbl, hide, col, data) {
             for (let p of Object.keys(col)) {            
                 const td = document.createElement('td');    
                 tr.appendChild(td);    
-                // console.log(p.split('.').length); 
+                // console.log(p); 
                 if (p.split('.').length>1) {
                     ref = await postOnServer({'id':rows[p], 'textId':p.split('.')[1]}, '/getref');  
                     if (rows[p]===0) {
                         td.textContent = ''; 
-                    } else {
-                        td.textContent = ref[0].name; 
+                    } else {                        
+                        td.textContent = ref[0].name;                        
                     }
                 } else {
-                    td.textContent = rows[p];    
+                    if (p==='Date') {
+                        td.textContent = rows[p].split('T')[0];   
+                    } else {
+                        td.textContent = rows[p]; 
+                    }
                 }
                 for (const h of hide) {   
                     if (p===h)     

@@ -729,16 +729,21 @@ function buildTable(refName, refType) {
     const evaEdit = btnToolbar.querySelector(".eva-edit");
     const evaCopy = btnToolbar.querySelector(".eva-copy");
     const evaDel  = btnToolbar.querySelector(".eva-del");
+    const evaRefresh = btnToolbar.querySelector(".eva-refresh");
+    evaRefresh.setAttribute("name", refName);  
+    evaRefresh.setAttribute("id", "eva-link-"+refName);   
     if (refType==='Reference') {           
         evaAdd .setAttribute("onclick","refModal()");
         evaEdit.setAttribute("onclick","refEditModal(false)");
         evaCopy.setAttribute("onclick","refEditModal(true)");
         evaDel .setAttribute("onclick","refDelete()");
+        evaRefresh.setAttribute("onclick","openTabRef(id,name)");
     } else  if (refType==='Document') {
         evaAdd .setAttribute("onclick","docModal()");
         evaEdit.setAttribute("onclick","docEditModal(false)");
         evaCopy.setAttribute("onclick","docEditModal(true)");
         evaDel .setAttribute("onclick","docDelete()");
+        evaRefresh.setAttribute("onclick","openTabRef(id,name)");
     }
 
     resTbl = buildTabpanel(refForm, "208");

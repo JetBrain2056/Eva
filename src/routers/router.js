@@ -31,6 +31,12 @@ router.post('/createreq', controller.createReq);
 router.post('/editreq', controller.editReq);
 router.post('/delreq', controller.deleteReq);
 
+router.post('/gettabparts', controller.getTabparts);
+router.post('/gettabpart', controller.getTabpart);
+router.post('/createtabpart', controller.createTabpart);
+router.post('/edittabpart', controller.editTabpart);
+router.post('/deltabpart', controller.deleteTabpart);
+
 //eva-app
 router.get('/subsystems', controller.getSubsystems);
 router.post('/getrefs', controller.getReferences);

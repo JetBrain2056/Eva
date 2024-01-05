@@ -204,7 +204,7 @@
           </a>
         </li> 
         <li class="nav-item">
-          <a class="nav-link" href="#" id="object-tabular" data-bs-toggle="tab" data-bs-target="#nav-tabular"  role="tab" aria-controls="nav-tabular" aria-selected="false" onclick="">
+          <a class="nav-link" href="#" id="object-tabular" data-bs-toggle="tab" data-bs-target="#nav-tabpart"  role="tab" aria-controls="nav-tabular" aria-selected="false" onclick="">
             Tabular parts
           </a>
         </li> 
@@ -289,14 +289,18 @@
             </div> 
             <div class="eva-table"></div> 
           </div>
-          <div class="tab-pane fade" id="nav-tabular" role="tabpanel" aria-labelledby="nav-tabular-tab">
+          <div class="tab-pane fade" id="nav-tabpart" role="tabpanel" aria-labelledby="nav-tabpart-tab">
             <div class="btn-toolbar" role="toolbar" aria-label="toolbar group">
               <div class="btn-group btn-group-sm" role="group">
-                <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" data-bs-toggle="modal" data-bs-target="#tabularModal">
+                <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" onclick="tabPartModal()">
                   <i class="fa fa-plus-square"></i>
                   <span>{{ button_add }}</span>
                 </button>
-                <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" onclick="tabularDelete()">
+                <button type="button" class="btn btn-primary d-flex gap-2 align-items-center eva-edit" onclick="tabPartEditModal()">
+                  <i class="fa fa-edit"></i>
+                  <span>{{ button_edit }}</span>
+                </button>
+                <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" onclick="tabPartDelete()">
                   <i class="fa fa-minus-square"></i>
                   <span>{{ button_delete }}</span>
                 </button>
@@ -396,9 +400,7 @@
                     <option selected value="String">String</option>                
                     <option value="Number">Number</option> 
                     <option value="Date">Date</option>   
-                    <option value="Boolean">Boolean</option>                                                      
-                    {# <option value="Reference">{{text_reference}}</option>              
-                    <option value="Document">{{text_document}}</option>                                                               #}
+                    <option value="Boolean">Boolean</option>                                                                                                                          
                   </select>  
                   <button class="btn btn-outline-secondary" id="input-req-type_btn" type="button" onclick="selectType(id)">...</button>
                 </div>
@@ -430,6 +432,32 @@
       </div>
       <div class="modal-footer">
         <button type="submit" class="btn btn-primary" onclick="reqCreate()">{{ button_save }}&{{ button_close }}</button>
+      </div>
+    </div>
+  </div>
+</div>
+{# Modal Tabular part #}
+<div class="modal fade" id="tabPartModal" tabindex="-2" data-bs-backdrop="static" aria-labelledby="tabPartModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="tabPartModalLabel">*</h5>
+        <button type="button" class="btn-close" aria-label="Close" data-bs-dismiss="modal" onclick=""></button>
+      </div>
+      <div class="modal-body">
+        <form class="form" id="create-tabpart-form">         
+          <label for="input-tabpart-id">Identifier:</label>
+          <div class="input-group input-group-sm">
+            <input type="text" placeholder="[a-zA-Z0-9]" id="input-tabpart-id" class="form-control" required pattern="[a-zA-Z0-9.]+"/>
+          </div>             
+          <label for="input-tabpart-synonym">Synonym:</label>
+          <div class="input-group input-group-sm">
+            <input type="text" placeholder="" id="input-tabpart-synonum" class="form-control"/>
+          </div>                
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" onclick="tabPartCreate()">{{ button_save }}&{{ button_close }}</button>
       </div>
     </div>
   </div>

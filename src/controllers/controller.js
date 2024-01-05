@@ -1,4 +1,4 @@
-const { User, Role, Config, Subsystem, Constant, Module, Requisite, Form } = require('../models/models.js');
+const { User, Role, Config, Subsystem, Constant, Module, Requisite, TabPart, Form } = require('../models/models.js');
 const { content }       = require('../index.js');
 const bcrypt            = require('bcrypt');
 const sequelize         = require('../db');
@@ -705,6 +705,81 @@ exports.editReq = async function(req, res) {
 
     try {
         const result = await Requisite.update({             
+            data  : data            
+        }, {
+            where: {id : id}
+        })        
+        return await res.json(result); 
+    } catch(err) {
+        console.log(err); 
+    }   
+}
+exports.getTabparts = async function(req, res) {
+    console.log(dateNow(),'>>getTabParts()...');
+    if (!req.body) return res.sendStatus(400);
+
+    const { owner } = req.body;
+
+    try {
+        const  data = await TabPart.findAll({ where: { owner: owner }});        
+        await res.send(data);        
+    } catch(err) {
+        console.log(err);
+    }
+}
+exports.getTabpart = async function(req, res) {
+    console.log(dateNow(),'>>getTabPart()...');
+    if (!req.body) return res.sendStatus(400);
+
+    const { id } = req.body;
+
+    try {
+        const data = await TabPart.findOne({ where: { id: id }});        
+        await res.send(data);        
+    } catch(err) {
+        console.log(err);
+    }
+}
+exports.createTabpart = async function(req, res) {
+    console.log(dateNow(),'>>createTabPart()...');
+    if (!req.body) return res.sendStatus(400);
+
+    const { owner, data } = req.body;
+    
+    try {                     
+        const result = await TabPart.create({     
+                owner : owner,           
+                data  : data
+        });
+        return await res.json(result);   
+    } catch (err) {
+        console.log(err);
+    }
+}
+exports.deleteTabpart = async function(req, res) {
+    console.log(dateNow(),'>>deleteTabPart()...');
+    if (!req.body) return res.sendStatus(400);
+
+    const { id } = req.body;
+
+    try {    
+        const result = await TabPart.destroy(
+        {
+            where: {id : id}
+        })
+        return await res.json(result); 
+    } catch(err) {
+        console.log(err);
+    }
+}
+exports.editTabpart = async function(req, res) {
+    console.log(dateNow(),'>>editTabPart()...');    
+    if (!req.body) return res.sendStatus(400);     
+
+    const { id, data }  = req.body;  
+
+    try {
+        const result = await TabPart.update({             
             data  : data            
         }, {
             where: {id : id}

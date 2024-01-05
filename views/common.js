@@ -709,6 +709,7 @@ async function objectEditModal() {
     mainSelect();
 
     await showRequisiteTable();
+    await showTabPartTable();
 }
 async function objectDelete() {
     console.log('>>objectDelete()...');
@@ -1042,6 +1043,145 @@ async function reqDelete() {
     }
 
     if (res) await showRequisiteTable();
+}
+/////////////////////////////////////////////////////////////////////////////
+async function showTabPartTable() {
+    console.log('>>showTabPartTable()...');
+   
+    const modalForm = document.getElementById("nav-tabpart");
+
+    resTbl = buildTabpanel(modalForm, "300");
+
+    const ownerForm     = document.getElementById("create-object-form");  
+    const id = ownerForm.getAttribute("eva-id");
+
+    const getData = {'owner': id}
+    let tmp = await postOnServer(getData,'/gettabparts');  
+
+    let data = [];
+
+    for (const row of tmp) {
+        let strJson = row.data; 
+        let Elements = await JSON.parse(strJson);
+
+        data.push({'id':row.id, 'textId':Elements.textId, 'type':Elements.type});    
+    }
+  
+    const col = {'id':'Id','textId':'Identifier'} 
+    const hide = ['id'];
+    
+    showTable(resTbl, hide, col, data);
+
+}
+async function tabPartModal() {
+    console.log('>>tabPartModal()...');
+
+    const inputOwnerForm  = document.querySelector("#create-object-form"); 
+    if (!inputOwnerForm.checkValidity()) {    
+        alert('The main identifier is not valid!')
+        return;
+    }
+    
+    const modalForm  = document.getElementById("tabPartModal");
+    const objectModalLabel = modalForm.querySelector("#tabPartModalLabel");  
+    objectModalLabel.innerText = 'Add tabular part:';
+
+    const inputForm  = modalForm.querySelector("#create-tabpart-form");   
+    inputForm.reset();
+    inputForm.setAttribute("create-mode",true);  
+
+    requisiteModal = getModal(modalForm);
+}
+async function tabPartEditModal() {
+    console.log('>>tabPartEditModal()...');
+
+    if (selectRows.length === 0) return;
+
+    const modalForm  = document.getElementById("tabPartModal");    
+
+    const objectModalLabel = modalForm.querySelector('#tabPartModalLabel');  
+    objectModalLabel.innerText = 'Edit tabular part:';
+
+    const inputForm  = modalForm.querySelector("#create-tabpart-form");   
+    inputForm.reset();
+    inputForm.setAttribute("create-mode",false);  
+
+    requisiteModal = getModal(modalForm);
+
+    const row = await selectRows[0];  
+
+    let data = { 'id': row.cells[0].innerText }
+
+    let res = await postOnServer(data,'/gettabpart');
+
+    const inputTabPartId    = inputForm.querySelector("#input-tabpart-id");
+    const inputTabPartSyn   = inputForm.querySelector("#input-tabpart-synonum");
+  
+    if (res) {
+        let strJson = res.data;                  
+        let Elements = await JSON.parse(strJson);    
+
+        inputForm.setAttribute("eva-id", res.id);
+        inputTabPartId.value       = Elements.textId;        
+        inputTabPartSyn.value      = Elements.synonum;
+    }
+}
+async function tabPartCreate(e) {
+    console.log('>>tabPartCreate()...');
+
+    const ownerForm       = document.getElementById("create-object-form");  
+    const inputForm       = document.getElementById("create-tabpart-form");
+    const inputTabpartId  = inputForm.querySelector("#input-tabpart-id");    
+    const inputTabpartSyn = inputForm.querySelector("#input-tabpart-synonum");
+    const createMode      = inputForm.getAttribute("create-mode"); 
+
+    if (!inputForm.checkValidity()) {
+        await e.preventDefault();
+        await e.stopPropagation();        
+    }
+
+    let tmp = { 
+        textId    : inputTabpartId.value,         
+        synonum   : inputTabpartSyn.value,           
+    }          
+
+    const data =  {
+        'id'      : inputForm.getAttribute("eva-id"),
+        'owner'   : ownerForm.getAttribute("eva-id"),
+        'data'    : JSON.stringify(tmp),
+    }
+
+    if (createMode==='true') {
+        try {
+            result = await postOnServer(data, '/createtabpart')
+            console.log(result);        
+        } catch (err) {
+            console.log(err);
+        }
+    } else {
+        try {
+            result = await postOnServer(data, '/edittabpart')
+            console.log(result);        
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    await requisiteModal.hide();
+
+    if (result) await showTabPartTable();    
+}
+async function tabPartDelete() {
+    console.log('>>tabPartDelete()...');
+    
+    for (const row of selectRows) {
+
+        const data = {'id': row.cells[0].innerText};
+
+        res = await postOnServer(data,'/deltabpart');        
+    }
+
+    if (res) await showTabPartTable();
 }
 /////////////////////////////////////////////////////////////////////////////
 window.onload = function() {

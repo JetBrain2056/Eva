@@ -57,6 +57,12 @@ const TabPart = sequelize.define('TabPart', {
     data  : {type: DataTypes.TEXT}
 })
 
+const TabPartReq = sequelize.define('TabPartReq', {
+    id    : {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},  
+    owner : {type: DataTypes.INTEGER},
+    data  : {type: DataTypes.TEXT}
+})
+
 const Form = sequelize.define('Form', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},    
     name:  {type: DataTypes.STRING},
@@ -78,5 +84,6 @@ module.exports = {
     Module, 
     Requisite,
     TabPart,
+    TabPartReq,
     Form
 }

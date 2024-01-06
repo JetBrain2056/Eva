@@ -356,8 +356,52 @@
     </div>
   </div>
 </div> 
+{# Modal Tabular part #}
+<div class="modal fade" id="tabPartModal" tabindex="-2" data-bs-backdrop="static" aria-labelledby="tabPartModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="tabPartModalLabel">*</h5>
+        <button type="button" class="btn-close" aria-label="Close" data-bs-dismiss="modal" onclick=""></button>
+      </div>
+      <div class="modal-body">
+        <form class="form" id="create-tabpart-form">         
+          <label for="input-tabpart-id">Identifier:</label>
+          <div class="input-group input-group-sm">
+            <input type="text" placeholder="[a-zA-Z0-9]" id="input-tabpart-id" class="form-control" required pattern="[a-zA-Z0-9.]+"/>
+          </div>             
+          <label for="input-tabpart-synonym">Synonym:</label>
+          <div class="input-group input-group-sm">
+            <input type="text" placeholder="" id="input-tabpart-synonum" class="form-control"/>
+          </div>  
+          <label>Requisites:</label>
+          <div class="btn-toolbar" role="toolbar" aria-label="toolbar group">
+            <div class="btn-group btn-group-sm" role="group">
+              <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" onclick="reqModal()">
+                <i class="fa fa-plus-square"></i>
+                <span>{{ button_add }}</span>
+              </button>
+              <button type="button" class="btn btn-primary d-flex gap-2 align-items-center eva-edit" onclick="reqEditModal()">
+                <i class="fa fa-edit"></i>
+                <span>{{ button_edit }}</span>
+              </button>
+              <button type="button" class="btn btn-primary d-flex gap-2 align-items-center" onclick="reqTabPartDelete()">
+                <i class="fa fa-minus-square"></i>
+                <span>{{ button_delete }}</span>
+              </button>
+            </div>
+          </div>                        
+        </form>
+        <div class="eva-table"></div>  
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" onclick="tabPartCreate()">{{ button_save }}&{{ button_close }}</button>
+      </div>
+    </div>
+  </div>
+</div>
 {# Modal Requisite #}
-<div class="modal fade" id="requisiteModal" tabindex="-2" data-bs-backdrop="static" aria-labelledby="requisiteModalLabel" aria-hidden="true">
+<div class="modal fade" id="requisiteModal" tabindex="-3" data-bs-backdrop="static" aria-labelledby="requisiteModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -436,32 +480,6 @@
     </div>
   </div>
 </div>
-{# Modal Tabular part #}
-<div class="modal fade" id="tabPartModal" tabindex="-2" data-bs-backdrop="static" aria-labelledby="tabPartModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="tabPartModalLabel">*</h5>
-        <button type="button" class="btn-close" aria-label="Close" data-bs-dismiss="modal" onclick=""></button>
-      </div>
-      <div class="modal-body">
-        <form class="form" id="create-tabpart-form">         
-          <label for="input-tabpart-id">Identifier:</label>
-          <div class="input-group input-group-sm">
-            <input type="text" placeholder="[a-zA-Z0-9]" id="input-tabpart-id" class="form-control" required pattern="[a-zA-Z0-9.]+"/>
-          </div>             
-          <label for="input-tabpart-synonym">Synonym:</label>
-          <div class="input-group input-group-sm">
-            <input type="text" placeholder="" id="input-tabpart-synonum" class="form-control"/>
-          </div>                
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="submit" class="btn btn-primary" onclick="tabPartCreate()">{{ button_save }}&{{ button_close }}</button>
-      </div>
-    </div>
-  </div>
-</div>
 {# Modal Module #}
 <div class="modal modal-lg fade" id="moduleModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="moduleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -484,7 +502,7 @@
   </div>
 </div>
 {# Modal Select Type #}
-<div class="modal modal-lg fade" id="selectTypeModal" tabindex="-2" data-bs-backdrop="static" aria-labelledby="selectTypeModalLabel" aria-hidden="true">
+<div class="modal modal-lg fade" id="selectTypeModal" tabindex="-4" data-bs-backdrop="static" aria-labelledby="selectTypeModalLabel" aria-hidden="true">
   <div class="modal-dialog  modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">

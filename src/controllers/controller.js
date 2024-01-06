@@ -1,4 +1,4 @@
-const { User, Role, Config, Subsystem, Constant, Module, Requisite, TabPart, Form } = require('../models/models.js');
+const { User, Role, Config, Subsystem, Constant, Module, Requisite, TabPart, TabPartReq, Form } = require('../models/models.js');
 const { content }       = require('../index.js');
 const bcrypt            = require('bcrypt');
 const sequelize         = require('../db');
@@ -789,7 +789,81 @@ exports.editTabpart = async function(req, res) {
         console.log(err); 
     }   
 }
+exports.getTabPartReqs = async function(req, res) {
+    console.log(dateNow(),'>>getTabPartReqs()...');
+    if (!req.body) return res.sendStatus(400);
 
+    const { owner } = req.body;
+
+    try {
+        const  data = await TabPartReq.findAll({ where: { owner: owner }});        
+        await res.send(data);        
+    } catch(err) {
+        console.log(err);
+    }
+}
+exports.getTabPartReq = async function(req, res) {
+    console.log(dateNow(),'>>getTabPartReq()...');
+    if (!req.body) return res.sendStatus(400);
+
+    const { id } = req.body;
+
+    try {
+        const  data = await TabPartReq.findOne({ where: { id: id }});        
+        await res.send(data);        
+    } catch(err) {
+        console.log(err);
+    }
+}
+exports.createTabPartReq = async function(req, res) {
+    console.log(dateNow(),'>>createTabPartReq()...');
+    if (!req.body) return res.sendStatus(400);
+
+    const { owner, data } = req.body;
+    
+    try {                     
+        const result = await TabPartReq.create({     
+                owner : owner,           
+                data  : data
+        });
+        return await res.json(result);   
+    } catch (err) {
+        console.log(err);
+    }
+}
+exports.deleteTabPartReq = async function(req, res) {
+    console.log(dateNow(),'>>deleteTabPartReq()...');
+    if (!req.body) return res.sendStatus(400);
+
+    const { id } = req.body;
+
+    try {    
+        const result = await TabPartReq.destroy(
+        {
+            where: {id : id}
+        })
+        return await res.json(result); 
+    } catch(err) {
+        console.log(err);
+    }
+}
+exports.editTabPartReq = async function(req, res) {
+    console.log(dateNow(),'>>editTabPartReq()...');    
+    if (!req.body) return res.sendStatus(400);     
+
+    const { id, data }  = req.body;  
+
+    try {
+        const result = await TabPartReq.update({             
+            data  : data            
+        }, {
+            where: {id : id}
+        })        
+        return await res.json(result); 
+    } catch(err) {
+        console.log(err); 
+    }   
+}
 //eva-app/////////////////////////////////////////
 exports.getReferences = async function(req, res) {
     console.log(dateNow(),'>>getReferences()...');

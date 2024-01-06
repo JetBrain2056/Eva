@@ -1,5 +1,6 @@
 let selectRows = [];
 let currentModal;
+let tabpartModal;
 let requisiteModal;
 let selectModal;
 let inputStatus     = document.getElementById('status');
@@ -899,6 +900,33 @@ async function showRequisiteTable() {
     showTable(resTbl, hide, col, data);
 
 }
+async function showTabPartReqTable() {
+    console.log('>>showTabPartReqTable()...');
+   
+    const modalForm = document.getElementById("tabPartModal");
+
+    resTbl = buildTabpanel(modalForm, "385");
+
+    // const ownerForm     = modalForm;  
+    const id = modalForm.getAttribute("eva-id");
+    console.log(id);
+    const getData = {'owner': id}
+    let tmp = await postOnServer(getData,'/gettabpartreqs');  
+    console.log(tmp);
+    let data = [];
+    for (const row of tmp) {
+        let strJson = row.data; 
+        let Elements = await JSON.parse(strJson);
+
+        data.push({'id':row.id, 'textId':Elements.textId, 'type':Elements.type});    
+    }
+  
+    const col = {'id':'Id','textId':'Identifier','type':'Type'} 
+    const hide = ['id'];
+    
+    showTable(resTbl, hide, col, data);
+
+}
 async function reqModal() {
     console.log('>>reqModal()...');
 
@@ -915,6 +943,8 @@ async function reqModal() {
     const inputForm  = modalForm.querySelector("#create-req-form");   
     inputForm.reset();
     inputForm.setAttribute("create-mode",true);  
+    // inputForm.setAttribute("eva-id", true);  
+    // inputForm.setAttribute("eva-type", true);  
 
     requisiteModal = getModal(modalForm);
 }
@@ -1012,16 +1042,24 @@ async function reqCreate(e) {
         'data'    : JSON.stringify(tmp),
     }
 
+    const reqType = inputForm.getAttribute("eva-type");
+    let link = '';
+    if (reqType==='Reference') {
+        link = 'req';
+    } else {
+        link = 'tabpartreq';
+    }
+
     if (createMode==='true') {
         try {
-            result = await postOnServer(data, '/createreq')
+            result = await postOnServer(data, '/create'+link)
             console.log(result);        
         } catch (err) {
             console.log(err);
         }
     } else {
         try {
-            result = await postOnServer(data, '/editreq')
+            result = await postOnServer(data, '/edit'+link)
             console.log(result);        
         } catch (err) {
             console.log(err);
@@ -1030,19 +1068,35 @@ async function reqCreate(e) {
 
     await requisiteModal.hide();
 
-    if (result) await showRequisiteTable();    
+    if (result) {
+        // if (reqType==='Reference') {
+            await showRequisiteTable();    
+        // } else {        
+        //     await showTabPartReqTable();  
+        // }
+    }
 }
 async function reqDelete() {
     console.log('>>reqDelete()...');
     
     for (const row of selectRows) {
-
         const data = {'id': row.cells[0].innerText};
 
         res = await postOnServer(data,'/delreq');        
     }
 
     if (res) await showRequisiteTable();
+}
+async function reqTabPartDelete() {
+    console.log('>>reqTabPartDelete()...');
+    
+    for (const row of selectRows) {
+        const data = {'id': row.cells[0].innerText};
+
+        res = await postOnServer(data,'/deltabpartreq');        
+    }
+
+    if (res) await showTabPartReqTable();
 }
 /////////////////////////////////////////////////////////////////////////////
 async function showTabPartTable() {
@@ -1059,7 +1113,6 @@ async function showTabPartTable() {
     let tmp = await postOnServer(getData,'/gettabparts');  
 
     let data = [];
-
     for (const row of tmp) {
         let strJson = row.data; 
         let Elements = await JSON.parse(strJson);
@@ -1089,8 +1142,11 @@ async function tabPartModal() {
     const inputForm  = modalForm.querySelector("#create-tabpart-form");   
     inputForm.reset();
     inputForm.setAttribute("create-mode",true);  
+    modalForm.setAttribute("eva-id", inputForm.getAttribute("eva-id"));  
 
-    requisiteModal = getModal(modalForm);
+    tabpartModal = getModal(modalForm);
+
+    await showTabPartReqTable();
 }
 async function tabPartEditModal() {
     console.log('>>tabPartEditModal()...');
@@ -1106,7 +1162,7 @@ async function tabPartEditModal() {
     inputForm.reset();
     inputForm.setAttribute("create-mode",false);  
 
-    requisiteModal = getModal(modalForm);
+    tabpartModal = getModal(modalForm);
 
     const row = await selectRows[0];  
 
@@ -1122,9 +1178,12 @@ async function tabPartEditModal() {
         let Elements = await JSON.parse(strJson);    
 
         inputForm.setAttribute("eva-id", res.id);
+        modalForm.setAttribute("eva-id", res.id);  
         inputTabPartId.value       = Elements.textId;        
         inputTabPartSyn.value      = Elements.synonum;
     }
+
+    await showTabPartReqTable();
 }
 async function tabPartCreate(e) {
     console.log('>>tabPartCreate()...');
@@ -1175,7 +1234,6 @@ async function tabPartDelete() {
     console.log('>>tabPartDelete()...');
     
     for (const row of selectRows) {
-
         const data = {'id': row.cells[0].innerText};
 
         res = await postOnServer(data,'/deltabpart');        

@@ -127,7 +127,7 @@ async function refModal() {
     currentModal = getModal(modalForm);
 
     const refModalLabel  = modalForm.querySelector('#refModalLabel');  
-    refModalLabel.innerText = 'Add element:';    
+    refModalLabel.innerText = 'Add an element:';    
 
     let createMode = true;
     let copyMode   = false;
@@ -170,9 +170,9 @@ async function refEditModal(copyMode) {
 
     const refModalLabel    = modalForm.querySelector('#refModalLabel');  
     if (copyMode) {
-        refModalLabel.innerText = 'Add element:';
+        refModalLabel.innerText = 'Add an element:';
     } else {
-        refModalLabel.innerText = 'Edit element:';
+        refModalLabel.innerText = 'Edit an element:';
     }   
 
     let createMode = false;    
@@ -412,7 +412,7 @@ async function docModal() {
     currentModal = getModal(modalForm);
 
     const refModalLabel  = modalForm.querySelector('#docModalLabel');  
-    refModalLabel.innerText = 'Add document:';    
+    refModalLabel.innerText = 'Add an document:';    
 
     let createMode = true;
     let copyMode   = false;
@@ -489,9 +489,9 @@ async function docEditModal(copyMode) {
 
     const refModalLabel    = modalForm.querySelector('#docModalLabel');  
     if (copyMode) {
-        refModalLabel.innerText = 'Add document:';
+        refModalLabel.innerText = 'Add an document:';
     } else {
-        refModalLabel.innerText = 'Edit document:';
+        refModalLabel.innerText = 'Edit an document:';
     }   
 
     let createMode = false;    

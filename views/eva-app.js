@@ -67,6 +67,18 @@ async function getSynonyms(evaForm) {
     }
     return arrSyn;
 }
+async function tabParts(ul, textId) {
+    console.log('>>tabParts()...', id);
+    res = await postOnServer({ 'owner': textIdid }, '/gettabparts');  
+
+    res = await postOnServer({ 'owner': id }, '/gettabparts');  
+    console.log(res);
+    for (let elem of res) {
+        let strJson = elem.data;          
+        let Elements = await JSON.parse(strJson);    
+        addTabs(ul, Elements.textId);
+    }
+}
 async function refCreate(e) {
     console.log('>>refCreate()...');
 
@@ -125,8 +137,8 @@ async function refModal() {
 
     const ul = modalForm.querySelector("#eva-nav-tabs-ref"); 
     ul.innerHTML = '';  
-    const tabName = "Main";
-    addTabs(ul, tabName);
+    
+    addTabs(ul, 'Main');
 
     const refModalLabel  = modalForm.querySelector('#refModalLabel');  
     refModalLabel.innerText = 'Add an element:';    
@@ -158,8 +170,9 @@ async function refModal() {
         arr[colName] = '';  
         arrCol[colName] = obj;
     }
-    // console.log(arrCol);
+    
     await refElement(refForm, arr, arrCol, arrSyn, createMode, copyMode, typeId);      
+    await tabParts(ul, textId);
 }
 async function refEditModal(copyMode) {
     console.log('>>refEditModal()...'); 
@@ -172,8 +185,8 @@ async function refEditModal(copyMode) {
 
     const ul = modalForm.querySelector("#eva-nav-tabs-ref"); 
     ul.innerHTML = '';  
-    const tabName = "Main";
-    addTabs(ul, tabName);
+    
+    addTabs(ul, 'Main');
 
     const refModalLabel    = modalForm.querySelector('#refModalLabel');  
     if (copyMode) {
@@ -216,7 +229,8 @@ async function refEditModal(copyMode) {
     }
 
     res = await postOnServer(data, '/getref');  
-    await refElement(refForm, res[0], arrCol, arrSyn, createMode, copyMode);     
+    await refElement(refForm, res[0], arrCol, arrSyn, createMode, copyMode);   
+    await tabParts(ul, id);  
 }
 async function constEditModal() {
     console.log('>>constEditModal()...'); 
@@ -454,7 +468,8 @@ async function docModal() {
         arrCol[colName] = obj;
     }
 
-    await refElement(refForm, arr, arrCol, arrSyn, createMode, copyMode, typeId);      
+    await refElement(refForm, arr, arrCol, arrSyn, createMode, copyMode, typeId);        
+    await tabParts(ul, textId);
 }
 async function docCreate(e) {
     console.log('>>docCreate()...');
@@ -487,7 +502,7 @@ async function docCreate(e) {
 
     await currentModal.hide();
 
-    if (result) await showDocTable(textId);
+    if (result) await showRefTable(textId);
 
 }
 async function docEditModal(copyMode) {
@@ -501,8 +516,8 @@ async function docEditModal(copyMode) {
 
     const ul = modalForm.querySelector("#eva-nav-tabs-doc"); 
     ul.innerHTML = '';  
-    const tabName = "Main";
-    addTabs(ul, tabName);
+    
+    addTabs(ul, 'Main');
 
     const refModalLabel    = modalForm.querySelector('#docModalLabel');  
     if (copyMode) {
@@ -544,8 +559,10 @@ async function docEditModal(copyMode) {
         let obj = {'colName': colName, 'dataType':dataType, 'identifier': identifier}          
         arrCol[colName] = obj;
     }
+
     res = await postOnServer(data, '/getref');  
     await refElement(refForm, res[0], arrCol, arrSyn, createMode, copyMode, typeId);     
+    await tabParts(ul, textId);
 }
 async function docDelete() {
     console.log('>>docDelete()...');
@@ -561,7 +578,7 @@ async function docDelete() {
         result = await postOnServer(data, '/delref');        
     }
 
-    if (result) await showDocTable(textId);
+    if (result) await showRefTable(textId);
 }
 //DOM Dynamic Content////////////////////////////////////////////////////////
 function addTabs(ul, tabName) {

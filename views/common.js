@@ -800,14 +800,11 @@ async function typeSelect() {
 
     const modalForm = document.getElementById("selectTypeModal");
 
-    const id = modalForm.getAttribute("eva-id");     
-    // console.log(id);
-    const inputElement = document.querySelector("#"+id);
-    console.log(inputElement);
+    const id = modalForm.getAttribute("eva-id");         
+    const inputElement = document.querySelector("#"+id);    
     const value = row.cells[1].innerText+'.'+row.cells[2].innerText;
     
-    const elem = inputElement.querySelector("option[value='"+value+"']");
-    console.log(elem);
+    const elem = inputElement.querySelector("option[value='"+value+"']");    
     if (!elem) {
         const option = document.createElement('option');
         option.value = value;
@@ -815,6 +812,10 @@ async function typeSelect() {
         option.setAttribute("selected","selected"); 
         inputElement.appendChild(option);
     }
+
+    const inputReqId = document.querySelector("#input-req-id");
+    inputReqId.value = value;
+    inputReqId.setAttribute("disabled","disabled");   
   
     inputElement.setAttribute("eva-id", row.cells[0].innerText);
   
@@ -822,8 +823,6 @@ async function typeSelect() {
 }
 async function selectType(id) {
     console.log('>>selectType()...'); 
-
-    console.log(id);
 
     const modalForm = document.getElementById("selectTypeModal");
     modalForm.setAttribute("eva-id", id.split('_')[0]);

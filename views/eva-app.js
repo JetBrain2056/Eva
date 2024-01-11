@@ -916,57 +916,51 @@ function navLink(nav, name, id, type) {
     li.appendChild(a);           
     nav.appendChild(li);     
 }
-function collapseLink(div, a, name, n) {
+function collapseLink(div, nav, name, n) {
 
-    a[n] = document.createElement('div');
-    a[n].setAttribute("class","icon-link");    
-    a[n].setAttribute("style","color: #555555;font-size: 19px;");     
-    a[n].setAttribute("data-bs-toggle","collapse"); 
-    a[n].setAttribute("data-bs-target","#collapse-link-"+n);     
-    a[n].href="#";
-    a[n].innerText = name;
+    const a = document.createElement('div');
+    a.setAttribute("class","icon-link");    
+    a.setAttribute("style","color: #555555;font-size: 19px;");     
+    a.setAttribute("data-bs-toggle","collapse"); 
+    a.setAttribute("data-bs-target","#collapse-link-"+n);     
+    a.href="#";
+    a.innerText = name;
         const i = document.createElement("i");
         i.setAttribute("class","fa fa-caret-down");
         i.setAttribute("aria-hidden","true");    
-    a[n].appendChild(i);
-    div.appendChild(a[n]);  
+    a.appendChild(i);
+    div.appendChild(a);  
 
-    return a;
+    nav[n] = document.createElement('nav');       
+    nav[n].setAttribute("class","collapse show container-fluid");    
+    nav[n].setAttribute("id","collapse-link-"+n); 
+    a.appendChild(nav[n]);   
+
+    return nav;
 }
-async function tabDesk(div) {
+async function tabDesk() {
     console.log('>>tabDesk()...');
-
-    let a = [];
-    a[0] = document.createElement('a');
-    a[0].setAttribute("class","link icon-link");    
-    a[0].setAttribute("style","color: #555555;font-size: 19px;");  
-    a[0].href="#";  
-    a[0].innerText = 'Constants';
-    a[0].setAttribute("id", "Constants");           
-    a[0].setAttribute("eva-id", "Constants");  
-    a[0].setAttribute("onclick", "openConst()");  
-    div.appendChild(a[0]);  
-
-    a = collapseLink(div, a, 'References', 1);
-    a = collapseLink(div, a, 'Documents' , 2);
+    const div = document.querySelector("#nav-Desktop");
     
-    let nav = [];
-    nav[0] = document.createElement('nav');       
-    nav[0].setAttribute("class","collapse show container-fluid");    
-    nav[0].setAttribute("id","collapse-link-1"); 
-    a[1].appendChild(nav[0]);    
+    const a = document.createElement('a');
+    a.setAttribute("class","link icon-link");    
+    a.setAttribute("style","color: #555555;font-size: 19px;");  
+    a.href="#";  
+    a.innerText = 'Constants';
+    a.setAttribute("id", "Constants");           
+    a.setAttribute("eva-id", "Constants");  
+    a.setAttribute("onclick", "openConst()");  
+    div.appendChild(a);  
 
-    nav[1] = document.createElement('nav');       
-    nav[1].setAttribute("class","collapse show container-fluid");    
-    nav[1].setAttribute("id","collapse-link-2");
-    a[2].appendChild(nav[1]);    
+    let nav = [];
+    nav = collapseLink(div, nav, 'References', 0);
+    nav = collapseLink(div, nav, 'Documents' , 1);
     
     let data = await getOnServer('/getconfig');
     for (let row of data) {
         let id       = row.id;
         let strJson  = row.data; 
-        let elements = await JSON.parse(strJson);
-        // console.log(elements.typeId);
+        let elements = await JSON.parse(strJson);        
         if (row.state===0 && elements.typeId==='Reference') {                                                   
             navLink(nav[0], elements.textId, id, elements.typeId);                                  
         } else if (row.state===0 && elements.typeId==='Document') {    
@@ -974,16 +968,15 @@ async function tabDesk(div) {
         }
     }        
 }
-async function tabRef(div) {
+async function tabRef() {
     console.log('>>tabRef()...');
-
+    const div = document.querySelector("#nav-References");
     let data = await getOnServer('/getconfig');
     for (let row of data) {
         let id       = row.id;
         let strJson  = row.data;         
         let elements = await JSON.parse(strJson);
-        if (row.state===0 && elements.typeId==='Reference') {
-                    
+        if (row.state===0 && elements.typeId==='Reference') {                    
             const nav = document.createElement('nav');
             nav.setAttribute("class","nav flex-column");                 
                 navLink(nav, elements.textId, id, elements.typeId);                    
@@ -1026,13 +1019,10 @@ async function header() {
     for (let row of data) {        
         navItem(navTab, row.name);           
     }      
-
-    let div = document.querySelector("#nav-Desktop");
-    tabDesk(div);  
-    div = document.querySelector("#nav-References");
-    tabRef(div);  
-    div = document.querySelector("#nav-Reports");
-    //tabRep(div);   
+   
+    tabDesk();  
+    tabRef();  
+ 
     //Subsystems
     for (let row of data) {     
         console.log('name', row.name);           

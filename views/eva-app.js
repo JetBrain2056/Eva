@@ -916,52 +916,48 @@ function navLink(nav, name, id, type) {
     li.appendChild(a);           
     nav.appendChild(li);     
 }
-async function tabDesk(div) {
-    console.log('>>tabDesk()...');
+function collapseLink(div, a, name, n) {
 
-    const a1 = document.createElement('a');
-    a1.setAttribute("class","link icon-link");    
-    a1.setAttribute("style","color: #555555;font-size: 19px;");  
-    a1.href="#";  
-    a1.innerText = 'Constants';
-    a1.setAttribute("id", "Constants");           
-    a1.setAttribute("eva-id", "Constants");  
-    a1.setAttribute("onclick", "openConst()");  
-    div.appendChild(a1);  
-    
-    const a = document.createElement('div');
-    a.setAttribute("class","icon-link");    
-    a.setAttribute("style","color: #555555;font-size: 19px;");     
-    a.setAttribute("data-bs-toggle","collapse"); 
-    a.setAttribute("data-bs-target","#collapse-link");     
-    a.href="#";
-    a.innerText = 'References';
+    a[n] = document.createElement('div');
+    a[n].setAttribute("class","icon-link");    
+    a[n].setAttribute("style","color: #555555;font-size: 19px;");     
+    a[n].setAttribute("data-bs-toggle","collapse"); 
+    a[n].setAttribute("data-bs-target","#collapse-link-"+n);     
+    a[n].href="#";
+    a[n].innerText = name;
         const i = document.createElement("i");
         i.setAttribute("class","fa fa-caret-down");
         i.setAttribute("aria-hidden","true");    
-    a.appendChild(i);
-    div.appendChild(a);   
+    a[n].appendChild(i);
+    div.appendChild(a[n]);  
 
-    const a3 = document.createElement('div');
-    a3.setAttribute("class","icon-link");    
-    a3.setAttribute("style","color: #555555;font-size: 19px;");     
-    a3.setAttribute("data-bs-toggle","collapse"); 
-    a3.setAttribute("data-bs-target","#collapse-link3");     
-    a3.href="#";
-    a3.innerText = 'Documents';
-        const i3 = document.createElement("i");
-        i3.setAttribute("class","fa fa-caret-down");
-        i3.setAttribute("aria-hidden","true");    
-    a3.appendChild(i3);
-    div.appendChild(a3); 
+    return a;
+}
+async function tabDesk(div) {
+    console.log('>>tabDesk()...');
 
-    const nav = document.createElement('nav');       
-    nav.setAttribute("class","collapse show container-fluid");    
-    nav.setAttribute("id","collapse-link");    
+    let a = [];
+    a[0] = document.createElement('a');
+    a[0].setAttribute("class","link icon-link");    
+    a[0].setAttribute("style","color: #555555;font-size: 19px;");  
+    a[0].href="#";  
+    a[0].innerText = 'Constants';
+    a[0].setAttribute("id", "Constants");           
+    a[0].setAttribute("eva-id", "Constants");  
+    a[0].setAttribute("onclick", "openConst()");  
+    div.appendChild(a[0]);  
 
-    const nav3 = document.createElement('nav');       
-    nav3.setAttribute("class","collapse show container-fluid");    
-    nav3.setAttribute("id","collapse-link3");  
+    a = collapseLink(div, a, 'References', 1);
+    a = collapseLink(div, a, 'Documents' , 2);
+    
+    let nav = [];
+    nav[0] = document.createElement('nav');       
+    nav[0].setAttribute("class","collapse show container-fluid");    
+    nav[0].setAttribute("id","collapse-link-1");    
+
+    nav[1] = document.createElement('nav');       
+    nav[1].setAttribute("class","collapse show container-fluid");    
+    nav[1].setAttribute("id","collapse-link-2");  
     
     let data = await getOnServer('/getconfig');
     for (let row of data) {
@@ -970,11 +966,11 @@ async function tabDesk(div) {
         let elements = await JSON.parse(strJson);
         console.log(elements.typeId);
         if (row.state===0 && elements.typeId==='Reference') {                                                   
-            navLink(nav, elements.textId, id, elements.typeId);                    
-            a.appendChild(nav);    
+            navLink(nav[0], elements.textId, id, elements.typeId);                    
+            a[1].appendChild(nav[0]);    
         } else if (row.state===0 && elements.typeId==='Document') {    
-            navLink(nav3, elements.textId, id, elements.typeId);                    
-            a3.appendChild(nav3);                 
+            navLink(nav[1], elements.textId, id, elements.typeId);                    
+            a[2].appendChild(nav[1]);                 
         }
     }        
 }

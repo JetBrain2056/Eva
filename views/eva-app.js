@@ -953,24 +953,24 @@ async function tabDesk(div) {
     let nav = [];
     nav[0] = document.createElement('nav');       
     nav[0].setAttribute("class","collapse show container-fluid");    
-    nav[0].setAttribute("id","collapse-link-1");    
+    nav[0].setAttribute("id","collapse-link-1"); 
+    a[1].appendChild(nav[0]);    
 
     nav[1] = document.createElement('nav');       
     nav[1].setAttribute("class","collapse show container-fluid");    
-    nav[1].setAttribute("id","collapse-link-2");  
+    nav[1].setAttribute("id","collapse-link-2");
+    a[2].appendChild(nav[1]);    
     
     let data = await getOnServer('/getconfig');
     for (let row of data) {
         let id       = row.id;
         let strJson  = row.data; 
         let elements = await JSON.parse(strJson);
-        console.log(elements.typeId);
+        // console.log(elements.typeId);
         if (row.state===0 && elements.typeId==='Reference') {                                                   
-            navLink(nav[0], elements.textId, id, elements.typeId);                    
-            a[1].appendChild(nav[0]);    
+            navLink(nav[0], elements.textId, id, elements.typeId);                                  
         } else if (row.state===0 && elements.typeId==='Document') {    
-            navLink(nav[1], elements.textId, id, elements.typeId);                    
-            a[2].appendChild(nav[1]);                 
+            navLink(nav[1], elements.textId, id, elements.typeId);                               
         }
     }        
 }

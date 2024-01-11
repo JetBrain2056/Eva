@@ -566,7 +566,7 @@ async function docDelete() {
 //DOM Dynamic Content////////////////////////////////////////////////////////
 function addTabs(ul, tabName) {
     const li = document.createElement("li");        
-    li.setAttribute("class","nav-item");                      
+    li.setAttribute("class","nav-item nav-item-sm");                      
     li.setAttribute("id", "eva-item-"+tabName);  
     li.setAttribute("name", tabName);  
         const a = document.createElement("a");
@@ -845,6 +845,24 @@ async function showRefTable(refName, refType) {
     showTable(refTbl, hide, col, data, colType);
 
 }
+function addTabPane(name) {
+    const evaSubsys = document.querySelector('.eva-subsys'); 
+    const subsys = document.createElement("div"); 
+    if (name=='Desktop') {    
+        subsys.setAttribute("class","tab-pane fade active show");      
+    } else {                       
+        subsys.setAttribute("class","tab-pane fade");   
+    }
+    subsys.setAttribute("role","tabpanel");
+    subsys.setAttribute("id", "nav-"+name);
+    subsys.setAttribute("aria-labelledby","nav-"+name+"-tab");
+        const h5 = document.createElement("h5");  
+        h5.setAttribute("class","title");
+        h5.innerText = name;
+        h5.appendChild(document.createElement("hr"));  
+    subsys.appendChild(h5);    
+    evaSubsys.appendChild(subsys);  
+}
 function navItem(navTab, name) {    
     const li = document.createElement('li');
     li.setAttribute("class","nav-item");
@@ -864,24 +882,24 @@ function navItem(navTab, name) {
         a[name].innerText = name;    
         a[name].href="#";                 
     li.appendChild(a[name]);     
-    navTab.appendChild(li);  
+    navTab.appendChild(li);      
 
-    const evaSubsys = document.querySelector('.eva-subsys'); 
-    const subsys = document.createElement("div"); 
-    if (name=='Desktop') {    
-        subsys.setAttribute("class","tab-pane fade active show");      
-    } else {                       
-        subsys.setAttribute("class","tab-pane fade");   
-    }
-    subsys.setAttribute("role","tabpanel");
-    subsys.setAttribute("id", "nav-"+name);
-    subsys.setAttribute("aria-labelledby","nav-"+name+"-tab");
-        const h5 = document.createElement("h5");  
-        h5.setAttribute("class","title");
-        h5.innerText = name;
-        h5.appendChild(document.createElement("hr"));  
-    subsys.appendChild(h5);    
-    evaSubsys.appendChild(subsys);                   
+    addTabPane(name);
+}
+function navHiddenItem(navTab, name) {    
+    const li = document.createElement("li");        
+        li.setAttribute("class","nav-item");
+        li.setAttribute("hidden","hidden");
+            const a = document.createElement("a");
+            a.setAttribute("class","nav-link eva-link-"+name);
+            a.setAttribute("id",name+"-form");
+            a.setAttribute("data-bs-toggle","tab");
+            a.setAttribute("data-bs-target","#nav-"+name+"-form");
+            a.setAttribute("role","tab");
+            a.setAttribute("aria-controls","nav-"+name+"-form");
+            a.setAttribute("aria-selected","false");
+        li.appendChild(a);    
+    navTab.appendChild(li);               
 }
 function navLink(nav, name, id, type) {
     console.log('>>navLink()...', type);
@@ -997,34 +1015,11 @@ async function tabSubsys(div, name) {
 async function header() {
     console.log('>>header()...');
 
-    const navTab = document.getElementById("eva-nav");      
-        const li = document.createElement("li");        
-        li.setAttribute("class","nav-item");
-        li.setAttribute("hidden","hidden");
-            const a = document.createElement("a");
-            a.setAttribute("class","nav-link eva-link-ref");
-            a.setAttribute("id","ref-form");
-            a.setAttribute("data-bs-toggle","tab");
-            a.setAttribute("data-bs-target","#nav-ref-form");
-            a.setAttribute("role","tab");
-            a.setAttribute("aria-controls","nav-ref-form");
-            a.setAttribute("aria-selected","false");
-        li.appendChild(a);    
-    navTab.appendChild(li);
-        const li2 = document.createElement("li");        
-        li2.setAttribute("class","nav-item");
-        li2.setAttribute("hidden","hidden");
-            const a2 = document.createElement("a");
-            a2.setAttribute("class","nav-link eva-link-const");
-            a2.setAttribute("id","const-form");
-            a2.setAttribute("data-bs-toggle","tab");
-            a2.setAttribute("data-bs-target","#nav-const-form");
-            a2.setAttribute("role","tab");
-            a2.setAttribute("aria-controls","nav-const-form");
-            a2.setAttribute("aria-selected","false");
-        li2.appendChild(a2);    
-    navTab.appendChild(li2);        
-    
+    const navTab = document.getElementById("eva-nav");   
+    //HIDDEN
+    navHiddenItem(navTab,'const');   
+    navHiddenItem(navTab,'ref');  
+          
     //MAIN
     navItem(navTab, 'Desktop'); 
     navItem(navTab, 'References');         

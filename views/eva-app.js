@@ -433,14 +433,14 @@ async function docModal() {
 
     const ul = modalForm.querySelector("#eva-nav-tabs-doc"); 
     ul.innerHTML = '';  
-    const tabName = "Main";
-    addTabs(ul, tabName);
+    
+    addTabs(ul, 'Main');
 
     const refModalLabel  = modalForm.querySelector('#docModalLabel');  
     refModalLabel.innerText = 'Add an document:';    
 
-    let createMode = true;
-    let copyMode   = false;
+    const createMode = true;
+    const copyMode   = false;
 
     const refForm        = modalForm.querySelector('#create-doc-form');  
     refForm.innerHTML = '';
@@ -475,7 +475,7 @@ async function docCreate(e) {
 
     const refForm    = document.getElementById("create-doc-form");
     const textId     = refForm.getAttribute("eva-textId");
-    const refType    = refForm.getAttribute("eva-typeId");
+    const typeId     = refForm.getAttribute("eva-typeId");
     let createMode   = refForm.getAttribute("create-mode");     
     let copyMode     = refForm.getAttribute("copy-mode");   
     
@@ -499,7 +499,7 @@ async function docCreate(e) {
 
     await currentModal.hide();
 
-    if (result) await showRefTable(textId, refType);
+    if (result) await showRefTable(textId, typeId);
 
 }
 async function docEditModal(copyMode) {
@@ -521,10 +521,9 @@ async function docEditModal(copyMode) {
         refModalLabel.innerText = 'Add an document:';
     } else {
         refModalLabel.innerText = 'Edit an document:';
-    }   
-
-    let createMode = false;    
+    }        
           
+    const createMode = false;
     const refForm    = modalForm.querySelector('#create-doc-form');    
     refForm.reset();  
     refForm.innerHTML = '';     
@@ -537,6 +536,7 @@ async function docEditModal(copyMode) {
     const textId = evaForm.getAttribute("eva-textId");
     const typeId = evaForm.getAttribute("eva-typeId");
     refForm.setAttribute("eva-textId", textId);
+    refForm.setAttribute("eva-typeId", typeId);
 
     arrSyn = await getSynonyms(evaForm);  
 
@@ -566,7 +566,7 @@ async function docDelete() {
 
     const refForm = document.getElementById("nav-ref-form");    
     const textId  = refForm.getAttribute("eva-textId");
-    const typeId = refForm.getAttribute("eva-typeId");
+    const typeId  = refForm.getAttribute("eva-typeId");
     
     for (const row of selectRows) {
         const data = {

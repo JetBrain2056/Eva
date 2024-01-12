@@ -84,8 +84,7 @@ async function refCreate(e) {
 
     const refForm    = document.getElementById("create-ref-form");
     const textId     = refForm.getAttribute("eva-textId");
-    const typeId     = refForm.getAttribute("eva-typeId");
-    const id         = refForm.getAttribute("eva-id");
+    const typeId     = refForm.getAttribute("eva-typeId");    
     let createMode   = refForm.getAttribute("create-mode");     
     let copyMode     = refForm.getAttribute("copy-mode");   
     
@@ -102,15 +101,14 @@ async function refCreate(e) {
             result = await postOnServer(data, '/createref');                           
         } else {    
             result = await postOnServer(data, '/updateref');
-        }
-        // console.log(result);  
+        }         
     } catch (err) {
         console.log(err);
     }
 
     await currentModal.hide();
 
-    if (result) await showRefTable(textId, typeId, id);
+    if (result) await showRefTable(textId, typeId);
 
 }
 async function refDelete() {
@@ -118,6 +116,7 @@ async function refDelete() {
 
     const refForm = document.getElementById("nav-ref-form");    
     const textId  = refForm.getAttribute("eva-textId");
+    const typeId  = refForm.getAttribute("eva-typeId");
     
     for (const row of selectRows) {
         const data = {
@@ -127,7 +126,7 @@ async function refDelete() {
         result = await postOnServer(data, '/delref');        
     }
 
-    if (result) await showRefTable(textId);
+    if (result) await showRefTable(textId, typeId);
 }
 async function refModal() {
     console.log('>>refModal()...');      
@@ -476,6 +475,7 @@ async function docCreate(e) {
 
     const refForm    = document.getElementById("create-doc-form");
     const textId     = refForm.getAttribute("eva-textId");
+    const refType    = refForm.getAttribute("eva-typeId");
     let createMode   = refForm.getAttribute("create-mode");     
     let copyMode     = refForm.getAttribute("copy-mode");   
     
@@ -484,25 +484,22 @@ async function docCreate(e) {
         await e.stopPropagation();        
     }
       
-    data = await createReq(refForm, textId, createMode, copyMode);   
-    console.log(data);  
+    data = await createReq(refForm, textId, createMode, copyMode);        
     try {
         if (createMode==='true'&&copyMode==='false') {
             result = await postOnServer(data, '/createref');                  
-        } else if (createMode==='false'&&copyMode==='true') {   
-            // console.log(copyMode);           
+        } else if (createMode==='false'&&copyMode==='true') {               
             result = await postOnServer(data, '/createref');                           
         } else {    
             result = await postOnServer(data, '/updateref');
-        }
-        // console.log(result);  
+        }        
     } catch (err) {
         console.log(err);
     }
 
     await currentModal.hide();
 
-    if (result) await showRefTable(textId);
+    if (result) await showRefTable(textId, refType);
 
 }
 async function docEditModal(copyMode) {
@@ -569,6 +566,7 @@ async function docDelete() {
 
     const refForm = document.getElementById("nav-ref-form");    
     const textId  = refForm.getAttribute("eva-textId");
+    const typeId = refForm.getAttribute("eva-typeId");
     
     for (const row of selectRows) {
         const data = {
@@ -578,7 +576,7 @@ async function docDelete() {
         result = await postOnServer(data, '/delref');        
     }
 
-    if (result) await showRefTable(textId);
+    if (result) await showRefTable(textId, typeId);
 }
 //DOM Dynamic Content////////////////////////////////////////////////////////
 function addTabs(ul, tabName) {
@@ -836,9 +834,8 @@ async function showRefTable(refName, refType) {
     const evaForm = document.querySelector('#eva-ref-form');    
     
     arrSyn = await getSynonyms(evaForm);  
-    console.log(arrSyn);
-
-    // const col  = { 'id':'Id', 'name':'Name' };  
+    // console.log(arrSyn);
+    
     const res = await postOnServer(tmp, '/getrefcol');  
     let col = {};   
     let colType = {};           
@@ -849,7 +846,13 @@ async function showRefTable(refName, refType) {
         if (synom) {
             col[colName] = synom;  
         } else {
-            col[colName] = colName;  
+            if (colName==='number') {
+                col[colName] = 'Number';  
+            } else if (colName==='date') {
+                col[colName] = 'Date';  
+            } else {
+                col[colName] = colName;  
+            }
         } 
         colType[colName] = dataType;
     }

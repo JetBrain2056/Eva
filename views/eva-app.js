@@ -69,16 +69,19 @@ async function getSynonyms(evaForm) {
     }
     return arrSyn;
 }
-async function tabParts(ul, textId) {
-    console.log('>>tabParts()...', textId);
-    // res = await postOnServer({ 'owner': textId }, '/gettabparts');  
-    // console.log(res);
+async function tabParts(ul, refName) {
+    console.log('>>tabParts()...');
+    const refLink = document.querySelector("#"+refName);
+    const refId   = refLink.getAttribute("eva-id");  
+    console.log(refId);
+    res = await postOnServer({ 'owner': refId }, '/gettabparts');  
+    console.log(res);
 
-    // for (let elem of res) {
-    //     let strJson = elem.data;          
-    //     let Elements = await JSON.parse(strJson);    
-    //     addTabs(ul, Elements.textId);
-    // }
+    for (let elem of res) {
+        let strJson = elem.data;          
+        let Elements = await JSON.parse(strJson);    
+        addTabs(ul, Elements.textId);
+    }
 }
 async function constEditModal() {
     console.log('>>constEditModal()...'); 
@@ -407,7 +410,7 @@ async function refEditModal(copyMode) {
 
     res = await postOnServer(data, '/getref');  
     await refElement(refForm, res[0], arrCol, arrSyn, createMode, copyMode);   
-    await tabParts(ul, id);  
+    await tabParts(ul, textId);  
 }
 async function refDelete() {
     console.log('>>refDelete()...');
@@ -566,9 +569,9 @@ async function docEditModal(copyMode) {
 async function docDelete() {
     console.log('>>docDelete()...');
 
-    const refForm = document.getElementById("nav-ref-form");    
-    const textId  = refForm.getAttribute("eva-textId");
-    const typeId  = refForm.getAttribute("eva-typeId");
+    const evaForm    = document.querySelector('#eva-ref-form');   
+    const textId = evaForm.getAttribute("eva-textId");
+    const typeId = evaForm.getAttribute("eva-typeId");
     
     for (const row of selectRows) {
         const data = {
@@ -587,7 +590,11 @@ function addTabs(ul, tabName) {
     li.setAttribute("id", "eva-item-"+tabName);  
     li.setAttribute("name", tabName);  
         const a = document.createElement("a");
-        a.setAttribute("class","nav-link active");                                
+        if (tabName==='Main') {
+            a.setAttribute("class","nav-link active");                                
+        } else {
+            a.setAttribute("class","nav-link");                                 
+        }
         a.setAttribute("href","#");                    
         a.setAttribute("name", tabName);  
         a.setAttribute("id", "eva-link-"+tabName);                                                        

@@ -400,8 +400,12 @@ exports.updateConfig = async function(req, res) {
     console.log(dateNow(), '>>updateConfig()...');
     if (!req.body) return res.sendStatus(400);
 
-    let refColumns = {id   : {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-                      name : {type: DataTypes.STRING(150)}}; 
+    let refColumns = {
+        id   : {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+        name : {type: DataTypes.STRING(150)},
+        number : {type: DataTypes.STRING(9)},
+        date : {type: DataTypes.DATE}
+    }
 
     let data;
     try {                          
@@ -459,8 +463,13 @@ exports.updateConfig = async function(req, res) {
                     console.log(err);
                     return await res.send('0');
                 }
-            } else if (typeId==='Document') { 
-                delete refColumns['name'];
+            } else {
+                if (typeId==='Document') { 
+                    delete refColumns['name'];            
+                } else {    
+                    delete refColumns['number'];
+                    delete refColumns['date'];                               
+                }       
                 try {
                     const EvaObject = sequelize.define(objectId, refColumns);
                     console.log('Create table:', EvaObject);   
@@ -469,15 +478,6 @@ exports.updateConfig = async function(req, res) {
                     console.log(err);
                     return await res.send('0');
                 } 
-            } else {                    
-                try {
-                    const EvaObject = sequelize.define(objectId, refColumns);
-                    console.log('Create table:', EvaObject);   
-                    await EvaObject.sync({alter: true});
-                } catch(err) {
-                    console.log(err);
-                    return await res.send('0');
-                }        
             }
             try {
                 const result = await Config.update({ 
@@ -552,8 +552,8 @@ exports.updateConfig = async function(req, res) {
                 }
                 try {
                     const count = await Constant.update({
-                        name : objectId,
-                        type : Elements.constType,
+                        name  : objectId,
+                        type  : Elements.constType,
                         value : value             
                     }, {
                         where: {id: row.id}
@@ -576,8 +576,7 @@ exports.updateConfig = async function(req, res) {
                     console.log(err);
                     return await res.send('0');
                 }                        
-            } else {      
-            
+            } else {                  
                 const reqlist = await Requisite.findAll({ where: { owner: row.id } });                            
                 for (let row of reqlist) { 
                     let strJson = row.data; 
@@ -602,7 +601,12 @@ exports.updateConfig = async function(req, res) {
                         refColumns[Elements.type] = {type: DataTypes.INTEGER};  
                     }
                 }                
-                if (typeId==='Document') { delete refColumns['name'] }
+                if (typeId==='Document') { 
+                    delete refColumns['name'];
+                } else {
+                    delete refColumns['number'];
+                    delete refColumns['date'] 
+                }
                 try {                    
                     const EvaObject = sequelize.define(objectId, refColumns);
                     console.log('Create table:', EvaObject);   

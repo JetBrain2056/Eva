@@ -414,8 +414,7 @@ exports.updateConfig = async function(req, res) {
         console.log(err);
         return await res.send('0');
     }
-
-    // console.log(data);
+    
     for (let row of data) {    
         let strJson = row.data;          
         let Elements = await JSON.parse(strJson);      
@@ -630,7 +629,16 @@ exports.updateConfig = async function(req, res) {
             }
         }    
     }
-   return await res.send('1');
+
+    try {                          
+        data = await TabPart.findAll({ where: { state: [1,2,3] }});   
+        console.log(data);                     
+    } catch(err) {
+        console.log(err);
+        return await res.send('0');
+    }
+
+    return await res.send('1');
 }
 exports.getSubsystems = async function(req, res) {
     console.log(dateNow(),'>>getSubsystems()...');
@@ -752,7 +760,8 @@ exports.createTabpart = async function(req, res) {
     
     try {                     
         const result = await TabPart.create({     
-                owner : owner,           
+                owner : owner, 
+                state : 1,          
                 data  : data
         });
         return await res.json(result);   
@@ -767,9 +776,10 @@ exports.deleteTabpart = async function(req, res) {
     const { id } = req.body;
 
     try {    
-        const result = await TabPart.destroy(
-        {
-            where: {id : id}
+        const result = await TabPart.update({ 
+            state : 2                     
+        }, {
+            where: {id: id}
         })
         return await res.json(result); 
     } catch(err) {
@@ -783,10 +793,11 @@ exports.editTabpart = async function(req, res) {
     const { id, data }  = req.body;  
 
     try {
-        const result = await TabPart.update({             
+        const result = await TabPart.update({ 
+            state : 3,
             data  : data            
         }, {
-            where: {id : id}
+            where: {id: id}
         })        
         return await res.json(result); 
     } catch(err) {

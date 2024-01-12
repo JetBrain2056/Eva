@@ -54,12 +54,13 @@ const Requisite = sequelize.define('Requisite', {
 const TabPart = sequelize.define('TabPart', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},    
     owner : {type: DataTypes.INTEGER},
+    state : {type: DataTypes.INTEGER},
     data  : {type: DataTypes.TEXT}
 })
 
 const TabPartReq = sequelize.define('TabPartReq', {
     id    : {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},  
-    owner : {type: DataTypes.INTEGER},
+    owner : {type: DataTypes.INTEGER}, 
     data  : {type: DataTypes.TEXT}
 })
 

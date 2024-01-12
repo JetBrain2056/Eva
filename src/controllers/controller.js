@@ -637,6 +637,76 @@ exports.updateConfig = async function(req, res) {
         console.log(err);
         return await res.send('0');
     }
+    for (let row of data) {    
+        let strJson = row.data;          
+        let Elements = await JSON.parse(strJson);      
+        // let owner    = Elements.owner; 
+        let objectId = Elements.owner+'.'+Elements.textId;                        
+        let synonum  = Elements.synonum;
+        
+        if (row.state === 0) {
+            continue;
+        } else if (row.state === 1) {                                                   
+            delete refColumns['name'];                          
+            delete refColumns['number'];
+            delete refColumns['date'];                                           
+            try {
+                const EvaObject = sequelize.define(objectId, refColumns);
+                console.log('Create table:', EvaObject);   
+                await EvaObject.sync({alter: true});
+            } catch(err) {
+                console.log(err);
+                return await res.send('0');
+            }             
+            try {
+                const result = await Config.update({ 
+                    state : 0                     
+                }, {
+                    where: {id: row.id}
+                }) 
+                console.log('Update table:', result);                           
+            } catch(err) {
+                console.log(err);
+                return await res.send('0');
+            }
+        } else if (row.state === 2) {                                  
+            try { 
+                await sequelize.query('DROP TABLE IF EXISTS "'+objectId+'s";');
+                console.log('Deleted table:', objectId);                           
+            } catch(err) {
+                console.log(err);
+                return await res.send('0');
+            }           
+            try {                                        
+                const count = await TabPart.destroy({where: {id: row.id}});
+                console.log('Deleted row(s):', count);
+            } catch(err) {
+                console.log(err);
+                return await res.send('0');
+            }                
+        } else if (row.state === 3) {                                                                                          
+            try {                    
+                const EvaObject = sequelize.define(objectId, refColumns);
+                console.log('Create table:', EvaObject);   
+                await EvaObject.sync({ alter: true });                    
+            } catch(err) {
+                console.log(err);
+                return await res.send('0');
+            }              
+            console.log('>>TabPart.update()...');         
+            try {
+                const result = await TabPart.update({ 
+                    state : 0                     
+                }, {
+                    where: {id: row.id}
+                }) 
+                console.log('Update table:', result);                           
+            } catch(err) {
+                console.log(err);
+                return await res.send('0');
+            }
+        }    
+    }
 
     return await res.send('1');
 }

@@ -1221,7 +1221,7 @@ async function tabPartEditModal() {
     console.log('>>tabPartEditModal()...');
 
     if (selectRows.length === 0) return;
-
+   
     const modalForm  = document.getElementById("tabPartModal");    
 
     const objectModalLabel = modalForm.querySelector('#tabPartModalLabel');  
@@ -1246,8 +1246,8 @@ async function tabPartEditModal() {
         let strJson = res.data;                  
         let Elements = await JSON.parse(strJson);    
 
-        inputForm.setAttribute("eva-ownerId", res.id);         
-        modalForm.setAttribute("eva-id", res.id); 
+        modalForm.setAttribute("eva-id", res.id);         
+        inputForm.setAttribute("eva-id", res.id);                
         inputTabPartId.value       = Elements.textId;        
         inputTabPartSyn.value      = Elements.synonum;
     }
@@ -1262,20 +1262,27 @@ async function tabPartCreate(e) {
     const inputTabpartId  = inputForm.querySelector("#input-tabpart-id");    
     const inputTabpartSyn = inputForm.querySelector("#input-tabpart-synonum");
     const createMode      = inputForm.getAttribute("create-mode"); 
+    const input_textId    = ownerForm.querySelector('#input-textId'); 
 
     if (!inputForm.checkValidity()) {
         await e.preventDefault();
         await e.stopPropagation();        
     }
 
+    const owner = input_textId.value;
+    console.log('owner', owner );
+    const id = inputForm.getAttribute("eva-id");
+    console.log('id', id );
+
     let tmp = { 
+        owner     : owner,
         textId    : inputTabpartId.value,         
         synonum   : inputTabpartSyn.value,           
     }          
 
     const data =  {
-        'id'      : inputForm.getAttribute("eva-id"),
-        'owner'   : ownerForm.getAttribute("eva-id"),        
+        'id'      : id,
+        'owner'   : owner,        
         'data'    : JSON.stringify(tmp),
     }
 

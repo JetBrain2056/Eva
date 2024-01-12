@@ -569,11 +569,11 @@ async function objectCreate(e) {
     console.log('>>configCreate()...');
 
     const input_form   = document.getElementById('create-object-form'); 
-    const input_type   = input_form.querySelector('#input-type');
+    const input_type        = input_form.querySelector('#input-type');
     const input_const_type  = input_form.querySelector('#input-const-type');
-    const input_textId = input_form.querySelector('#input-textId');    
-    const input_subsystem  = input_form.querySelector('#input-subsystem');      
-    const createMode = input_form.getAttribute("create-mode");  
+    const input_textId      = input_form.querySelector('#input-textId');    
+    const input_subsystem   = input_form.querySelector('#input-subsystem');      
+    const createMode        = input_form.getAttribute("create-mode");  
     
     if (!input_form.checkValidity()) {
         await e.preventDefault();
@@ -591,7 +591,7 @@ async function objectCreate(e) {
     resCheck = await postOnServer(tmp,'/checkobject');    
     console.log(resCheck);
     if (resCheck) {
-        //alert('The identifier is not unique!');
+        console.log('The identifier is not unique!');
         // await e.preventDefault();
         // await e.stopPropagation();            
     }
@@ -688,19 +688,12 @@ async function objectEditModal() {
         input_textId.value      = Elements.textId;
         input_subsystem.value   = Elements.subsysName;
         input_subsystem.setAttribute("eva-id", Elements.subsysId);
-        if (Elements.typeId === "Constant") {  
-
-            // const data = {'id':res.id, 'textId':'Constant'};
-            // tmp = await postOnServer(data,'/getref');
-            
-            // console.log(tmp[0].uuidType);
-            
+        if (Elements.typeId === "Constant") {              
             const option = document.createElement('option');
             option.value = Elements.constType;
             option.text  = Elements.constType;
             option.setAttribute("selected","selected"); 
-            inputConstType.appendChild(option);
-          
+            inputConstType.appendChild(option);          
             inputConstType.setAttribute("eva-id", row.cells[0].innerText);
         }
     }    
@@ -1282,7 +1275,7 @@ async function tabPartCreate(e) {
 
     const data =  {
         'id'      : inputForm.getAttribute("eva-id"),
-        'owner'   : ownerForm.getAttribute("eva-id"),
+        'owner'   : ownerForm.getAttribute("eva-id"),        
         'data'    : JSON.stringify(tmp),
     }
 

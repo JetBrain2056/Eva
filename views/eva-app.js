@@ -59,6 +59,8 @@ async function getSynonyms(evaForm) {
     let arrSyn = [];  
     arrSyn['id'] = 'Id';
     arrSyn['name'] = 'Name';
+    arrSyn['date'] = 'Date';
+    arrSyn['number'] = 'Number';
     for (let elem of resreq) {
         let strJson = elem.data;          
         let Elements = await JSON.parse(strJson);  
@@ -664,7 +666,7 @@ async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode, ty
                         input.setAttribute("hidden", "hidden");
                     }
                 }
-                if (req==='name') {
+                if (req==='name'||req==='date'||req==='number') {
                     input.setAttribute("required", "required");
                 }
                 
@@ -796,8 +798,7 @@ function buildTable(refName, refType) {
     return resTbl;
 }
 async function showConstTable() {
-    console.log('>>showConstTable()...');   
-    
+    console.log('>>showConstTable()...');     
     
     let formTbl = document.getElementById("nav-const-form");    
 
@@ -816,12 +817,11 @@ async function showConstTable() {
             data.push(row);
         }
     }
-    // console.log(data); 
+    
     const col  = {'id':'Id', 'name':'Name', 'value':'Value'} 
     const hide = ['id'];      
 
     showTable(resTbl, hide, col, data);
-
 }
 async function showRefTable(refName, refType) {
     console.log('>>showRefTable()...', refName, refType);   
@@ -833,8 +833,7 @@ async function showRefTable(refName, refType) {
 
     const evaForm = document.querySelector('#eva-ref-form');    
     
-    arrSyn = await getSynonyms(evaForm);  
-    // console.log(arrSyn);
+    arrSyn = await getSynonyms(evaForm);     
     
     const res = await postOnServer(tmp, '/getrefcol');  
     let col = {};   
@@ -845,14 +844,8 @@ async function showRefTable(refName, refType) {
         const synom = arrSyn[colName];
         if (synom) {
             col[colName] = synom;  
-        } else {
-            if (colName==='number') {
-                col[colName] = 'Number';  
-            } else if (colName==='date') {
-                col[colName] = 'Date';  
-            } else {
-                col[colName] = colName;  
-            }
+        } else {          
+            col[colName] = colName;            
         } 
         colType[colName] = dataType;
     }

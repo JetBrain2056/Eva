@@ -25,7 +25,7 @@ function mainSelect() {
     const navMain        = $objectModal.querySelector("#object-main");
     const navRequisite   = $objectModal.querySelector("#object-requisite");
     const navTabular     = $objectModal.querySelector("#object-tabular");    
-    const navForms       = $objectModal.querySelector("#object-forms");      
+    const navForms       = $objectModal.querySelector("#object-forms");             
     
     navMain.click();
     if (inputType.value === "Subsystem"||inputType.value === "") {                     
@@ -57,7 +57,7 @@ function mainSelect() {
             inputConstType .setAttribute("hidden","hidden");  
             inputTypeBtn   .setAttribute("hidden","hidden"); 
         }
-    } else {
+    } else {        
         inputSubsystem.removeAttribute("disabled");        
         inputSubsysBtn.removeAttribute("disabled");
         inputOwner    .setAttribute("disabled","disabled");       
@@ -943,7 +943,8 @@ async function reqModal() {
     inputForm.reset();
     inputForm.setAttribute("create-mode",true);  
     inputForm.setAttribute("eva-ownerId", inputOwnerForm.getAttribute("eva-id"));  
-    // inputForm.setAttribute("eva-type", true);  
+    const inputReqId = inputForm.querySelector("#input-req-id");
+    inputReqId.removeAttribute("disabled");
 
     requisiteModal = getModal(modalForm);
 }
@@ -977,7 +978,7 @@ async function reqEditModal() {
     const inputReqLPat  = inputForm.querySelector("#input-req-pattern");  
     const inputReqLValid= inputForm.querySelector("#input-req-valid");             
     const inputReqDescr = inputForm.querySelector("#input-req-descr");
-  
+
     if (res) {
         let strJson = res.data;                  
         let Elements = await JSON.parse(strJson);    
@@ -986,15 +987,15 @@ async function reqEditModal() {
         inputReqId.value       = Elements.textId;
         const type = inputReqType.querySelector("option[value='"+Elements.type+"']");
         if (Elements.type.split('.').length>1 && !type) { 
-            const option = document.createElement("option");
-            // option.setAttribute("selected","selected");
+            const option = document.createElement("option");            
             option.innerText = Elements.type;  
             option.value     = Elements.type;
             inputReqType.appendChild(option);
             inputReqType.value     = Elements.type;
-                      
+            inputReqId.setAttribute("disabled","disabled");            
         } else {
             inputReqType.value     = Elements.type;
+            inputReqId.removeAttribute("disabled");
         }
         inputReqDescr.value    = Elements.descr;
         inputReqSyn.value      = Elements.synonum;

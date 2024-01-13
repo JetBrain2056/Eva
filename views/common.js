@@ -1004,7 +1004,8 @@ async function reqCreate(e) {
     const ownerForm     = document.getElementById("create-object-form");  
     const ownerTabPart  = document.getElementById("create-tabpart-form");  
 
-    let owner = ownerTabPart.getAttribute("eva-ownerId")||ownerForm.getAttribute("eva-id");
+    let owner = ownerTabPart.getAttribute("eva-id")||ownerForm.getAttribute("eva-id");
+    console.log('owner',owner);
 
     const inputForm     = document.getElementById("create-req-form");
     const inputReqId    = inputForm.querySelector("#input-req-id");
@@ -1040,7 +1041,7 @@ async function reqCreate(e) {
     }
     
     let link = '';
-    if (ownerTabPart.getAttribute("eva-ownerId")) {
+    if (ownerTabPart.getAttribute("eva-id")) {
         link = 'tabpartreq';
     } else {
         link = 'req';
@@ -1106,7 +1107,7 @@ async function reqTabPartModal() {
 
     const inputForm  = modalForm.querySelector("#create-req-form");   
     inputForm.reset();
-    inputForm.setAttribute("create-mode",true);      
+    inputForm.setAttribute("create-mode",true);            
 
     requisiteModal = getModal(modalForm);
 }
@@ -1149,8 +1150,7 @@ async function reqTabPartEditModal() {
         inputReqId.value       = Elements.textId;
         const type = inputReqType.querySelector("option[value='"+Elements.type+"']");
         if (Elements.type.split('.').length>1 && !type) { 
-            const option = document.createElement("option");
-            // option.setAttribute("selected","selected");
+            const option = document.createElement("option");            
             option.innerText = Elements.type;  
             option.value     = Elements.type;
             inputReqType.appendChild(option);

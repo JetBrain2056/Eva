@@ -615,16 +615,29 @@ async function tabParts(refForm, ul, refName) {
         const textId = Elements.owner+'.'+Elements.textId.substring(0, Elements.textId.length-1);
 
         const navRefForm = document.getElementById("nav-ref-form");
-        const btnToolbar = navRefForm.querySelector(".btn-toolbar");
-        const cloneBtnToolbar = btnToolbar.cloneNode(true);
-        div.appendChild(cloneBtnToolbar);  
+        const tmpBtnToolbar = navRefForm.querySelector(".btn-toolbar");
+        const btnToolbar = tmpBtnToolbar.cloneNode(true);        
+        div.appendChild(btnToolbar);  
 
         const div2 = document.createElement("div");
         div2.setAttribute("class","eva-table"); 
         div2.setAttribute("id","eva-"+Elements.owner+"-"+Elements.textId+"-form"); 
         div.appendChild(div2);     
+                
+        const evaAdd  = btnToolbar.querySelector(".eva-add");
+        const evaEdit = btnToolbar.querySelector(".eva-edit");
+        const evaCopy = btnToolbar.querySelector(".eva-copy");
+        const evaDel  = btnToolbar.querySelector(".eva-del");
+        const evaRefresh = btnToolbar.querySelector(".eva-refresh");
+        evaRefresh.setAttribute("name", refName);  
+        evaRefresh.setAttribute("id", "eva-link-"+refName);              
+        evaAdd .setAttribute("onclick","");
+        evaEdit.setAttribute("onclick","");
+        evaCopy.setAttribute("onclick","");
+        evaDel .setAttribute("onclick","");
+        evaRefresh.setAttribute("onclick","");
 
-        await showTabPartTable(refForm, textId, 'TabPart');      
+        await showTabPartTable(refForm, textId);      
     }
 }
 async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode, typeId) {
@@ -888,8 +901,8 @@ async function showRefTable(refName, refType) {
 
     showTable(refTbl, hide, col, data, colType);
 }
-async function showTabPartTable(refForm, refName, refType) {
-    console.log('>>showTabPartTable()...', refName, refType);   
+async function showTabPartTable(refForm, refName) {
+    console.log('>>showTabPartTable()...', refName);   
 
     resTbl = buildTabpanel(refForm, "295");
     

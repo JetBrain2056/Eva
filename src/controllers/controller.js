@@ -415,13 +415,43 @@ exports.updateConfig = async function(req, res) {
         return await res.send('0');
     }
     
-    for (let row of data) {    
-        let strJson = row.data;          
-        let Elements = await JSON.parse(strJson);      
-        let objectId = Elements.textId;        
-        
-        // console.log(row);
-        let typeId = Elements.typeId;
+    for (const row of data) {    
+        const strJson  = row.data;          
+        const Elements = await JSON.parse(strJson);      
+        const objectId = Elements.textId;                        
+        const typeId   = Elements.typeId;
+
+        if (typeId==='Document') { 
+            delete refColumns['name'];            
+        } else {    
+            delete refColumns['number'];
+            delete refColumns['date'];                               
+        } 
+
+        const reqlist = await Requisite.findAll({ where: { owner: row.id } });                            
+        for (const row of reqlist) { 
+            const strJson  = row.data; 
+            const Elements = await JSON.parse(strJson);  
+            if (Elements.type === 'String') {
+                if (Elements.length === 0) {
+                    refColumns[Elements.textId] = {type: DataTypes.STRING}; 
+                } else {
+                    refColumns[Elements.textId] = {type: DataTypes.STRING(Elements.length)}; 
+                }                                              
+            } else if (Elements.type === 'Number') {
+                if (Elements.accuracy === 0) {
+                    refColumns[Elements.textId] = {type: DataTypes.INTEGER};     
+                } else {
+                    refColumns[Elements.textId] = {type: DataTypes.DECIMAL(14, Elements.accuracy)};  
+                }
+            } else if (Elements.type === 'Boolean') {
+                refColumns[Elements.textId] = {type: DataTypes.BOOLEAN};  
+            } else if (Elements.type === 'Date') {
+                refColumns[Elements.textId] = {type: DataTypes.DATE};  
+            } else {
+                refColumns[Elements.type] = {type: DataTypes.INTEGER};  
+            }
+        }  
         
         if (row.state === 0) {
             continue;
@@ -437,8 +467,7 @@ exports.updateConfig = async function(req, res) {
                     console.log(err);
                     return await res.send('0');
                 }    
-            } else if (typeId==='Constant') {   
-                // const uuid = uuidv4();                 
+            } else if (typeId==='Constant') {                                 
                 try {
                     const elem = await Constant.create({   
                         id  : row.id,              
@@ -462,13 +491,7 @@ exports.updateConfig = async function(req, res) {
                     console.log(err);
                     return await res.send('0');
                 }
-            } else {
-                if (typeId==='Document') { 
-                    delete refColumns['name'];            
-                } else {    
-                    delete refColumns['number'];
-                    delete refColumns['date'];                               
-                }       
+            } else {                      
                 try {
                     const EvaObject = sequelize.define(objectId, refColumns);
                     console.log('Create table:', EvaObject);   
@@ -575,37 +598,7 @@ exports.updateConfig = async function(req, res) {
                     console.log(err);
                     return await res.send('0');
                 }                        
-            } else {                  
-                const reqlist = await Requisite.findAll({ where: { owner: row.id } });                            
-                for (let row of reqlist) { 
-                    let strJson = row.data; 
-                    let Elements = await JSON.parse(strJson);  
-                    if (Elements.type === 'String') {
-                        if (Elements.length === 0) {
-                            refColumns[Elements.textId] = {type: DataTypes.STRING}; 
-                        } else {
-                            refColumns[Elements.textId] = {type: DataTypes.STRING(Elements.length)}; 
-                        }                                              
-                    } else if (Elements.type === 'Number') {
-                        if (Elements.accuracy === 0) {
-                            refColumns[Elements.textId] = {type: DataTypes.INTEGER};     
-                        } else {
-                            refColumns[Elements.textId] = {type: DataTypes.DECIMAL(14, Elements.accuracy)};  
-                        }
-                    } else if (Elements.type === 'Boolean') {
-                        refColumns[Elements.textId] = {type: DataTypes.BOOLEAN};  
-                    } else if (Elements.type === 'Date') {
-                        refColumns[Elements.textId] = {type: DataTypes.DATE};  
-                    } else {
-                        refColumns[Elements.type] = {type: DataTypes.INTEGER};  
-                    }
-                }                
-                if (typeId==='Document') { 
-                    delete refColumns['name'];
-                } else {
-                    delete refColumns['number'];
-                    delete refColumns['date'] 
-                }
+            } else {                                            
                 try {                    
                     const EvaObject = sequelize.define(objectId, refColumns);
                     console.log('Create table:', EvaObject);   
@@ -637,19 +630,52 @@ exports.updateConfig = async function(req, res) {
         console.log(err);
         return await res.send('0');
     }
-    for (let row of data) {    
-        let strJson = row.data;          
-        let Elements = await JSON.parse(strJson);      
-        // let owner    = Elements.owner; 
-        let objectId = Elements.owner+'.'+Elements.textId;                        
-        let synonum  = Elements.synonum;
+    
+    refColumns = {
+        id   : {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true}
+        // name : {type: DataTypes.STRING(150)},
+        // number : {type: DataTypes.STRING(9)},
+        // date : {type: DataTypes.DATE}
+    }
+
+    for (const row of data) {    
+        const strJson  = row.data;          
+        const Elements = await JSON.parse(strJson);      
+        //const owner    = Elements.owner; 
+        const objectId = Elements.owner+'.'+Elements.textId;                        
+        const synonum  = Elements.synonum;
         
+        const reqlist = await TabPartReq.findAll({ where: { owner: row.id } });                            
+        for (const row of reqlist) { 
+            const strJson  = row.data; 
+            const Elements = await JSON.parse(strJson);  
+            if (Elements.type === 'String') {
+                if (Elements.length === 0) {
+                    refColumns[Elements.textId] = {type: DataTypes.STRING}; 
+                } else {
+                    refColumns[Elements.textId] = {type: DataTypes.STRING(Elements.length)}; 
+                }                                              
+            } else if (Elements.type === 'Number') {
+                if (Elements.accuracy === 0) {
+                    refColumns[Elements.textId] = {type: DataTypes.INTEGER};     
+                } else {
+                    refColumns[Elements.textId] = {type: DataTypes.DECIMAL(14, Elements.accuracy)};  
+                }
+            } else if (Elements.type === 'Boolean') {
+                refColumns[Elements.textId] = {type: DataTypes.BOOLEAN};  
+            } else if (Elements.type === 'Date') {
+                refColumns[Elements.textId] = {type: DataTypes.DATE};  
+            } else {
+                refColumns[Elements.type] = {type: DataTypes.INTEGER};  
+            }
+        } 
+
         if (row.state === 0) {
             continue;
-        } else if (row.state === 1) {                                                   
-            delete refColumns['name'];                          
-            delete refColumns['number'];
-            delete refColumns['date'];                                           
+        } else if (row.state === 1) {                                                             
+            // delete refColumns['name'];                          
+            // delete refColumns['number'];
+            // delete refColumns['date'];                                           
             try {
                 const EvaObject = sequelize.define(objectId, refColumns);
                 console.log('Create table:', EvaObject);   
@@ -693,7 +719,7 @@ exports.updateConfig = async function(req, res) {
                 console.log(err);
                 return await res.send('0');
             }              
-            console.log('>>TabPart.update()...');         
+            console.log(dateNow(), '>>TabPart.update()...');         
             try {
                 const result = await TabPart.update({ 
                     state : 0                     

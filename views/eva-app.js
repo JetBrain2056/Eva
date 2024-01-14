@@ -614,13 +614,17 @@ async function tabParts(refForm, ul, refName) {
 
         const textId = Elements.owner+'.'+Elements.textId.substring(0, Elements.textId.length-1);
 
-        // const div2 = document.createElement("div");
-        // div2.setAttribute("class","eva-table"); 
-        // div2.setAttribute("id","eva-"+Elements.owner+"-"+Elements.textId+"-form"); 
-        // div.appendChild(div2);     
+        const navRefForm = document.getElementById("nav-ref-form");
+        const btnToolbar = navRefForm.querySelector(".btn-toolbar");
+        const cloneBtnToolbar = btnToolbar.cloneNode(true);
+        div.appendChild(cloneBtnToolbar);  
 
-        // await showRefTable(Elements.owner+"-"+Elements.textId, 'Reference');  
-    
+        const div2 = document.createElement("div");
+        div2.setAttribute("class","eva-table"); 
+        div2.setAttribute("id","eva-"+Elements.owner+"-"+Elements.textId+"-form"); 
+        div.appendChild(div2);     
+
+        await showTabPartTable(refForm, textId, 'TabPart');      
     }
 }
 async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode, typeId) {
@@ -855,21 +859,20 @@ async function showRefTable(refName, refType) {
     console.log('>>showRefTable()...', refName, refType);   
 
     refTbl = buildTable(refName, refType);
-
-    let tmp = { 'textId': refName }
-    let data = await postOnServer(tmp, '/getrefs');
-
-    const evaForm = document.querySelector('#eva-ref-form');    
     
+    const tmp = {'textId': refName}
+    const data = await postOnServer(tmp, '/getrefs');
+
+    const evaForm = document.querySelector('#eva-ref-form');        
     arrSyn = await getSynonyms(evaForm);     
     
     const res = await postOnServer(tmp, '/getrefcol');  
     let col = {};   
     let colType = {};           
-    for (const elem of res) {
+    for (elem of res) {
         const colName  = elem.column_name;            
         const dataType = elem.data_type;            
-        const synom = arrSyn[colName];
+        const synom    = arrSyn[colName];
         if (synom) {
             col[colName] = synom;  
         } else {          
@@ -884,7 +887,35 @@ async function showRefTable(refName, refType) {
     }
 
     showTable(refTbl, hide, col, data, colType);
+}
+async function showTabPartTable(refForm, refName, refType) {
+    console.log('>>showTabPartTable()...', refName, refType);   
 
+    resTbl = buildTabpanel(refForm, "295");
+    
+    const tmp = {'textId': refName}
+    const data = await postOnServer(tmp, '/getrefs');
+
+    arrSyn = await getSynonyms(refForm);     
+    
+    const res = await postOnServer(tmp, '/getrefcol');  
+    let col = {};   
+    let colType = {};           
+    for (elem of res) {
+        const colName  = elem.column_name;            
+        const dataType = elem.data_type;            
+        const synom    = arrSyn[colName];
+        if (synom) {
+            col[colName] = synom;  
+        } else {          
+            col[colName] = colName;            
+        } 
+        colType[colName] = dataType;
+    }
+
+    let hide = ['id']; 
+
+    showTable(resTbl, hide, col, data, colType);
 }
 function addTabPane(name) {
     const evaSubsys = document.querySelector('.eva-subsys'); 

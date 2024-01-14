@@ -633,9 +633,6 @@ exports.updateConfig = async function(req, res) {
     
     refColumns = {
         id   : {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true}
-        // name : {type: DataTypes.STRING(150)},
-        // number : {type: DataTypes.STRING(9)},
-        // date : {type: DataTypes.DATE}
     }
 
     for (const row of data) {    
@@ -672,10 +669,7 @@ exports.updateConfig = async function(req, res) {
 
         if (row.state === 0) {
             continue;
-        } else if (row.state === 1) {                                                             
-            // delete refColumns['name'];                          
-            // delete refColumns['number'];
-            // delete refColumns['date'];                                           
+        } else if (row.state === 1) {                                                                                                    
             try {
                 const EvaObject = sequelize.define(objectId, refColumns);
                 console.log('Create table:', EvaObject);   
@@ -685,7 +679,7 @@ exports.updateConfig = async function(req, res) {
                 return await res.send('0');
             }             
             try {
-                const result = await Config.update({ 
+                const result = await TabPart.update({ 
                     state : 0                     
                 }, {
                     where: {id: row.id}

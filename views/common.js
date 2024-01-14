@@ -1185,8 +1185,9 @@ async function showTabPartTable() {
     for (const row of tmp) {
         let strJson = row.data; 
         let Elements = await JSON.parse(strJson);
-
-        data.push({'id':row.id, 'textId':Elements.textId, 'type':Elements.type});    
+        if (row.state===0||row.state===1||row.state===3) {
+            data.push({'id':row.id, 'textId':Elements.textId, 'type':Elements.type}); 
+        }   
     }
   
     const col = {'id':'Id','textId':'Identifier'} 

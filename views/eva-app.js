@@ -69,6 +69,22 @@ async function getSynonyms(evaForm) {
     }
     return arrSyn;
 }
+async function getTabPartSyns(evaForm) {
+    console.log('>>getTabPartSyns()...');
+
+    const id = evaForm.getAttribute("eva-id");    
+    const resreq = await postOnServer({'owner': id}, '/gettabpartreqs');  
+    console.log(resreq);
+    let arrSyn = [];  
+    arrSyn['id'] = 'Id';
+    for (let elem of resreq) {
+        let strJson = elem.data;          
+        let Elements = await JSON.parse(strJson);  
+        let colName = Elements.textId;
+        arrSyn[colName] = Elements.synonum;
+    }
+    return arrSyn;
+}
 async function constEditModal() {
     console.log('>>constEditModal()...'); 
   
@@ -637,6 +653,8 @@ async function tabParts(refForm, ul, refName) {
         evaDel .setAttribute("onclick","");
         evaRefresh.setAttribute("onclick","");
 
+        refForm.setAttribute("eva-id", elem.id);
+
         await showTabPartTable(refForm, textId);      
     }
 }
@@ -909,7 +927,8 @@ async function showTabPartTable(refForm, refName) {
     const tmp = {'textId': refName}
     const data = await postOnServer(tmp, '/getrefs');
 
-    arrSyn = await getSynonyms(refForm);     
+    arrSyn = await getTabPartSyns(refForm);  
+    console.log(arrSyn);   
     
     const res = await postOnServer(tmp, '/getrefcol');  
     let col = {};   

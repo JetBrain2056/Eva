@@ -69,20 +69,6 @@ async function getSynonyms(evaForm) {
     }
     return arrSyn;
 }
-async function tabParts(ul, refName) {
-    console.log('>>tabParts()...');
-    const refLink = document.querySelector("#"+refName);
-    const refId   = refLink.getAttribute("eva-id");  
-    console.log(refId);
-    res = await postOnServer({ 'owner': refId }, '/gettabparts');  
-    console.log(res);
-
-    for (let elem of res) {
-        let strJson = elem.data;          
-        let Elements = await JSON.parse(strJson);    
-        addTabs(ul, Elements.textId);
-    }
-}
 async function constEditModal() {
     console.log('>>constEditModal()...'); 
   
@@ -542,29 +528,33 @@ async function docEditModal(copyMode) {
     const typeId = evaForm.getAttribute("eva-typeId");
     refForm.setAttribute("eva-textId", textId);
     refForm.setAttribute("eva-typeId", typeId);
+    refForm.setAttribute("class","tab-content");
+
+    const div = document.createElement("div");
+    div.setAttribute("class","tab-pane active show");    
+    div.setAttribute("id","nav-Main");
+    div.setAttribute("role","tabpanel");
+    refForm.appendChild(div);
 
     arrSyn = await getSynonyms(evaForm);  
 
-    const id     = row.cells[0].innerText;
-    const data = { 
-        'textId': textId,
-        'id': id
-    };
+    const id   = row.cells[0].innerText;
+    const data = {'textId': textId, 'id': id}
 
-    let res = await postOnServer({ 'textId': textId }, '/getrefcol');         
+    res = await postOnServer({'textId': textId}, '/getrefcol');         
     let arrCol = [];  
-    for (let elem of res) {
+    for (elem of res) {
         const colName    = elem.column_name;
         const dataType   = elem.data_type;
         const identifier = elem.dtd_identifier;
 
-        let obj = {'colName': colName, 'dataType':dataType, 'identifier': identifier}          
+        const obj = {'colName': colName, 'dataType':dataType, 'identifier': identifier}          
         arrCol[colName] = obj;
     }
 
     res = await postOnServer(data, '/getref');  
-    await refElement(refForm, res[0], arrCol, arrSyn, createMode, copyMode, typeId);     
-    await tabParts(ul, textId);
+    await refElement(div, res[0], arrCol, arrSyn, createMode, copyMode, typeId);     
+    await tabParts(refForm, ul, textId);
 }
 async function docDelete() {
     console.log('>>docDelete()...');
@@ -586,15 +576,18 @@ async function docDelete() {
 //DOM Dynamic Content////////////////////////////////////////////////////////
 function addTabs(ul, tabName) {
     const li = document.createElement("li");        
-    li.setAttribute("class","nav-item nav-item-sm");                      
+    li.setAttribute("class","nav-item");                      
     li.setAttribute("id", "eva-item-"+tabName);  
     li.setAttribute("name", tabName);  
         const a = document.createElement("a");
         if (tabName==='Main') {
-            a.setAttribute("class","nav-link active");                                
+            a.setAttribute("class","nav-link active");                                       
         } else {
             a.setAttribute("class","nav-link");                                 
         }
+        a.setAttribute("data-bs-toggle","tab");
+        a.setAttribute("data-bs-target","#nav-"+tabName);
+        a.setAttribute("role","tab");  
         a.setAttribute("href","#");                    
         a.setAttribute("name", tabName);  
         a.setAttribute("id", "eva-link-"+tabName);                                                        
@@ -602,9 +595,37 @@ function addTabs(ul, tabName) {
     li.appendChild(a);                             
     ul.appendChild(li);   
 }
+async function tabParts(refForm, ul, refName) {
+    console.log('>>tabParts()...');
+    const refLink = document.querySelector("#"+refName);
+    const id      = refLink.getAttribute("eva-id");       
+    
+    res = await postOnServer({'owner': id}, '/gettabparts');      
+    for (elem of res) {
+        const strJson  = elem.data;          
+        const Elements = await JSON.parse(strJson);    
+        addTabs(ul, Elements.textId);
+
+        const div = document.createElement("div");
+        div.setAttribute("class","tab-pane");    
+        div.setAttribute("id","nav-"+Elements.textId);
+        div.setAttribute("role","tabpanel");
+        refForm.appendChild(div);
+
+        const textId = Elements.owner+'.'+Elements.textId.substring(0, Elements.textId.length-1);
+
+        // const div2 = document.createElement("div");
+        // div2.setAttribute("class","eva-table"); 
+        // div2.setAttribute("id","eva-"+Elements.owner+"-"+Elements.textId+"-form"); 
+        // div.appendChild(div2);     
+
+        // await showRefTable(Elements.owner+"-"+Elements.textId, 'Reference');  
+    
+    }
+}
 async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode, typeId) {
     console.log('>>refElement()...');  
-    console.log(col);
+    
     if (col) {                  
         delete col['createdAt'];
         delete col['updatedAt'];
@@ -1024,7 +1045,7 @@ async function tabSubsys(div, name) {
 async function header() {
     console.log('>>header()...');
 
-    const navTab = document.getElementById("eva-nav");   
+    navTab = document.getElementById("eva-nav");   
     //HIDDEN
     navHiddenItem(navTab,'const');   
     navHiddenItem(navTab,'ref');  
@@ -1036,7 +1057,7 @@ async function header() {
 
     //DYNAMIC    
     data = await getOnServer('/subsystems');    
-    for (let row of data) {        
+    for (row of data) {        
         navItem(navTab, row.name);           
     }      
    
@@ -1044,8 +1065,8 @@ async function header() {
     tabRef();  
  
     //Subsystems
-    for (let row of data) {     
-        console.log('name', row.name);           
+    for (row of data) {     
+        // console.log('name', row.name);           
         div = document.querySelector("#nav-"+row.name);
         tabSubsys(div, row.name);
     }  

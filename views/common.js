@@ -1269,10 +1269,11 @@ async function tabPartCreate(e) {
         await e.stopPropagation();        
     }
 
-    const owner = input_textId.value;
-    console.log('owner', owner );
+    const owner   = input_textId.value;
+    const ownerId = ownerForm.getAttribute("eva-id");
+    // console.log('ownerId', ownerId );
     const id = inputForm.getAttribute("eva-id");
-    console.log('id', id );
+    // console.log('id', id );
 
     let tmp = { 
         owner     : owner,
@@ -1282,7 +1283,7 @@ async function tabPartCreate(e) {
 
     const data =  {
         'id'      : id,
-        'owner'   : owner,        
+        'owner'   : ownerId,        
         'data'    : JSON.stringify(tmp),
     }
 

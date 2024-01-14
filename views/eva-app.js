@@ -655,7 +655,7 @@ async function tabParts(refForm, ul, refName) {
 
         refForm.setAttribute("eva-id", elem.id);
 
-        await showTabPartTable(refForm, textId);      
+        await showTabTable(refForm, textId);      
     }
 }
 async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode, typeId) {
@@ -919,8 +919,8 @@ async function showRefTable(refName, refType) {
 
     showTable(refTbl, hide, col, data, colType);
 }
-async function showTabPartTable(refForm, refName) {
-    console.log('>>showTabPartTable()...', refName);   
+async function showTabTable(refForm, refName) {
+    console.log('>>showTabTable()...', refName);   
 
     resTbl = buildTabpanel(refForm, "295");
     

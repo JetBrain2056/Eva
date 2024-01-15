@@ -632,7 +632,8 @@ exports.updateConfig = async function(req, res) {
     }
     
     refColumns = {
-        id   : {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true}
+        id   : {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+        owner: {type: DataTypes.INTEGER}
     }
 
     for (const row of data) {    

@@ -22,4 +22,25 @@
     </div>
   </div>
 </div> 
+{# Modal Elem #}  
+<div class="modal fade" id="elemModal" tabindex="-2" data-bs-backdrop="static" aria-labelledby="elemModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="elemModalLabel"></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <ul class="nav nav-tabs" id="eva-nav-tabs-elem"></ul>
+        <form class="form" id="create-elem-form"> 
+          {# Dynamic form #}
+        </form>
+      </div>
+      <div class="modal-footer">
+        {# <button type="submit" class="btn btn-primary" onclick="refSave()"><i class="fa fa-floppy-o"></i></button> #}
+        <button type="submit" class="btn btn-primary" onclick="elemCreate()">{{ button_save }}&{{button_close}}</button>        
+      </div>
+    </div>
+  </div>
+</div> 
 {% endblock %}

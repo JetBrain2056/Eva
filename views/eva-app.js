@@ -659,7 +659,7 @@ async function elemModal() {
     const ownerId = ownerForm.getAttribute("eva-id");
     console.log(ownerId);
     // const textId = ownerForm.getAttribute("eva-textId");
-    const typeId = ownerForm.getAttribute("eva-typeId");
+    //const typeId = ownerForm.getAttribute("eva-typeId");
     // refForm.setAttribute("eva-id", ownerId);
     // refForm.setAttribute("eva-textId", textId);
 
@@ -677,7 +677,7 @@ async function elemModal() {
         arrCol[colName] = obj;
     }
     
-    await refElement(refForm, arr, arrCol, arrSyn, createMode, copyMode, typeId);          
+    await refElement(refForm, arr, arrCol, arrSyn, createMode, copyMode, 'Element');          
 }
 async function elemEditModal(copyMode) {
     console.log('>>elemEditModal()...'); 
@@ -697,6 +697,7 @@ async function elemEditModal(copyMode) {
 
     const createMode = false;    
           
+    const ownerForm  = document.querySelector('#create-doc-form');   
     const refForm    = modalForm.querySelector('#create-elem-form');    
     refForm.reset();  
     refForm.innerHTML = '';     
@@ -710,13 +711,17 @@ async function elemEditModal(copyMode) {
     const textId = 'Order.Product';
     refForm.setAttribute("eva-textId", textId);
 
+    const ownerId = ownerForm.getAttribute("eva-id");
+    console.log(ownerId);
+
     arrSyn = await getTabPartSyns(evaForm);  
 
     const id     = row.cells[0].innerText;
     const data = { 
         'textId': textId,
-        'id': id
-    };
+        'id': id,
+        'owner': ownerId
+    }
 
     let res = await postOnServer(data, '/getrefcol');       
     let arrCol = [];  
@@ -735,7 +740,7 @@ async function elemEditModal(copyMode) {
 async function elemDelete() {
     console.log('>>elemDelete()...');
 
-    const modalForm  = document.getElementById('docModal');  
+    // const modalForm  = document.getElementById('docModal');  
     const refForm = document.getElementById("create-doc-form");    
   
     // let textId    = tabPane.getAttribute("eva-id");
@@ -778,7 +783,7 @@ function addTabs(ul, tabName) {
 async function tabParts(refForm, ul, refName) {
     console.log('>>tabParts()...');
     const refLink = document.querySelector("#"+refName);
-    const id      = refLink.getAttribute("eva-id");       
+    const id      = refLink.getAttribute("eva-id");          
     
     res = await postOnServer({'owner': id}, '/gettabparts');      
     for (elem of res) {
@@ -1088,8 +1093,9 @@ async function showTabTable(refForm, refName) {
     console.log('>>showTabTable()...', refName);   
 
     resTbl = buildTabpanel(refForm, "295");
-    
-    const tmp = {'textId': refName}
+
+    const ownerId = refForm.getAttribute("eva-id");      
+    const tmp = {'textId': refName, 'owner': ownerId}
     const data = await postOnServer(tmp, '/getrefs');
 
     arrSyn = await getTabPartSyns(refForm);  

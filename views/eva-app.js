@@ -1,5 +1,6 @@
 let a = [];
 selectRows = [];
+let elementsModal;
 n = 0;
 
 //Commands on client/////////////////////////////////////////////////////////
@@ -7,6 +8,7 @@ async function modalShow() {
     console.log('>>modalShow()...');   
     await selectModal.hide();     
     await currentModal.show();   
+    if (elementsModal) await elementsModal.show();
 }
 async function openConst() {
     console.log('>>openRef()...');
@@ -210,6 +212,7 @@ async function elementBtn(idBtn) {
     const refName = inputElemType.split('.')[1];
 
     currentModal.hide();
+    if (elementsModal) elementsModal.hide();
 
     selectModal = getModal(modalForm);
 
@@ -238,6 +241,7 @@ async function elemSelect() {
 
     await selectModal.hide();
     await currentModal.show();
+    if (elementsModal) await elementsModal.show();
 }
 async function createReq(refForm, textId, createMode, copyMode) {
     console.log('>>createReq()...');   
@@ -628,7 +632,8 @@ async function elemCreate(e) {
         console.log(err);
     }
 
-    await requisiteModal.hide();
+    await elementsModal.hide();
+    elementsModal = "";
 
     if (result) await showTabTable(ownerForm, textId);
 }
@@ -636,7 +641,7 @@ async function elemModal() {
     console.log('>>elemModal()...');      
 
     const modalForm  = document.getElementById('elemModal');  
-    requisiteModal = getModal(modalForm);
+    elementsModal = getModal(modalForm);
 
     const refModalLabel  = modalForm.querySelector('#elemModalLabel');  
     refModalLabel.innerText = 'Add an element:';    
@@ -698,7 +703,7 @@ async function elemEditModal(copyMode) {
     refForm.setAttribute("create-mode", createMode);  
     refForm.setAttribute("copy-mode", copyMode);   
 
-    requisiteModal = getModal(modalForm);
+    elementsModal = getModal(modalForm);
 
     const evaForm    = document.querySelector('#eva-ref-form');   
     // const textId = evaForm.getAttribute("eva-textId");
@@ -730,11 +735,13 @@ async function elemEditModal(copyMode) {
 async function elemDelete() {
     console.log('>>elemDelete()...');
 
+    const modalForm  = document.getElementById('docModal');  
     const refForm = document.getElementById("create-doc-form");    
-    // const textId  = refForm.getAttribute("eva-textId");
-    // const typeId  = refForm.getAttribute("eva-typeId");
-
-    const textId  = 'Order.Product';
+  
+    // let textId    = tabPane.getAttribute("eva-id");
+    // console.log('tabPane', tabPane);
+    // console.log('textId', textId);
+    let textId  = 'Order.Product';
     
     for (const row of selectRows) {
         const data = {
@@ -779,13 +786,14 @@ async function tabParts(refForm, ul, refName) {
         const Elements = await JSON.parse(strJson);    
         addTabs(ul, Elements.textId);
 
+        const textId = Elements.owner+'.'+Elements.textId.substring(0, Elements.textId.length-1);
+
         const div = document.createElement("div");
         div.setAttribute("class","tab-pane");    
         div.setAttribute("id","nav-"+Elements.textId);
         div.setAttribute("role","tabpanel");
-        refForm.appendChild(div);
-
-        const textId = Elements.owner+'.'+Elements.textId.substring(0, Elements.textId.length-1);
+        div.setAttribute("eva-id", textId);
+        refForm.appendChild(div);    
 
         const navRefForm = document.getElementById("nav-ref-form");
         const tmpBtnToolbar = navRefForm.querySelector(".btn-toolbar");

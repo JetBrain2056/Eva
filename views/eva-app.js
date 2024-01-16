@@ -730,7 +730,7 @@ async function elemEditModal(copyMode) {
     }
 
     res = await postOnServer(data, '/getref');  
-    await refElement(refForm, res[0], arrCol, arrSyn, createMode, copyMode);       
+    await refElement(refForm, res[0], arrCol, arrSyn, createMode, copyMode, 'Element');       
 }
 async function elemDelete() {
     console.log('>>elemDelete()...');
@@ -887,9 +887,9 @@ async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode, ty
                     input.name  = req;
                 }
              
-                if (req==='id') {
+                if (req==='id'||req==='owner') {
                     input.setAttribute("disabled","disabled");                    
-                    if (typeId==='Document') {
+                    if (typeId==='Document'||typeId==='Element'){
                         label.setAttribute("hidden", "hidden");
                         input.setAttribute("hidden", "hidden");
                     }

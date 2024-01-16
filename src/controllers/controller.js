@@ -975,11 +975,12 @@ exports.getReferences = async function(req, res) {
     console.log(dateNow(),'>>getReferences()...');
     if (!req.body) return res.sendStatus(400);
     
-    const {textId} = req.body;    
+    const {textId, owner} = req.body;  
+    let query = `SELECT * FROM "`+textId+`s";`
+    if (owner) { query = `SELECT * FROM "`+textId+`s" WHERE "owner"=`+owner+`;`}
+    
     try {
-        const data = await sequelize.query(
-            `SELECT * FROM "`+textId+`s";`         
-        );
+        const data = await sequelize.query(query);
         return await res.send(data[0]);        
     } catch(err) {
         console.log(err);

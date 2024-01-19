@@ -441,8 +441,9 @@ async function docCreate(e) {
     const refForm    = document.getElementById("create-doc-form");
     const textId     = refForm.getAttribute("eva-textId");
     const typeId     = refForm.getAttribute("eva-typeId");
-    let createMode   = refForm.getAttribute("create-mode");     
-    let copyMode     = refForm.getAttribute("copy-mode");   
+    const createMode = refForm.getAttribute("create-mode");     
+    const copyMode   = refForm.getAttribute("copy-mode");   
+    const save       = refForm.getAttribute("eva-save");
     
     if (!refForm.checkValidity()) {
         await e.preventDefault();
@@ -462,7 +463,7 @@ async function docCreate(e) {
         console.log(err);
     }
 
-    await currentModal.hide();
+    if (save===false) await currentModal.hide();
 
     if (result) await showRefTable(textId, typeId);
 
@@ -595,6 +596,11 @@ async function docDelete() {
 
     if (result) await showRefTable(textId, typeId);
 }
+async function docSave() {
+    const docForm  = document.getElementById("create-doc-form");
+    docForm.setAttribute("eva-save", true);
+    await docCreate();
+}
 async function elemCreate(e) {
     console.log('>>elemCreate()...');
     
@@ -612,6 +618,7 @@ async function elemCreate(e) {
     }
     
     const ownerId = ownerForm.getAttribute("eva-id");
+    const save    = ownerForm.getAttribute("eva-save");
 
     data = await createReq(refForm, textId, createMode, copyMode); 
     data['owner'] = ownerId;
@@ -628,8 +635,10 @@ async function elemCreate(e) {
         console.log(err);
     }
 
-    await elementsModal.hide();
-    elementsModal = "";
+    if (save===false) {
+        await elementsModal.hide();
+        elementsModal = "";
+    }
 
     if (result) await showTabTable(ownerForm, textId);
 }
@@ -756,6 +765,11 @@ async function elemDelete() {
     }
 
     if (result) await showTabTable(refForm, textId);
+}
+async function elemSave() {
+    const ownerForm  = document.getElementById("create-doc-form");
+    ownerForm.setAttribute("eva-save", true);
+    await elemCreate();
 }
 //DOM Dynamic Content////////////////////////////////////////////////////////
 function addTabs(ul, tabName) {

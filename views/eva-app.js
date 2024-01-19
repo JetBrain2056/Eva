@@ -597,19 +597,15 @@ async function docDelete() {
 }
 async function elemCreate(e) {
     console.log('>>elemCreate()...');
-
+    
     const ownerForm  = document.getElementById("create-doc-form");
     const refForm    = document.getElementById("create-elem-form");
-    let textId     = refForm.getAttribute("eva-textId");
-    console.log(textId);
-    // const typeId       = refForm.getAttribute("eva-typeId");    
-    // console.log(typeId);
+    let textId       = refForm.getAttribute("eva-textId");
+    // console.log(textId);
+ 
     const createMode   = refForm.getAttribute("create-mode");     
     const copyMode     = refForm.getAttribute("copy-mode");   
-
-    textId = 'Order.Product';
-    //const textId = Elements.owner+'.'+Elements.textId.substring(0, Elements.textId.length-1);
-    
+        
     if (!refForm.checkValidity()) {
         await e.preventDefault();
         await e.stopPropagation();        
@@ -619,7 +615,7 @@ async function elemCreate(e) {
 
     data = await createReq(refForm, textId, createMode, copyMode); 
     data['owner'] = ownerId;
-    console.log(ownerId);
+    // console.log(ownerId);
     try {
         if (createMode==='true'&&copyMode==='false') {
             result = await postOnServer(data, '/createref');                  
@@ -657,15 +653,18 @@ async function elemModal() {
 
     const ownerForm = document.querySelector('#create-doc-form');  
     const ownerId = ownerForm.getAttribute("eva-id");
-    console.log(ownerId);
-    // const textId = ownerForm.getAttribute("eva-textId");
-    //const typeId = ownerForm.getAttribute("eva-typeId");
-    // refForm.setAttribute("eva-id", ownerId);
-    // refForm.setAttribute("eva-textId", textId);
-
+    //console.log(ownerId);
+  
     let arrSyn = await getTabPartSyns(ownerForm);  
+
+    // let tabPane = ownerForm.querySelector(".tab-pane");
+    // console.log(tabPane);
+    const evaForm    = document.querySelector('#eva-ref-form');   
+    let textId = evaForm.getAttribute("eva-textId");    
+    textId = textId+'.Product';
+    console.log(textId);
     
-    const res = await postOnServer({ 'textId': 'Order.Product' }, '/getrefcol');  
+    const res = await postOnServer({ 'textId': textId }, '/getrefcol');  
     let arr = [];    
     let arrCol = [];  
     for (let elem of res) {
@@ -707,12 +706,12 @@ async function elemEditModal(copyMode) {
     elementsModal = getModal(modalForm);
 
     const evaForm    = document.querySelector('#eva-ref-form');   
-    // const textId = evaForm.getAttribute("eva-textId");
-    const textId = 'Order.Product';
+    let textId = evaForm.getAttribute("eva-textId");    
+    textId = textId+'.Product';
+    console.log(textId);
     refForm.setAttribute("eva-textId", textId);
-
+    
     const ownerId = ownerForm.getAttribute("eva-id");
-    console.log(ownerId);
 
     arrSyn = await getTabPartSyns(evaForm);  
 

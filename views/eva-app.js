@@ -463,7 +463,11 @@ async function docCreate(e) {
         console.log(err);
     }
 
-    if (save===false) await currentModal.hide();
+    if (save==='false') {
+        await currentModal.hide();
+    } else {
+        refForm.setAttribute("eva-save", false);
+    }
 
     if (result) await showRefTable(textId, typeId);
 
@@ -489,7 +493,8 @@ async function docModal() {
     refForm.innerHTML = '';
     refForm.reset();   
     refForm.setAttribute("create-mode", createMode);  
-    refForm.setAttribute("copy-mode", copyMode);       
+    refForm.setAttribute("copy-mode", copyMode);   
+    refForm.setAttribute("eva-save", false);       
 
     const evaForm = document.querySelector('#eva-ref-form'); 
     const textId = evaForm.getAttribute("eva-textId");
@@ -541,6 +546,7 @@ async function docEditModal(copyMode) {
     refForm.innerHTML = '';     
     refForm.setAttribute("create-mode", createMode);  
     refForm.setAttribute("copy-mode", copyMode);   
+    refForm.setAttribute("eva-save", false);   
 
     currentModal = getModal(modalForm);
 
@@ -611,6 +617,7 @@ async function elemCreate(e) {
  
     const createMode   = refForm.getAttribute("create-mode");     
     const copyMode     = refForm.getAttribute("copy-mode");   
+    const save         = refForm.getAttribute("eva-save");
         
     if (!refForm.checkValidity()) {
         await e.preventDefault();
@@ -618,7 +625,6 @@ async function elemCreate(e) {
     }
     
     const ownerId = ownerForm.getAttribute("eva-id");
-    const save    = ownerForm.getAttribute("eva-save");
 
     data = await createReq(refForm, textId, createMode, copyMode); 
     data['owner'] = ownerId;
@@ -635,9 +641,11 @@ async function elemCreate(e) {
         console.log(err);
     }
 
-    if (save===false) {
+    if (save==='false') {
         await elementsModal.hide();
         elementsModal = "";
+    } else {
+        refForm.setAttribute("eva-save", false);
     }
 
     if (result) await showTabTable(ownerForm, textId);
@@ -659,6 +667,7 @@ async function elemModal() {
     refForm.reset();   
     refForm.setAttribute("create-mode", createMode);  
     refForm.setAttribute("copy-mode", copyMode);   
+    refForm.setAttribute("eva-save", false); 
 
     const ownerForm = document.querySelector('#create-doc-form');  
     const ownerId = ownerForm.getAttribute("eva-id");
@@ -711,6 +720,7 @@ async function elemEditModal(copyMode) {
     refForm.innerHTML = '';     
     refForm.setAttribute("create-mode", createMode);  
     refForm.setAttribute("copy-mode", copyMode);   
+    refForm.setAttribute("eva-save", false); 
 
     elementsModal = getModal(modalForm);
 
@@ -767,8 +777,8 @@ async function elemDelete() {
     if (result) await showTabTable(refForm, textId);
 }
 async function elemSave() {
-    const ownerForm  = document.getElementById("create-doc-form");
-    ownerForm.setAttribute("eva-save", true);
+    const elemForm  = document.getElementById("create-elem-form");
+    elemForm.setAttribute("eva-save", true);
     await elemCreate();
 }
 //DOM Dynamic Content////////////////////////////////////////////////////////

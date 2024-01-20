@@ -434,6 +434,24 @@ async function refDelete() {
 
     if (result) await showRefTable(textId, typeId);
 }
+async function copyTabPart(ownerForm) {
+    console.log('>>copyTabPart()...');
+
+    const ownerId = ownerForm.getAttribute("eva-id");
+    
+    let res = ownerForm.getElementsByClassName("tab-pane");  
+    // console.log(res);   
+    for (const tabPane of res) {
+        if (tabPane.id==="nav-Main") continue;
+        
+        const textId  = tabPane.getAttribute("eva-id");  
+        console.log(textId); 
+        // data = await createReq(tabPane, textId, true, false); 
+        // data['owner'] = ownerId;
+        // result = await postOnServer(data, '/createref');   
+    }
+
+}
 async function docCreate(e) {
     console.log('>>docCreate()...');
 
@@ -454,7 +472,8 @@ async function docCreate(e) {
         if (createMode==='true'&&copyMode==='false') {
             result = await postOnServer(data, '/createref');                  
         } else if (createMode==='false'&&copyMode==='true') {               
-            result = await postOnServer(data, '/createref');                           
+            result = await postOnServer(data, '/createref');      
+            await copyTabPart(refForm);                     
         } else {    
             result = await postOnServer(data, '/updateref');
         }        

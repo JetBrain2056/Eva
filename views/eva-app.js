@@ -795,23 +795,29 @@ function addTabs(ul, tabName) {
     ul.appendChild(li);   
 }
 async function tabParts(refForm, ul, refName) {
-    console.log('>>tabParts()...');
+    console.log('>>tabParts()...', refName);
     const refLink = document.querySelector("#"+refName);
     const id      = refLink.getAttribute("eva-id");          
-    
+    console.log('ownerId', id);
+
     res = await postOnServer({'owner': id}, '/gettabparts');      
     for (elem of res) {
         const strJson  = elem.data;          
         const Elements = await JSON.parse(strJson);    
         addTabs(ul, Elements.textId);
 
-        const textId = Elements.owner+'.'+Elements.textId.substring(0, Elements.textId.length-1);
+        let textId = Elements.owner+'.'+Elements.textId;
+
+        if (textId.substring(textId.length - 1)==='s') {
+            textId = textId.substring(0, textId.length-1);
+        }    
 
         const div = document.createElement("div");
         div.setAttribute("class","tab-pane");    
         div.setAttribute("id","nav-"+Elements.textId);
         div.setAttribute("role","tabpanel");
         div.setAttribute("eva-id", textId);
+        div.setAttribute("eva-ownerId", id);
         refForm.appendChild(div);    
 
         const navRefForm = document.getElementById("nav-ref-form");
@@ -837,9 +843,7 @@ async function tabParts(refForm, ul, refName) {
         evaDel .setAttribute("onclick","elemDelete()");
         evaRefresh.setAttribute("onclick","");
 
-        // refForm.setAttribute("eva-id", elem.id);
-
-        await showTabTable(refForm, textId);      
+        await showTabTable(div, textId);      
     }
 }
 async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode, typeId) {
@@ -1108,12 +1112,15 @@ async function showTabTable(refForm, refName) {
 
     resTbl = buildTabpanel(refForm, "295");
 
-    const ownerId = refForm.getAttribute("eva-id");      
-    const tmp = {'textId': refName, 'owner': ownerId}
+    const ownerForm = document.querySelector("#create-doc-form")
+    const id = ownerForm.getAttribute("eva-id");    
+    // console.log('id', id);
+
+    const tmp = {'textId': refName, 'owner': id}
     const data = await postOnServer(tmp, '/getrefs');
 
-    arrSyn = await getTabPartSyns(refForm);  
-    // console.log(arrSyn);   
+    arrSyn = await getTabPartSyns(ownerForm);      
+    // let arrSyn = [];
     
     const res = await postOnServer(tmp, '/getrefcol');  
     let col = {};   

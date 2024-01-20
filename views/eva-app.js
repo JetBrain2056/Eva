@@ -466,6 +466,7 @@ async function docCreate(e) {
         await currentModal.hide();
     } else {
         refForm.setAttribute("eva-save", false);
+        refForm.setAttribute("create-mode", false);  
     }
 
     if (result) await showRefTable(textId, typeId);
@@ -611,10 +612,9 @@ async function elemCreate(e) {
     
     const ownerForm  = document.getElementById("create-doc-form");
     const refForm    = document.getElementById("create-elem-form");
-    //const textId     = refForm.getAttribute("eva-textId");
+
     const tabPane = ownerForm.querySelector(".tab-pane.active.show");     
-    const textId  = tabPane.getAttribute("eva-id");       
-    // console.log(textId);
+    const textId  = tabPane.getAttribute("eva-id");           
  
     const createMode   = refForm.getAttribute("create-mode");     
     const copyMode     = refForm.getAttribute("copy-mode");   
@@ -629,7 +629,7 @@ async function elemCreate(e) {
 
     data = await createReq(refForm, textId, createMode, copyMode); 
     data['owner'] = ownerId;
-    // console.log(ownerId);
+
     try {
         if (createMode==='true'&&copyMode==='false') {
             result = await postOnServer(data, '/createref');                  
@@ -647,6 +647,7 @@ async function elemCreate(e) {
         elementsModal = "";
     } else {
         refForm.setAttribute("eva-save", false);
+        refForm.setAttribute("create-mode", false);  
     }
 
     if (result) await showTabTable(tabPane, textId);
@@ -769,7 +770,7 @@ async function elemDelete() {
 }
 async function elemSave() {
     const elemForm  = document.getElementById("create-elem-form");
-    elemForm.setAttribute("eva-save", true);
+    elemForm.setAttribute("eva-save", true);    
     await elemCreate();
 }
 //DOM Dynamic Content////////////////////////////////////////////////////////

@@ -663,6 +663,7 @@ async function elemModal() {
     let createMode = true;
     let copyMode   = false;
 
+    const ownerForm      = document.querySelector('#create-doc-form');  
     const refForm        = modalForm.querySelector('#create-elem-form');  
     refForm.innerHTML = '';
     refForm.reset();   

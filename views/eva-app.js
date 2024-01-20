@@ -566,7 +566,7 @@ async function docEditModal(copyMode) {
     arrSyn = await getSynonyms(evaForm);  
 
     const id   = row.cells[0].innerText;
-    console.log(id);
+    console.log('id',id);
     refForm.setAttribute("eva-id", id);
     const data = {'textId': textId, 'id': id}
 
@@ -612,8 +612,10 @@ async function elemCreate(e) {
     
     const ownerForm  = document.getElementById("create-doc-form");
     const refForm    = document.getElementById("create-elem-form");
-    let textId       = refForm.getAttribute("eva-textId");
-    // console.log(textId);
+    //const textId     = refForm.getAttribute("eva-textId");
+    const tabPane = ownerForm.querySelector(".tab-pane.active.show");     
+    const textId  = tabPane.getAttribute("eva-id");       
+    console.log(textId);
  
     const createMode   = refForm.getAttribute("create-mode");     
     const copyMode     = refForm.getAttribute("copy-mode");   
@@ -676,6 +678,7 @@ async function elemModal() {
     const tabPane = ownerForm.querySelector(".tab-pane.active.show");     
     const textId  = tabPane.getAttribute("eva-id");   
     console.log(textId);
+    // refForm.setAttribute("eva-textId",textId);
     
     const res = await postOnServer({ 'textId': textId }, '/getrefcol');  
     let arr = [];    

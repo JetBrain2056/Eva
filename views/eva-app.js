@@ -670,16 +670,11 @@ async function elemModal() {
     refForm.setAttribute("eva-save", false); 
 
     const ownerForm = document.querySelector('#create-doc-form');  
-    const ownerId = ownerForm.getAttribute("eva-id");
-    //console.log(ownerId);
   
     let arrSyn = await getTabPartSyns(ownerForm);  
 
-    // let tabPane = ownerForm.querySelector(".tab-pane");
-    // console.log(tabPane);
-    const evaForm    = document.querySelector('#eva-ref-form');   
-    let textId = evaForm.getAttribute("eva-textId");    
-    textId = textId+'.Product';
+    const tabPane = ownerForm.querySelector(".tab-pane.active.show");     
+    const textId  = tabPane.getAttribute("eva-id");   
     console.log(textId);
     
     const res = await postOnServer({ 'textId': textId }, '/getrefcol');  
@@ -723,16 +718,15 @@ async function elemEditModal(copyMode) {
     refForm.setAttribute("eva-save", false); 
 
     elementsModal = getModal(modalForm);
-
-    const evaForm    = document.querySelector('#eva-ref-form');   
-    let textId = evaForm.getAttribute("eva-textId");    
-    textId = textId+'.Product';
+    
+    const tabPane = ownerForm.querySelector(".tab-pane.active.show");     
+    const textId  = tabPane.getAttribute("eva-id");        
     console.log(textId);
     refForm.setAttribute("eva-textId", textId);
     
     const ownerId = ownerForm.getAttribute("eva-id");
 
-    arrSyn = await getTabPartSyns(evaForm);  
+    arrSyn = await getTabPartSyns(ownerForm);  
 
     const id     = row.cells[0].innerText;
     const data = { 
@@ -757,14 +751,11 @@ async function elemEditModal(copyMode) {
 }
 async function elemDelete() {
     console.log('>>elemDelete()...');
-
-    // const modalForm  = document.getElementById('docModal');  
-    const refForm = document.getElementById("create-doc-form");    
+     
+    const ownerForm = document.getElementById("create-doc-form");    
   
-    // let textId    = tabPane.getAttribute("eva-id");
-    // console.log('tabPane', tabPane);
-    // console.log('textId', textId);
-    let textId  = 'Order.Product';
+    const tabPane = ownerForm.querySelector(".tab-pane.active.show");    
+    const textId  = tabPane.getAttribute("eva-id");   
     
     for (const row of selectRows) {
         const data = {
@@ -774,7 +765,7 @@ async function elemDelete() {
         result = await postOnServer(data, '/delref');        
     }
 
-    if (result) await showTabTable(refForm, textId);
+    if (result) await showTabTable(ownerForm, textId);
 }
 async function elemSave() {
     const elemForm  = document.getElementById("create-elem-form");

@@ -434,21 +434,32 @@ async function refDelete() {
 
     if (result) await showRefTable(textId, typeId);
 }
-async function copyTabPart(ownerForm) {
-    console.log('>>copyTabPart()...');
+async function copyTabPart(ownerForm, ownerId) {
+    console.log('>>copyTabPart()...', ownerId);
 
-    const ownerId = ownerForm.getAttribute("eva-id");
+    const currentOwnerId = ownerForm.getAttribute("eva-id");
     
     let res = ownerForm.getElementsByClassName("tab-pane");  
-    // console.log(res);   
+    
     for (const tabPane of res) {
         if (tabPane.id==="nav-Main") continue;
         
         const textId  = tabPane.getAttribute("eva-id");  
-        console.log(textId); 
-        // data = await createReq(tabPane, textId, true, false); 
-        // data['owner'] = ownerId;
-        // result = await postOnServer(data, '/createref');   
+        console.log(textId);                         
+
+        const data = {'textId': textId, 'owner': currentOwnerId}
+        const result = await postOnServer(data, '/getrefs');   
+        // console.log(result);
+        for (const row of result) {             
+            delete row['id'];
+            delete row['createdAt'];
+            delete row['updatedAt'];
+            row['owner'] = ownerId;
+            row['textId'] = textId;
+            console.log(row);        
+
+            await postOnServer(row, '/createref');   
+        }
     }
 
 }
@@ -473,7 +484,7 @@ async function docCreate(e) {
             result = await postOnServer(data, '/createref');                  
         } else if (createMode==='false'&&copyMode==='true') {               
             result = await postOnServer(data, '/createref');      
-            await copyTabPart(refForm);                     
+            await copyTabPart(refForm, result);                     
         } else {    
             result = await postOnServer(data, '/updateref');
         }        

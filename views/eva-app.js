@@ -649,7 +649,11 @@ async function docSave() {
 async function elemCreate(e) {
     console.log('>>elemCreate()...');
     
-    const ownerForm  = document.getElementById("create-doc-form");
+    if (currentModal._element.id==='refModal') {
+        ownerForm      = document.querySelector('#create-ref-form');  
+    } else {
+        ownerForm      = document.querySelector('#create-doc-form');  
+    }
     const refForm    = document.getElementById("create-elem-form");
 
     const tabPane = ownerForm.querySelector(".tab-pane.active.show");     
@@ -692,7 +696,8 @@ async function elemCreate(e) {
     if (result) await showTabTable(tabPane, textId);
 }
 async function elemModal() {
-    console.log('>>elemModal()...');      
+    console.log('>>elemModal()...');    
+    
 
     const modalForm  = document.getElementById('elemModal');  
     elementsModal = getModal(modalForm);
@@ -703,7 +708,12 @@ async function elemModal() {
     let createMode = true;
     let copyMode   = false;
 
-    const ownerForm      = document.querySelector('#create-doc-form');  
+    if (currentModal._element.id==='refModal') {
+        ownerForm      = document.querySelector('#create-ref-form');  
+    } else {
+        ownerForm      = document.querySelector('#create-doc-form');  
+    }
+
     const refForm        = modalForm.querySelector('#create-elem-form');  
     refForm.innerHTML = '';
     refForm.reset();   
@@ -749,7 +759,11 @@ async function elemEditModal(copyMode) {
 
     const createMode = false;    
           
-    const ownerForm  = document.querySelector('#create-doc-form');   
+    if (currentModal._element.id==='refModal') {
+        ownerForm      = document.querySelector('#create-ref-form');  
+    } else {
+        ownerForm      = document.querySelector('#create-doc-form');  
+    } 
     const refForm    = modalForm.querySelector('#create-elem-form');    
     refForm.reset();  
     refForm.innerHTML = '';     

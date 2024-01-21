@@ -336,14 +336,15 @@ async function refModal() {
     refForm.reset();   
     refForm.setAttribute("create-mode", createMode);  
     refForm.setAttribute("copy-mode", copyMode);   
-
-    const evaForm = document.querySelector('#eva-ref-form');  
+   
+    const evaForm = document.querySelector('#eva-ref-form'); 
     const textId = evaForm.getAttribute("eva-textId");
     const typeId = evaForm.getAttribute("eva-typeId");
-    refForm.setAttribute("eva-textId", textId);
+    refForm.setAttribute("eva-textId", textId);  
+    refForm.setAttribute("eva-typeId", typeId);
 
     let arrSyn = await getSynonyms(evaForm);  
-    
+
     const res = await postOnServer({ 'textId': textId }, '/getrefcol');  
     let arr = [];    
     let arrCol = [];  
@@ -355,8 +356,8 @@ async function refModal() {
         arr[colName] = '';  
         arrCol[colName] = obj;
     }
-    
-    await refElement(refForm, arr, arrCol, arrSyn, createMode, copyMode, typeId);      
+
+    await refElement(refForm, arr, arrCol, arrSyn, createMode, copyMode, typeId);        
     await tabParts(ul, textId);
 }
 async function refEditModal(copyMode) {
@@ -392,30 +393,38 @@ async function refEditModal(copyMode) {
 
     const evaForm    = document.querySelector('#eva-ref-form');   
     const textId = evaForm.getAttribute("eva-textId");
+    const typeId = evaForm.getAttribute("eva-typeId");
     refForm.setAttribute("eva-textId", textId);
+    refForm.setAttribute("eva-typeId", typeId);
+    refForm.setAttribute("class","tab-content");
+
+    const div = document.createElement("div");
+    div.setAttribute("class","tab-pane active show");    
+    div.setAttribute("id","nav-Main");
+    div.setAttribute("role","tabpanel");
+    refForm.appendChild(div);
 
     arrSyn = await getSynonyms(evaForm);  
 
-    const id     = row.cells[0].innerText;
-    const data = { 
-        'textId': textId,
-        'id': id
-    };
+    const id   = row.cells[0].innerText;
+    console.log('id',id);
+    refForm.setAttribute("eva-id", id);
+    const data = {'textId': textId, 'id': id}
 
-    let res = await postOnServer(data, '/getrefcol');       
+    res = await postOnServer({'textId': textId}, '/getrefcol');         
     let arrCol = [];  
-    for (let elem of res) {        
+    for (elem of res) {
         const colName    = elem.column_name;
         const dataType   = elem.data_type;
         const identifier = elem.dtd_identifier;
-      
-        let obj = {'colName': colName, 'dataType':dataType, 'identifier': identifier}         
-        arrCol[colName] = obj;            
+
+        const obj = {'colName': colName, 'dataType':dataType, 'identifier': identifier}          
+        arrCol[colName] = obj;
     }
 
     res = await postOnServer(data, '/getref');  
-    await refElement(refForm, res[0], arrCol, arrSyn, createMode, copyMode);   
-    await tabParts(ul, textId);  
+    await refElement(div, res[0], arrCol, arrSyn, createMode, copyMode, typeId);     
+    await tabParts(refForm, ul, textId);
 }
 async function refDelete() {
     console.log('>>refDelete()...');
@@ -445,7 +454,7 @@ async function copyTabPart(ownerForm, ownerId) {
         if (tabPane.id==="nav-Main") continue;
         
         const textId  = tabPane.getAttribute("eva-id");  
-        console.log(textId);                         
+        // console.log(textId);                         
 
         const data = {'textId': textId, 'owner': currentOwnerId}
         const result = await postOnServer(data, '/getrefs');   
@@ -456,7 +465,7 @@ async function copyTabPart(ownerForm, ownerId) {
             delete row['updatedAt'];
             row['owner'] = ownerId;
             row['textId'] = textId;
-            console.log(row);        
+            // console.log(row);        
 
             await postOnServer(row, '/createref');   
         }

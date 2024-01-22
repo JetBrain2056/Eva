@@ -571,6 +571,8 @@ async function objectCreate(e) {
     const input_form   = document.getElementById('create-object-form'); 
     const input_type        = input_form.querySelector('#input-type');
     const input_const_type  = input_form.querySelector('#input-const-type');
+    const inputObjRep       = input_form.querySelector('#input-object-rep'); 
+    const inputListRep      = input_form.querySelector('#input-list-rep'); 
     const input_textId      = input_form.querySelector('#input-textId');    
     const input_subsystem   = input_form.querySelector('#input-subsystem');      
     const createMode        = input_form.getAttribute("create-mode");  
@@ -580,15 +582,8 @@ async function objectCreate(e) {
         await e.stopPropagation();        
     }
     
-    const tmp = { 
-        typeId    : input_type.value, 
-        textId    : input_textId.value,
-        subsysId  : input_subsystem.getAttribute("eva-id"),
-        subsysName: input_subsystem.value,
-        constType : input_const_type.value        
-    }
     
-    resCheck = await postOnServer(tmp,'/checkobject');    
+    resCheck = await postOnServer({'textId' : input_textId.value},'/checkobject');    
     console.log(resCheck);
     if (resCheck) {
         console.log('The identifier is not unique!');
@@ -596,6 +591,15 @@ async function objectCreate(e) {
         // await e.stopPropagation();            
     }
 
+    const tmp = { 
+        typeId    : input_type.value, 
+        textId    : input_textId.value,
+        subsysId  : input_subsystem.getAttribute("eva-id"),
+        subsysName: input_subsystem.value,
+        constType : input_const_type.value,
+        objectRep : inputObjRep.value,
+        listRep   : inputListRep.value
+    }
     const data =  {
         'id'      : input_form.getAttribute("eva-id"),
         'data'    : JSON.stringify(tmp),
@@ -675,6 +679,8 @@ async function objectEditModal() {
     const input_textId    = input_form.querySelector('#input-textId');   
     const input_subsystem = input_form.querySelector('#input-subsystem');  
     const inputConstType  = input_form.querySelector('#input-const-type'); 
+    const inputObjRep     = input_form.querySelector('#input-object-rep'); 
+    const inputListRep    = input_form.querySelector('#input-list-rep'); 
 
     let data = { 'id': row.cells[0].innerText }
 
@@ -686,6 +692,8 @@ async function objectEditModal() {
         input_form.setAttribute("eva-id", res.id);
         input_type.value        = Elements.typeId;        
         input_textId.value      = Elements.textId;
+        inputObjRep.value       = Elements.objectRep;
+        inputListRep.value      = Elements.listRep;
         input_subsystem.value   = Elements.subsysName;
         input_subsystem.setAttribute("eva-id", Elements.subsysId);
         if (Elements.typeId === "Constant") {              
@@ -709,9 +717,7 @@ async function objectDelete() {
     console.log('>>objectDelete()...');
     
     for (const row of selectRows) {
-
-        let data = {'id': row.cells[0].innerText}
-
+        const data = {'id': row.cells[0].innerText}
         result = await postOnServer(data,'/delobject');        
     }
 

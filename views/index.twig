@@ -10,6 +10,7 @@
         <script defer src="./eva-app.js"></script>
         <script defer src="./@popperjs/core/dist/umd/popper.min.js"></script>
         <script defer src="./js/bootstrap.min.js"></script>
+        <script defer src="./editor.js"></script>        
         <link rel="icon" type="image/x-icon" href="{{ shortIcon }}">
         <link href="./css/bootstrap.min.css" rel="stylesheet">
         <link href="./font-awesome/css/font-awesome.min.css" rel="stylesheet">
@@ -31,8 +32,7 @@
                         <noscript>You need to enable JavaScript to run this app.</noscript>                    
                         <div class="eva" id="eva-app" data-app="">{#Start app#}                           
                             {% include "./template/common/constants.twig" %} 
-                            {% include "./template/common/references.twig" %}  
-                            {% include "./template/common/documents.twig" %}                                                        
+                            {% include "./template/common/references.twig" %}                         
                         </div>                            
                     {% endif %}       
                 </div>                         

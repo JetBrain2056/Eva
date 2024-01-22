@@ -491,13 +491,7 @@ async function elemCreate(e) {
     console.log('>>elemCreate()...');
 
     const refModalForm = currentModal._element;
-    let ownerForm;
-    if (refModalForm.id==='refModal') {
-        ownerForm      = refModalForm.querySelector('#create-ref-form');  
-    } else {
-        ownerForm      = refModalForm.querySelector('#create-doc-form');  
-    }
-
+    const ownerForm  = refModalForm.querySelector('#create-ref-form');  
     const refForm    = document.getElementById("create-elem-form");
 
     const tabPane = ownerForm.querySelector(".tab-pane.active.show");     
@@ -535,6 +529,7 @@ async function elemCreate(e) {
     } else {
         refForm.setAttribute("eva-save", false);
         refForm.setAttribute("create-mode", false);  
+        refForm.setAttribute("copy-mode", false);  
     }
 
     if (result) await showTabTable(tabPane, textId);
@@ -553,12 +548,7 @@ async function elemModal() {
     let copyMode   = false;
 
     const refModalForm = currentModal._element;
-    let ownerForm;
-    if (refModalForm.id==='refModal') {
-        ownerForm      = document.querySelector('#create-ref-form');  
-    } else {
-        ownerForm      = document.querySelector('#create-doc-form');  
-    }
+    const ownerForm = refModalForm.querySelector('#create-ref-form');  
 
     const refForm        = modalForm.querySelector('#create-elem-form');  
     refForm.innerHTML = '';
@@ -606,13 +596,8 @@ async function elemEditModal(copyMode) {
     const createMode = false;    
           
     const refModalForm = currentModal._element;
-    let ownerForm;
-    if (refModalForm.id==='refModal') {
-        ownerForm      = document.querySelector('#create-ref-form');  
-    } else {
-        ownerForm      = document.querySelector('#create-doc-form');  
-    } 
-
+    const ownerForm    = refModalForm.querySelector('#create-ref-form'); 
+  
     const refForm    = modalForm.querySelector('#create-elem-form');    
     refForm.reset();  
     refForm.innerHTML = '';     
@@ -656,12 +641,7 @@ async function elemDelete() {
     console.log('>>elemDelete()...');
      
     const refModalForm = currentModal._element;
-    let ownerForm;
-    if (refModalForm.id==='refModal') {
-        ownerForm      = refModalForm.querySelector('#create-ref-form');  
-    } else {
-        ownerForm      = refModalForm.querySelector('#create-doc-form');  
-    }   
+    const ownerForm    = refModalForm.querySelector('#create-ref-form');    
   
     const tabPane = ownerForm.querySelector(".tab-pane.active.show");    
     const textId  = tabPane.getAttribute("eva-id");   

@@ -537,7 +537,6 @@ async function elemCreate(e) {
 async function elemModal() {
     console.log('>>elemModal()...');    
     
-
     const modalForm  = document.getElementById('elemModal');  
     elementsModal = getModal(modalForm);
 
@@ -580,7 +579,7 @@ async function elemModal() {
 async function elemEditModal(copyMode) {
     console.log('>>elemEditModal()...'); 
   
-    if (selectRows.length === 0) { return };
+    if (selectRows.length === 0) return;
 
     const row = selectRows[0];      
 
@@ -685,6 +684,7 @@ function addTabs(ul, tabName) {
 }
 async function tabParts(refForm, ul, refName) {
     console.log('>>tabParts()...', refName);
+    
     const refLink = document.querySelector("#"+refName);
     const id      = refLink.getAttribute("eva-id");    
 
@@ -1081,12 +1081,12 @@ function navHiddenItem(navTab, name) {
         li.appendChild(a);    
     navTab.appendChild(li);               
 }
-function navLink(nav, name, id, type) {
+function navLink(nav, name, id, type, textId) {
     console.log('>>navLink()...', type);
     const li = document.createElement('div');
         const a = document.createElement('a');
         a.setAttribute("class","icon-link eva-link p-1");
-        a.setAttribute("id", name);           
+        a.setAttribute("id", textId);           
         a.setAttribute("eva-id", id);  
         a.setAttribute("eva-type", type);
         a.innerText = name+'s';
@@ -1137,14 +1137,17 @@ async function tabDesk() {
     nav = collapseLink(div, nav, 'Documents' , 1);
     
     let data = await getOnServer('/getconfig');
-    for (let row of data) {
-        let id       = row.id;
-        let strJson  = row.data; 
-        let elements = await JSON.parse(strJson);        
+    for (const row of data) {
+        const id       = row.id;
+        const strJson  = row.data; 
+        const elements = await JSON.parse(strJson);  
+        let name = elements.textId;
+        if (elements.objectRep) name = elements.objectRep;    
+
         if (row.state===0 && elements.typeId==='Reference') {                                                   
-            navLink(nav[0], elements.textId, id, elements.typeId);                                  
+            navLink(nav[0], name, id, elements.typeId, elements.textId);                                  
         } else if (row.state===0 && elements.typeId==='Document') {    
-            navLink(nav[1], elements.textId, id, elements.typeId);                               
+            navLink(nav[1], name, id, elements.typeId, elements.textId);                               
         }
     }        
 }
@@ -1152,14 +1155,16 @@ async function tabRef() {
     console.log('>>tabRef()...');
     const div = document.querySelector("#nav-References");
     let data = await getOnServer('/getconfig');
-    for (let row of data) {
-        let id       = row.id;
-        let strJson  = row.data;         
-        let elements = await JSON.parse(strJson);
+    for (const row of data) {
+        const id       = row.id;
+        const strJson  = row.data;         
+        const elements = await JSON.parse(strJson);
+        let name = elements.textId;
+        if (elements.objectRep) name = elements.objectRep;   
         if (row.state===0 && elements.typeId==='Reference') {                    
             const nav = document.createElement('nav');
             nav.setAttribute("class","nav flex-column");                 
-                navLink(nav, elements.textId, id, elements.typeId);                    
+                navLink(nav, name, id, elements.typeId, elements.textId);                    
             div.appendChild(nav);          
         }
     }        

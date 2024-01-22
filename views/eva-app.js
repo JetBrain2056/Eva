@@ -316,6 +316,7 @@ async function refCreate(e) {
     } else {
         refForm.setAttribute("eva-save", false);
         refForm.setAttribute("create-mode", false);  
+        refForm.setAttribute("copy-mode", false);  
     }
 
     if (result) await showRefTable(textId, typeId);

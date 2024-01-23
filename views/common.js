@@ -575,6 +575,8 @@ async function objectCreate(e) {
     const inputListRep      = input_form.querySelector('#input-list-rep'); 
     const input_textId      = input_form.querySelector('#input-textId');    
     const input_subsystem   = input_form.querySelector('#input-subsystem');      
+    const inputReqId        = document.querySelector('#input-hide-id'); 
+    const inputReqName      = document.querySelector('#input-name-length'); 
     const createMode        = input_form.getAttribute("create-mode");  
     
     if (!input_form.checkValidity()) {
@@ -582,13 +584,10 @@ async function objectCreate(e) {
         await e.stopPropagation();        
     }
     
-    
     resCheck = await postOnServer({'textId' : input_textId.value},'/checkobject');    
     console.log(resCheck);
     if (resCheck) {
-        console.log('The identifier is not unique!');
-        // await e.preventDefault();
-        // await e.stopPropagation();            
+        console.log('The identifier is not unique!');          
     }
 
     const tmp = { 
@@ -598,14 +597,16 @@ async function objectCreate(e) {
         subsysName: input_subsystem.value,
         constType : input_const_type.value,
         objectRep : inputObjRep.value,
-        listRep   : inputListRep.value
+        listRep   : inputListRep.value,
+        hideId    : inputReqId.checked,
+        nameLength: inputReqName.value
     }
     const data =  {
         'id'      : input_form.getAttribute("eva-id"),
         'data'    : JSON.stringify(tmp),
     }
     
-    console.log('createMode:', createMode);
+    // console.log('createMode:', createMode);
     if (createMode==='true') {
         try {
             result = await postOnServer(data, '/createobject')
@@ -626,9 +627,7 @@ async function objectCreate(e) {
 
     if (result) await showConfigTable();
 
-    //btnConfigSave.removeAttribute("disabled");
     btnConfigSave.style.backgroundColor = 'red';
-
 }
 async function objectModal() {
     console.log('>>objectModal()...'); 
@@ -647,7 +646,6 @@ async function objectModal() {
 
     const input_subsystem = input_form.querySelector('#input-subsystem');  
     input_subsystem.removeAttribute("disabled");     
-
 
     const navReq = modalForm.querySelector("#nav-requisite");
     const evaTbl = navReq.querySelector(".eva-table");
@@ -681,8 +679,10 @@ async function objectEditModal() {
     const inputConstType  = input_form.querySelector('#input-const-type'); 
     const inputObjRep     = input_form.querySelector('#input-object-rep'); 
     const inputListRep    = input_form.querySelector('#input-list-rep'); 
+    const inputReqId      = modalForm.querySelector('#input-hide-id'); 
+    const inputReqName    = modalForm.querySelector('#input-name-length'); 
 
-    let data = { 'id': row.cells[0].innerText }
+    let data = {'id': row.cells[0].innerText}
 
     res = await postOnServer(data,'/getobject');
     if (res) {
@@ -694,6 +694,8 @@ async function objectEditModal() {
         input_textId.value      = Elements.textId;
         inputObjRep.value       = Elements.objectRep;
         inputListRep.value      = Elements.listRep;
+        if (Elements.hideId)     {inputReqId.checked      = Elements.hideId;}
+        if (Elements.nameLength) {inputReqName.value      = Elements.nameLength;}
         input_subsystem.value   = Elements.subsysName;
         input_subsystem.setAttribute("eva-id", Elements.subsysId);
         if (Elements.typeId === "Constant") {              
@@ -729,9 +731,7 @@ async function updateConfig() {
     console.log('>>updateConfig()...');
     inputStatus.value = '>> Update config in DB...';
   
-    let data = {};
-
-    result = await postOnServer(data, '/updateconf');
+    result = await postOnServer({}, '/updateconf');
 
     console.log(result);
     if (result===1) { 

@@ -159,6 +159,9 @@ async function constEditModal() {
                     inputValue.value       = '';  
                     constValueBtn.removeAttribute("hidden"); 
                 }
+            } else {    
+                inputValue.value       = '';  
+                constValueBtn.removeAttribute("hidden"); 
             }
         }
         

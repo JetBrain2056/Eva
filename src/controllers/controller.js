@@ -425,7 +425,12 @@ exports.updateConfig = async function(req, res) {
             delete refColumns['name'];            
         } else {    
             delete refColumns['number'];
-            delete refColumns['date'];                               
+            delete refColumns['date'];   
+            if (Elements.nameLength==='0') {                
+                delete refColumns['name'];  
+            } else {
+                refColumns['name'] = {type: DataTypes.STRING(Elements.nameLength)};
+            }                            
         } 
 
         const reqlist = await Requisite.findAll({ where: { owner: row.id } });                            

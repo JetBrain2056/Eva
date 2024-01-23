@@ -858,10 +858,11 @@ function closeTabRef(id) {
     let navItem = ul.getElementsByClassName("nav-item");    
     const evaLink = document.getElementById(id);   
     if (evaLink) {   
-        if (navItem.length > 1) {            
+        if (navItem.length > 1) {                              
             evaLink.parentElement.remove();  
-            const refName = navItem[navItem.length-1].getAttribute("name");   
-            openRef(refName);
+            const refName = navItem[navItem.length-1].getAttribute("name");                              
+            const name    = navItem[navItem.length-1].getAttribute("eva-name");  
+            openRef(refName, name);
         } else {
             const Desktop = document.getElementById("Desktop");
             if (Desktop) { 
@@ -876,7 +877,8 @@ function openTabRef(id, refName) {
       
     const evaLink = document.getElementById(id);   
     if (evaLink) {    
-        openRef(refName);
+        const name = evaLink.parentElement.getAttribute("eva-name");
+        openRef(refName, name);
     }
 }
 function buildTable(refName, refType) {
@@ -896,17 +898,18 @@ function buildTable(refName, refType) {
         li.setAttribute("class","nav-item d-flex justify-content-end");                      
         li.setAttribute("id", "eva-item-"+refName);  
         li.setAttribute("name", refName);  
+        li.setAttribute("eva-name", name); 
             const a = document.createElement("a");
             a.setAttribute("class","nav-link active p-1 pe-4");                                
             a.setAttribute("href","#");                    
-            a.setAttribute("name", refName);  
+            a.setAttribute("name", refName);              
             a.setAttribute("id", "eva-link-"+refName);                                               
             a.setAttribute("onclick", "openTabRef(id,name)");   
             a.innerText = name+'s '; 
             const button = document.createElement("button");
             button.setAttribute("type","button");
             button.setAttribute("class","btn-close position-absolute p-2");                
-            button.setAttribute("href","#");               
+            button.setAttribute("href","#");                          
             button.setAttribute("id", "eva-btn-"+refName);            
             button.setAttribute("onclick", "closeTabRef(id)");                                     
         li.appendChild(a);                             
@@ -1174,19 +1177,20 @@ async function tabRef() {
         }
     }        
 }
-async function tabSubsys(div, name) {
+async function tabSubsys(div, nameSub) {
     console.log('>>tabSubsys()...');
 
     let data = await getOnServer('/getconfig');
     for (let row of data) {
-        let id       = row.id;
-        let strJson  = row.data;         
-        let elements = await JSON.parse(strJson);
-        if (row.state===0 && (elements.typeId==='Document'||elements.typeId==='Reference') && elements.subsysName===name) {
-            // console.log(elements.textId);        
+        const id       = row.id;
+        const strJson  = row.data;         
+        const elements = await JSON.parse(strJson);
+        let name = elements.textId;
+        if (elements.objectRep) name = elements.objectRep;   
+        if (row.state===0 && (elements.typeId==='Document'||elements.typeId==='Reference') && elements.subsysName===nameSub) {                    
             const nav = document.createElement('nav');
             nav.setAttribute("class","nav flex-column");                 
-                navLink(nav, elements.textId, id, elements.typeId);                    
+                navLink(nav, name, id, elements.typeId, elements.textId);                    
             div.appendChild(nav);          
         }
     }        

@@ -705,6 +705,8 @@ async function objectEditModal() {
             option.setAttribute("selected","selected"); 
             inputConstType.appendChild(option);          
             inputConstType.setAttribute("eva-id", row.cells[0].innerText);
+            inputObjRep.value       = "";
+            inputListRep.value      = "";
         }
     }    
 

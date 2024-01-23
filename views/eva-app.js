@@ -29,8 +29,8 @@ async function openConst() {
     let status = document.getElementById("status");
     status.value = ">It's work!";
 }
-async function openRef(refName) {
-    console.log('>>openRef()...');
+async function openRef(refName, name) {
+    console.log('>>openRef()...', refName, name);
               
     const tabForm = document.getElementById("ref-form");                      
     const refLink = document.querySelector("#"+refName);
@@ -40,6 +40,7 @@ async function openRef(refName) {
     evaForm.setAttribute("eva-id", refId);
     evaForm.setAttribute("eva-textId", refName);
     evaForm.setAttribute("eva-typeId", refType);
+    evaForm.setAttribute("name", name);
 
     let tab = new bootstrap.Tab(tabForm);
     tab.show();    
@@ -881,6 +882,9 @@ function openTabRef(id, refName) {
 function buildTable(refName, refType) {
     console.log('>>buildTable()...');  
 
+    const evaForm = document.querySelector('#eva-ref-form'); 
+    const name    = evaForm.getAttribute("name");
+
     const refForm = document.getElementById("nav-ref-form");
     refForm.setAttribute("eva-textId", refName);
 
@@ -898,7 +902,7 @@ function buildTable(refName, refType) {
             a.setAttribute("name", refName);  
             a.setAttribute("id", "eva-link-"+refName);                                               
             a.setAttribute("onclick", "openTabRef(id,name)");   
-            a.innerText = refName+'s '; 
+            a.innerText = name+'s '; 
             const button = document.createElement("button");
             button.setAttribute("type","button");
             button.setAttribute("class","btn-close position-absolute p-2");                
@@ -911,7 +915,7 @@ function buildTable(refName, refType) {
     }
 
     const refFormLabel = refForm.querySelector("#refFormLabel"); 
-    refFormLabel.innerText = refName+'s';
+    refFormLabel.innerText = name+'s';
     
     const btnToolbar = refForm.querySelector(".btn-toolbar");     
     const evaAdd  = btnToolbar.querySelector(".eva-add");
@@ -1089,10 +1093,11 @@ function navLink(nav, name, id, type, textId) {
         a.setAttribute("id", textId);           
         a.setAttribute("eva-id", id);  
         a.setAttribute("eva-type", type);
+        a.setAttribute("name", name);
         a.innerText = name+'s';
         a.href="#";
         a.setAttribute("style","color: grey;font-size: 19px;");          
-        a.setAttribute("onclick", "openRef(id)");  
+        a.setAttribute("onclick", "openRef(id, name)");  
     li.appendChild(a);           
     nav.appendChild(li);     
 }

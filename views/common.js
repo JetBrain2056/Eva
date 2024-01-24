@@ -18,10 +18,10 @@ function mainSelect() {
     const inputObjectRep = $objectModal.querySelector('#input-object-rep');
     const inputListRep   = $objectModal.querySelector('#input-list-rep');
     const inputSubsystem = $objectModal.querySelector("#input-subsystem");    
-    const inputSubsysBtn = $objectModal.querySelector("#input-subsystem-btn");  
+    const inputSubsysBtn = $objectModal.querySelector("#input-subsystem_btn");  
     const inputModule    = $objectModal.querySelector("#input-module"); 
     const inputOwner     = $objectModal.querySelector("#input-owner");
-    const inputOwnerBtn  = $objectModal.querySelector("#input-owner-btn");
+    const inputOwnerBtn  = $objectModal.querySelector("#input-owner_btn");
     const navMain        = $objectModal.querySelector("#object-main");
     const navRequisite   = $objectModal.querySelector("#object-requisite");
     const navTabular     = $objectModal.querySelector("#object-tabular");    
@@ -60,8 +60,13 @@ function mainSelect() {
     } else {        
         inputSubsystem.removeAttribute("disabled");        
         inputSubsysBtn.removeAttribute("disabled");
-        inputOwner    .setAttribute("disabled","disabled");       
-        inputOwnerBtn .setAttribute("disabled","disabled"); 
+        if (inputType.value === "Reference") {
+            inputOwner    .removeAttribute("disabled");       
+            inputOwnerBtn .removeAttribute("disabled"); 
+        } else {
+            inputOwner    .setAttribute("disabled","disabled");       
+            inputOwnerBtn .setAttribute("disabled","disabled"); 
+        }
         inputModule   .removeAttribute("disabled");        
         navRequisite  .removeAttribute("hidden");        
         navTabular    .removeAttribute("hidden");        
@@ -568,18 +573,19 @@ async function showConfigTable() {
 async function objectCreate(e) {
     console.log('>>configCreate()...');
 
-    const input_form   = document.getElementById('create-object-form'); 
-    const input_type        = input_form.querySelector('#input-type');
-    const input_const_type  = input_form.querySelector('#input-const-type');
-    const inputObjRep       = input_form.querySelector('#input-object-rep'); 
-    const inputListRep      = input_form.querySelector('#input-list-rep'); 
-    const input_textId      = input_form.querySelector('#input-textId');    
-    const input_subsystem   = input_form.querySelector('#input-subsystem');      
+    const inputForm         = document.getElementById('create-object-form'); 
+    const input_type        = inputForm.querySelector('#input-type');
+    const input_const_type  = inputForm.querySelector('#input-const-type');
+    const inputObjRep       = inputForm.querySelector('#input-object-rep'); 
+    const inputListRep      = inputForm.querySelector('#input-list-rep'); 
+    const input_textId      = inputForm.querySelector('#input-textId');    
+    const input_subsystem   = inputForm.querySelector('#input-subsystem');      
     const inputReqId        = document.querySelector('#input-hide-id'); 
     const inputReqName      = document.querySelector('#input-name-length'); 
-    const createMode        = input_form.getAttribute("create-mode");  
+    const inputOwner        = inputForm.querySelector('#input-owner');  
+    const createMode        = inputForm.getAttribute("create-mode");  
     
-    if (!input_form.checkValidity()) {
+    if (!inputForm.checkValidity()) {
         await e.preventDefault();
         await e.stopPropagation();        
     }
@@ -599,10 +605,11 @@ async function objectCreate(e) {
         objectRep : inputObjRep.value,
         listRep   : inputListRep.value,
         hideId    : inputReqId.checked,
-        nameLength: inputReqName.value
+        nameLength: inputReqName.value,
+        owner     : inputOwner.value
     }
     const data =  {
-        'id'      : input_form.getAttribute("eva-id"),
+        'id'      : inputForm.getAttribute("eva-id"),
         'data'    : JSON.stringify(tmp),
     }
     
@@ -668,46 +675,57 @@ async function objectEditModal() {
     const objectModalLabel = modalForm.querySelector('#objectModalLabel');  
     objectModalLabel.innerText = 'Edit object:';
 
-    const input_form      = modalForm.querySelector('#create-object-form');  
-    input_form.reset();  
-    input_form.setAttribute("create-mode",false);   
+    const inputForm      = modalForm.querySelector('#create-object-form');  
+    inputForm.reset();  
+    inputForm.setAttribute("create-mode",false);   
 
-    const input_type      = input_form.querySelector('#input-type');
+    const input_type      = inputForm.querySelector('#input-type');
     input_type.setAttribute("disabled","disabled");    
-    const input_textId    = input_form.querySelector('#input-textId');   
-    const input_subsystem = input_form.querySelector('#input-subsystem');  
-    const inputConstType  = input_form.querySelector('#input-const-type'); 
-    const inputObjRep     = input_form.querySelector('#input-object-rep'); 
-    const inputListRep    = input_form.querySelector('#input-list-rep'); 
+    const input_textId    = inputForm.querySelector('#input-textId');   
+    const input_subsystem = inputForm.querySelector('#input-subsystem');  
+    const inputConstType  = inputForm.querySelector('#input-const-type'); 
+    const inputObjRep     = inputForm.querySelector('#input-object-rep'); 
+    const inputListRep    = inputForm.querySelector('#input-list-rep'); 
     const inputReqId      = modalForm.querySelector('#input-hide-id'); 
     const inputReqName    = modalForm.querySelector('#input-name-length'); 
+    const inputOwner      = inputForm.querySelector('#input-owner');  
 
     let data = {'id': row.cells[0].innerText}
 
     res = await postOnServer(data,'/getobject');
     if (res) {
-        let strJson = res.data;          
-        let Elements = await JSON.parse(strJson);        
+        const strJson  = res.data;          
+        const Elements = await JSON.parse(strJson);        
 
-        input_form.setAttribute("eva-id", res.id);
-        input_type.value        = Elements.typeId;        
-        input_textId.value      = Elements.textId;
-        inputObjRep.value       = Elements.objectRep;
-        inputListRep.value      = Elements.listRep;
-        if (Elements.hideId)     {inputReqId.checked      = Elements.hideId;}
-        if (Elements.nameLength) {inputReqName.value      = Elements.nameLength;}
-        input_subsystem.value   = Elements.subsysName;
-        input_subsystem.setAttribute("eva-id", Elements.subsysId);
-        if (Elements.typeId === "Constant") {              
+        inputForm.setAttribute("eva-id", res.id);
+        
+        if (Elements.typeId === "Constant") {                
             const option = document.createElement('option');
             option.value = Elements.constType;
             option.text  = Elements.constType;
             option.setAttribute("selected","selected"); 
             inputConstType.appendChild(option);          
             inputConstType.setAttribute("eva-id", row.cells[0].innerText);
+        } else if (Elements.typeId === "Reference") {            
+            if (Elements.hideId)     {inputReqId.checked      = Elements.hideId;}
+            if (Elements.nameLength) {inputReqName.value      = Elements.nameLength;}
+            inputObjRep.value       = Elements.objectRep;
+            inputListRep.value      = Elements.listRep;
+            if (Elements.owner)      {inputOwner.value        = Elements.owner;}
+        } else if (Elements.typeId === "Document") {                        
+            inputObjRep.value       = Elements.objectRep;
+            inputListRep.value      = Elements.listRep;   
+            inputOwner.value        = "";           
+        } else {
             inputObjRep.value       = "";
             inputListRep.value      = "";
-        }
+            inputOwner.value        = "";  
+        } 
+        input_type.value        = Elements.typeId;        
+        input_textId.value      = Elements.textId;                    
+        input_subsystem.value   = Elements.subsysName;
+        input_subsystem.setAttribute("eva-id", Elements.subsysId);
+           
     }    
 
     currentModal = getModal(modalForm);
@@ -761,10 +779,8 @@ function openModule() {
     selectModal = getModal(modalForm);
 
 }
-async function showTypeTable() {
+async function showTypeTable(modalForm) {
     console.log('>>showTypeTable()...');
-
-    const modalForm = document.getElementById("selectTypeModal");
 
     resTbl = buildTabpanel(modalForm, "300");
 
@@ -830,7 +846,38 @@ async function selectType(id) {
 
     selectModal = getModal(modalForm);
 
-    await showTypeTable();
+    await showTypeTable(modalForm);
+}
+async function ownerSelect() {
+    console.log('>>ownerSelect()...');
+
+    if (selectRows.length === 0) return;
+
+    const row = selectRows[0];  
+
+    const modalForm = document.getElementById("selectOwnerModal");
+
+    const id = modalForm.getAttribute("eva-id");         
+    const inputElement = document.querySelector("#"+id);    
+    const value = row.cells[1].innerText+'.'+row.cells[2].innerText;
+    
+    const inputOwner = document.querySelector("#input-owner");
+    inputOwner.value = value;
+    // inputOwner.setAttribute("disabled","disabled");   
+  
+    inputElement.setAttribute("eva-id", row.cells[0].innerText);
+  
+    await selectModal.hide();
+}
+async function selectOwner(id) {
+    console.log('>>selectOwner()...'); 
+
+    const modalForm = document.getElementById("selectOwnerModal");
+    modalForm.setAttribute("eva-id", id.split('_')[0]);
+
+    selectModal = getModal(modalForm);
+
+    await showTypeTable(modalForm);
 }
 /////////////////////////////////////////////////////////////////////////////
 async function showSubsystemsTable() {

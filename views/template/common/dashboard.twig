@@ -255,12 +255,12 @@
               <label for="input-subsystem">Subsystem:</label>
               <div class="input-group input-group-sm"> 
                 <input type="text" placeholder="..." id="input-subsystem" class="form-control"/>
-                <button class="btn btn-outline-secondary" id="input-subsystem-btn" type="button" onclick="objectEditSubsystem()">...</button>
+                <button class="btn btn-outline-secondary" id="input-subsystem_btn" type="button" onclick="objectEditSubsystem()">...</button>
               </div>                  
               <label for="input-owner">Owner:</label>
               <div class="input-group input-group-sm">
                 <input type="text" placeholder="..." id="input-owner" class="form-control"/>
-                <button class="btn btn-outline-secondary" id="input-owner-btn" type="button" onclick="objectOwner()">...</button>
+                <button class="btn btn-outline-secondary" id="input-owner_btn" type="button" onclick="selectOwner(id)">...</button>
               </div>  
               <label for="input-module">Others:</label>
               <div class="input-group input-group-sm">
@@ -528,6 +528,31 @@
         <div class="btn-toolbar" role="toolbar" aria-label="toolbar group">          
           <div class="btn-group btn-group-sm" role="group">
             <button type="submit" class="btn btn-primary d-flex gap-2 align-items-center eva-edit" onclick="typeSelect()">
+              <i class=""></i>
+              <span>Select</span>
+            </button>    
+          </div>
+        </div>
+        <div class="eva-table"></div>          
+      </div>
+      <div class="modal-footer">        
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{button_close}}</button>
+      </div>
+    </div>
+  </div>
+</div> 
+{# Modal Select Owner #}
+<div class="modal modal-lg fade" id="selectOwnerModal" tabindex="-4" data-bs-backdrop="static" aria-labelledby="selectOwnerModalLabel" aria-hidden="true">
+  <div class="modal-dialog  modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Select owner:</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">          
+        <div class="btn-toolbar" role="toolbar" aria-label="toolbar group">          
+          <div class="btn-group btn-group-sm" role="group">
+            <button type="submit" class="btn btn-primary d-flex gap-2 align-items-center eva-edit" onclick="ownerSelect()">
               <i class=""></i>
               <span>Select</span>
             </button>    

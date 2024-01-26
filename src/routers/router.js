@@ -51,5 +51,6 @@ router.post('/getrefcol', controller.getRefColumns);
 router.post('/createref', controller.createReference);
 router.post('/updateref', controller.updateReference);
 router.post('/delref', controller.deleteReference);
+router.post('/getowner', controller.getOwner);
 
 module.exports = { router }                                                  

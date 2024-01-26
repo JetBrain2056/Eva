@@ -748,19 +748,19 @@ async function tabParts(refForm, ul, refName) {
     }
 }
 async function tabOwner(refForm, textId, refName) {
-    console.log('>>tabOwner()...', refName);
-    
-    const refLink = document.querySelector("#"+refName);
-    const id      = refLink.getAttribute("eva-id");    
+    console.log('>>tabOwner()...', textId, refName);
 
-   
+    const refLink = document.querySelector("#"+textId);
+    const id      = refLink.getAttribute("eva-id"); 
+    console.log(id);
+ 
     const div = document.createElement("div");
     div.setAttribute("class","tab-pane");    
     div.setAttribute("id","nav-"+refName);
     div.setAttribute("role","tabpanel");
-    div.setAttribute("eva-id", textId);
+    div.setAttribute("eva-id", 'Reference.'+textId);
     div.setAttribute("eva-ownerId", id);
-    div.setAttribute("eva-tabId", refName);
+    div.setAttribute("eva-tabId", 1);
     refForm.appendChild(div);    
 
     const navRefForm = document.getElementById("nav-ref-form");
@@ -773,20 +773,20 @@ async function tabOwner(refForm, textId, refName) {
     div2.setAttribute("id","eva-"+refName+"-form"); 
     div.appendChild(div2);     
             
-    // const evaAdd  = btnToolbar.querySelector(".eva-add");
-    // const evaEdit = btnToolbar.querySelector(".eva-edit");
-    // const evaCopy = btnToolbar.querySelector(".eva-copy");
-    // const evaDel  = btnToolbar.querySelector(".eva-del");
-    // const evaRefresh = btnToolbar.querySelector(".eva-refresh");
-    // evaRefresh.setAttribute("name", refName);  
-    // evaRefresh.setAttribute("id", "eva-link-"+refName);              
-    // evaAdd .setAttribute("onclick","elemModal()");
-    // evaEdit.setAttribute("onclick","elemEditModal(false)");
-    // evaCopy.setAttribute("onclick","elemEditModal(true)");
-    // evaDel .setAttribute("onclick","elemDelete()");
-    // evaRefresh.setAttribute("onclick","");
+    const evaAdd  = btnToolbar.querySelector(".eva-add");
+    const evaEdit = btnToolbar.querySelector(".eva-edit");
+    const evaCopy = btnToolbar.querySelector(".eva-copy");
+    const evaDel  = btnToolbar.querySelector(".eva-del");
+    const evaRefresh = btnToolbar.querySelector(".eva-refresh");
+    evaRefresh.setAttribute("name", refName);  
+    evaRefresh.setAttribute("id", "eva-link-"+refName);              
+    evaAdd .setAttribute("onclick","elemModal()");
+    evaEdit.setAttribute("onclick","elemEditModal(false)");
+    evaCopy.setAttribute("onclick","elemEditModal(true)");
+    evaDel .setAttribute("onclick","elemDelete()");
+    evaRefresh.setAttribute("onclick","");
 
-    await showTabTable(div, refName);      
+    await showOwnerTable(div,  'Reference.'+textId, refName);      
 }
 async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode, typeId) {
     console.log('>>refElement()...');  
@@ -1061,7 +1061,7 @@ async function showTabTable(refForm, refName) {
     const data = await postOnServer(tmp, '/getrefs');
 
     const tabId = refForm.getAttribute("eva-tabId");
-    console.log('tabId', tabId);
+    // console.log('tabId', tabId);
     arrSyn = await getTabPartSyns(tabId);      
     
     const res = await postOnServer(tmp, '/getrefcol');  
@@ -1080,6 +1080,39 @@ async function showTabTable(refForm, refName) {
     }
 
     let hide = ['id','owner']; 
+
+    showTable(resTbl, hide, col, data, colType);
+}
+async function showOwnerTable(refForm, owner, refName) {
+    console.log('>>showOwnerTable()...', refName);   
+
+    resTbl = buildTabpanel(refForm, "295");
+
+    const ownerForm = document.querySelector("#create-ref-form")
+    const id = ownerForm.getAttribute("eva-id");        
+
+    const tmp = {'textId':refName, 'id':id, 'owner':owner}     
+    const data = await postOnServer(tmp, '/getownerrefs');
+
+    const evaForm = document.querySelector('#eva-ref-form');        
+    arrSyn = await getSynonyms(evaForm);  
+    
+    const res = await postOnServer({'textId':refName}, '/getrefcol');  
+    let col = {};   
+    let colType = {};           
+    for (elem of res) {
+        const colName  = elem.column_name;            
+        const dataType = elem.data_type;            
+        const synom    = arrSyn[colName];
+        if (synom) {
+            col[colName] = synom;  
+        } else {          
+            col[colName] = colName;            
+        } 
+        colType[colName] = dataType;
+    }
+
+    let hide = ['id', owner]; 
 
     showTable(resTbl, hide, col, data, colType);
 }

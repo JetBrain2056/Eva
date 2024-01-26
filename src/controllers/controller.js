@@ -1,4 +1,4 @@
-const { User, Role, Config, Subsystem, Constant, Module, Requisite, TabPart, TabPartReq, Form } = require('../models/models.js');
+const { User, Role, Config, Subsystem, Constant, Module, Requisite, TabPart, TabPartReq, Form, Owner } = require('../models/models.js');
 const { content }       = require('../index.js');
 const bcrypt            = require('bcrypt');
 const sequelize         = require('../db');
@@ -420,6 +420,7 @@ exports.updateConfig = async function(req, res) {
         const Elements = await JSON.parse(strJson);      
         const objectId = Elements.textId;                        
         const typeId   = Elements.typeId;
+        const owner    = Elements.owner;
 
         if (typeId==='Document') { 
             delete refColumns['name'];            
@@ -430,7 +431,19 @@ exports.updateConfig = async function(req, res) {
                 delete refColumns['name'];  
             } else {
                 refColumns['name'] = {type: DataTypes.STRING(Elements.nameLength)};
-            }                            
+            }   
+            if (owner) {
+                refColumns[owner] = {type: DataTypes.INTEGER};
+                try {
+                    const elem = await Owner.create({                                             
+                        owner   : owner,
+                        refName : objectId
+                    });
+                    console.log('Create element:', elem);                       
+                } catch(err) {
+                    console.log(err);                    
+                } 
+            }
         } 
 
         const reqlist = await Requisite.findAll({ where: { owner: row.id } });                            
@@ -1092,6 +1105,21 @@ exports.deleteReference = async function(req, res) {
         );
         console.log('Delete object:', data[1]);                                  
         return await res.json(data);
+    } catch(err) {
+        console.log(err);
+    }
+}
+exports.getOwner = async function(req, res) {
+    console.log(dateNow(),'>>getReferences()...');
+    if (!req.body) return res.sendStatus(400);
+    
+    const {owner} = req.body;  
+    
+    query = `SELECT * FROM "Owners" WHERE "owner"='`+owner+`';`
+    
+    try {
+        const data = await sequelize.query(query);
+        return await res.send(data[0]);        
     } catch(err) {
         console.log(err);
     }

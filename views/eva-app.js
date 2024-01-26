@@ -441,10 +441,13 @@ async function refEditModal(copyMode) {
     await tabParts(refForm, ul, textId);
 
     res = await postOnServer({owner:'Reference.'+textId}, '/getowner');  
-    console.log(res[0].refName);
+    // console.log(res[0].refName);
     if (res) { 
-        addTabs(ul, res[0].refName);
-        tabOwner(refForm, textId, res[0].refName);
+        for (const row of res) {
+            const refName = row.refName;
+            addTabs(ul, refName);
+            await tabOwner(refForm, textId, refName);
+        }
     }
 }
 async function refDelete() {

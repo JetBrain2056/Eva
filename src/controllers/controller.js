@@ -1004,6 +1004,21 @@ exports.getReferences = async function(req, res) {
         console.log(err);
     }
 }
+exports.getOwnerReferences = async function(req, res) {
+    console.log(dateNow(),'>>getOwnerReferences()...');
+    if (!req.body) return res.sendStatus(400);
+    
+    const {textId, id, owner} = req.body;  
+    
+    query = `SELECT * FROM "`+textId+`s" WHERE "`+owner+`"=`+id+`;`
+    
+    try {
+        const data = await sequelize.query(query);
+        return await res.send(data[0]);        
+    } catch(err) {
+        console.log(err);
+    }
+}
 exports.getReference = async function(req, res) {
     console.log(dateNow(),'>>getReference()...');
     if (!req.body) return res.sendStatus(400);

@@ -46,6 +46,7 @@ router.post('/deltabpartreq', controller.deleteTabPartReq);
 //eva-app
 router.get('/subsystems', controller.getSubsystems);
 router.post('/getrefs', controller.getReferences);
+router.post('/getownerrefs', controller.getOwnerReferences);
 router.post('/getref', controller.getReference);
 router.post('/getrefcol', controller.getRefColumns);
 router.post('/createref', controller.createReference);

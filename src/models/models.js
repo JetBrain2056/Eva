@@ -70,6 +70,12 @@ const Form = sequelize.define('Form', {
     xbase64: {type: DataTypes.TEXT}
 })
 
+const Owner = sequelize.define('Owner', {
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},    
+    owner    : {type: DataTypes.STRING},
+    refName  : {type: DataTypes.STRING}
+})
+
 Role.hasMany(User);
 User.belongsTo(Role);
 
@@ -86,5 +92,6 @@ module.exports = {
     Requisite,
     TabPart,
     TabPartReq,
-    Form
+    Form,
+    Owner
 }

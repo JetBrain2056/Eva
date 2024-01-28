@@ -571,9 +571,14 @@ async function elemModal() {
     const tabPane = ownerForm.querySelector(".tab-pane.active.show");     
     const textId  = tabPane.getAttribute("eva-id");
     const tabId   = tabPane.getAttribute("eva-tabId");
+       
+    console.log('textId', textId);   
+    console.log('tabId', tabId);
 
     arrSyn = await getTabPartSyns(tabId);     
     arrCol = await getColumns(textId);
+    console.log('arrSyn', arrSyn);
+    console.log('arrCol', arrCol);
     
     await refElement(refForm, arrCol, arrCol, arrSyn, createMode, copyMode, 'Element');          
 }
@@ -725,16 +730,16 @@ async function tabParts(refForm, ul, refName) {
 async function tabOwner(refForm, textId, refName) {
     console.log('>>tabOwner()...', textId, refName);
 
-    const refLink = document.querySelector("#"+textId);
-    const id      = refLink.getAttribute("eva-id"); 
-    console.log(id);
+    const refLink   = document.querySelector("#"+textId);
+    const ownerId = refLink.getAttribute("eva-id"); 
+    console.log('ownerId', ownerId);
  
     const div = document.createElement("div");
     div.setAttribute("class","tab-pane");    
     div.setAttribute("id","nav-"+refName);
     div.setAttribute("role","tabpanel");
-    div.setAttribute("eva-id", 'Reference.'+textId);
-    div.setAttribute("eva-ownerId", id);
+    div.setAttribute("eva-id", refName);
+    div.setAttribute("eva-ownerId", ownerId);
     div.setAttribute("eva-tabId", 1);
     refForm.appendChild(div);    
 

@@ -54,7 +54,7 @@ async function openRef(refName, name) {
 }
 async function getColumns(textId) {
     res = await postOnServer({'textId': textId}, '/getrefcol');         
-    let arrCol = [];  
+    let arrCol = [];
     for (elem of res) {
         const colName    = elem.column_name;
         const dataType   = elem.data_type;
@@ -507,7 +507,8 @@ async function elemCreate(e) {
     const refForm    = document.getElementById("create-elem-form");
 
     const tabPane = ownerForm.querySelector(".tab-pane.active.show");     
-    const textId  = tabPane.getAttribute("eva-id");           
+    const textId  = tabPane.getAttribute("eva-id");      
+    const tabId   = tabPane.getAttribute("eva-tabId");     
  
     const createMode   = refForm.getAttribute("create-mode");     
     const copyMode     = refForm.getAttribute("copy-mode");   
@@ -518,10 +519,15 @@ async function elemCreate(e) {
         await e.stopPropagation();        
     }
     
-    const ownerId = ownerForm.getAttribute("eva-id");
+    const ownerId     = ownerForm.getAttribute("eva-id");
+    const ownerTextId = ownerForm.getAttribute("eva-textId");
 
     data = await createReq(refForm, textId, createMode, copyMode); 
-    data['owner'] = ownerId;
+    if (tabId==='0') {
+        data['Reference.'+ownerTextId] = ownerId;
+    } else {
+        data['owner'] = ownerId;
+    }
 
     try {
         if (createMode==='true'&&copyMode==='false') {
@@ -544,7 +550,11 @@ async function elemCreate(e) {
         refForm.setAttribute("copy-mode", false);  
     }
 
-    if (result) await showTabTable(tabPane, textId);
+    if (tabId==='0') {        
+        if (result) await showOwnerTable(tabPane, 'Reference.'+ownerTextId, textId);
+    } else {        
+        if (result) await showTabTable(tabPane, textId);
+    }
 }
 async function elemModal() {
     console.log('>>elemModal()...');    
@@ -571,14 +581,17 @@ async function elemModal() {
     const tabPane = ownerForm.querySelector(".tab-pane.active.show");     
     const textId  = tabPane.getAttribute("eva-id");
     const tabId   = tabPane.getAttribute("eva-tabId");
-       
-    console.log('textId', textId);   
-    console.log('tabId', tabId);
 
-    arrSyn = await getTabPartSyns(tabId);     
+    const ownerId      = ownerForm.getAttribute("eva-id");
+    const ownerTextId  = ownerForm.getAttribute("eva-textId");
+       
+    arrSyn = await getTabPartSyns(tabId);         
     arrCol = await getColumns(textId);
-    console.log('arrSyn', arrSyn);
-    console.log('arrCol', arrCol);
+    
+    if (tabId==='0') {
+        arrSyn['Reference.'+ownerTextId] = 'owner';
+        arrCol['Reference.'+ownerTextId] = Number(ownerId);
+    }
     
     await refElement(refForm, arrCol, arrCol, arrSyn, createMode, copyMode, 'Element');          
 }
@@ -617,14 +630,17 @@ async function elemEditModal(copyMode) {
     const tabId   = tabPane.getAttribute("eva-tabId");
     refForm.setAttribute("eva-textId", textId);
     
-    const ownerId = ownerForm.getAttribute("eva-id");
+    const ownerId     = ownerForm.getAttribute("eva-id");
+    const ownerTextId = ownerForm.getAttribute("eva-textId");
     const id      = row.cells[0].innerText;
 
     arrSyn = await getTabPartSyns(tabId);  
     arrCol = await getColumns(textId);
 
+    if (tabId==='0') {arrSyn['Reference.'+ownerTextId] = 'owner';}
+
     const data = {'textId': textId, 'id': id, 'owner': ownerId}
-    res = await postOnServer(data, '/getref');  
+    res = await postOnServer(data, '/getref');      
     await refElement(refForm, res[0], arrCol, arrSyn, createMode, copyMode, 'Element');       
 }
 async function elemDelete() {
@@ -632,9 +648,12 @@ async function elemDelete() {
      
     const refModalForm = currentModal._element;
     const ownerForm    = refModalForm.querySelector('#create-ref-form');    
+
+    const ownerTextId = ownerForm.getAttribute("eva-textId");
   
     const tabPane = ownerForm.querySelector(".tab-pane.active.show");    
     const textId  = tabPane.getAttribute("eva-id");   
+    const tabId   = tabPane.getAttribute("eva-tabId");   
     
     for (const row of selectRows) {
         const data = {
@@ -644,7 +663,11 @@ async function elemDelete() {
         result = await postOnServer(data, '/delref');        
     }
 
-    if (result) await showTabTable(tabPane, textId);
+    if (tabId==='0') {        
+        if (result) await showOwnerTable(tabPane, 'Reference.'+ownerTextId, textId);
+    } else {        
+        if (result) await showTabTable(tabPane, textId);
+    }
 }
 async function elemSave() {
     const elemForm  = document.getElementById("create-elem-form");
@@ -740,7 +763,7 @@ async function tabOwner(refForm, textId, refName) {
     div.setAttribute("role","tabpanel");
     div.setAttribute("eva-id", refName);
     div.setAttribute("eva-ownerId", ownerId);
-    div.setAttribute("eva-tabId", 1);
+    div.setAttribute("eva-tabId", 0);
     refForm.appendChild(div);    
 
     const navRefForm = document.getElementById("nav-ref-form");
@@ -769,7 +792,7 @@ async function tabOwner(refForm, textId, refName) {
     await showOwnerTable(div,  'Reference.'+textId, refName);      
 }
 async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode, typeId) {
-    console.log('>>refElement()...', arrCol);  
+    console.log('>>refElement()...', col);  
     
     if (col) {                  
         delete col['createdAt'];
@@ -848,7 +871,15 @@ async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode, ty
                         const date = new Date('1,1,0001');                        
                         input.value = dateFormat(date).slice(0, 10);
                     } else {
-                        input.value = '';
+                        if (arrSyn[req]==='owner') { 
+                            resRef = await postOnServer({'id': col[req], 'textId':req.split('.')[1]}, '/getref');
+                            if (resRef.length===1) {
+                                input.value = resRef[0].name;                                
+                                input.setAttribute("eva-id", resRef[0].id);
+                            }
+                        } else {
+                            input.value = '';
+                        }
                     }
                 } else if (createMode===false) {
                     if (type.dataType === 'boolean') {
@@ -1023,9 +1054,7 @@ async function showRefTable(refName, refType) {
     }
 
     let hide = [];  
-    if (refType==='Document') {
-        hide = ['id'];      
-    }
+    if (refType==='Document') { hide = ['id'];}
 
     showTable(refTbl, hide, col, data, colType);
 }

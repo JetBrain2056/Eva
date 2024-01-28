@@ -52,6 +52,18 @@ async function openRef(refName, name) {
     let status = document.getElementById("status");
     status.value = ">It's work!";
 }
+async function getColumns(textId) {
+    res = await postOnServer({'textId': textId}, '/getrefcol');         
+    let arrCol = [];  
+    for (elem of res) {
+        const colName    = elem.column_name;
+        const dataType   = elem.data_type;
+        const identifier = elem.dtd_identifier;
+        const obj = {'colName': colName, 'dataType':dataType, 'identifier': identifier}          
+        arrCol[colName] = obj;
+    }
+    return arrCol;
+}
 async function getSynonyms(evaForm) {
     console.log('>>getSynonyms()...');
 
@@ -356,22 +368,20 @@ async function refModal() {
     refForm.setAttribute("eva-textId", textId);  
     refForm.setAttribute("eva-typeId", typeId);
 
-    let arrSyn = await getSynonyms(evaForm);  
+    arrSyn = await getSynonyms(evaForm);  
+    arrCol = await getColumns(textId);
 
-    const res = await postOnServer({ 'textId': textId }, '/getrefcol');  
-    let arr = [];    
-    let arrCol = [];  
-    for (let elem of res) {
-        let colName    = elem.column_name;
-        let dataType   = elem.data_type;
-        let identifier = elem.dtd_identifier;
-        let obj = {'colName': colName, 'dataType':dataType, 'identifier': identifier}
-        arr[colName] = '';  
-        arrCol[colName] = obj;
-    }
-
-    await refElement(refForm, arr, arrCol, arrSyn, createMode, copyMode, typeId);        
+    await refElement(refForm, arrCol, arrCol, arrSyn, createMode, copyMode, typeId);        
     await tabParts(ul, textId);
+
+    res = await postOnServer({owner:'Reference.'+textId}, '/getowner');  
+    if (res) { 
+        for (const row of res) {
+            const refName = row.refName;
+            addTabs(ul, refName);
+            await tabOwner(refForm, textId, refName);
+        }
+    }
 }
 async function refEditModal(copyMode) {
     console.log('>>refEditModal()...'); 
@@ -418,30 +428,18 @@ async function refEditModal(copyMode) {
     div.setAttribute("role","tabpanel");
     refForm.appendChild(div);
 
-    arrSyn = await getSynonyms(evaForm);  
-
-    const id   = row.cells[0].innerText;
-    console.log('id',id);
+    const id   = row.cells[0].innerText;    
     refForm.setAttribute("eva-id", id);
+    
+    arrSyn = await getSynonyms(evaForm);  
+    arrCol = await getColumns(textId);
+
     const data = {'textId': textId, 'id': id}
-
-    res = await postOnServer({'textId': textId}, '/getrefcol');         
-    let arrCol = [];  
-    for (elem of res) {
-        const colName    = elem.column_name;
-        const dataType   = elem.data_type;
-        const identifier = elem.dtd_identifier;
-
-        const obj = {'colName': colName, 'dataType':dataType, 'identifier': identifier}          
-        arrCol[colName] = obj;
-    }
-
     res = await postOnServer(data, '/getref');  
     await refElement(div, res[0], arrCol, arrSyn, createMode, copyMode, typeId);     
     await tabParts(refForm, ul, textId);
 
-    res = await postOnServer({owner:'Reference.'+textId}, '/getowner');  
-    // console.log(res[0].refName);
+    res = await postOnServer({owner:'Reference.'+textId}, '/getowner');      
     if (res) { 
         for (const row of res) {
             const refName = row.refName;
@@ -574,21 +572,10 @@ async function elemModal() {
     const textId  = tabPane.getAttribute("eva-id");
     const tabId   = tabPane.getAttribute("eva-tabId");
 
-    let arrSyn = await getTabPartSyns(tabId); 
+    arrSyn = await getTabPartSyns(tabId);     
+    arrCol = await getColumns(textId);
     
-    const res = await postOnServer({ 'textId': textId }, '/getrefcol');  
-    let arr = [];    
-    let arrCol = [];  
-    for (elem of res) {
-        const colName     = elem.column_name;
-        const dataType    = elem.data_type;
-        const  identifier = elem.dtd_identifier;
-        const obj = {'colName': colName, 'dataType':dataType, 'identifier': identifier}
-        arr[colName] = '';  
-        arrCol[colName] = obj;
-    }
-    
-    await refElement(refForm, arr, arrCol, arrSyn, createMode, copyMode, 'Element');          
+    await refElement(refForm, arrCol, arrCol, arrSyn, createMode, copyMode, 'Element');          
 }
 async function elemEditModal(copyMode) {
     console.log('>>elemEditModal()...'); 
@@ -629,24 +616,9 @@ async function elemEditModal(copyMode) {
     const id      = row.cells[0].innerText;
 
     arrSyn = await getTabPartSyns(tabId);  
+    arrCol = await getColumns(textId);
 
-    const data = { 
-        'textId': textId,
-        'id': id,
-        'owner': ownerId
-    }
-
-    let res = await postOnServer(data, '/getrefcol');       
-    let arrCol = [];  
-    for (elem of res) {        
-        const colName    = elem.column_name;
-        const dataType   = elem.data_type;
-        const identifier = elem.dtd_identifier;
-      
-        const obj = {'colName': colName, 'dataType':dataType, 'identifier': identifier}         
-        arrCol[colName] = obj;            
-    }
-
+    const data = {'textId': textId, 'id': id, 'owner': ownerId}
     res = await postOnServer(data, '/getref');  
     await refElement(refForm, res[0], arrCol, arrSyn, createMode, copyMode, 'Element');       
 }
@@ -792,7 +764,7 @@ async function tabOwner(refForm, textId, refName) {
     await showOwnerTable(div,  'Reference.'+textId, refName);      
 }
 async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode, typeId) {
-    console.log('>>refElement()...');  
+    console.log('>>refElement()...', arrCol);  
     
     if (col) {                  
         delete col['createdAt'];

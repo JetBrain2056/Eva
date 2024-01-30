@@ -434,12 +434,36 @@ exports.updateConfig = async function(req, res) {
             }   
             if (owner) {
                 refColumns[owner] = {type: DataTypes.INTEGER};
+            
+                const count = await Owner.findOne({where:{ refName : objectId }})
+                if (count) {
+                    try {
+                        const elem = await Owner.update(
+                            { 
+                                owner : owner                    
+                            }, {
+                                where: {refName: objectId}
+                            }
+                        );
+                        console.log('Update element:', elem);                       
+                    } catch(err) {
+                        console.log(err);                    
+                    } 
+                } else {
+                    try {
+                        const elem = await Owner.create({                                             
+                            owner   : owner,
+                            refName : objectId
+                        });
+                        console.log('Create element:', elem);                       
+                    } catch(err) {
+                        console.log(err);                    
+                    }
+                }
+            } else {
                 try {
-                    const elem = await Owner.create({                                             
-                        owner   : owner,
-                        refName : objectId
-                    });
-                    console.log('Create element:', elem);                       
+                    const count = await Owner.destroy({where: {refName: objectId}});                    
+                    console.log('Deleted row(s):', count);                     
                 } catch(err) {
                     console.log(err);                    
                 } 

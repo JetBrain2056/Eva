@@ -590,11 +590,11 @@ async function objectCreate(e) {
         await e.stopPropagation();        
     }
     
-    resCheck = await postOnServer({'textId' : input_textId.value},'/checkobject');    
-    console.log(resCheck);
-    if (resCheck) {
-        console.log('The identifier is not unique!');          
-    }
+    // resCheck = await postOnServer({'typeId': input_type.value,'textId' : input_textId.value},'/checkobject');    
+    // console.log(resCheck);
+    // if (resCheck) {
+    //     console.log('The identifier is not unique!');          
+    // }
 
     const tmp = { 
         typeId    : input_type.value, 

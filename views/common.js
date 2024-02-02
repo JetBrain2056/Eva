@@ -200,9 +200,13 @@ async function showTable(showTbl, hide, col, data, colType) {
                         td.textContent = ref[0].name;                        
                     }
                 } else {                
-                    if (colType&&colType[p]==='timestamp with time zone') {
-                        td.textContent = rows[p].split('T')[0];   
-                    } else {
+                    if (colType&&colType[p]==='timestamp with time zone') {                        
+                        const d = new Date(rows[p]);
+                        td.textContent = new Intl.DateTimeFormat('ru').format(d);   
+                    } else if (colType&&colType[p]==='numeric') {
+                        const minFD = rows[p].split('.')[1].length;
+                        td.textContent = new Intl.NumberFormat('ru', {minimumFractionDigits: minFD}).format(rows[p]);
+                    } else {                        
                         td.textContent = rows[p]; 
                     }
                 }                                    

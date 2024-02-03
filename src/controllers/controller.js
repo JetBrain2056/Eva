@@ -1111,11 +1111,14 @@ exports.updateReference = async function(req, res) {
 
     let tmp ='';
     for (let elem of Object.keys(req.body)) {
-        if(elem==='id'||elem==='textId'||elem==='createdAt'||elem==='updatedAt') {            
+        if(elem==='id'||elem==='textId'||elem==='createdAt'||elem==='updatedAt') {    
+            continue;        
         } else {
             console.log(elem, typeof(req.body[elem]));
             if (typeof(req.body[elem]) ==='number') {
                 tmp = tmp +` "`+ elem + `"=`+ req.body[elem]+`,`;
+            } else if (typeof(req.body[elem]) ==='object') {
+                tmp = tmp +` "`+ elem + `"=null,`;
             } else {
                 tmp = tmp +` "`+ elem + `"='`+ req.body[elem]+`',`;
             }

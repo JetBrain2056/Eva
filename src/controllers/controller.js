@@ -1083,7 +1083,7 @@ exports.createReference = async function(req, res) {
     const {textId} = req.body;   
 
     delete req.body["textId"];
-    console.log('req.body:', typeof(req.body));
+    console.log('req.body:', String(req.body));
 
     try {
         // const now = Date.now()/1000.0;        
@@ -1115,10 +1115,8 @@ exports.updateReference = async function(req, res) {
             continue;        
         } else {
             console.log(elem, typeof(req.body[elem]));
-            if (typeof(req.body[elem]) ==='number') {
-                tmp = tmp +` "`+ elem + `"=`+ req.body[elem]+`,`;
-            } else if (typeof(req.body[elem]) ==='object') {
-                tmp = tmp +` "`+ elem + `"=null,`;
+            if (typeof(req.body[elem])==='number'||typeof(req.body[elem])==='object') {
+                tmp = tmp +` "`+ elem + `"=`+ req.body[elem]+`,`;      
             } else {
                 tmp = tmp +` "`+ elem + `"='`+ req.body[elem]+`',`;
             }

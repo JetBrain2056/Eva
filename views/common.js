@@ -208,13 +208,19 @@ async function showTable(showTbl, hide, col, data, colType) {
                         if (ref.length>0) td.textContent = ref[0].name;                        
                     }
                 } else {                
-                    if (colType&&colType[p]==='timestamp with time zone') {                        
-                        const d = new Date(rows[p]);
-                        td.textContent = new Intl.DateTimeFormat('ru').format(d);   
+                    if (colType&&colType[p]==='timestamp with time zone') {     
+                        if (rows[p]) {
+                            const d = new Date(rows[p]);
+                            td.textContent = new Intl.DateTimeFormat('ru').format(d);  
+                        } else {
+                            td.textContent = '';
+                        }                         
                     } else if (colType&&colType[p]==='numeric') {
-                        const minFD = rows[p].split('.')[1].length;
-                        td.textContent = new Intl.NumberFormat('ru', {minimumFractionDigits: minFD}).format(rows[p]);
-                        td.style.textAlign = 'end';
+                        if (rows[p]) { 
+                            const minFD = rows[p].split('.')[1].length;
+                            td.textContent = new Intl.NumberFormat('ru', {minimumFractionDigits: minFD}).format(rows[p]);
+                            td.style.textAlign = 'end';
+                        }
                     } else {                        
                         td.textContent = rows[p]; 
                     }

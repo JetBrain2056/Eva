@@ -272,10 +272,11 @@ async function createReq(refForm, textId, createMode, copyMode) {
                 data[elem.name] = elem.checked; 
             } else if (type === 'date') {
                 if (elem.value === '') {
-                    data[elem.name] = new Date('00,00,0000');                     
+                    data[elem.name] = null;                       
                 } else {                    
                     data[elem.name] = new Date(elem.value);                           
                 }
+                console.log(data[elem.name]);                    
             } else if (type === 'number') {
                 data[elem.name] = Number(elem.value); 
             } else if (type === 'text') {
@@ -385,6 +386,7 @@ async function refModal() {
     //await tabParts(refForm, ul, textId);
 
     res = await postOnServer({owner:'Reference.'+textId}, '/getowner');  
+    console.log(res)
     if (res) { 
         for (const row of res) {
             const refName = row.refName;
@@ -878,8 +880,8 @@ async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode, ty
                 
                 if (createMode===true) {
                     if (type.dataType === 'timestamp with time zone') {
-                        const date = new Date('0,0,0000');                        
-                        input.value = date;
+                        // const date = new Date('0,0,0000');                        
+                        input.value = '';
                     } else {
                         if (arrSyn[req]==='owner') { 
                             resRef = await postOnServer({'id': col[req], 'textId':req.split('.')[1]}, '/getref');

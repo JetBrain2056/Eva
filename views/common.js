@@ -182,7 +182,7 @@ async function showTable(showTbl, hide, col, data, colType) {
             th.style.display = "none";        
         }
         tr.appendChild(th);        
-        th.textContent = col[e];      
+        th.textContent = col[e];              
     }       
   
     if (data) {
@@ -193,11 +193,11 @@ async function showTable(showTbl, hide, col, data, colType) {
                 const td = document.createElement('td');    
                 tr.appendChild(td);   
                 if (p.split('.').length>1) {
-                    ref = await postOnServer({'id':rows[p], 'textId':p.split('.')[1]}, '/getref');  
+                    ref = await postOnServer({'id':rows[p], 'textId':p.split('.')[1]}, '/getref');                      
                     if (rows[p]===0) {
                         td.textContent = ''; 
                     } else {                        
-                        td.textContent = ref[0].name;                        
+                        if (ref.length>0) td.textContent = ref[0].name;                        
                     }
                 } else {                
                     if (colType&&colType[p]==='timestamp with time zone') {                        
@@ -206,6 +206,7 @@ async function showTable(showTbl, hide, col, data, colType) {
                     } else if (colType&&colType[p]==='numeric') {
                         const minFD = rows[p].split('.')[1].length;
                         td.textContent = new Intl.NumberFormat('ru', {minimumFractionDigits: minFD}).format(rows[p]);
+                        td.style.textAlign = 'end';
                     } else {                        
                         td.textContent = rows[p]; 
                     }

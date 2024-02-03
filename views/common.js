@@ -37,25 +37,31 @@ function mainSelect() {
         navRequisite   .setAttribute("hidden","hidden");        
         navTabular     .setAttribute("hidden","hidden");
         navForms       .setAttribute("hidden","hidden"); 
-        labelConstType.setAttribute("hidden","hidden");   
+        labelConstType .setAttribute("hidden","hidden");   
         inputConstType .setAttribute("hidden","hidden");   
-        inputTypeBtn   .setAttribute("hidden","hidden");                             
+        inputTypeBtn   .setAttribute("hidden","hidden");     
+        inputObjectRep .removeAttribute("disabled");
+        inputListRep   .setAttribute("disabled","disabled");                          
     } else if (inputType.value === "Module"||inputType.value === "Constant") {   
         inputObjectRep.setAttribute("disabled","disabled");   
-        inputListRep  .setAttribute("disabled","disabled");   
-        inputOwner    .setAttribute("disabled","disabled");       
-        inputOwnerBtn .setAttribute("disabled","disabled");                       
+        inputListRep  .setAttribute("disabled","disabled");                               
         navRequisite  .setAttribute("hidden","hidden");        
         navTabular    .setAttribute("hidden","hidden");
-        navForms      .setAttribute("hidden","hidden"); 
+        navForms      .setAttribute("hidden","hidden");         
+        inputOwner    .setAttribute("disabled","disabled");       
+        inputOwnerBtn .setAttribute("disabled","disabled"); 
         if (inputType.value === "Constant") {           
             labelConstType.removeAttribute("hidden");  
-            inputConstType .removeAttribute("hidden");  
-            inputTypeBtn   .removeAttribute("hidden"); 
+            inputConstType.removeAttribute("hidden");  
+            inputTypeBtn  .removeAttribute("hidden");   
+            inputModule   .setAttribute("disabled","disabled");     
+            inputObjectRep.removeAttribute("disabled");        
         } else {           
             labelConstType.setAttribute("hidden","hidden");   
-            inputConstType .setAttribute("hidden","hidden");  
-            inputTypeBtn   .setAttribute("hidden","hidden"); 
+            inputConstType.setAttribute("hidden","hidden");  
+            inputTypeBtn  .setAttribute("hidden","hidden"); 
+            inputModule   .removeAttribute("disabled");      
+            inputObjectRep.setAttribute("disabled","disabled");                
         }
     } else {        
         inputSubsystem.removeAttribute("disabled");        
@@ -72,8 +78,10 @@ function mainSelect() {
         navTabular    .removeAttribute("hidden");        
         navForms      .removeAttribute("hidden");    
         labelConstType.setAttribute("hidden","hidden");   
-        inputConstType .setAttribute("hidden","hidden");  
-        inputTypeBtn   .setAttribute("hidden","hidden");    
+        inputConstType.setAttribute("hidden","hidden");  
+        inputTypeBtn  .setAttribute("hidden","hidden");  
+        inputObjectRep.removeAttribute("disabled");  
+        inputListRep  .removeAttribute("disabled");    
     }
 }
 function rowSelect(e) {

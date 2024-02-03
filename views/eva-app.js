@@ -272,7 +272,7 @@ async function createReq(refForm, textId, createMode, copyMode) {
                 data[elem.name] = elem.checked; 
             } else if (type === 'date') {
                 if (elem.value === '') {
-                    data[elem.name] = null;                       
+                    if (createMode==='false') data[elem.name] = null;                       
                 } else {                    
                     data[elem.name] = new Date(elem.value);                           
                 }

@@ -70,7 +70,7 @@ async function getSynonyms(evaForm) {
     const id = evaForm.getAttribute("eva-id");
     const datareq = { 'owner': id }
     const resreq = await postOnServer(datareq, '/getreqs');  
-    // console.log(resreq);
+    console.log('id', id);
     let arrSyn = [];  
     arrSyn['id'] = 'Id';
     arrSyn['name'] = 'Name';
@@ -272,7 +272,7 @@ async function createReq(refForm, textId, createMode, copyMode) {
                 data[elem.name] = elem.checked; 
             } else if (type === 'date') {
                 if (elem.value === '') {
-                    data[elem.name] = new Date('01,01,0001');  
+                    data[elem.name] = new Date('00,00,0000');                     
                 } else {                    
                     data[elem.name] = new Date(elem.value);                           
                 }
@@ -367,12 +367,22 @@ async function refModal() {
     const typeId = evaForm.getAttribute("eva-typeId");
     refForm.setAttribute("eva-textId", textId);  
     refForm.setAttribute("eva-typeId", typeId);
+    refForm.setAttribute("class","tab-content");
+
+    const div = document.createElement("div");
+    div.setAttribute("class","tab-pane active show");    
+    div.setAttribute("id","nav-Main");
+    div.setAttribute("role","tabpanel");
+    refForm.appendChild(div);
+
+    //const id   = row.cells[0].innerText;    
+    refForm.setAttribute("eva-id", 0);
 
     arrSyn = await getSynonyms(evaForm);  
     arrCol = await getColumns(textId);
 
-    await refElement(refForm, arrCol, arrCol, arrSyn, createMode, copyMode, typeId);        
-    await tabParts(ul, textId);
+    await refElement(refForm, arrCol, arrCol, arrSyn, createMode, copyMode, typeId);            
+    //await tabParts(refForm, ul, textId);
 
     res = await postOnServer({owner:'Reference.'+textId}, '/getowner');  
     if (res) { 
@@ -868,8 +878,8 @@ async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode, ty
                 
                 if (createMode===true) {
                     if (type.dataType === 'timestamp with time zone') {
-                        const date = new Date('1,1,0001');                        
-                        input.value = dateFormat(date).slice(0, 10);
+                        const date = new Date('0,0,0000');                        
+                        input.value = date;
                     } else {
                         if (arrSyn[req]==='owner') { 
                             resRef = await postOnServer({'id': col[req], 'textId':req.split('.')[1]}, '/getref');
@@ -886,7 +896,7 @@ async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode, ty
                         input.checked = col[req];
                     } else if (type.dataType === 'timestamp with time zone') {
                         const date = col[req];                                               
-                        input.value = date.slice(0, 10);
+                        if (date) input.value = date.slice(0, 10);
                     } else {
                         if (req.split('.').length > 1) {
                             resRef = await postOnServer({'id': col[req], 'textId':req.split('.')[1]}, '/getref');

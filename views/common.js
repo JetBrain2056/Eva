@@ -210,7 +210,7 @@ async function showTable(showTbl, hide, col, data, colType) {
                         } else {
                             if (ref.length>0) {
                                 const d = new Date(ref[0].date);
-                                td.textContent = 'Order №'+ref[0].number+' from '+new Intl.DateTimeFormat('ru').format(d);  
+                                td.textContent = p.split('.')[1]+' №'+ref[0].number+' from '+new Intl.DateTimeFormat('ru').format(d);  
                             }
                         }
                     }

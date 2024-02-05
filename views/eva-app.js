@@ -227,7 +227,7 @@ async function elementBtn(idBtn) {
     const refType = inputElemType.split('.')[0];
     const refName = inputElemType.split('.')[1];
 
-    modalForm.setAttribute("eva-type", refType);
+    modalForm.setAttribute("eva-type", inputElemType);
 
     currentModal.hide();
     if (elementsModal) elementsModal.hide();
@@ -262,10 +262,10 @@ async function elemSelect() {
     const type            = modalForm.getAttribute("eva-type");
     const inputElemValue  = document.querySelector('#'+id);    
 
-    if (type==='Reference') {
+    if (type.split('.')[0]==='Reference') {
         inputElemValue.value = row.cells[1].innerText;
     } else {                
-        inputElemValue.value = 'Order №' + row.cells[1].innerText + ' from ' + row.cells[2].innerText;
+        inputElemValue.value = type.split('.')[1]+' №' + row.cells[1].innerText + ' from ' + row.cells[2].innerText;
     }
 
     inputElemValue.setAttribute("eva-id", row.cells[0].innerText);    
@@ -895,8 +895,7 @@ async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode, ty
                 }
                 
                 if (createMode===true) {
-                    if (type.dataType === 'timestamp with time zone') {
-                        // const date = new Date('0,0,0000');                        
+                    if (type.dataType === 'timestamp with time zone') {                  
                         input.value = '';
                     } else {
                         if (arrSyn[req]==='owner') { 

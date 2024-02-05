@@ -142,13 +142,17 @@ async function constEditModal() {
             inputValue.setAttribute("pattern", "[0-9.]+");   
             inputValue.setAttribute("maxlength", "15");          
             inputValue.setAttribute("placeholder", "0.00");  
-            inputValue.style = "text-align:right;";
-            inputValue.value       = elem.value;  
+            inputValue.style = "text-align:right;";                        
+            inputValue.value = elem.value;             
         } else if (elem.type === 'Date') {
             inputValue.setAttribute("type","date");
-            inputValue.setAttribute("class","eva-req form-control");            
-            const date = new Date(elem.value);                        
-            inputValue.value = dateFormat(date).slice(0, 10);
+            inputValue.setAttribute("class","eva-req form-control");      
+            if (elem.value==='') {                
+                inputValue.value = '';
+            } else {                                               
+                inputValue.value = elem.value.slice(0,10);
+                console.log(elem.value.slice(0,10));
+            }   
         } else if (elem.type === 'Boolean') {
             inputValue.setAttribute("type","checkbox");
             inputValue.setAttribute("class","eva-req form-check-input");                         
@@ -191,8 +195,15 @@ async function constSave() {
     let value;
     if (type==='Boolean') {        
         value = inputValue.checked;
-    } else if (type==='String'||type==='Number'||type==='Date') {
+    } else if (type==='String'||type==='Number') {
         value = inputValue.value;
+    } else if (type==='Date') {
+        if (inputValue.value==='') {
+            value = '';
+        } else {
+            // const d = new Date(inputValue.value);            
+            value = inputValue.value.slice(0,10);
+        }
     } else {
         value = inputValue.getAttribute("eva-id");
     }
@@ -241,6 +252,7 @@ async function elementBtn(idBtn) {
 
     let col = {};
     let hide = [];
+    let colType = {};
     if (refType==='Reference') {
         col  = {'id':'Id' ,'name':'Name'};          
     } else {
@@ -1045,6 +1057,7 @@ async function showConstTable() {
     result = await postOnServer(tmp, '/getrefs');   
    
     let data = [];
+    let colType = {};
     for (let row of result) {
         let refName = row.type.split('.');
         if (refName[0]==='Reference'&&row.value>0) {            
@@ -1052,13 +1065,20 @@ async function showConstTable() {
             data.push(Object.assign(row,{'value':ref[0].name}));            
         } else {
             data.push(row);
+            if (row.type==='Date') {
+                colType[row.name] = 'timestamp with time zone';
+            } else if (row.type==='Number') {
+                colType[row.name] = 'numeric';
+            } else {
+                colType[row.name] = row.type.toLowerCase();       
+            }
         }
     }
     
     const col  = {'id':'Id', 'name':'Name', 'value':'Value'} 
-    const hide = ['id'];      
+    const hide = ['id'];          
 
-    showTable(resTbl, hide, col, data);
+    await showTable(resTbl, hide, col, data, colType);
 }
 async function showRefTable(refName, refType) {
     console.log('>>showRefTable()...', refName, refType);   

@@ -224,7 +224,10 @@ async function elementBtn(idBtn) {
 
     modalForm.setAttribute("eva-id", idBtn.split('_')[0]);
 
+    const refType = inputElemType.split('.')[0];
     const refName = inputElemType.split('.')[1];
+
+    modalForm.setAttribute("eva-type", refType);
 
     currentModal.hide();
     if (elementsModal) elementsModal.hide();
@@ -233,13 +236,20 @@ async function elementBtn(idBtn) {
 
     refTbl = buildTabpanel(modalForm, "270");
 
-    let tmp = {'textId': refName };
+    let tmp = {'textId': refName};
     let data = await postOnServer(tmp, '/getrefs');   
 
-    const col  = { 'id':'Id' ,'name':'Name' };  
-    const hide = [];      
+    let col = {};
+    let hide = [];
+    if (refType==='Reference') {
+        col  = {'id':'Id' ,'name':'Name'};          
+    } else {
+        col  = {'id':'Id' ,'number':'Number', 'date':'Date'};  
+        hide = ['id'];   
+        colType = {'date': 'timestamp with time zone'};
+    }       
 
-    showTable(refTbl, hide, col, data);
+    showTable(refTbl, hide, col, data, colType);
 }
 async function elemSelect() {
     console.log('>>elemSelect()...');
@@ -249,9 +259,15 @@ async function elemSelect() {
 
     const modalForm       = document.getElementById("selectElemModal");
     const id              = modalForm.getAttribute("eva-id");
+    const type            = modalForm.getAttribute("eva-type");
     const inputElemValue  = document.querySelector('#'+id);    
 
-    inputElemValue.value        = row.cells[1].innerText;
+    if (type==='Reference') {
+        inputElemValue.value = row.cells[1].innerText;
+    } else {                
+        inputElemValue.value = 'Order №' + row.cells[1].innerText + ' from ' + row.cells[2].innerText;
+    }
+
     inputElemValue.setAttribute("eva-id", row.cells[0].innerText);    
 
     await selectModal.hide();
@@ -901,9 +917,15 @@ async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode, ty
                         if (date) input.value = date.slice(0, 10);
                     } else {
                         if (req.split('.').length > 1) {
-                            resRef = await postOnServer({'id': col[req], 'textId':req.split('.')[1]}, '/getref');
+                            const textIdArr = req.split('.');
+                            resRef = await postOnServer({'id': col[req], 'textId':textIdArr[1]}, '/getref');
                             if (resRef.length===1) {
-                                input.value = resRef[0].name;                                
+                                if (textIdArr[0]==='Reference') {
+                                    input.value = resRef[0].name;                                
+                                } else {
+                                    const d = new Date(resRef[0].date);                                    
+                                    input.value = textIdArr[1]+' №'+resRef[0].number+' from '+new Intl.DateTimeFormat('ru').format(d);                                
+                                }
                                 input.setAttribute("eva-id", resRef[0].id);
                             } else {
                                 input.value = '';
@@ -1082,7 +1104,7 @@ async function showTabTable(refForm, refName) {
     const data = await postOnServer(tmp, '/getrefs');
 
     const tabId = refForm.getAttribute("eva-tabId");
-    // console.log('tabId', tabId);
+    
     arrSyn = await getTabPartSyns(tabId);      
     
     const res = await postOnServer(tmp, '/getrefcol');  
@@ -1100,7 +1122,7 @@ async function showTabTable(refForm, refName) {
         colType[colName] = dataType;
     }
 
-    let hide = ['id','owner']; 
+    const hide = ['id','owner']; 
 
     showTable(resTbl, hide, col, data, colType);
 }

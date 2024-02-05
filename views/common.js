@@ -204,8 +204,15 @@ async function showTable(showTbl, hide, col, data, colType) {
                     ref = await postOnServer({'id':rows[p], 'textId':p.split('.')[1]}, '/getref');                      
                     if (rows[p]===0) {
                         td.textContent = ''; 
-                    } else {                        
-                        if (ref.length>0) td.textContent = ref[0].name;                        
+                    } else {        
+                        if (p.split('.')[0]==='Reference') {
+                            if (ref.length>0) td.textContent = ref[0].name;                        
+                        } else {
+                            if (ref.length>0) {
+                                const d = new Date(ref[0].date);
+                                td.textContent = 'Order №'+ref[0].number+' from '+new Intl.DateTimeFormat('ru').format(d);  
+                            }
+                        }
                     }
                 } else {                
                     if (colType&&colType[p]==='timestamp with time zone') {     

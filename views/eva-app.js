@@ -370,7 +370,6 @@ async function refModal() {
     console.log('>>refModal()...');      
 
     const modalForm  = document.getElementById('refModal');  
-    currentModal = getModal(modalForm);
 
     const ul = modalForm.querySelector("#eva-nav-tabs-ref"); 
     ul.innerHTML = '';  
@@ -389,6 +388,8 @@ async function refModal() {
     refForm.setAttribute("create-mode", createMode);  
     refForm.setAttribute("copy-mode", copyMode);   
     refForm.setAttribute("eva-save", false);   
+
+    currentModal = getModal(modalForm);
    
     const evaForm = document.querySelector('#eva-ref-form'); 
     const textId = evaForm.getAttribute("eva-textId");
@@ -402,18 +403,17 @@ async function refModal() {
     div.setAttribute("id","nav-Main");
     div.setAttribute("role","tabpanel");
     refForm.appendChild(div);
-
-    //const id   = row.cells[0].innerText;    
+    
     refForm.setAttribute("eva-id", 0);
 
     arrSyn = await getSynonyms(evaForm);  
     arrCol = await getColumns(textId);
 
-    await refElement(refForm, arrCol, arrCol, arrSyn, createMode, copyMode, typeId);            
-    //await tabParts(refForm, ul, textId);
+    await refElement(div, arrCol, arrCol, arrSyn, createMode, copyMode, typeId);            
+    await tabParts(refForm, ul, textId);
 
     res = await postOnServer({owner:'Reference.'+textId}, '/getowner');  
-    console.log(res)
+    // console.log(res)
     if (res) { 
         for (const row of res) {
             const refName = row.refName;
@@ -740,8 +740,9 @@ async function tabParts(refForm, ul, refName) {
     
     const refLink = document.querySelector("#"+refName);
     const id      = refLink.getAttribute("eva-id");    
-
-    res = await postOnServer({'owner': id}, '/gettabparts');      
+    // console.log(id); 
+    res = await postOnServer({'owner': id}, '/gettabparts');     
+    // console.log(res); 
     for (elem of res) {
         const tabId    = elem.id;
         const strJson  = elem.data;          

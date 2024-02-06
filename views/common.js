@@ -214,7 +214,7 @@ async function showTable(showTbl, hide, col, data, colType) {
                             }
                         }
                     }
-                } else {                
+                } else {                                   
                     if (colType&&colType[p]==='timestamp with time zone') {     
                         if (rows[p]) {
                             const d = new Date(rows[p]);

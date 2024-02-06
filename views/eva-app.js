@@ -200,8 +200,7 @@ async function constSave() {
     } else if (type==='Date') {
         if (inputValue.value==='') {
             value = '';
-        } else {
-            // const d = new Date(inputValue.value);            
+        } else {             
             value = inputValue.value.slice(0,10);
         }
     } else {
@@ -1065,19 +1064,20 @@ async function showConstTable() {
             data.push(Object.assign(row,{'value':ref[0].name}));            
         } else {
             data.push(row);
-            if (row.type==='Date') {
-                colType[row.name] = 'timestamp with time zone';
-            } else if (row.type==='Number') {
-                colType[row.name] = 'numeric';
-            } else {
-                colType[row.name] = row.type.toLowerCase();       
-            }
+            // if (row.type==='Date') {
+            //     colType[row.name] = 'timestamp with time zone';
+            // } else if (row.type==='Number') {
+            //     colType[row.name] = 'numeric';
+            // } else {
+            //     colType[row.name] = row.type.toLowerCase();       
+            // }
         }
     }
     
-    const col  = {'id':'Id', 'name':'Name', 'value':'Value'} 
-    const hide = ['id'];          
+    const col  = {'id':'Id', 'name':'Name', 'value':'Value', 'type':'Type'} 
+    const hide = ['id','type'];          
 
+    console.log(colType)
     await showTable(resTbl, hide, col, data, colType);
 }
 async function showRefTable(refName, refType) {

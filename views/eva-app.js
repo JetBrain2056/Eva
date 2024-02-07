@@ -4,6 +4,10 @@ let elementsModal;
 n = 0;
 
 //Commands on client/////////////////////////////////////////////////////////
+function setStatus(value) {
+    let status = document.getElementById("status");
+    status.value = value;
+}
 async function modalShow() {
     console.log('>>modalShow()...');   
     await selectModal.hide();     
@@ -11,7 +15,7 @@ async function modalShow() {
     if (elementsModal) await elementsModal.show();
 }
 async function openConst() {
-    console.log('>>openRef()...');
+    console.log('>>openConst()...');
         
     const refForm    = document.getElementById("create-const-form");  
     const tabForm    = document.getElementById("const-form");      
@@ -26,8 +30,7 @@ async function openConst() {
 
     await showConstTable();
     
-    let status = document.getElementById("status");
-    status.value = ">It's work!";
+    setStatus(">Open Constants");
 }
 async function openRef(refName, name) {
     console.log('>>openRef()...', refName, name);
@@ -48,9 +51,8 @@ async function openRef(refName, name) {
     selectRows = [];
     
     await showRefTable(refName, refType);
-
-    let status = document.getElementById("status");
-    status.value = ">It's work!";
+    
+    setStatus(">Open "+refName+"s");
 }
 async function getColumns(textId) {
     res = await postOnServer({'textId': textId}, '/getrefcol');         
@@ -1381,8 +1383,7 @@ function appContent() {
     app.setAttribute("class","col tab-content p-3 eva-subsys");    
     app.style="height:calc(100vh - 95.5px); border: 1px solid #00ff92";
 
-    const status = document.getElementById("status"); 
-    status.value='>onload';  
+    setStatus('>Onload...');  
 }
 function init() {
     

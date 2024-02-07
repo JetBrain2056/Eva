@@ -363,8 +363,10 @@ async function refCreate(e) {
         refForm.setAttribute("copy-mode", false);  
     }
 
-    if (result) await showRefTable(textId, typeId);
-
+    if (result) {        
+        refForm.setAttribute("eva-id", result);
+        await showRefTable(textId, typeId);
+    }
 }
 async function refModal() {
     console.log('>>refModal()...');      
@@ -599,7 +601,6 @@ async function elemModal() {
     console.log('>>elemModal()...');    
     
     const modalForm  = document.getElementById('elemModal');  
-    elementsModal = getModal(modalForm);
 
     const refModalLabel  = modalForm.querySelector('#elemModalLabel');  
     refModalLabel.innerText = 'Add an element:';    
@@ -623,6 +624,11 @@ async function elemModal() {
 
     const ownerId      = ownerForm.getAttribute("eva-id");
     const ownerTextId  = ownerForm.getAttribute("eva-textId");
+    if (Number(ownerId)===0) { 
+        await refSave();                
+    }
+
+    elementsModal = getModal(modalForm);
        
     arrSyn = await getTabPartSyns(tabId);         
     arrCol = await getColumns(textId);

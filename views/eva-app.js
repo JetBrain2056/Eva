@@ -491,16 +491,13 @@ async function refEditModal(copyMode) {
 }
 async function refDelete() {
     console.log('>>refDelete()...');
-
-    const refForm = document.getElementById("nav-ref-form");    
-    const textId  = refForm.getAttribute("eva-textId");
-    const typeId  = refForm.getAttribute("eva-typeId");
+    
+    const evaForm = document.getElementById("eva-ref-form");   
+    const textId  = evaForm.getAttribute("eva-textId");        
+    const typeId  = evaForm.getAttribute("eva-typeId");
     
     for (const row of selectRows) {
-        const data = {
-            'textId': textId,
-            'id': row.cells[0].innerText
-        }
+        const data = {'textId': textId, 'id': row.cells[0].innerText}
         result = await postOnServer(data, '/delref');        
     }
 

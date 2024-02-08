@@ -114,14 +114,14 @@ function rowSelect(e) {
           if (e.target.getAttribute("type-attr")==='integer') {
             const a = Number(tr1Text);
             const b = Number(tr2Text);            
-            if(a < b) { return reverse*(-1); }
-            if(a > b) { return reverse; }
+            if(a < b) { return reverse }
+            if(a > b) { return reverse*(-1) }
             return 0;            
           } else if (e.target.getAttribute("type-attr")==='numeric') {
             const a = Number(tr1Text.replace(/\s/g, "").replace(',','.'));
             const b = Number(tr2Text.replace(/\s/g, "").replace(',','.'));            
-            if(a < b) { return reverse*(-1); }
-            if(a > b) { return reverse; }
+            if(a < b) { return reverse }
+            if(a > b) { return reverse*(-1) }
             return 0; 
           } else {
             return reverse * (tr1Text.localeCompare(tr2Text));

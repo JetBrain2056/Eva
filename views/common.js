@@ -110,6 +110,7 @@ function rowSelect(e) {
         rows.sort((tr1, tr2) => {    
           const tr1Text = tr1.cells[cellIndex].textContent;
           const tr2Text = tr2.cells[cellIndex].textContent;   
+          console.log(e.target.getAttribute("type-attr"))
           if (e.target.getAttribute("type-attr")==='integer') {
             const a = Number(tr1Text);
             const b = Number(tr2Text);            
@@ -200,8 +201,11 @@ async function showTable(showTbl, hide, col, data, colType) {
     for (const e of keysCol) {             
         const th = document.createElement('th');    
         th.setAttribute("sort-attr", "");    
-        // console.log(colType[e]);                                        
-        th.setAttribute("type-attr", colType[e]);   
+        if (e.split('.').length>1) {                                   
+            th.setAttribute("type-attr", e);   
+        } else {
+            th.setAttribute("type-attr", colType[e]);  
+        }
         if (hide.includes(e)) { th.style.display = "none";}
         tr.appendChild(th);        
         th.textContent = col[e];              

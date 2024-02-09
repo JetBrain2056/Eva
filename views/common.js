@@ -201,12 +201,12 @@ async function showTable(showTbl, hide, col, data, colType) {
     for (const e of keysCol) {             
         const th = document.createElement('th');    
         th.setAttribute("sort-attr", "");    
-        if (e.split('.').length>0) {                                   
+        if (e.split('.').length>1) {                                   
             th.setAttribute("type-attr", e);   
-        } else {
+        } else {            
             if (colType) th.setAttribute("type-attr", colType[e]);  
         }
-        if (hide.includes(e)) { th.style.display = "none";}
+        if (hide.includes(e)) { th.style.display = "none" }
         tr.appendChild(th);        
         th.textContent = col[e];              
     }       

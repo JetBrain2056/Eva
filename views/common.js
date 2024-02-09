@@ -110,14 +110,14 @@ function rowSelect(e) {
         rows.sort((tr1, tr2) => {    
           const tr1Text = tr1.cells[cellIndex].textContent;
           const tr2Text = tr2.cells[cellIndex].textContent;   
-          console.log(e.target.getAttribute("type-attr"))
-          if (e.target.getAttribute("type-attr")==='integer') {
+          const typeAttr = e.target.getAttribute("type-attr");
+          if (typeAttr==='integer') {
             const a = Number(tr1Text);
             const b = Number(tr2Text);            
             if(a < b) { return reverse }
             if(a > b) { return reverse*(-1) }
             return 0;            
-          } else if (e.target.getAttribute("type-attr")==='numeric') {
+          } else if (typeAttr==='numeric') {
             const a = Number(tr1Text.replace(/\s/g, "").replace(',','.'));
             const b = Number(tr2Text.replace(/\s/g, "").replace(',','.'));            
             if(a < b) { return reverse }
@@ -201,10 +201,10 @@ async function showTable(showTbl, hide, col, data, colType) {
     for (const e of keysCol) {             
         const th = document.createElement('th');    
         th.setAttribute("sort-attr", "");    
-        if (e.split('.').length>1) {                                   
+        if (e.split('.').length>0) {                                   
             th.setAttribute("type-attr", e);   
         } else {
-            th.setAttribute("type-attr", colType[e]);  
+            if (colType) th.setAttribute("type-attr", colType[e]);  
         }
         if (hide.includes(e)) { th.style.display = "none";}
         tr.appendChild(th);        

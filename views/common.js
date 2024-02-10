@@ -817,7 +817,7 @@ function openModule() {
 
     const textArea      = modalForm.querySelector('#editor');     
     // console.log(textArea);
-    textArea.value = '';
+    // textArea.value = '';
     //inputForm.setAttribute("create-mode",true);   
 
     currentModal['module'] = getModal(modalForm);
@@ -1421,14 +1421,16 @@ async function tabPartDelete() {
 /////////////////////////////////////////////////////////////////////////////
 window.onload = function() {
 
-    let editor = CodeMirror.fromTextArea(document.getElementById("editor"), {
-        lineNumbers: true, 
-        mode: 'javascript'                      
-    });  
-
     try {          
         const logged = content.getAttribute("data-logged");
-        if (logged==='true') return;
+        if (logged==='true') {
+            let editor = CodeMirror.fromTextArea(document.getElementById("editor"), {
+                lineNumbers: true, 
+                mode: 'javascript'                      
+            });  
+            return;
+        }
+
         listUsers();                       
     } catch(e) {
         console.log(e);

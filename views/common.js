@@ -815,12 +815,12 @@ function openModule() {
     const modalLabel = modalForm.querySelector('#moduleModalLabel');  
     modalLabel.innerText = 'Edit module:';
 
-    // const inputForm      = modalForm.querySelector('#create-module'); 
-    //inputForm.reset();    
+    const textArea      = modalForm.querySelector('#editor');     
+    // console.log(textArea);
+    textArea.value = '';
     //inputForm.setAttribute("create-mode",true);   
-  
 
-    selectModal = getModal(modalForm);
+    currentModal['module'] = getModal(modalForm);
 
 }
 async function showTypeTable(modalForm) {
@@ -1420,10 +1420,16 @@ async function tabPartDelete() {
 }
 /////////////////////////////////////////////////////////////////////////////
 window.onload = function() {
-    try {
+
+    let editor = CodeMirror.fromTextArea(document.getElementById("editor"), {
+        lineNumbers: true, 
+        mode: 'javascript'                      
+    });  
+
+    try {          
         const logged = content.getAttribute("data-logged");
         if (logged==='true') return;
-        listUsers();                
+        listUsers();                       
     } catch(e) {
         console.log(e);
     }
@@ -1434,10 +1440,10 @@ function loginMode() {
     const logged = content.getAttribute("data-logged");   
     const mode   = content.getAttribute("data-mode");
  
-    if (mode==='true'&&logged==='true') {           
+    if (mode==='true'&&logged==='true') {             
         showConfigTable();
         let inputType = $objectModal.querySelector('#input-type');
-        inputType.addEventListener('change', mainSelect);
+        inputType.addEventListener('change', mainSelect);        
     } else {
         return;
     }    

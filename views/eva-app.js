@@ -742,12 +742,13 @@ function addTabs(ul, tabName) {
 }
 async function tabParts(refForm, ul, refName) {
     console.log('>>tabParts()...', refName);
+
+    selectRows = [];
     
     const refLink = document.querySelector("#"+refName);
     const id      = refLink.getAttribute("eva-id");    
-    // console.log(id); 
-    res = await postOnServer({'owner': id}, '/gettabparts');     
-    // console.log(res); 
+    
+    res = await postOnServer({'owner': id}, '/gettabparts');         
     for (elem of res) {
         const tabId    = elem.id;
         const strJson  = elem.data;          

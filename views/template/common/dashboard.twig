@@ -504,11 +504,10 @@
         <button type="button" class="btn-close"  aria-label="Close"  data-bs-dismiss="modal" onclick=""></button>
       </div>
       <div class="modal-body">
-        <form class="form" id="create-module-form"> 
-          {# <textarea  class="text/javascript form-control" id="input-module-form" type="text/javascript" rows="18" style="height: calc(100vh - 230px);"> #}
-          <textarea id="editor" class="text/javascript form-control" type="text/javascript" rows="18" style="height: calc(100vh - 230px);">      
-          </textarea>                    
-        </form>
+        <form class="form" id="create-module-form">      
+          {# style="height: calc(100vh - 230px);"   #}
+            <textarea id="editor" class="form-control" ></textarea>                                        
+        </form>      
       </div>
       <div class="modal-footer">
         <button type="submit" class="btn btn-primary" onclick="moduleCreate()">{{ button_save }}&{{ button_close }}</button>

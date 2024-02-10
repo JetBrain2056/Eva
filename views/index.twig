@@ -9,11 +9,14 @@
         <script defer src="./common.js"></script>
         <script defer src="./eva-app.js"></script>
         <script defer src="./@popperjs/core/dist/umd/popper.min.js"></script>
-        <script defer src="./js/bootstrap.min.js"></script>         
+        <script defer src="./js/bootstrap.min.js"></script>                   
+        <script defer src="./lib/codemirror.js"></script>        
+        <script defer src="./lib/javascript.js"></script>   
         <link rel="icon" type="image/x-icon" href="{{ shortIcon }}">
         <link href="./css/bootstrap.min.css" rel="stylesheet">
         <link href="./font-awesome/css/font-awesome.min.css" rel="stylesheet">
         <link href="./stylesheet/stylesheet.css" rel="stylesheet">        
+        <link href="./lib/codemirror.css" rel="stylesheet">   
     </head>
     <body>             
         <div class="content d-flex flex-column" data-mode="{{ mode }}" data-logged="{{ logged }}">             
@@ -26,7 +29,7 @@
                         </div>
                         <div class="col">
                             {% include "./template/common/dashboard.twig" %}
-                        </div>                                                            
+                        </div>                                                                                 
                     {% else %} {#Frontend#}                       
                         <noscript>You need to enable JavaScript to run this app.</noscript>                    
                         <div class="eva" id="eva-app" data-app="">{#Start app#}                           

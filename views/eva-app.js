@@ -901,8 +901,10 @@ async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode, ty
                         input.setAttribute("class","eva-req form-control");                                                                                       
                         input.setAttribute("pattern", "^([0-9.]+)");                                               
                         // input.setAttribute("required", "required");   
+                        input.setAttribute("data-inputmask","'alias':'numeric', 'groupSeparator':' ', 'digits':2, 'digitsOptional':false, 'prefix':'', 'placeholder': '0'");
+                        // <small class="text-muted">e.g "123,456,789"</small>
                         input.setAttribute("maxlength", type.numPrec+1);          
-                        input.setAttribute("placeholder", "0.00");  
+                        // input.setAttribute("placeholder", "0.00");  
                         input.style = "text-align:right;";
                     } else if (type.dataType === 'timestamp with time zone') {
                         input.setAttribute("type","date");

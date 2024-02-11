@@ -1066,7 +1066,7 @@ exports.getRefColumns = async function(req, res) {
     const {textId} = req.body;    
     try {
         const data = await sequelize.query(
-            `SELECT column_name, data_type, dtd_identifier 
+            `SELECT column_name, data_type, dtd_identifier, character_maximum_length,  numeric_precision, numeric_scale
              FROM information_schema.Columns
              WHERE table_schema = 'public' and table_name = '`+textId+`s'
                and not column_name ='updatedAt' and not column_name='createdAt' ;`         

@@ -484,7 +484,7 @@ exports.updateConfig = async function(req, res) {
                 if (Elements.accuracy === 0) {
                     refColumns[Elements.textId] = {type: DataTypes.INTEGER};     
                 } else {
-                    refColumns[Elements.textId] = {type: DataTypes.DECIMAL(14, Elements.accuracy)};  
+                    refColumns[Elements.textId] = {type: DataTypes.DECIMAL(Elements.length, Elements.accuracy)};  
                 }
             } else if (Elements.type === 'Boolean') {
                 refColumns[Elements.textId] = {type: DataTypes.BOOLEAN};  
@@ -683,7 +683,7 @@ exports.updateConfig = async function(req, res) {
         const Elements = await JSON.parse(strJson);      
         //const owner    = Elements.owner; 
         const objectId = Elements.owner+'.'+Elements.textId;                        
-        const synonum  = Elements.synonum;
+        // const synonum  = Elements.synonum;
         
         const reqlist = await TabPartReq.findAll({ where: { owner: row.id } });                            
         for (const row of reqlist) { 
@@ -699,7 +699,7 @@ exports.updateConfig = async function(req, res) {
                 if (Elements.accuracy === 0) {
                     refColumns[Elements.textId] = {type: DataTypes.INTEGER};     
                 } else {
-                    refColumns[Elements.textId] = {type: DataTypes.DECIMAL(14, Elements.accuracy)};  
+                    refColumns[Elements.textId] = {type: DataTypes.DECIMAL(Elements.length, Elements.accuracy)};  
                 }
             } else if (Elements.type === 'Boolean') {
                 refColumns[Elements.textId] = {type: DataTypes.BOOLEAN};  

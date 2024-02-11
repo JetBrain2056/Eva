@@ -4,6 +4,18 @@ let elementsModal;
 n = 0;
 
 //Commands on client/////////////////////////////////////////////////////////
+function mask(val, digits) {        
+    let newVal = '';
+    if (val.split('.')[1].length>digits) {
+        newVal = val.split('.')[0]+'.'+val.split('.')[1].slice(0,digits);
+    } else {
+        newVal = val;
+    }    
+    return newVal; 
+}
+function inpHandler() {    
+    return this.value = mask(this.value, this.getAttribute("data-digits"));
+}
 function setStatus(value) {
     let status = document.getElementById("status");
     status.value = value;
@@ -313,7 +325,7 @@ async function createReq(refForm, textId, createMode, copyMode) {
             } else if (type === 'number') {
                 data[elem.name] = Number(elem.value); 
             } else if (type === 'text') {
-                if (dataType === 'numeric') {
+                if (dataType === 'numeric') {                    
                     data[elem.name] = Number(elem.value);  
                 } else if (dataType === 'integer') { 
                     data[elem.name] = Number(elem.value);  
@@ -901,11 +913,11 @@ async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode, ty
                         input.setAttribute("class","eva-req form-control");                                                                                       
                         input.setAttribute("pattern", "^([0-9.]+)");                                               
                         // input.setAttribute("required", "required");   
-                        input.setAttribute("data-inputmask","'alias':'numeric', 'groupSeparator':' ', 'digits':2, 'digitsOptional':false, 'prefix':'', 'placeholder': '0'");
-                        // <small class="text-muted">e.g "123,456,789"</small>
+                        input.setAttribute("data-digits", type.numScale);                                                
                         input.setAttribute("maxlength", type.numPrec+1);          
-                        // input.setAttribute("placeholder", "0.00");  
+                        input.setAttribute("placeholder", "0.00");  
                         input.style = "text-align:right;";
+                        input.addEventListener('input', inpHandler);
                     } else if (type.dataType === 'timestamp with time zone') {
                         input.setAttribute("type","date");
                         input.setAttribute("class","eva-req form-control");

@@ -50,7 +50,7 @@ async function openRef(refName, name) {
 
     selectRows = [];
     
-    await showRefTable(refName, refType);
+    await showRefTable(refName, refType, refId);
     
     setStatus(">Open "+refName+"s");
 }
@@ -331,7 +331,10 @@ async function createReq(refForm, textId, createMode, copyMode) {
 async function refCreate(e) {
     console.log('>>refCreate()...');
 
-    const refForm    = document.getElementById("create-ref-form");
+    const evaForm    = document.querySelector('#eva-ref-form');   
+    const refId      = evaForm.getAttribute("eva-id");
+    
+    const refForm    = document.getElementById("create-ref-form");    
     const textId     = refForm.getAttribute("eva-textId");
     const typeId     = refForm.getAttribute("eva-typeId");    
     const createMode = refForm.getAttribute("create-mode");     
@@ -367,7 +370,7 @@ async function refCreate(e) {
 
     if (result) {        
         refForm.setAttribute("eva-id", result);
-        await showRefTable(textId, typeId);
+        await showRefTable(textId, typeId, refId);
     }
 }
 async function refModal() {
@@ -495,6 +498,7 @@ async function refDelete() {
     console.log('>>refDelete()...');
     
     const evaForm = document.getElementById("eva-ref-form");   
+    const refId   = evaForm.getAttribute("eva-id");   
     const textId  = evaForm.getAttribute("eva-textId");        
     const typeId  = evaForm.getAttribute("eva-typeId");
     
@@ -503,7 +507,7 @@ async function refDelete() {
         result = await postOnServer(data, '/delref');        
     }
 
-    if (result) await showRefTable(textId, typeId);
+    if (result) await showRefTable(textId, typeId, refId);
 }
 async function refSave() {
     const docForm  = document.getElementById("create-ref-form");
@@ -1071,13 +1075,6 @@ async function showConstTable() {
             data.push(Object.assign(row,{'value':ref[0].name}));            
         } else {
             data.push(row);
-            // if (row.type==='Date') {
-            //     colType[row.name] = 'timestamp with time zone';
-            // } else if (row.type==='Number') {
-            //     colType[row.name] = 'numeric';
-            // } else {
-            //     colType[row.name] = row.type.toLowerCase();       
-            // }
         }
     }
     
@@ -1087,8 +1084,8 @@ async function showConstTable() {
     console.log(colType)
     await showTable(resTbl, hide, col, data, colType);
 }
-async function showRefTable(refName, refType) {
-    console.log('>>showRefTable()...', refName, refType);   
+async function showRefTable(refName, refType, refId) {
+    console.log('>>showRefTable()...', refName, refType, refId);   
 
     refTbl = buildTable(refName, refType);
     
@@ -1098,7 +1095,7 @@ async function showRefTable(refName, refType) {
     const evaForm = document.querySelector('#eva-ref-form');        
     arrSyn = await getSynonyms(evaForm);     
     
-    const res = await postOnServer(tmp, '/getrefcol');  
+    res = await postOnServer(tmp, '/getrefcol');  
     let col = {};   
     let colType = {};           
     for (elem of res) {
@@ -1114,7 +1111,16 @@ async function showRefTable(refName, refType) {
     }
 
     let hide = [];  
-    if (refType==='Document') { hide = ['id'];}
+    if (refType==='Document') { hide = ['id'] }
+
+    if (refId) {
+        res = await postOnServer({'id': refId},'/getobject');        
+        if (res) {
+            const strJson  = res.data;          
+            const Elements = await JSON.parse(strJson);                                         
+            if (Elements.hideId===true) { hide = ['id'] }                  
+        } 
+    }
 
     showTable(refTbl, hide, col, data, colType);
 }

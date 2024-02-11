@@ -61,7 +61,11 @@ async function getColumns(textId) {
         const colName    = elem.column_name;
         const dataType   = elem.data_type;
         const identifier = elem.dtd_identifier;
-        const obj = {'colName': colName, 'dataType':dataType, 'identifier': identifier}          
+        const maxlength  = elem.character_maximum_length; 
+        const numPrec    = elem.numeric_precision;
+        const numScale   = elem.numeric_scale;
+        const obj = {'colName': colName, 'dataType':dataType, 'identifier': identifier, 
+                     'maxlength': maxlength, 'numPrec':numPrec, 'numScale':numScale}          
         arrCol[colName] = obj;
     }
     return arrCol;
@@ -863,7 +867,7 @@ async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode, ty
             refForm.appendChild(div);                
                 const input  = document.createElement("input");       
                 const btn    = document.createElement("button");
-                let type = arrCol[req];
+                let type = arrCol[req];                
                 if (req.split('.').length > 1) {
                     input.setAttribute("type","text");
                     input.setAttribute("class","eva-req form-control"); 
@@ -880,17 +884,24 @@ async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode, ty
                 } else {
                     if (type.dataType === 'character varying') {
                         input.setAttribute("type","text");                    
-                        input.setAttribute("class","eva-req form-control");    
+                        input.setAttribute("class","eva-req form-control");                           
+                        if (type.maxlength) {
+                            input.setAttribute("maxlength", type.maxlength);
+                            // input.setAttribute("required", "required");  
+                        } 
                     } else if (type.dataType === 'integer') {
                         input.setAttribute("type","number");                    
                         input.setAttribute("class","eva-req form-control");   
-                        input.setAttribute("required", "required");        
+                        input.setAttribute("required", "required");   
+                        input.setAttribute("maxlength", type.numPrec);    
+                        input.setAttribute("placeholder", "0");                          
                     } else if (type.dataType === 'numeric') {
                         input.setAttribute("type","text");                    
                         input.setAttribute("inputmode","decimal");
-                        input.setAttribute("class","eva-req form-control");              
-                        input.setAttribute("pattern", "[0-9.]+");   
-                        input.setAttribute("maxlength", "15");          
+                        input.setAttribute("class","eva-req form-control");                                                                                       
+                        input.setAttribute("pattern", "^([0-9.]+)");                                               
+                        // input.setAttribute("required", "required");   
+                        input.setAttribute("maxlength", type.numPrec+1);          
                         input.setAttribute("placeholder", "0.00");  
                         input.style = "text-align:right;";
                     } else if (type.dataType === 'timestamp with time zone') {
@@ -1080,8 +1091,7 @@ async function showConstTable() {
     
     const col  = {'id':'Id', 'name':'Name', 'value':'Value', 'type':'Type'} 
     const hide = ['id','type'];          
-
-    console.log(colType)
+    
     await showTable(resTbl, hide, col, data, colType);
 }
 async function showRefTable(refName, refType, refId) {

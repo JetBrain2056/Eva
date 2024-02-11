@@ -1426,7 +1426,11 @@ window.onload = function() {
         if (logged==='true') {
             let editor = CodeMirror.fromTextArea(document.getElementById("editor"), {
                 lineNumbers: true, 
-                mode: 'javascript'                      
+                mode: 'javascript',
+                lineWrapping: true,
+                extraKeys: {"Ctrl-Q": function(cm){ cm.foldCode(cm.getCursor()); }},
+                foldGutter: true,
+                gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]                   
             });  
             return;
         }

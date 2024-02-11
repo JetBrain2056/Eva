@@ -1420,10 +1420,9 @@ async function tabPartDelete() {
 }
 /////////////////////////////////////////////////////////////////////////////
 window.onload = function() {
-
-    try {          
-        const logged = content.getAttribute("data-logged");
-        if (logged==='true') {
+    try { 
+        const mode   = content.getAttribute("data-mode");
+        if (mode==='true') {
             let editor = CodeMirror.fromTextArea(document.getElementById("editor"), {
                 lineNumbers: true, 
                 mode: 'javascript',
@@ -1431,10 +1430,14 @@ window.onload = function() {
                 extraKeys: {"Ctrl-Q": function(cm){ cm.foldCode(cm.getCursor()); }},
                 foldGutter: true,
                 gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]                   
-            });  
-            return;
+            }); 
         }
-
+    } catch(e) {
+        console.log(e);
+    }    
+    try {          
+        const logged = content.getAttribute("data-logged");
+        if (logged==='true') return;
         listUsers();                       
     } catch(e) {
         console.log(e);
@@ -1449,7 +1452,7 @@ function loginMode() {
     if (mode==='true'&&logged==='true') {             
         showConfigTable();
         let inputType = $objectModal.querySelector('#input-type');
-        inputType.addEventListener('change', mainSelect);        
+        inputType.addEventListener('change', mainSelect);            
     } else {
         return;
     }    

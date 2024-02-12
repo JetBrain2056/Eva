@@ -6,25 +6,26 @@ n = 0;
 //Commands on client/////////////////////////////////////////////////////////
 function mask(val, length, accuracy) {     
     let newVal = '';        
-    if (val==='') val = '.00';
-    let valArr = val.split('.');
-   
-    if (valArr.length < 2) {val = val+'.00'; valArr = val.split('.')} 
-
+    if (val===''||val==='0') return '0.0';
+    let valArr = val.split('.');    
+    if (valArr.length===1) { 
+        if (val.length > length-accuracy) {return valArr[0].slice(0,length-accuracy)+'.0'}        
+        if (val===valArr[0]) {
+            return valArr[0]+'.0';    
+        } else {
+            return valArr[0].slice(0,-1)+'.0';   
+        }
+    } 
     if (valArr[1].length > accuracy) {
         newVal = valArr[0]+'.'+valArr[1].slice(0,accuracy);    
-    } else {
-        newVal = val;
-    }
-    if (valArr[0].length > (length-accuracy)) {    
+    } else if (valArr[1].length===0 ) {    
+        newVal = valArr[0]+'.0';       
+    } else if (valArr[0].length > (length-accuracy)) {    
         newVal = valArr[0].slice(0,length-accuracy)+'.'+valArr[1]; 
+    } else {
+        newVal = val;   
     }       
-    return newVal; 
-}
-function inpHandler() {    
-    const length   = this.getAttribute("data-length");
-    const accuracy = this.getAttribute("data-accuracy");
-    return this.value = mask(this.value, length, accuracy);
+    return newVal;     
 }
 function setStatus(value) {
     let status = document.getElementById("status");
@@ -921,16 +922,19 @@ async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode, ty
                         input.setAttribute("type","number");                    
                         input.setAttribute("inputmode","decimal");
                         input.setAttribute("class","eva-req form-control");                                                                                       
-                        input.setAttribute("step",0.01); 
-                        input.setAttribute("min",0.00);                                                
+                        input.setAttribute("step", .01); 
+                        input.setAttribute("min", .00);                                                
                         // input.setAttribute("pattern", "^([0-9.]+)");                                               
                         // input.setAttribute("required", "required");   
                         input.setAttribute("data-length", type.numPrec);                                                
                         input.setAttribute("data-accuracy", type.numScale); 
-                        input.setAttribute("maxlength", type.numPrec+1);          
+                        // input.setAttribute("maxlength", type.numPrec+1);          
                         input.setAttribute("placeholder", "0.00");  
                         input.style = "text-align:right;";
-                        input.addEventListener('input', inpHandler);
+                        if (createMode===true) input.value = 0.00;
+                        input.addEventListener('input', function() {
+                            input.value = mask(this.value, type.numPrec, type.numScale);
+                        });
                     } else if (type.dataType === 'timestamp with time zone') {
                         input.setAttribute("type","date");
                         input.setAttribute("class","eva-req form-control");

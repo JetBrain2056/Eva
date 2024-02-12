@@ -6,15 +6,11 @@ n = 0;
 //Commands on client/////////////////////////////////////////////////////////
 function mask(val, length, accuracy) {     
     let newVal = '';        
-    if (val===''||val==='0') return '0.0';
-    let valArr = val.split('.');    
+    if (val===''||val==='0') return '0.0';    
+    let valArr = val.split('.');        
     if (valArr.length===1) { 
-        if (val.length > length-accuracy) {return valArr[0].slice(0,length-accuracy)+'.0'}        
-        if (val===valArr[0]) {
-            return valArr[0]+'.0';    
-        } else {
-            return valArr[0].slice(0,-1)+'.0';   
-        }
+        if (val.length > length-accuracy) {return valArr[0].slice(0,length-accuracy)+'.0'}                      
+        return val+'.0';
     } 
     if (valArr[1].length > accuracy) {
         newVal = valArr[0]+'.'+valArr[1].slice(0,accuracy);    

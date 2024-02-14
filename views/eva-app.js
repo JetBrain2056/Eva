@@ -25,6 +25,8 @@ function mask(val, length, accuracy) {
         }                                     
     } 
     if (newVal.slice(0,1)==='0'&&valArr[0].length>1) newVal = newVal.slice(1,newVal.length);
+    if (newVal.slice(0,1)===','&&valArr[1].length>0) newVal = '0'+newVal;
+    if (newVal===',') newVal='0,';
     return newVal;     
 }
 function setStatus(value) {
@@ -981,7 +983,7 @@ async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode, ty
                         if (date) input.value = date.slice(0, 10);
                     } else  if (type.dataType === 'numeric') {
                         let value = col[req]; 
-                        input.value = value.replace('.',','); 
+                        if (value) input.value = value.replace('.',','); 
                     } else {
                         if (req.split('.').length > 1) {
                             const textIdArr = req.split('.');

@@ -7,7 +7,7 @@ n = 0;
 function mask(val, length, accuracy) {     
     let newVal = '';          
     val = val.replace(/[^0-9,.]/g,'');
-    val = val.replace('.',',');    
+    val = val.replace('.',',').replace(' ','');    
     let valArr = val.split(',');        
     if (valArr.length===1) { 
         if (val.length > length-accuracy) {
@@ -24,6 +24,7 @@ function mask(val, length, accuracy) {
             newVal = valArr[0]+','+valArr[1].slice(0,accuracy);   
         }                                     
     } 
+    // newVal = new Intl.NumberFormat('ru', {minimumFractionDigits: accuracy}).format(newVal);    
     return newVal;     
 }
 function setStatus(value) {
@@ -336,7 +337,7 @@ async function createReq(refForm, textId, createMode, copyMode) {
                 data[elem.name] = Number(elem.value); 
             } else if (type === 'text') {
                 if (dataType === 'numeric') {                    
-                    data[elem.name] = Number(elem.value.replace(',','.'));  
+                    data[elem.name] = Number(elem.value.replace(',','.').replace(' ',''));  
                 } else if (dataType === 'integer') { 
                     data[elem.name] = Number(elem.value);  
                 } else if (dataType === 'character varying') {  
@@ -930,9 +931,7 @@ async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode, ty
                         // input.setAttribute("maxlength", type.numPrec+1);          
                         input.setAttribute("placeholder", "0,00");  
                         input.style = "text-align:right;";
-                        if (createMode===true||input.value===0) input.value = '0.00';
-                        const length   = type.numPrec; 
-                        const accuracy = type.numScale;                     
+                        if (createMode===true||input.value===0) input.value = '0,00';                                           
                         input.oninput = function() {                                                                                                                                  
                             let newVal = mask(input.value, type.numPrec, type.numScale);                                                                                                                                  
                             input.value = newVal;
@@ -980,6 +979,9 @@ async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode, ty
                     } else if (type.dataType === 'timestamp with time zone') {
                         const date = col[req];                                               
                         if (date) input.value = date.slice(0, 10);
+                    } else  if (type.dataType === 'numeric') {
+                        let value = col[req]; 
+                        input.value = value.replace('.',','); 
                     } else {
                         if (req.split('.').length > 1) {
                             const textIdArr = req.split('.');

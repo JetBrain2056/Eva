@@ -15,13 +15,18 @@ function mask(val, length, accuracy) {
         } else{
             newVal = val;
         }                                  
-    } else {        
-        if (valArr[1].length===0 ) {    
-            newVal = valArr[0]+',';       
-        } else if (valArr[0].length > (length-accuracy)) {    
-            newVal = valArr[0].slice(0,length-accuracy)+','+valArr[1].slice(0,accuracy); 
+    } else {    
+        let valSumArr = '';
+        if (valArr[2]) {
+            valSumArr = valArr[1] + valArr[2];
         } else {
-            newVal = valArr[0]+','+valArr[1].slice(0,accuracy);   
+            valSumArr = valArr[1]; 
+        }
+        
+        if (valArr[0].length > length-accuracy) {    
+            newVal = valArr[0].slice(0,length-accuracy)+','+valSumArr.slice(0,accuracy); 
+        } else {            
+            newVal = valArr[0]+','+valSumArr.slice(0,accuracy);   
         }                                     
     } 
     if (newVal.slice(0,1)==='0'&&valArr[0].length>1) newVal = newVal.slice(1,newVal.length);

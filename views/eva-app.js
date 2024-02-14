@@ -7,27 +7,22 @@ n = 0;
 function mask(val, length, accuracy) {     
     let newVal = '';          
     val = val.replace(/[^0-9,.]/g,'');
-    val = val.replace('.',',');
-    console.log(val);
+    val = val.replace('.',',');    
     let valArr = val.split(',');        
     if (valArr.length===1) { 
         if (val.length > length-accuracy) {
             newVal = valArr[0].slice(0,length-accuracy)+','+valArr[0].slice(length-accuracy,length)
         } else{
             newVal = val;
-        }     
-        console.log('arr1:',newVal);                        
-    } else {
-        if (valArr[1].length > accuracy) {
-            newVal = valArr[0]+','+valArr[1].slice(0,accuracy);    
-        // } else if (valArr[1].length===0 ) {    
-        //     newVal = valArr[0];       
+        }                                  
+    } else {        
+        if (valArr[1].length===0 ) {    
+            newVal = valArr[0]+',';       
         } else if (valArr[0].length > (length-accuracy)) {    
-            newVal = valArr[0].slice(0,length-accuracy)+','+valArr[1]; 
+            newVal = valArr[0].slice(0,length-accuracy)+','+valArr[1].slice(0,accuracy); 
         } else {
-            newVal = val;   
-        }  
-        console.log('arr2:',newVal);                            
+            newVal = valArr[0]+','+valArr[1].slice(0,accuracy);   
+        }                                     
     } 
     return newVal;     
 }
@@ -938,8 +933,7 @@ async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode, ty
                         if (createMode===true||input.value===0) input.value = '0.00';
                         const length   = type.numPrec; 
                         const accuracy = type.numScale;                     
-                        input.oninput = function() {                                                     
-                            console.log(input.value);                                                     
+                        input.oninput = function() {                                                                                                                                  
                             let newVal = mask(input.value, type.numPrec, type.numScale);                                                                                                                                  
                             input.value = newVal;
                         }                        

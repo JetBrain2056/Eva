@@ -24,7 +24,7 @@ function mask(val, length, accuracy) {
             newVal = valArr[0]+','+valArr[1].slice(0,accuracy);   
         }                                     
     } 
-    // newVal = new Intl.NumberFormat('ru', {minimumFractionDigits: accuracy}).format(newVal);    
+    if (newVal.slice(0,1)==='0'&&valArr[0].length>1) newVal = newVal.slice(1,newVal.length);
     return newVal;     
 }
 function setStatus(value) {

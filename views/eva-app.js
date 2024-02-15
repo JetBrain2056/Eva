@@ -4,16 +4,19 @@ let elementsModal;
 n = 0;
 
 //Commands on client/////////////////////////////////////////////////////////
-function mask(val, length, accuracy) {     
+function mask(val, length, accuracy) {    
+    
+    function triads(parts) { return parts.replace(/(\d)(?=(\d{3})+$)/g, '$1 ') }
+
     let newVal = '';          
     val = val.replace(/[^0-9,.]/g,'');
     val = val.replace('.',',').replace(' ','');    
     let valArr = val.split(',');        
     if (valArr.length===1) { 
         if (val.length > length-accuracy) {
-            newVal = valArr[0].slice(0,length-accuracy)+','+valArr[0].slice(length-accuracy,length)
+            newVal = triads(valArr[0].slice(0,length-accuracy))+','+valArr[0].slice(length-accuracy,length)
         } else{
-            newVal = val;
+            newVal = triads(val);
         }                                  
     } else {    
         let valSumArr = '';
@@ -24,14 +27,15 @@ function mask(val, length, accuracy) {
         }
         
         if (valArr[0].length > length-accuracy) {    
-            newVal = valArr[0].slice(0,length-accuracy)+','+valSumArr.slice(0,accuracy); 
+            newVal = triads(valArr[0].slice(0,length-accuracy))+','+valSumArr.slice(0,accuracy); 
         } else {            
-            newVal = valArr[0]+','+valSumArr.slice(0,accuracy);   
+            newVal = triads(valArr[0])+','+valSumArr.slice(0,accuracy);   
         }                                     
     } 
     if (newVal.slice(0,1)==='0'&&valArr[0].length>1) newVal = newVal.slice(1,newVal.length);
     if (newVal.slice(0,1)===','&&valArr[1].length>0) newVal = '0'+newVal;
     if (newVal===',') newVal='0,';
+    
     return newVal;     
 }
 function setStatus(value) {
@@ -343,8 +347,8 @@ async function createReq(refForm, textId, createMode, copyMode) {
             } else if (type === 'number') {
                 data[elem.name] = Number(elem.value); 
             } else if (type === 'text') {
-                if (dataType === 'numeric') {                    
-                    data[elem.name] = Number(elem.value.replace(',','.').replace(' ',''));  
+                if (dataType === 'numeric') {                                          
+                    data[elem.name] = Number(elem.value.replace(',','.').replace(/[^0-9.]/g,''));  
                 } else if (dataType === 'integer') { 
                     data[elem.name] = Number(elem.value);  
                 } else if (dataType === 'character varying') {  
@@ -987,8 +991,8 @@ async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode, ty
                         const date = col[req];                                               
                         if (date) input.value = date.slice(0, 10);
                     } else  if (type.dataType === 'numeric') {
-                        let value = col[req]; 
-                        if (value) input.value = value.replace('.',','); 
+                        const val = col[req]; 
+                        if (val) input.value = new Intl.NumberFormat('ru', {minimumFractionDigits: type.numScale}).format(val); 
                     } else {
                         if (req.split('.').length > 1) {
                             const textIdArr = req.split('.');

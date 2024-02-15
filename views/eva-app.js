@@ -6,7 +6,7 @@ n = 0;
 //Commands on client/////////////////////////////////////////////////////////
 function mask(val, length, accuracy) {    
     
-    function triads(parts) { return parts.replace(/(\d)(?=(\d{3})+$)/g, '$1 ') }
+    function triads(parts) { return new Intl.NumberFormat('ru').format(parts) }
 
     let newVal = '';          
     val = val.replace(/[^0-9,.]/g,'');

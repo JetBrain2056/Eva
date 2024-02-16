@@ -880,7 +880,9 @@ async function tabOwner(refForm, textId, refName) {
     await showOwnerTable(div,  'Reference.'+textId, refName);      
 }
 async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode, typeId) {
-    console.log('>>refElement()...', col);  
+    console.log('>>refElement()...', typeId);  
+
+    const textId = refForm.parentElement.getAttribute("eva-textId");
     
     if (col) {                  
         delete col['createdAt'];
@@ -971,8 +973,12 @@ async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode, ty
                 }
                 
                 if (createMode===true) {
-                    if (type.dataType === 'timestamp with time zone') {                  
-                        input.value = '';
+                    if (type.dataType === 'timestamp with time zone') {   
+                        if (req==='date')  {                            
+                            input.value = dateFormat(Date.now()).slice(0,10);
+                        } else {
+                            input.value = '';                        
+                        }
                     } else {
                         if (arrSyn[req]==='owner') { 
                             resRef = await postOnServer({'id': col[req], 'textId':req.split('.')[1]}, '/getref');
@@ -981,7 +987,13 @@ async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode, ty
                                 input.setAttribute("eva-id", resRef[0].id);
                             }
                         } else {
-                            input.value = '';
+                            if (req==='number') {
+                                const number = await postOnServer({owner:textId},'/getnumber');
+                                const textNumber = '00000000'+String(number);
+                                input.value = textNumber.slice(-9);
+                            } else {
+                                input.value = '';
+                            }
                         }
                     }
                 } else if (createMode===false) {

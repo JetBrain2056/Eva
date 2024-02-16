@@ -1,4 +1,5 @@
-const { User, Role, Config, Subsystem, Constant, Module, Requisite, TabPart, TabPartReq, Form, Owner } = require('../models/models.js');
+const { User, Role, Config, Subsystem, Constant, Module } = require('../models/models.js');
+const { Requisite, TabPart, TabPartReq, Form, Owner, ObjectNumberer } = require('../models/models.js');
 const { content }       = require('../index.js');
 const bcrypt            = require('bcrypt');
 const sequelize         = require('../db');
@@ -1150,7 +1151,7 @@ exports.deleteReference = async function(req, res) {
     }
 }
 exports.getOwner = async function(req, res) {
-    console.log(dateNow(),'>>getReferences()...');
+    console.log(dateNow(),'>>()getOwner...');
     if (!req.body) return res.sendStatus(400);
     
     const {owner} = req.body;  
@@ -1163,4 +1164,36 @@ exports.getOwner = async function(req, res) {
     } catch(err) {
         console.log(err);
     }
+}
+exports.getObjectNumber = async function(req, res) {
+    console.log(dateNow(),'>>getObjectNumber()...');
+    if (!req.body) return res.sendStatus(400);
+    
+    const {owner} = req.body;  
+
+    let number = 0;
+    try {
+        const data = await ObjectNumberer.findOne({ where: { owner: owner }});   
+        if (data) {
+            number = data.number;
+        } else {
+            number = 0;
+            await ObjectNumberer.create({owner: owner, number: number});
+        }
+    } catch(err) {
+        console.log(err);
+    }
+    try {
+        number = number + 1;
+        const data = await ObjectNumberer.update({
+            number: number
+        }, {
+            where: {owner: owner}
+        });
+
+        console.log('Update object:', data.id);
+        return await res.json(number);
+    } catch(err) {
+        console.log(err);
+    }    
 }

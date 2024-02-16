@@ -322,7 +322,7 @@ function tblFilter(name) {
 }
 //Get/post on Server//////////////////////////////////////////////////////////
 async function postOnServer(data, link) {
-    console.log('>>postOnServer()...');
+    console.log('>>postOnServer()...', link);
     let res;
     try {
         let response = await fetch(link, {
@@ -337,7 +337,7 @@ async function postOnServer(data, link) {
     return res;
 }
 async function getOnServer(link) {
-    console.log('>>getOnServer()...');
+    console.log('>>getOnServer()...', link);
     let res;
     try{
         let response = await fetch(link);

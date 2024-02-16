@@ -76,6 +76,13 @@ const Owner = sequelize.define('Owner', {
     refName  : {type: DataTypes.STRING}
 })
 
+const ObjectNumberer = sequelize.define('ObjectNumberer', {
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},    
+    owner   : {type: DataTypes.STRING},
+    number  : {type: DataTypes.INTEGER},
+    textNumber  : {type: DataTypes.STRING}
+})
+
 Role.hasMany(User);
 User.belongsTo(Role);
 
@@ -93,5 +100,6 @@ module.exports = {
     TabPart,
     TabPartReq,
     Form,
-    Owner
+    Owner,
+    ObjectNumberer
 }

@@ -53,5 +53,6 @@ router.post('/createref', controller.createReference);
 router.post('/updateref', controller.updateReference);
 router.post('/delref', controller.deleteReference);
 router.post('/getowner', controller.getOwner);
+router.post('/getnumber', controller.getObjectNumber);
 
 module.exports = { router }                                                  

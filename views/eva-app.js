@@ -104,25 +104,6 @@ async function getColumns(textId) {
     }
     return arrCol;
 }
-async function getSynonyms(evaForm) {
-    console.log('>>getSynonyms()...');
-
-    const id = evaForm.getAttribute("eva-id");    
-    const resreq  = await postOnServer({'owner': id}, '/getreqs');  
-    
-    let arrSyn = [];  
-    arrSyn['id'] = 'Id';
-    arrSyn['name'] = 'Name';
-    arrSyn['date'] = 'Date';
-    arrSyn['number'] = 'Number';
-    for (let elem of resreq) {
-        let strJson = elem.data;          
-        let Elements = await JSON.parse(strJson);  
-        let colName = Elements.textId;
-        arrSyn[colName] = Elements.synonum;
-    }
-    return arrSyn;
-}
 async function getReqs(evaForm) {
     console.log('>>getReqs()...');
 
@@ -133,6 +114,7 @@ async function getReqs(evaForm) {
     arrReq['name']   = {'synonum':'Name'};
     arrReq['date']   = {'synonum':'Date'};
     arrReq['number'] = {'synonum':'Number'};
+    arrReq['owner']  = {'synonum':'Owner'};
     for (let elem of resreq) {
         let strJson = elem.data;          
         let Elements = await JSON.parse(strJson);  
@@ -1175,7 +1157,7 @@ async function showRefTable(refName, refType, refId) {
     const data = await postOnServer(tmp, '/getrefs');
 
     const evaForm = document.querySelector('#eva-ref-form');        
-    arrSyn = await getSynonyms(evaForm);     
+    arrReq = await getReqs(evaForm);     
     
     res = await postOnServer(tmp, '/getrefcol');  
     let col = {};   
@@ -1183,9 +1165,9 @@ async function showRefTable(refName, refType, refId) {
     for (elem of res) {
         const colName  = elem.column_name;            
         const dataType = elem.data_type;            
-        const synom    = arrSyn[colName];
-        if (synom) {
-            col[colName] = synom;  
+        const reqs     = arrReq[colName];                
+        if (reqs&&reqs.synonum) {            
+            col[colName] = reqs.synonum;  
         } else {          
             col[colName] = colName;            
         } 
@@ -1226,8 +1208,9 @@ async function showTabTable(refForm, refName) {
     let colType = {};           
     for (elem of res) {
         const colName  = elem.column_name;            
-        const dataType = elem.data_type;            
-        const synom    = arrReq[colName].synonum;
+        const dataType = elem.data_type;   
+        const reqs     = arrReq[colName];         
+        const synom    = reqs.synonum;
         if (synom) {
             col[colName] = synom;  
         } else {          
@@ -1252,7 +1235,7 @@ async function showOwnerTable(refForm, owner, refName) {
     const data = await postOnServer(tmp, '/getownerrefs');
 
     const evaForm = document.querySelector('#eva-ref-form');        
-    arrSyn = await getSynonyms(evaForm);  
+    arrReq = await getReqs(evaForm);  
     
     const res = await postOnServer({'textId':refName}, '/getrefcol');  
     let col = {};   
@@ -1260,9 +1243,9 @@ async function showOwnerTable(refForm, owner, refName) {
     for (elem of res) {
         const colName  = elem.column_name;            
         const dataType = elem.data_type;            
-        const synom    = arrSyn[colName];
-        if (synom) {
-            col[colName] = synom;  
+        const reqs     = arrReq[colName];         
+        if (reqs&&reqs.synonum) {            
+            col[colName] = reqs.synonum;  
         } else {          
             col[colName] = colName;            
         } 

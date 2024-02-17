@@ -920,10 +920,11 @@ async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode, ty
 
             const reqs = arrReq[req];
             let validation = false;
-            if (reqs) { validation = reqs.validation}
-            console.log(validation);
-            console.log(typeof(validation));
-
+            let pattern    = '';
+            if (reqs) {
+                validation = reqs.validation;
+                pattern    = reqs.pattern;
+            }
             refForm.appendChild(label);
             const div  = document.createElement("div");
             div.setAttribute("class", "input-group input-group-sm col-auto");
@@ -934,7 +935,8 @@ async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode, ty
                 if (req.split('.').length > 1) {
                     input.setAttribute("type","text");
                     input.setAttribute("class","eva-req form-control"); 
-                    input.setAttribute("disabled","disabled");                    
+                    input.setAttribute("disabled","disabled");   
+                    // input.oninput = function() { input.value = input.value.replace(/[^]/g,'') }                 
                     input.setAttribute("data-type", req);
                     const reqName = req.split('.')[1].toLowerCase();
                     input.id    = "input-ref-"+reqName;
@@ -959,15 +961,11 @@ async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode, ty
                         input.setAttribute("inputmode","decimal");
                         input.setAttribute("class","eva-req form-control");                                                                                       
                         input.setAttribute("step", 0.01); 
-                        input.setAttribute("min", 0.0);                                                
-                        // input.setAttribute("pattern", "^([0-9.]+)");                                                                                                                                   
+                        input.setAttribute("min", 0.0);                                                                                                                                                                                                        
                         input.setAttribute("placeholder", "0,00");  
                         input.style = "text-align:right;";
                         if (createMode===true||input.value===0) input.value = '0,00';                                           
-                        input.oninput = function() {                                                                                                                                  
-                            let newVal = mask(input.value, type.numPrec, type.numScale);                                                                                                                                  
-                            input.value = newVal;
-                        }                        
+                        input.oninput = function() { input.value = mask(input.value, type.numPrec, type.numScale) }
                     } else if (type.dataType === 'timestamp with time zone') {
                         input.setAttribute("type","date");
                         input.setAttribute("class","eva-req form-control");
@@ -977,7 +975,8 @@ async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode, ty
                     }
                     input.setAttribute("data-type", type.dataType);
                     input.id    = "input-ref-"+req;
-                    input.name  = req;                    
+                    input.name  = req;    
+                    if (pattern) input.setAttribute("pattern", pattern);                   
                 }
              
                 if (req==='id'||req==='owner') {

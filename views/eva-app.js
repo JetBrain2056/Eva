@@ -110,7 +110,7 @@ async function getSynonyms(evaForm) {
     const id = evaForm.getAttribute("eva-id");
     const datareq = { 'owner': id }
     const resreq = await postOnServer(datareq, '/getreqs');  
-    console.log('id', id);
+    // console.log('id', id);
     let arrSyn = [];  
     arrSyn['id'] = 'Id';
     arrSyn['name'] = 'Name';
@@ -123,6 +123,22 @@ async function getSynonyms(evaForm) {
         arrSyn[colName] = Elements.synonum;
     }
     return arrSyn;
+}
+async function getReqs(evaForm) {
+    console.log('>>getReqs()...');
+
+    const id = evaForm.getAttribute("eva-id");
+    const datareq = { 'owner': id }
+    const resreq = await postOnServer(datareq, '/getreqs');  
+    // console.log('id', id);
+    let arrReq = [];  
+    for (let elem of resreq) {
+        let strJson = elem.data;          
+        let Elements = await JSON.parse(strJson);  
+        let colName = Elements.textId;
+        arrReq[colName] = {'validation':Elements.validation, 'pattern':Elements.pattern};
+    }
+    return arrReq;
 }
 async function getTabPartSyns(id) {
     console.log('>>getTabPartSyns()...', id);
@@ -453,8 +469,9 @@ async function refModal() {
 
     arrSyn = await getSynonyms(evaForm);  
     arrCol = await getColumns(textId);
+    arrReq = await getReqs(evaForm);
 
-    await refElement(div, arrCol, arrCol, arrSyn, createMode, copyMode, typeId);            
+    await refElement(div, arrCol, arrCol, arrSyn, createMode, copyMode, typeId, arrReq);            
     await tabParts(refForm, ul, textId);
 
     res = await postOnServer({owner:'Reference.'+textId}, '/getowner');  
@@ -517,10 +534,11 @@ async function refEditModal(copyMode) {
     
     arrSyn = await getSynonyms(evaForm);  
     arrCol = await getColumns(textId);
+    arrReq = await getReqs(evaForm);
 
     const data = {'textId': textId, 'id': id}
     res = await postOnServer(data, '/getref');  
-    await refElement(div, res[0], arrCol, arrSyn, createMode, copyMode, typeId);     
+    await refElement(div, res[0], arrCol, arrSyn, createMode, copyMode, typeId, arrReq);     
     await tabParts(refForm, ul, textId);
 
     res = await postOnServer({owner:'Reference.'+textId}, '/getowner');      
@@ -673,13 +691,14 @@ async function elemModal() {
        
     arrSyn = await getTabPartSyns(tabId);         
     arrCol = await getColumns(textId);
+    arrReq = [];
     
     if (tabId==='0') {
         arrSyn['Reference.'+ownerTextId] = 'owner';
         arrCol['Reference.'+ownerTextId] = Number(ownerId);
     }
     
-    await refElement(refForm, arrCol, arrCol, arrSyn, createMode, copyMode, 'Element');          
+    await refElement(refForm, arrCol, arrCol, arrSyn, createMode, copyMode, 'Element', arrReq);          
 }
 async function elemEditModal(copyMode) {
     console.log('>>elemEditModal()...'); 
@@ -722,12 +741,13 @@ async function elemEditModal(copyMode) {
 
     arrSyn = await getTabPartSyns(tabId);  
     arrCol = await getColumns(textId);
+    arrReq = [];
 
     if (tabId==='0') {arrSyn['Reference.'+ownerTextId] = 'owner';}
 
     const data = {'textId': textId, 'id': id, 'owner': ownerId}
     res = await postOnServer(data, '/getref');      
-    await refElement(refForm, res[0], arrCol, arrSyn, createMode, copyMode, 'Element');       
+    await refElement(refForm, res[0], arrCol, arrSyn, createMode, copyMode, 'Element', arrReq);       
 }
 async function elemDelete() {
     console.log('>>elemDelete()...');
@@ -879,7 +899,7 @@ async function tabOwner(refForm, textId, refName) {
 
     await showOwnerTable(div,  'Reference.'+textId, refName);      
 }
-async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode, typeId) {
+async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode, typeId, arrReq) {
     console.log('>>refElement()...', typeId);  
 
     const textId = refForm.parentElement.getAttribute("eva-textId");
@@ -890,13 +910,20 @@ async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode, ty
         for (let req of Object.keys(col)) {            
             const label  = document.createElement("label");
             label.setAttribute("for","input-ref-"+req);
-            //synonym
+            
             let synom = arrSyn[req];
             if (synom) {
                 label.innerText = synom+":";  
             } else {
                 label.innerText = req+":";  
-            }                           
+            }        
+
+            const reqs = arrReq[req];
+            let validation = false;
+            if (reqs) { validation = reqs.validation}
+            console.log(validation);
+            console.log(typeof(validation));
+
             refForm.appendChild(label);
             const div  = document.createElement("div");
             div.setAttribute("class", "input-group input-group-sm col-auto");
@@ -907,7 +934,7 @@ async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode, ty
                 if (req.split('.').length > 1) {
                     input.setAttribute("type","text");
                     input.setAttribute("class","eva-req form-control"); 
-                    input.setAttribute("disabled","disabled");
+                    input.setAttribute("disabled","disabled");                    
                     input.setAttribute("data-type", req);
                     const reqName = req.split('.')[1].toLowerCase();
                     input.id    = "input-ref-"+reqName;
@@ -921,14 +948,10 @@ async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode, ty
                     if (type.dataType === 'character varying') {
                         input.setAttribute("type","text");                    
                         input.setAttribute("class","eva-req form-control");                           
-                        if (type.maxlength) {
-                            input.setAttribute("maxlength", type.maxlength);
-                            // input.setAttribute("required", "required");  
-                        } 
+                        if (type.maxlength) input.setAttribute("maxlength", type.maxlength);                        
                     } else if (type.dataType === 'integer') {
                         input.setAttribute("type","number");                    
-                        input.setAttribute("class","eva-req form-control");   
-                        input.setAttribute("required", "required");   
+                        input.setAttribute("class","eva-req form-control");                          
                         input.setAttribute("maxlength", type.numPrec);    
                         input.setAttribute("placeholder", "0");                          
                     } else if (type.dataType === 'numeric') {
@@ -937,11 +960,7 @@ async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode, ty
                         input.setAttribute("class","eva-req form-control");                                                                                       
                         input.setAttribute("step", 0.01); 
                         input.setAttribute("min", 0.0);                                                
-                        // input.setAttribute("pattern", "^([0-9.]+)");                                               
-                        // input.setAttribute("required", "required");   
-                        input.setAttribute("data-length", type.numPrec);                                                
-                        input.setAttribute("data-accuracy", type.numScale); 
-                        // input.setAttribute("maxlength", type.numPrec+1);          
+                        // input.setAttribute("pattern", "^([0-9.]+)");                                                                                                                                   
                         input.setAttribute("placeholder", "0,00");  
                         input.style = "text-align:right;";
                         if (createMode===true||input.value===0) input.value = '0,00';                                           
@@ -958,18 +977,18 @@ async function refElement(refForm, col, arrCol, arrSyn, createMode, copyMode, ty
                     }
                     input.setAttribute("data-type", type.dataType);
                     input.id    = "input-ref-"+req;
-                    input.name  = req;
+                    input.name  = req;                    
                 }
              
                 if (req==='id'||req==='owner') {
                     input.setAttribute("disabled","disabled");                    
-                    if (typeId==='Document'||typeId==='Element'){
+                    if (typeId==='Document'||typeId==='Element') {
                         label.setAttribute("hidden", "hidden");
                         input.setAttribute("hidden", "hidden");
                     }
                 }
-                if (req==='name'||req==='date'||req==='number') {
-                    input.setAttribute("required", "required");
+                if (req==='name'||req==='date'||validation===true) {
+                    input.setAttribute("required", "required");                    
                 }
                 
                 if (createMode===true) {

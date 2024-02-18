@@ -422,6 +422,7 @@ exports.updateConfig = async function(req, res) {
         const objectId = Elements.textId;                        
         const typeId   = Elements.typeId;
         const owner    = Elements.owner;
+        const ownerId  = row.id;
 
         if (typeId==='Document') { 
             delete refColumns['name'];            
@@ -441,7 +442,8 @@ exports.updateConfig = async function(req, res) {
                     try {
                         const elem = await Owner.update(
                             { 
-                                owner : owner                    
+                                owner   : owner,
+                                ownerId : ownerId               
                             }, {
                                 where: {refName: objectId}
                             }

@@ -104,10 +104,9 @@ async function getColumns(textId) {
     }
     return arrCol;
 }
-async function getReqs(evaForm) {
-    console.log('>>getReqs()...');
-
-    const id = evaForm.getAttribute("eva-id");    
+async function getReqs(id) {
+    console.log('>>getReqs()...', id);
+      
     const resreq = await postOnServer({ 'owner': id }, '/getreqs');      
     let arrReq = [];  
     arrReq['id']     = {'synonum':'Id'};
@@ -116,9 +115,9 @@ async function getReqs(evaForm) {
     arrReq['number'] = {'synonum':'Number'};
     arrReq['owner']  = {'synonum':'Owner'};
     for (let elem of resreq) {
-        let strJson = elem.data;          
+        let strJson  = elem.data;          
         let Elements = await JSON.parse(strJson);  
-        let colName = Elements.textId;
+        let colName  = Elements.textId;
         arrReq[colName] = {'synonum':Elements.synonum, 'validation':Elements.validation, 'pattern':Elements.pattern};
     }
     return arrReq;
@@ -439,6 +438,7 @@ async function refModal() {
     const evaForm = document.querySelector('#eva-ref-form'); 
     const textId = evaForm.getAttribute("eva-textId");
     const typeId = evaForm.getAttribute("eva-typeId");
+    const id     = evaForm.getAttribute("eva-id");
     refForm.setAttribute("eva-textId", textId);  
     refForm.setAttribute("eva-typeId", typeId);
     refForm.setAttribute("class","tab-content");
@@ -452,7 +452,7 @@ async function refModal() {
     refForm.setAttribute("eva-id", 0);
     
     arrCol = await getColumns(textId);
-    arrReq = await getReqs(evaForm);
+    arrReq = await getReqs(id);
 
     await refElement(div, arrCol, arrCol, createMode, copyMode, typeId, arrReq);            
     await tabParts(refForm, ul, textId);
@@ -461,8 +461,9 @@ async function refModal() {
     if (res) { 
         for (const row of res) {
             const refName = row.refName;
+            const ownerId = row.ownerId;
             addTabs(ul, refName);
-            await tabOwner(refForm, textId, refName);
+            await tabOwner(refForm, textId, refName, ownerId);
         }
     }
 }
@@ -515,7 +516,7 @@ async function refEditModal(copyMode) {
     refForm.setAttribute("eva-id", id);
         
     arrCol = await getColumns(textId);
-    arrReq = await getReqs(evaForm);
+    arrReq = await getReqs(evaForm.getAttribute("eva-id"));
 
     const data = {'textId': textId, 'id': id}
     res = await postOnServer(data, '/getref');  
@@ -526,8 +527,9 @@ async function refEditModal(copyMode) {
     if (res) { 
         for (const row of res) {
             const refName = row.refName;
+            const ownerId = row.ownerId;
             addTabs(ul, refName);
-            await tabOwner(refForm, textId, refName);
+            await tabOwner(refForm, textId, refName, ownerId);
         }
     }
 }
@@ -589,7 +591,8 @@ async function elemCreate(e) {
 
     const tabPane = ownerForm.querySelector(".tab-pane.active.show");     
     const textId  = tabPane.getAttribute("eva-id");      
-    const tabId   = tabPane.getAttribute("eva-tabId");     
+    const tabId   = tabPane.getAttribute("eva-tabId");   
+    const ownerId = tabPane.getAttribute("eva-ownerId");     
  
     const createMode   = refForm.getAttribute("create-mode");     
     const copyMode     = refForm.getAttribute("copy-mode");   
@@ -600,14 +603,14 @@ async function elemCreate(e) {
         await e.stopPropagation();        
     }
     
-    const ownerId     = ownerForm.getAttribute("eva-id");
+    const owner       = ownerForm.getAttribute("eva-id");
     const ownerTextId = ownerForm.getAttribute("eva-textId");
 
     data = await createReq(refForm, textId, createMode, copyMode); 
     if (tabId==='0') {
-        data['Reference.'+ownerTextId] = ownerId;
+        data['Reference.'+ownerTextId] = owner;
     } else {
-        data['owner'] = ownerId;
+        data['owner'] = owner;
     }
 
     try {
@@ -632,7 +635,7 @@ async function elemCreate(e) {
     }
 
     if (tabId==='0') {        
-        if (result) await showOwnerTable(tabPane, 'Reference.'+ownerTextId, textId);
+        if (result) await showOwnerTable(tabPane, 'Reference.'+ownerTextId, textId, ownerId);
     } else {        
         if (result) await showTabTable(tabPane, textId);
     }
@@ -661,21 +664,24 @@ async function elemModal() {
     const tabPane = ownerForm.querySelector(".tab-pane.active.show");     
     const textId  = tabPane.getAttribute("eva-id");
     const tabId   = tabPane.getAttribute("eva-tabId");
+    const ownerId = tabPane.getAttribute("eva-ownerId");
 
-    const ownerId      = ownerForm.getAttribute("eva-id");
+    const owner        = ownerForm.getAttribute("eva-id");
     const ownerTextId  = ownerForm.getAttribute("eva-textId");
 
-    if (Number(ownerId)===0) await refSave();
+    if (Number(owner)===0) await refSave();
 
     elementsModal = getModal(modalForm);
-       
-    arrReq = await getTabPartSyns(tabId);         
+                
     arrCol = await getColumns(textId);    
-    
-    if (tabId==='0') {
-        arrReq['Reference.'+ownerTextId] = {'synonum':'Owner'};
-        arrCol['Reference.'+ownerTextId] = Number(ownerId);
-    }
+    arrCol['Reference.'+ownerTextId] = Number(owner);     
+
+    if (tabId==='0') {        
+        arrReq = await getReqs(ownerId);                                
+    } else {
+        arrReq = await getTabPartSyns(tabId);         
+    }        
+    arrReq['Reference.'+ownerTextId] = {'synonum':'Owner'}; 
     
     await refElement(refForm, arrCol, arrCol, createMode, copyMode, 'Element', arrReq);          
 }
@@ -712,18 +718,23 @@ async function elemEditModal(copyMode) {
     const tabPane = ownerForm.querySelector(".tab-pane.active.show");     
     const textId  = tabPane.getAttribute("eva-id");   
     const tabId   = tabPane.getAttribute("eva-tabId");
+    const ownerId = tabPane.getAttribute("eva-ownerId");
     refForm.setAttribute("eva-textId", textId);
     
-    const ownerId     = ownerForm.getAttribute("eva-id");
+    const owner       = ownerForm.getAttribute("eva-id");
     const ownerTextId = ownerForm.getAttribute("eva-textId");
-    const id      = row.cells[0].innerText;
-
-    arrReq = await getTabPartSyns(tabId);  
+    const id          = row.cells[0].innerText;
+     
     arrCol = await getColumns(textId);    
 
-    if (tabId==='0') arrReq['Reference.'+ownerTextId] = {'synonum':'Owner'};
+    if (tabId==='0') {        
+        arrReq = await getReqs(ownerId);         
+    } else {
+        arrReq = await getTabPartSyns(tabId); 
+    }
+    arrReq['Reference.'+ownerTextId] = {'synonum':'Owner'};
 
-    const data = {'textId': textId, 'id': id, 'owner': ownerId}
+    const data = {'textId': textId, 'id': id, 'owner': owner}
     res = await postOnServer(data, '/getref');      
     await refElement(refForm, res[0], arrCol, createMode, copyMode, 'Element', arrReq);       
 }
@@ -836,18 +847,19 @@ async function tabParts(refForm, ul, refName) {
         await showTabTable(div, textId);      
     }
 }
-async function tabOwner(refForm, textId, refName) {
-    console.log('>>tabOwner()...', textId, refName);
+async function tabOwner(refForm, textId, refName, ownerId) {
+    console.log('>>tabOwner()...', textId, refName, ownerId);
 
     const refLink   = document.querySelector("#"+textId);
-    const ownerId = refLink.getAttribute("eva-id"); 
-    console.log('ownerId', ownerId);
+    const owner     = refLink.getAttribute("eva-id"); 
+    console.log('owner:', owner);
  
     const div = document.createElement("div");
     div.setAttribute("class","tab-pane");    
     div.setAttribute("id","nav-"+refName);
     div.setAttribute("role","tabpanel");
     div.setAttribute("eva-id", refName);
+    div.setAttribute("eva-owner", owner);
     div.setAttribute("eva-ownerId", ownerId);
     div.setAttribute("eva-tabId", 0);
     refForm.appendChild(div);    
@@ -875,22 +887,22 @@ async function tabOwner(refForm, textId, refName) {
     evaDel .setAttribute("onclick","elemDelete()");
     evaRefresh.setAttribute("onclick","");
 
-    await showOwnerTable(div,  'Reference.'+textId, refName);      
+    await showOwnerTable(div,  'Reference.'+textId, refName, ownerId);      
 }
 async function refElement(refForm, col, arrCol, createMode, copyMode, typeId, arrReq) {
-    console.log('>>refElement()...', typeId);  
+    console.log('>>refElement()...', col);  
 
     const textId = refForm.parentElement.getAttribute("eva-textId");
     
     if (col) {                  
         delete col['createdAt'];
         delete col['updatedAt'];
-        for (let req of Object.keys(col)) {            
+        for (req of Object.keys(col)) {  
+                                    
             const label  = document.createElement("label");
             label.setAttribute("for","input-ref-"+req);
                        
-            const reqs = arrReq[req];        
-            console.log(reqs);      
+            const reqs = arrReq[req];                         
             let validation = false;
             let pattern    = '';
             if (reqs) {
@@ -976,10 +988,11 @@ async function refElement(refForm, col, arrCol, createMode, copyMode, typeId, ar
                             input.value = '';                        
                         }
                     } else {
-                        if (arrReq[req].synonum==='Owner') { 
+                        if (arrReq[req].synonum==='Owner'&&req.split('.').length>1) { 
                             resRef = await postOnServer({'id': col[req], 'textId':req.split('.')[1]}, '/getref');
                             if (resRef.length===1) {
-                                input.value = resRef[0].name;                                
+                                input.value = resRef[0].name;        
+                                console.log(resRef[0].id)                        
                                 input.setAttribute("eva-id", resRef[0].id);
                             }
                         } else {
@@ -1157,7 +1170,8 @@ async function showRefTable(refName, refType, refId) {
     const data = await postOnServer(tmp, '/getrefs');
 
     const evaForm = document.querySelector('#eva-ref-form');        
-    arrReq = await getReqs(evaForm);     
+    const id      = evaForm.getAttribute("eva-id");
+    arrReq = await getReqs(id);         
     
     res = await postOnServer(tmp, '/getrefcol');  
     let col = {};   
@@ -1223,7 +1237,7 @@ async function showTabTable(refForm, refName) {
 
     showTable(resTbl, hide, col, data, colType);
 }
-async function showOwnerTable(refForm, owner, refName) {
+async function showOwnerTable(refForm, owner, refName, ownerId) {
     console.log('>>showOwnerTable()...', refName);   
 
     resTbl = buildTabpanel(refForm, "295");
@@ -1233,9 +1247,9 @@ async function showOwnerTable(refForm, owner, refName) {
 
     const tmp = {'textId':refName, 'id':id, 'owner':owner}     
     const data = await postOnServer(tmp, '/getownerrefs');
-
-    const evaForm = document.querySelector('#eva-ref-form');        
-    arrReq = await getReqs(evaForm);  
+          
+    arrReq = await getReqs(ownerId);  
+    console.log(arrReq)
     
     const res = await postOnServer({'textId':refName}, '/getrefcol');  
     let col = {};   
@@ -1243,8 +1257,9 @@ async function showOwnerTable(refForm, owner, refName) {
     for (elem of res) {
         const colName  = elem.column_name;            
         const dataType = elem.data_type;            
-        const reqs     = arrReq[colName];         
+        const reqs     = arrReq[colName];             
         if (reqs&&reqs.synonum) {            
+            // console.log(reqs.synonum);    
             col[colName] = reqs.synonum;  
         } else {          
             col[colName] = colName;            

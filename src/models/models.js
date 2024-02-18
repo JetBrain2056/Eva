@@ -73,7 +73,8 @@ const Form = sequelize.define('Form', {
 const Owner = sequelize.define('Owner', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},    
     owner    : {type: DataTypes.STRING},
-    refName  : {type: DataTypes.STRING}
+    refName  : {type: DataTypes.STRING},
+    ownerId  : {type: DataTypes.INTEGER}
 })
 
 const ObjectNumberer = sequelize.define('ObjectNumberer', {

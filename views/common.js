@@ -25,7 +25,11 @@ function mainSelect() {
     const navMain        = $objectModal.querySelector("#object-main");
     const navRequisite   = $objectModal.querySelector("#object-requisite");
     const navTabular     = $objectModal.querySelector("#object-tabular");    
-    const navForms       = $objectModal.querySelector("#object-forms");             
+    const navForms       = $objectModal.querySelector("#object-forms");   
+    const inputHideId    = $objectModal.querySelector("#input-hide-id");
+    const labelHideId    = $objectModal.querySelector("label[for=input-hide-id]"); 
+    const inputNameLength= $objectModal.querySelector("#input-name-length");
+    const labelNameLength= $objectModal.querySelector("label[for=input-name-length]"); 
     
     navMain.click();
     if (inputType.value === "Subsystem"||inputType.value === "") {                     
@@ -67,11 +71,19 @@ function mainSelect() {
         inputSubsystem.removeAttribute("disabled");        
         inputSubsysBtn.removeAttribute("disabled");
         if (inputType.value === "Reference") {
-            inputOwner    .removeAttribute("disabled");       
-            inputOwnerBtn .removeAttribute("disabled"); 
+            inputOwner     .removeAttribute("disabled");       
+            inputOwnerBtn  .removeAttribute("disabled"); 
+            inputHideId    .removeAttribute("hidden"); 
+            labelHideId    .removeAttribute("hidden"); 
+            inputNameLength.removeAttribute("hidden"); 
+            labelNameLength.removeAttribute("hidden"); 
         } else {
-            inputOwner    .setAttribute("disabled","disabled");       
-            inputOwnerBtn .setAttribute("disabled","disabled"); 
+            inputOwner     .setAttribute("disabled","disabled");       
+            inputOwnerBtn  .setAttribute("disabled","disabled"); 
+            inputHideId    .setAttribute("hidden","hidden");  
+            labelHideId    .setAttribute("hidden","hidden");  
+            inputNameLength.setAttribute("hidden","hidden");  
+            labelNameLength.setAttribute("hidden","hidden");  
         }
         inputModule   .removeAttribute("disabled");        
         navRequisite  .removeAttribute("hidden");        
@@ -89,6 +101,8 @@ function rowSelect(e) {
 
     const path = e.path || (e.composedPath && e.composedPath());
     const row  = path[1];
+
+    // selectRows = [];
 
     if (row.cells[0].nodeName  === 'TH') {
         

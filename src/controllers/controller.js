@@ -478,13 +478,13 @@ exports.updateConfig = async function(req, res) {
             const strJson  = row.data; 
             const Elements = await JSON.parse(strJson);  
             if (Elements.type === 'String') {
-                if (Elements.length === 0||Elements.length==='') {
+                if (Number(Elements.length)===0||Elements.length==='') {
                     refColumns[Elements.textId] = {type: DataTypes.STRING(150)}; 
                 } else {
                     refColumns[Elements.textId] = {type: DataTypes.STRING(Elements.length)}; 
                 }                                              
             } else if (Elements.type === 'Number') {
-                if (Elements.accuracy === 0) {
+                if (Number(Elements.accuracy)===0||Elements.accuracy==='') {
                     refColumns[Elements.textId] = {type: DataTypes.INTEGER};     
                 } else {
                     refColumns[Elements.textId] = {type: DataTypes.DECIMAL(Elements.length, Elements.accuracy)};  

@@ -127,16 +127,12 @@ function rowSelect(e) {
           const typeAttr = e.target.getAttribute("type-attr");
           if (typeAttr==='integer') {
             const a = Number(tr1Text);
-            const b = Number(tr2Text);            
-            if(a < b) { return reverse }
-            if(a > b) { return reverse*(-1) }
-            return 0;            
+            const b = Number(tr2Text);                      
+            return reverse*(a - b);
           } else if (typeAttr==='numeric') {
             const a = Number(tr1Text.replace(/\s/g, "").replace(',','.'));
-            const b = Number(tr2Text.replace(/\s/g, "").replace(',','.'));            
-            if(a < b) { return reverse }
-            if(a > b) { return reverse*(-1) }
-            return 0; 
+            const b = Number(tr2Text.replace(/\s/g, "").replace(',','.'));                        
+            return reverse*(a - b);
           } else {
             return reverse * (tr1Text.localeCompare(tr2Text));
           }
@@ -210,8 +206,12 @@ async function showTable(showTbl, hide, col, data, colType) {
   
     const tr = document.createElement('tr'); 
     thead.appendChild(tr);
-
-    const keysCol = Object.keys(col);    
+    
+    const keysCol = Object.keys(col);            
+    // keysCol.sort(function(a, b) {                                        
+        // return keysCol.indexOf(a) - keysCol.indexOf(b); 
+        // return -a.localeCompare(b);   
+    // });
     for (const e of keysCol) {             
         const th = document.createElement('th');    
         th.setAttribute("sort-attr", "");    
@@ -896,6 +896,28 @@ async function typeSelect() {
   
     await selectModal.hide();
 }
+function changeType() {
+
+    const inputForm    = document.querySelector("#create-req-form");   
+    const inputReqType = inputForm.querySelector("#input-req-type");
+    const inputReqLen  = inputForm.querySelector("#input-req-length");  
+    const inputReqLAcc = inputForm.querySelector("#input-req-accuracy");  
+    if (inputReqType.value==='Number') {
+        inputReqLen.removeAttribute("disabled");
+        inputReqLAcc.removeAttribute("disabled");
+        inputReqLen.setAttribute("max",32);
+    } else if (inputReqType.value==='String') {
+        inputReqLen.removeAttribute("disabled");
+        inputReqLAcc.value = 0;
+        inputReqLAcc.setAttribute("disabled", "disabled");
+        inputReqLen.removeAttribute("max");
+    } else {
+        inputReqLen.value = 0;
+        inputReqLen.setAttribute("disabled", "disabled");
+        inputReqLAcc.value = 0;
+        inputReqLAcc.setAttribute("disabled", "disabled");
+    }    
+}
 async function selectType(id) {
     console.log('>>selectType()...'); 
 
@@ -1053,6 +1075,8 @@ async function reqModal() {
     inputReqId.removeAttribute("disabled");
 
     requisiteModal = getModal(modalForm);
+
+    changeType();
 }
 async function reqEditModal() {
     console.log('>>reqEditModal()...');
@@ -1110,6 +1134,7 @@ async function reqEditModal() {
         inputReqLPat.value     = Elements.pattern;
         inputReqLValid.checked = Elements.validation;
     }
+    changeType();
 }
 async function reqCreate(e) {
     console.log('>>reqCreate()...');

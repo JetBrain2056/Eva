@@ -478,8 +478,8 @@ exports.updateConfig = async function(req, res) {
             const strJson  = row.data; 
             const Elements = await JSON.parse(strJson);  
             if (Elements.type === 'String') {
-                if (Elements.length === 0) {
-                    refColumns[Elements.textId] = {type: DataTypes.STRING}; 
+                if (Elements.length === 0||Elements.length==='') {
+                    refColumns[Elements.textId] = {type: DataTypes.STRING(150)}; 
                 } else {
                     refColumns[Elements.textId] = {type: DataTypes.STRING(Elements.length)}; 
                 }                                              

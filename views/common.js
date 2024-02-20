@@ -207,11 +207,13 @@ async function showTable(showTbl, hide, col, data, colType) {
     const tr = document.createElement('tr'); 
     thead.appendChild(tr);
     
-    const keysCol = Object.keys(col);            
+    let keysCol = Object.keys(col);       
+    
+    // console.log(keysCol)
     // keysCol.sort(function(a, b) {                                        
-        // return keysCol.indexOf(a) - keysCol.indexOf(b); 
-        // return -a.localeCompare(b);   
+    //     return keysCol.indexOf(a) - keysCol.indexOf(b);         
     // });
+    // console.log(keysCol)
     for (const e of keysCol) {             
         const th = document.createElement('th');    
         th.setAttribute("sort-attr", "");    
@@ -901,15 +903,17 @@ function changeType() {
     const inputForm    = document.querySelector("#create-req-form");   
     const inputReqType = inputForm.querySelector("#input-req-type");
     const inputReqLen  = inputForm.querySelector("#input-req-length");  
-    const inputReqLAcc = inputForm.querySelector("#input-req-accuracy");  
+    const inputReqLAcc = inputForm.querySelector("#input-req-accuracy");      
     if (inputReqType.value==='Number') {
         inputReqLen.removeAttribute("disabled");
         inputReqLAcc.removeAttribute("disabled");
+        inputReqLen.setAttribute("min",0);
         inputReqLen.setAttribute("max",32);
     } else if (inputReqType.value==='String') {
         inputReqLen.removeAttribute("disabled");
         inputReqLAcc.value = 0;
         inputReqLAcc.setAttribute("disabled", "disabled");
+        inputReqLen.removeAttribute("min");
         inputReqLen.removeAttribute("max");
     } else {
         inputReqLen.value = 0;

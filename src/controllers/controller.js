@@ -1156,10 +1156,14 @@ exports.getOwner = async function(req, res) {
     console.log(dateNow(),'>>()getOwner...');
     if (!req.body) return res.sendStatus(400);
     
-    const {owner} = req.body;  
+    const {owner, ownerId} = req.body;  
     
-    query = `SELECT * FROM "Owners" WHERE "owner"='`+owner+`';`
-    
+    if (owner) {
+        query = `SELECT * FROM "Owners" WHERE "owner"='`+owner+`';`
+    } else {
+        query = `SELECT * FROM "Owners" WHERE "ownerId"='`+ownerId+`';`
+    }
+
     try {
         const data = await sequelize.query(query);
         return await res.send(data[0]);        

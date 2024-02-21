@@ -1,3 +1,4 @@
+let $app = {};
 let a = [];
 selectRows = [];
 let elementsModal;
@@ -1463,6 +1464,9 @@ function appContent() {
     const app = document.getElementById('eva-app');
     app.setAttribute("class","col tab-content p-3 eva-subsys");    
     app.style="height:calc(100vh - 95.5px); border: 1px solid #00ff92";
+
+    $app   = JSON.parse(app.dataset.app);
+    console.log($app.$desktop);
 
     setStatus('>Onload...');  
 }

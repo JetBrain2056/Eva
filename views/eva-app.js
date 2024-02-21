@@ -1438,9 +1438,9 @@ async function header() {
     navHiddenItem(navTab,'ref');  
           
     //MAIN
-    navItem(navTab, 'Desktop'); 
-    navItem(navTab, 'References');         
-    navItem(navTab, 'Reports');    
+    navItem(navTab, $app.$desktop); 
+    navItem(navTab, $app.$references);         
+    navItem(navTab, $app.$reports);    
 
     //DYNAMIC    
     data = await getOnServer('/subsystems');    

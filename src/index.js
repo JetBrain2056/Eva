@@ -7,18 +7,19 @@ const { header }      = require('./language/'+lg_lg+'/common/header.js');
 const { column_left } = require('./language/'+lg_lg+'/common/column_left.js');
 const { dashboard }   = require('./language/'+lg_lg+'/common/dashboard.js');
 const { footer }      = require('./language/'+lg_lg+'/common/footer.js');
+const { app }        = require('./language/'+lg_lg+'/common/app.js');
  
 let content = {
-    home               : '/',
-    logout             : '/',
-    logo               : './image/logo192.png',
-    image              : './image/astronautSpace.png',
-    shortIcon          : './image/astronautSpace.ico',
-    name               : 'EVA',
-    Ent                : 'Enterprise',
-    Dev                : 'Developer', 
-    Version            : '1.0.0',
-    Information        : 'Information',    
+    home                   : '/',
+    logout                 : '/',
+    logo                   : './image/logo192.png',
+    image                  : './image/astronautSpace.png',
+    shortIcon              : './image/astronautSpace.ico',
+    name                   : 'EVA',
+    Ent                    : 'Enterprise',
+    Dev                    : 'Developer', 
+    Version                : '1.0.0',
+    Information            : 'Information',    
 
     //root
     lang                   : root.$_code,
@@ -132,21 +133,24 @@ let content = {
     text_configmenu        : column_left.$_text_configmenu,
 
     //dashboard
-    heading_title  : dashboard.$_heading_title,    
-    error_install  : dashboard.$_error_install,
-    text_add_user  : dashboard.$_text_add_user,
-    text_subsystem : dashboard.$_text_subsystem,
-    text_module    : dashboard.$_text_module,
-    text_constant  : dashboard.$_text_constant,
-    text_reference : dashboard.$_text_reference,
-    text_document  : dashboard.$_text_document,
-    text_processing: dashboard.$_text_processing,
-    text_register  : dashboard.$_text_register,
-    text_report    : dashboard.$_text_report,
+    heading_title          : dashboard.$_heading_title,    
+    error_install          : dashboard.$_error_install,
+    text_add_user          : dashboard.$_text_add_user,
+    text_subsystem         : dashboard.$_text_subsystem,
+    text_module            : dashboard.$_text_module,
+    text_constant          : dashboard.$_text_constant,
+    text_reference         : dashboard.$_text_reference,
+    text_document          : dashboard.$_text_document,
+    text_processing        : dashboard.$_text_processing,
+    text_register          : dashboard.$_text_register,
+    text_report            : dashboard.$_text_report,
 
     //footer
-    text_footer    : footer.$_text_footer,
-    text_version   : footer.$_text_version,    
+    text_footer            : footer.$_text_footer,
+    text_version           : footer.$_text_version,    
+
+    //app
+    app                    : app
 }
 
 module.exports = { content }

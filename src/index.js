@@ -7,7 +7,7 @@ const { header }      = require('./language/'+lg_lg+'/common/header.js');
 const { column_left } = require('./language/'+lg_lg+'/common/column_left.js');
 const { dashboard }   = require('./language/'+lg_lg+'/common/dashboard.js');
 const { footer }      = require('./language/'+lg_lg+'/common/footer.js');
-const { app }        = require('./language/'+lg_lg+'/common/app.js');
+const { app }         = require('./language/'+lg_lg+'/common/app.js');
  
 let content = {
     home                   : '/',

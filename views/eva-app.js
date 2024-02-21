@@ -113,7 +113,14 @@ async function getReqs(id) {
     arrReq['name']   = {'synonum':'Name'};
     arrReq['date']   = {'synonum':'Date'};
     arrReq['number'] = {'synonum':'Number'};
-    arrReq['owner']  = {'synonum':'Owner'};
+
+    resOwner = await postOnServer({ownerId:id}, '/getowner');    
+    if (resOwner) {
+        arrReq[resOwner[0].owner] = {'synonum':'Owner'};
+    } else {
+        arrReq['owner']  = {'synonum':'Owner'};
+    }
+
     for (let elem of resreq) {
         let strJson  = elem.data;          
         let Elements = await JSON.parse(strJson);  
@@ -1172,16 +1179,19 @@ async function showRefTable(refName, refType, refId) {
         } 
         colType[colName] = dataType;
     }
+    
+    resOwner = await postOnServer({ownerId:refId}, '/getowner');    
+    if (resOwner) col[resOwner[0].owner] = 'Owner';
 
     let hide = [];  
-    if (refType==='Document') { hide = ['id'] }
+    if (refType==='Document') hide = ['id'];
 
     if (refId) {
-        res = await postOnServer({'id': refId},'/getobject');        
+        res = await postOnServer({'id': refId}, '/getobject');        
         if (res) {
             const strJson  = res.data;          
             const Elements = await JSON.parse(strJson);                                         
-            if (Elements.hideId===true) { hide = ['id'] }                  
+            if (Elements.hideId===true) hide = ['id'];                 
         } 
     }
 
@@ -1223,7 +1233,7 @@ async function showTabTable(refForm, refName) {
     showTable(resTbl, hide, col, data, colType);
 }
 async function showOwnerTable(refForm, owner, refName, ownerId) {
-    console.log('>>showOwnerTable()...', refName);   
+    console.log('>>showOwnerTable()...', owner, refName);   
 
     resTbl = buildTabpanel(refForm, "295");
 
@@ -1233,8 +1243,7 @@ async function showOwnerTable(refForm, owner, refName, ownerId) {
     const tmp = {'textId':refName, 'id':id, 'owner':owner}     
     const data = await postOnServer(tmp, '/getownerrefs');
           
-    arrReq = await getReqs(ownerId);  
-    // console.log(arrReq)
+    arrReq = await getReqs(ownerId);
     
     const res = await postOnServer({'textId':refName}, '/getrefcol');  
     let col = {};   
@@ -1243,8 +1252,7 @@ async function showOwnerTable(refForm, owner, refName, ownerId) {
         const colName  = elem.column_name;            
         const dataType = elem.data_type;            
         const reqs     = arrReq[colName];             
-        if (reqs&&reqs.synonum) {            
-            // console.log(reqs.synonum);    
+        if (reqs&&reqs.synonum) {                         
             col[colName] = reqs.synonum;  
         } else {          
             col[colName] = colName;            

@@ -115,10 +115,11 @@ async function getReqs(id) {
     arrReq['number'] = {'synonum':'Number'};
 
     resOwner = await postOnServer({ownerId:id}, '/getowner');    
-    if (resOwner) {
-        arrReq[resOwner[0].owner] = {'synonum':'Owner'};
-    } else {
+    console.log(resOwner);
+    if (resOwner.length===0) {        
         arrReq['owner']  = {'synonum':'Owner'};
+    } else {
+        arrReq[resOwner[0].owner] = {'synonum':'Owner'};
     }
 
     for (let elem of resreq) {
@@ -1181,7 +1182,7 @@ async function showRefTable(refName, refType, refId) {
     }
     
     resOwner = await postOnServer({ownerId:refId}, '/getowner');    
-    if (resOwner) col[resOwner[0].owner] = 'Owner';
+    if (resOwner.length>0) col[resOwner[0].owner] = 'Owner';
 
     let hide = [];  
     if (refType==='Document') hide = ['id'];

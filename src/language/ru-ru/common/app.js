@@ -2,7 +2,7 @@ let app = {
     // Heading
     $desktop     : 'Рабочий стол',
     $references  : 'Справочники',
-    $report      : 'Отчеты'
+    $reports     : 'Отчеты'
 }
 
 module.exports = { app }

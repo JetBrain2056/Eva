@@ -2,6 +2,6 @@ let app = {
     // Heading
     $desktop     : 'Desktop',
     $references  : 'References',
-    $report      : 'Reports'
+    $reports     : 'Reports'
 }
 module.exports = { app }

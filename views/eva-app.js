@@ -1368,15 +1368,15 @@ async function tabDesk() {
     a.setAttribute("class","link icon-link");    
     a.setAttribute("style","color: #555555;font-size: 19px;");  
     a.href="#";  
-    a.innerText = 'Constants';
+    a.innerText = $app.$constants;
     a.setAttribute("id", "Constants");           
     a.setAttribute("eva-id", "Constants");  
     a.setAttribute("onclick", "openConst()");  
     div.appendChild(a);  
 
     let nav = [];
-    nav = collapseLink(div, nav, 'References', 0);
-    nav = collapseLink(div, nav, 'Documents' , 1);
+    nav = collapseLink(div, nav, $app.$references, 0);
+    nav = collapseLink(div, nav, $app.$documents , 1);
     
     let data = await getOnServer('/getconfig');
     for (const row of data) {

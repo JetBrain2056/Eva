@@ -4,7 +4,10 @@ let app = {
     $constants   : 'Константы',
     $references  : 'Справочники',
     $documents   : 'Документы',
-    $reports     : 'Отчеты'
+    $reports     : 'Отчеты',
+    //Form
+    $addElement  : 'Добавить элемент:',
+    $editElement : 'Редактировать элемент:'
 }
 
 module.exports = { app }

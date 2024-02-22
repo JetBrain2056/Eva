@@ -429,7 +429,7 @@ async function refModal() {
     addTabs(ul, 'Main');
 
     const refModalLabel  = modalForm.querySelector('#refModalLabel');  
-    refModalLabel.innerText = 'Add an element:';    
+    refModalLabel.innerText = $app.$addElement;    
 
     const createMode = true;
     const copyMode   = false;
@@ -491,9 +491,9 @@ async function refEditModal(copyMode) {
 
     const refModalLabel    = modalForm.querySelector('#refModalLabel');  
     if (copyMode) {
-        refModalLabel.innerText = 'Add an element:';
+        refModalLabel.innerText = $app.$addElement;
     } else {
-        refModalLabel.innerText = 'Edit an element:';
+        refModalLabel.innerText = $app.$editElement;
     }   
 
     const createMode = false;    
@@ -654,7 +654,7 @@ async function elemModal() {
     const ownerTextId   = ownerForm.getAttribute("eva-textId");
     const refModalLabel = modalForm.querySelector('#elemModalLabel');  
 
-    refModalLabel.innerText = 'Add an element ('+textId+'):'; 
+    refModalLabel.innerText = $app.$addElement.slice(0,-1)+' ('+textId+'):'; 
 
     const createMode = true;
     const copyMode   = false;
@@ -703,9 +703,9 @@ async function elemEditModal(copyMode) {
     const refModalLabel = modalForm.querySelector('#elemModalLabel');  
 
     if (copyMode) {
-        refModalLabel.innerText = 'Add an element ('+textId+'):';
+        refModalLabel.innerText = $app.$addElement.slice(0,-1)+' ('+textId+'):';
     } else {
-        refModalLabel.innerText = 'Edit an element ('+textId+'):';
+        refModalLabel.innerText = $app.$editElement.slice(0,-1)+' ('+textId+'):';
     }   
 
     const createMode = false;    
@@ -1464,9 +1464,9 @@ function appContent() {
     const app = document.getElementById('eva-app');
     app.setAttribute("class","col tab-content p-3 eva-subsys");    
     app.style="height:calc(100vh - 95.5px); border: 1px solid #00ff92";
-
-    $app   = JSON.parse(app.dataset.app);
-    console.log($app.$desktop);
+    
+    $app = JSON.parse(app.dataset.app);
+    console.log($app);
 
     setStatus('>Onload...');  
 }

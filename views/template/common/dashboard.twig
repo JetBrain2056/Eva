@@ -189,28 +189,28 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="objectModalLabel">Add an object:</h5>
+        <h5 class="modal-title" id="objectModalLabel"></h5>
         <button type="button" class="btn-close"  aria-label="Close" data-bs-dismiss="modal"></button>          
       </div>
       <ul class="nav nav-tabs" role="tablist" style="background:grey">                
         <li class="nav-item">
           <a class="nav-link active" href="#" id="object-main" data-bs-toggle="tab" data-bs-target="#nav-main"  role="tab" aria-controls="nav-main" aria-selected="true" onclick="">
-            Main
+            {{ dashboard.text_main }}
           </a>
         </li> 
         <li class="nav-item">
           <a class="nav-link" href="#" id="object-requisite" data-bs-toggle="tab" data-bs-target="#nav-requisite"  role="tab" aria-controls="nav-requisite" aria-selected="false" onclick="">
-            Requisites
+            {{ dashboard.text_requisites }}
           </a>
         </li> 
         <li class="nav-item">
           <a class="nav-link" href="#" id="object-tabular" data-bs-toggle="tab" data-bs-target="#nav-tabpart"  role="tab" aria-controls="nav-tabular" aria-selected="false" onclick="">
-            Tabular parts
+             {{ dashboard.text_tabparts }}
           </a>
         </li> 
         <li class="nav-item">
           <a class="nav-link" href="#" id="object-forms" data-bs-toggle="tab" data-bs-target="#nav-forms"  role="tab" aria-controls="nav-forms" aria-selected="false" onclick="">
-            Forms
+             {{ dashboard.text_forms }}
           </a>
         </li> 
       </ul>   

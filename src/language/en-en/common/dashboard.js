@@ -17,7 +17,18 @@ let dashboard = {
     text_main        : 'Main',
     text_requisites  : 'Requisites',
     text_tabparts    : 'Tabular parts',
-    text_forms       : 'Forms'
+    text_forms       : 'Forms',
+
+    text_name        : 'Name:',
+    text_descr       : 'Descr:',
+    text_role        : 'Role:',
+    text_email       : 'E-mail:',
+    text_password    : 'Password:',
+    text_cofirmpass  : 'Confirm password:',
+    text_show        : 'Show user:',
+    text_eauth       : 'Enterprise auth:',
+
+    text_select_roles: 'Select roles'
 }
 
 module.exports = { dashboard }

@@ -49,8 +49,8 @@ let root = {
     $_button_edit                   : 'Редактировать',
     $_button_copy                   : 'Копировать',
     $_button_etc                    : 'Дополнительно',
+    $_button_select                 : 'Выбор',
     
-
     // Error
     $_error_exception       : 'Ошибка кода(%s): %s в %s на строке %s'
 }

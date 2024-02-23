@@ -24,7 +24,7 @@ let dashboard = {
     text_role        : 'Role:',
     text_email       : 'E-mail:',
     text_password    : 'Password:',
-    text_cofirmpass  : 'Confirm password:',
+    text_confirmpass : 'Confirm password:',
     text_show        : 'Show user:',
     text_eauth       : 'Enterprise auth:',
 

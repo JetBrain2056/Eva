@@ -19,14 +19,14 @@ let dashboard = {
     text_tabparts    : 'Табличные части',
     text_forms       : 'Формы',
 
-    text_name        : 'Name:',
-    text_descr       : 'Descr:',
-    text_role        : 'Role:',
+    text_name        : 'Наименование:',
+    text_descr       : 'Описание:',
+    text_role        : 'Роль:',
     text_email       : 'E-mail:',
-    text_password    : 'Password:',
-    text_confirmpass : 'Confirm password:',
-    text_show        : 'Show user:',
-    text_eauth       : 'Enterprise auth:',
+    text_password    : 'Пароль:',
+    text_confirmpass : 'Подтвердить пароль:',
+    text_show        : 'Отображать пользователя:',
+    text_eauth       : 'Enterprise аутентификация:',
 
     text_select_roles: 'Выбор роли'
 }

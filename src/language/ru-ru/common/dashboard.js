@@ -24,11 +24,11 @@ let dashboard = {
     text_role        : 'Role:',
     text_email       : 'E-mail:',
     text_password    : 'Password:',
-    text_cofirmpass  : 'Confirm password:',
+    text_confirmpass : 'Confirm password:',
     text_show        : 'Show user:',
     text_eauth       : 'Enterprise auth:',
 
-    text_select_roles: 'Select roles'
+    text_select_roles: 'Выбор роли'
 }
 
 module.exports =   { dashboard }

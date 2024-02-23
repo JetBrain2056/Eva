@@ -3,6 +3,7 @@ let currentModal;
 let tabpartModal;
 let requisiteModal;
 let selectModal;
+let $dashboard;
 let inputStatus     = document.getElementById('status');
 const btnConfigSave = document.getElementById('btn-config-save');
 const content       = document.querySelector('.content');
@@ -436,7 +437,7 @@ async function userCreateModal() {
     const modalForm         = document.getElementById('userModal'); 
   
     const inputLabel        = modalForm.querySelector("#userModalLabel");
-    inputLabel.innerText = 'Add user:';      
+    inputLabel.innerText    = $dashboard.text_add_user;      
     const input_form        = modalForm.querySelector('#create-user-form'); 
     input_form.reset(); 
     input_form.setAttribute("create-mode",true);            
@@ -465,7 +466,7 @@ async function userEditModal() {
 
     input_form.setAttribute("create-mode", false);    
     input_form.reset();
-    inputLabel.innerText = 'Edit user:';
+    inputLabel.innerText = $dashboard.text_edit_user;
 
     let data = { 'id': row.cells[0].innerText }
 
@@ -520,7 +521,7 @@ async function roleCreateModal() {
     const modalForm         = document.getElementById('roleModal'); 
   
     const inputLabel        = modalForm.querySelector("#roleModalLabel");
-    inputLabel.innerText = 'Add role:';      
+    inputLabel.innerText    = $dashboard.text_add_role;      
     const input_form        = modalForm.querySelector('#create-role-form');  
     input_form.reset(); 
     input_form.setAttribute("create-mode",true);            
@@ -702,7 +703,7 @@ async function objectModal() {
     const modalForm = document.getElementById("objectModal");
 
     const objectModalLabel = modalForm.querySelector('#objectModalLabel');  
-    objectModalLabel.innerText = 'Add object:';
+    objectModalLabel.innerText = $dashboard.text_add_object;    
 
     const input_form      = modalForm.querySelector('#create-object-form');  
     input_form.reset();   
@@ -717,6 +718,10 @@ async function objectModal() {
     const navReq = modalForm.querySelector("#nav-requisite");
     const evaTbl = navReq.querySelector(".eva-table");
     evaTbl.innerHTML = '';
+
+    const navTab    = modalForm.querySelector("#nav-tabpart");    
+    const evaTabTbl = navTab.querySelector(".eva-table");
+    evaTabTbl.innerHTML = '';
 
     currentModal = getModal(modalForm);
 
@@ -733,7 +738,7 @@ async function objectEditModal() {
     const row = await selectRows[0];  
 
     const objectModalLabel = modalForm.querySelector('#objectModalLabel');  
-    objectModalLabel.innerText = 'Edit object:';
+    objectModalLabel.innerText = $dashboard.text_edit_object;  
 
     const inputForm      = modalForm.querySelector('#create-object-form');  
     inputForm.reset();  
@@ -1492,7 +1497,9 @@ function loginMode() {
     const logged = content.getAttribute("data-logged");   
     const mode   = content.getAttribute("data-mode");
  
-    if (mode==='true'&&logged==='true') {             
+    if (mode==='true'&&logged==='true') {   
+        const dashboard = document.getElementById('dashboard');
+        $dashboard = JSON.parse(dashboard.dataset.dashboard);
         showConfigTable();
         let inputType = $objectModal.querySelector('#input-type');
         inputType.addEventListener('change', mainSelect);            

@@ -48,6 +48,7 @@ let root = {
     $_button_grid					: 'Grid',    
     $_button_copy                   : 'Copy',
     $_button_etc                    : 'etc',
+    $_button_select                 : 'Select',
     
 
     // Error

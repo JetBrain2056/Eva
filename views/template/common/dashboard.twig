@@ -96,7 +96,7 @@
       </div>
       <div class="modal-body">
         <form class="form" id="create-user-form">
-          <label for="input-user-name">Name:</label>
+          <label for="input-user-name">{{ text_name }}</label>
           <div class="input-group input-group-sm has-validation">
             <input type="text" placeholder="Name" id="input-user-name" class="form-control" required/>
           </div>
@@ -142,15 +142,14 @@
   <div class="modal-dialog  modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Select roles</h5>
+        <h5 class="modal-title">{{ text_select_roles }}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
       </div>
       <div class="modal-body">          
         <div class="btn-toolbar" role="toolbar" aria-label="toolbar group">          
           <div class="btn-group btn-group-sm" role="group">
-            <button type="submit" class="btn btn-primary d-flex gap-2 align-items-center eva-edit" data-bs-dismiss="modal" onclick="roleSelect()">
-              <i class=""></i>
-              <span>Select</span>
+            <button type="submit" class="btn btn-primary d-flex gap-2 align-items-center eva-edit" data-bs-dismiss="modal" onclick="roleSelect()">              
+              {{ button_select }}
             </button>    
           </div>
         </div>
@@ -167,12 +166,12 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="roleModalLabel">Add Role:</h5>
+        <h5 class="modal-title" id="roleModalLabel">{{ text_add_role }}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
       </div>
       <div class="modal-body">
         <form class="form" id="create-role-form">
-          <label for="input-rolename">Name:</label>
+          <label for="input-rolename">{{ text_name}}</label>
           <div class="input-group input-group-sm">
             <input type="text" placeholder="Name" id="input-rolename" class="form-control" required/>
           </div>                  
@@ -359,7 +358,7 @@
           <div class="btn-group btn-group-sm" role="group">
             <button type="submit" class="btn btn-primary d-flex gap-2 align-items-center eva-edit" onclick="subsystemSelect()">
               <i class=""></i>
-              <span>Select</span>
+              <span>{{ button_select }}</span>
             </button>    
           </div>
         </div>
@@ -376,7 +375,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="tabPartModalLabel">*</h5>
+        <h5 class="modal-title" id="tabPartModalLabel"></h5>
         <button type="button" class="btn-close" aria-label="Close" data-bs-dismiss="modal" onclick=""></button>
       </div>
       <div class="modal-body">
@@ -420,7 +419,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="requisiteModalLabel">*</h5>
+        <h5 class="modal-title" id="requisiteModalLabel"></h5>
         <button type="button" class="btn-close" aria-label="Close" data-bs-dismiss="modal" onclick=""></button>
       </div>
       <div class="modal-body">
@@ -504,8 +503,7 @@
         <button type="button" class="btn-close"  aria-label="Close"  data-bs-dismiss="modal" onclick=""></button>
       </div>
       <div class="modal-body">
-        <form class="form" id="create-module-form">      
-          {# style="height: calc(100vh - 230px);"   #}
+        <form class="form" id="create-module-form">                
             <textarea id="editor" class="form-control" ></textarea>                                        
         </form>      
       </div>
@@ -528,7 +526,7 @@
           <div class="btn-group btn-group-sm" role="group">
             <button type="submit" class="btn btn-primary d-flex gap-2 align-items-center eva-edit" onclick="typeSelect()">
               <i class=""></i>
-              <span>Select</span>
+              <span>{{ button_select }}</span>
             </button>    
           </div>
         </div>
@@ -553,7 +551,7 @@
           <div class="btn-group btn-group-sm" role="group">
             <button type="submit" class="btn btn-primary d-flex gap-2 align-items-center eva-edit" onclick="ownerSelect()">
               <i class=""></i>
-              <span>Select</span>
+              <span>{{ button_select }}</span>
             </button>    
           </div>
         </div>

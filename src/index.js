@@ -88,8 +88,7 @@ let content = {
     //text_log               : column_left.$_text_log,
     text_event             : column_left.$_text_event,
     text_extension         : column_left.$_text_extension,
-    text_filter            : column_left.$_text_filter,
-    //text_geo_zone          : column_left.$_text_geo_zone,
+    text_filter            : column_left.$_text_filter,    
     text_information       : column_left.$_text_information,
     text_installer         : column_left.$_text_installer,
     $_text_language        : column_left.$_text_language,
@@ -134,14 +133,6 @@ let content = {
     text_configmenu        : column_left.$_text_configmenu,
 
     //dashboard    
-    text_subsystem         : dashboard.$_text_subsystem,
-    text_module            : dashboard.$_text_module,
-    text_constant          : dashboard.$_text_constant,
-    text_reference         : dashboard.$_text_reference,
-    text_document          : dashboard.$_text_document,
-    text_processing        : dashboard.$_text_processing,
-    text_register          : dashboard.$_text_register,
-    text_report            : dashboard.$_text_report,
     dashboard              : dashboard,
 
     //footer

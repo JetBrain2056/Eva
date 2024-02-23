@@ -31,6 +31,7 @@ let content = {
     button_update          : root.$_button_update,
     button_etc             : root.$_button_etc,
     button_save            : root.$_button_save,
+    button_select          : root.$_button_select,
 
     //login    
     text_heading           : login.$_text_heading,

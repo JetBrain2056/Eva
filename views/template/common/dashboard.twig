@@ -142,7 +142,7 @@
   <div class="modal-dialog  modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">{{ text_select_roles }}</h5>
+        <h5 class="modal-title">{{ dashboard.text_select_roles }}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
       </div>
       <div class="modal-body">          
@@ -220,14 +220,14 @@
               <label for="input-type">Object type:</label>              
               <select class="form-select form-select-sm" id="input-type" required pattern="[a-zA-Z]+">
                 <option selected desabled value="">...</option>
-                <option value="Subsystem">{{text_subsystem}}</option>  
-                <option value="Module">{{text_module}}</option>  
-                <option value="Constant">{{text_constant}}</option>
-                <option value="Reference">{{text_reference}}</option>              
-                <option value="Document">{{text_document}}</option>  
-                <option value="Processing">{{text_processing}}</option>  
-                <option value="Register">{{text_register}}</option>  
-                <option value="Report">{{text_report}}</option>                              
+                <option value="Subsystem">{{ dashboard.text_subsystem }}</option>  
+                <option value="Module">{{ dashboard.text_module }}</option>  
+                <option value="Constant">{{ dashboard.text_constant }}</option>
+                <option value="Reference">{{ dashboard.text_reference }}</option>              
+                <option value="Document">{{ dashboard.text_document }}</option>  
+                <option value="Processing">{{ dashboard.text_processing }}</option>  
+                <option value="Register">{{ dashboard.text_register }}</option>  
+                <option value="Report">{{ dashboard.text_report }}</option>                              
               </select>      
               <label for="input-textId">Identifier:</label>
               <div class="input-group input-group-sm has-validation">

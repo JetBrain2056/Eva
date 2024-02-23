@@ -132,10 +132,7 @@ let content = {
     text_other_status      : column_left.$_text_other_status,
     text_configmenu        : column_left.$_text_configmenu,
 
-    //dashboard
-    heading_title          : dashboard.$_heading_title,    
-    error_install          : dashboard.$_error_install,
-    text_add_user          : dashboard.$_text_add_user,
+    //dashboard    
     text_subsystem         : dashboard.$_text_subsystem,
     text_module            : dashboard.$_text_module,
     text_constant          : dashboard.$_text_constant,
@@ -144,6 +141,7 @@ let content = {
     text_processing        : dashboard.$_text_processing,
     text_register          : dashboard.$_text_register,
     text_report            : dashboard.$_text_report,
+    dashboard              : dashboard,
 
     //footer
     text_footer            : footer.$_text_footer,

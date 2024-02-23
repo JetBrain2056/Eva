@@ -59,7 +59,7 @@
           <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></button>
           <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
             <li><a class="dropdown-item d-flex gap-2 align-items-center"><i class="fa fa-refresh"></i>{{ button_update }}</a></li>
-            <li><a class="dropdown-item">{{ button_etc}}</a></li>
+            <li><a class="dropdown-item">{{ button_etc }}</a></li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item">...</a></li>
           </ul>
@@ -96,36 +96,36 @@
       </div>
       <div class="modal-body">
         <form class="form" id="create-user-form">
-          <label for="input-user-name">{{ text_name }}</label>
+          <label for="input-user-name">{{ dashboard.text_name }}</label>
           <div class="input-group input-group-sm has-validation">
             <input type="text" placeholder="Name" id="input-user-name" class="form-control" required/>
           </div>
-          <label for="input-descr">Descr:</label>
+          <label for="input-descr">{{ dashboard.text_descr }}</label>
           <div class="input-group input-group-sm">
             <input type="text" placeholder="Full name" id="input-descr" class="form-control"/>
           </div>
-          <label for="input-role">Role:</label>
+          <label for="input-role">{{ dashboard.text_role }}</label>
           <div class="input-group input-group-sm has-validation">            
             <input type="text" id="input-role" class="form-control" required/>
             <button class="btn btn-outline-secondary" type="button" onclick="userEditRole()">...</button>
           </div>
-          <label for="input-email">E-mail:</label>
+          <label for="input-email">{{ dashboard.email }}</label>
           <div class="input-group input-group-sm">            
             <input type="email" placeholder="email@example.com" id="input-email" class="form-control"/>
           </div>
-          <label for="input-password">Password:</label>
+          <label for="input-password">{{ dashboard.password }}</label>
           <div class="input-group input-group-sm">
             <input type="password" placeholder="Password" id="input-password" class="form-control"/>
           </div>
-          <label for="input-confirmpass">Confirm password:</label>
+          <label for="input-confirmpass">{{ dashboard.confirmpass }}</label>
           <div class="input-group input-group-sm">
             <input type="password" placeholder="Password" id="input-confirmpass" class="form-control"/>
           </div>
-          <label for="input-eauth">Show user:</label>
+          <label for="input-show">{{ dashboard.show }}</label>
           <div class="form-group input-group-sm">
             <input type="checkbox" class="form-check-input" id="input-show" checked/>
           </div>
-          <label for="input-eauth">Enterprise auth:</label>
+          <label for="input-eauth">{{ dashboard.eauth }}</label>
           <div class="form-group input-group-sm">
             <input type="checkbox" class="form-check-input" id="input-eauth" checked/>
           </div>

@@ -18,7 +18,16 @@ let dashboard = {
     text_requisites  : 'Реквизиты',
     text_tabparts    : 'Табличные части',
     text_forms       : 'Формы',
+    text_object_type : 'Тип объекта:',
+    text_identifier  : 'Идентификатор',
+    text_object_repres : 'Представление объекта',
+    text_list_repres : 'Представление списка',
+    text_hierarchical: 'Иерархический',
+    text_owner       : 'Владелец',
+    text_others      : 'Прочие',
+    btn_object_module: 'Модуль объекта',
 
+    //Пользователи
     text_name        : 'Наименование:',
     text_descr       : 'Описание:',
     text_role        : 'Роль:',
@@ -29,6 +38,7 @@ let dashboard = {
     text_eauth       : 'Enterprise аутентификация:',
 
     text_select_roles: 'Выбор роли',
+
     // Text
     text_api                  : 'API',
     text_attribute            : 'Атрибуты',
@@ -54,7 +64,7 @@ let dashboard = {
     text_layout               : 'Макеты',
     text_localisation         : 'Локализация',
     text_location             : 'Местонахождение',
-    text_contact              : 'Почта',
+    text_contact              : 'Контакты',
     text_marketing            : 'Маркетинг',
     text_maintenance          : 'Обслуживание',
     text_menu                 : 'Меню',
@@ -78,9 +88,8 @@ let dashboard = {
     text_weight_class         : 'Единицы веса',
     text_length_class         : 'Единицы измерения',
     text_zone                 : 'Регионы',
-    text_recurring            : 'Периодичность',
-    text_order_recurring      : 'Периодические заказы',
-    text_paypal_search        : 'Поиск транзакции'
+    text_recurring            : 'Периодичность',    
+    text__search              : 'Поиск'
 }
 
 module.exports =   { dashboard }

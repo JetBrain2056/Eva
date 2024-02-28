@@ -217,7 +217,7 @@
         <div class="tab-content">  
           <div class="tab-pane fade active show" id="nav-main" role="tabpanel" aria-labelledby="nav-main-tab">
             <form class="form" id="create-object-form">  
-              <label for="input-type">Object type:</label>              
+              <label for="input-type">{{ dashboard.text_object_type }}:</label>              
               <select class="form-select form-select-sm" id="input-type" required pattern="[a-zA-Z]+">
                 <option selected desabled value="">...</option>
                 <option value="Subsystem">{{ dashboard.text_subsystem }}</option>  
@@ -229,11 +229,11 @@
                 <option value="Register">{{ dashboard.text_register }}</option>  
                 <option value="Report">{{ dashboard.text_report }}</option>                              
               </select>      
-              <label for="input-textId">Identifier:</label>
+              <label for="input-textId">{{ dashboard.text_identifier }}:</label>
               <div class="input-group input-group-sm has-validation">
                 <input type="text" placeholder="[a-zA-Z0-9]" id="input-textId" class="form-control" required pattern="[a-zA-Z0-9]+"/>
               </div>  
-              <label for="input-const-type" hidden>Type:</label>
+              <label for="input-const-type" hidden>{{ dashboard.text_type }}:</label>
               <div class="input-group input-group-sm">
                 <select class="form-select form-select-sm" id="input-const-type" required pattern="[a-zA-Z]+" hidden>
                   <option value="String" selected>String</option>
@@ -243,28 +243,32 @@
                 </select> 
                 <button class="btn btn-outline-secondary" id="input-const-type_btn" type="button" onclick="selectType(id)" hidden>...</button>
               </div>
-              <label for="input-object-rep">Object representation:</label>
+              <label for="input-object-rep">{{ dashboard.text_object_repres}}:</label>
               <div class="input-group input-group-sm">
                 <input type="text" placeholder="" id="input-object-rep" class="form-control"/>
               </div> 
-              <label for="input-list-rep">List representation:</label>
+              <label for="input-list-rep">{{ dashboard.text_list_repres }}:</label>
               <div class="input-group input-group-sm">
                 <input type="text" placeholder="" id="input-list-rep" class="form-control"/>
               </div>  
-              <label for="input-subsystem">Subsystem:</label>
+              <label for="input-subsystem">{{ dashboard.text_subsystem }}:</label>
               <div class="input-group input-group-sm"> 
                 <input type="text" placeholder="..." id="input-subsystem" class="form-control"/>
                 <button class="btn btn-outline-secondary" id="input-subsystem_btn" type="button" onclick="objectEditSubsystem()">...</button>
               </div>                  
-              <label for="input-owner">Owner:</label>
+              <label for="input-owner">{{ dashboard.text_owner }}:</label>
               <div class="input-group input-group-sm">
                 <input type="text" placeholder="..." id="input-owner" class="form-control"/>
                 <button class="btn btn-outline-secondary" id="input-owner_btn" type="button" onclick="selectOwner(id)">...</button>
-              </div>  
-              <label for="input-module">Others:</label>
+              </div>                
+               <label for="input-req-hierar">{{ dashboard.text_hierarchical }}:</label>
+                <div class="input-group input-group-sm">
+                  <input type="checkbox" class="form-check-input" id="input-req-hierar"/>
+                </div>  
+              <label for="input-module">{{ dashboard.text_others }}:</label>
               <div class="input-group input-group-sm">
                 <button type="button" id="input-module" class="btn btn-secondary" onclick="openModule()">                              
-                    <span>Object module</span>
+                    <span>{{ dashboard.btn_object_module }}</span>
                 </button>
               </div>
             </form>

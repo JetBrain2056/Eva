@@ -31,6 +31,7 @@ function mainSelect() {
     const labelHideId    = $objectModal.querySelector("label[for=input-hide-id]"); 
     const inputNameLength= $objectModal.querySelector("#input-name-length");
     const labelNameLength= $objectModal.querySelector("label[for=input-name-length]"); 
+    const inputReqHierar = $objectModal.querySelector("#input-req-hierar");
     
     navMain.click();
     if (inputType.value === "Subsystem"||inputType.value === "") {                     
@@ -46,7 +47,8 @@ function mainSelect() {
         inputConstType .setAttribute("hidden","hidden");   
         inputTypeBtn   .setAttribute("hidden","hidden");     
         inputObjectRep .removeAttribute("disabled");
-        inputListRep   .setAttribute("disabled","disabled");                          
+        inputListRep   .setAttribute("disabled","disabled");    
+        inputReqHierar .setAttribute("disabled","disabled");                        
     } else if (inputType.value === "Module"||inputType.value === "Constant") {   
         inputObjectRep.setAttribute("disabled","disabled");   
         inputListRep  .setAttribute("disabled","disabled");                               
@@ -55,6 +57,7 @@ function mainSelect() {
         navForms      .setAttribute("hidden","hidden");         
         inputOwner    .setAttribute("disabled","disabled");       
         inputOwnerBtn .setAttribute("disabled","disabled"); 
+        inputReqHierar.setAttribute("disabled","disabled");  
         if (inputType.value === "Constant") {           
             labelConstType.removeAttribute("hidden");  
             inputConstType.removeAttribute("hidden");  
@@ -78,6 +81,7 @@ function mainSelect() {
             labelHideId    .removeAttribute("hidden"); 
             inputNameLength.removeAttribute("hidden"); 
             labelNameLength.removeAttribute("hidden"); 
+            inputReqHierar .removeAttribute("disabled");  
         } else {
             inputOwner     .setAttribute("disabled","disabled");       
             inputOwnerBtn  .setAttribute("disabled","disabled"); 
@@ -85,6 +89,7 @@ function mainSelect() {
             labelHideId    .setAttribute("hidden","hidden");  
             inputNameLength.setAttribute("hidden","hidden");  
             labelNameLength.setAttribute("hidden","hidden");  
+            inputReqHierar.setAttribute("disabled","disabled"); 
         }
         inputModule   .removeAttribute("disabled");        
         navRequisite  .removeAttribute("hidden");        
@@ -645,6 +650,7 @@ async function objectCreate(e) {
     const inputReqName      = document.querySelector('#input-name-length'); 
     const inputOwner        = inputForm.querySelector('#input-owner');  
     const createMode        = inputForm.getAttribute("create-mode");  
+    const inputReqHierar    = inputForm.querySelector("#input-req-hierar");
     
     if (!inputForm.checkValidity()) {
         await e.preventDefault();
@@ -667,7 +673,8 @@ async function objectCreate(e) {
         listRep   : inputListRep.value,
         hideId    : inputReqId.checked,
         nameLength: inputReqName.value,
-        owner     : inputOwner.value
+        owner     : inputOwner.value,
+        hierarchical : inputReqHierar.checked
     }
     const data =  {
         'id'      : inputForm.getAttribute("eva-id"),
@@ -754,6 +761,7 @@ async function objectEditModal() {
     const inputReqId      = modalForm.querySelector('#input-hide-id'); 
     const inputReqName    = modalForm.querySelector('#input-name-length'); 
     const inputOwner      = inputForm.querySelector('#input-owner');  
+    const inputReqHierar  = inputForm.querySelector("#input-req-hierar");
 
     let data = {'id': row.cells[0].innerText}
 
@@ -777,6 +785,7 @@ async function objectEditModal() {
             inputObjRep.value       = Elements.objectRep;
             inputListRep.value      = Elements.listRep;
             if (Elements.owner)      {inputOwner.value        = Elements.owner;}
+            inputReqHierar.checked  = Elements.hierarchical;
         } else if (Elements.typeId === "Document") {                        
             inputObjRep.value       = Elements.objectRep;
             inputListRep.value      = Elements.listRep;   

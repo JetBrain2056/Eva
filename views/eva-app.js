@@ -460,7 +460,7 @@ async function refModal() {
     refForm.setAttribute("eva-id", 0);
     
     arrCol = await getColumns(textId);
-    arrReq = await getReqs(id);
+    arrReq = await getReqs(id);    
 
     await refElement(div, arrCol, arrCol, createMode, copyMode, typeId, arrReq);            
     await tabParts(refForm, ul, textId);
@@ -677,7 +677,7 @@ async function elemModal() {
         arrReq = await getReqs(ownerId);                                
         arrReq['Reference.'+ownerTextId] = {'synonum':'Owner'}; 
     } else {
-        arrCol['owner'] = Number(owner);    
+        arrCol['owner'] = Number(owner);                   
         arrReq = await getTabPartSyns(tabId);         
     }            
     
@@ -981,12 +981,12 @@ async function refElement(refForm, col, arrCol, createMode, copyMode, typeId, ar
                         } else {
                             input.value = '';                        
                         }
-                    } else {
-                        if (arrReq[req].synonum==='Owner'&&req.split('.').length>1) { 
-                            resRef = await postOnServer({'id': col[req], 'textId':req.split('.')[1]}, '/getref');
+                    } else {                             
+                        if (arrReq[req].synonum==='Owner'&&req.split('.').length>1 && typeof(col[req])==='number') { 
+                            const id = col[req];                                                    
+                            resRef = await postOnServer({'id': id, 'textId':req.split('.')[1]}, '/getref');                            
                             if (resRef.length===1) {
-                                input.value = resRef[0].name;        
-                                console.log(resRef[0].id)                        
+                                input.value = resRef[0].name;                                        
                                 input.setAttribute("eva-id", resRef[0].id);
                             }
                         } else {

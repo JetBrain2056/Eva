@@ -15,6 +15,7 @@ let dashboard = {
     text_add_object  : 'Add an object:',
     text_edit_object : 'Edit an object:',
     text_main        : 'Main',
+    text_forms       : 'Forms',
     text_requisites  : 'Requisites',
     text_tabparts    : 'Tabular parts',
     text_object_type : 'Object type:',
@@ -25,7 +26,6 @@ let dashboard = {
     text_owner       : 'Owner',
     text_others      : 'Others',
     btn_object_module: 'Object module',
-
 
     //Users
     text_name        : 'Name:',

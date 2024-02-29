@@ -402,10 +402,10 @@ exports.updateConfig = async function(req, res) {
     if (!req.body) return res.sendStatus(400);
 
     let refColumns = {
-        id   : {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-        name : {type: DataTypes.STRING(150)},
+        id     : {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+        name   : {type: DataTypes.STRING(150)},
         number : {type: DataTypes.STRING(9)},
-        date : {type: DataTypes.DATE}
+        date   : {type: DataTypes.DATE}
     }
 
     let data;
@@ -423,6 +423,7 @@ exports.updateConfig = async function(req, res) {
         const typeId   = Elements.typeId;
         const owner    = Elements.owner;
         const ownerId  = row.id;
+        const hierar   = Elements.hierarchical;
 
         if (typeId==='Document') { 
             delete refColumns['name'];            
@@ -470,6 +471,12 @@ exports.updateConfig = async function(req, res) {
                 } catch(err) {
                     console.log(err);                    
                 } 
+            }
+
+            if (hierar) {
+                refColumns['level']  = {type: DataTypes.INTEGER};
+                refColumns['parent'] = {type: DataTypes.INTEGER};
+                refColumns['isGroup'] = {type: DataTypes.BOOLEAN};
             }
         } 
 

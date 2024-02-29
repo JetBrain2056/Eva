@@ -18,7 +18,7 @@ let dashboard = {
     text_requisites  : 'Реквизиты',
     text_tabparts    : 'Табличные части',
     text_forms       : 'Формы',
-    text_object_type : 'Тип объекта:',
+    text_object_type : 'Тип объекта',
     text_identifier  : 'Идентификатор',
     text_object_repres : 'Представление объекта',
     text_list_repres : 'Представление списка',

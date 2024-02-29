@@ -18,7 +18,7 @@ let dashboard = {
     text_forms       : 'Forms',
     text_requisites  : 'Requisites',
     text_tabparts    : 'Tabular parts',
-    text_object_type : 'Object type:',
+    text_object_type : 'Object type',
     text_identifier  : 'Identifier',
     text_object_repres : 'Object representation',
     text_list_repres : 'List representation',

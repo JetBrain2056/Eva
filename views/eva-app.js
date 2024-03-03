@@ -1195,6 +1195,7 @@ async function showRefTable(refName, refType, refId) {
             const Elements = await JSON.parse(strJson);                                         
             if (Elements.hideId===true) hide = ['id'];                 
         } 
+        hide.push('level','parent','isGroup')
     }
 
     showTable(refTbl, hide, col, data, colType);

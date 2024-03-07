@@ -969,6 +969,9 @@ async function refElement(refForm, col, arrCol, createMode, copyMode, typeId, ar
                         label.setAttribute("hidden", "hidden");
                         input.setAttribute("hidden", "hidden");
                     }
+                } else if (req==='level'||req==='isGroup') {
+                    label.setAttribute("hidden", "hidden");
+                    input.setAttribute("hidden", "hidden");
                 }
                 if (req==='name'||req==='date'||validation===true) {
                     input.setAttribute("required", "required");                    
@@ -1128,6 +1131,26 @@ function buildTable(refName, refType) {
     resTbl = buildTabpanel(refForm, "208");
     return resTbl;
 }
+async function getRefCol(refName, arrReq) {
+    console.log('>>getRefCol()...', refName);  
+
+    const res = await postOnServer({'textId':refName}, '/getrefcol');  
+    let col = {};   
+    let colType = {};           
+    for (elem of res) {
+        const colName  = elem.column_name;            
+        const dataType = elem.data_type;            
+        const reqs     = arrReq[colName];             
+        if (reqs&&reqs.synonum) {                         
+            col[colName] = reqs.synonum;  
+        } else {          
+            col[colName] = colName;            
+        } 
+        colType[colName] = dataType;
+    }
+    const arrCol = [col, colType];
+    return arrCol;
+}
 async function showConstTable() {
     console.log('>>showConstTable()...');     
     
@@ -1165,22 +1188,9 @@ async function showRefTable(refName, refType, refId) {
 
     const evaForm = document.querySelector('#eva-ref-form');        
     const id      = evaForm.getAttribute("eva-id");
+
     arrReq = await getReqs(id);         
-    
-    res = await postOnServer(tmp, '/getrefcol');  
-    let col = {};   
-    let colType = {};           
-    for (elem of res) {
-        const colName  = elem.column_name;            
-        const dataType = elem.data_type;            
-        const reqs     = arrReq[colName];                
-        if (reqs&&reqs.synonum) {            
-            col[colName] = reqs.synonum;  
-        } else {          
-            col[colName] = colName;            
-        } 
-        colType[colName] = dataType;
-    }
+    arrCol = await getRefCol(refName, arrReq);
     
     resOwner = await postOnServer({ownerId:refId}, '/getowner');    
     if (resOwner.length>0) col[resOwner[0].owner] = 'Owner';
@@ -1198,7 +1208,7 @@ async function showRefTable(refName, refType, refId) {
         hide.push('level','parent','isGroup')
     }
 
-    showTable(refTbl, hide, col, data, colType);
+    showTable(refTbl, hide, arrCol[0], data, arrCol[1]);
 }
 async function showTabTable(refForm, refName) {
     console.log('>>showTabTable()...', refName);   
@@ -1213,27 +1223,12 @@ async function showTabTable(refForm, refName) {
 
     const tabId = refForm.getAttribute("eva-tabId");
     
-    arrReq = await getTabPartSyns(tabId);      
-    
-    const res = await postOnServer(tmp, '/getrefcol');  
-    let col = {};   
-    let colType = {};           
-    for (elem of res) {
-        const colName  = elem.column_name;            
-        const dataType = elem.data_type;   
-        const reqs     = arrReq[colName];         
-        const synom    = reqs.synonum;
-        if (synom) {
-            col[colName] = synom;  
-        } else {          
-            col[colName] = colName;            
-        } 
-        colType[colName] = dataType;
-    }
+    arrReq = await getTabPartSyns(tabId);     
+    arrCol = await getRefCol(refName, arrReq) 
 
     const hide = ['id','owner']; 
 
-    showTable(resTbl, hide, col, data, colType);
+    showTable(resTbl, hide, arrCol[0], data, arrCol[1]);
 }
 async function showOwnerTable(refForm, owner, refName, ownerId) {
     console.log('>>showOwnerTable()...', owner, refName);   
@@ -1246,26 +1241,12 @@ async function showOwnerTable(refForm, owner, refName, ownerId) {
     const tmp = {'textId':refName, 'id':id, 'owner':owner}     
     const data = await postOnServer(tmp, '/getownerrefs');
           
-    arrReq = await getReqs(ownerId);
-    
-    const res = await postOnServer({'textId':refName}, '/getrefcol');  
-    let col = {};   
-    let colType = {};           
-    for (elem of res) {
-        const colName  = elem.column_name;            
-        const dataType = elem.data_type;            
-        const reqs     = arrReq[colName];             
-        if (reqs&&reqs.synonum) {                         
-            col[colName] = reqs.synonum;  
-        } else {          
-            col[colName] = colName;            
-        } 
-        colType[colName] = dataType;
-    }
+    arrReq = await getReqs(ownerId);    
+    arrCol = await getRefCol(refName, arrReq);
 
     let hide = ['id', owner]; 
 
-    showTable(resTbl, hide, col, data, colType);
+    showTable(resTbl, hide, arrCol[0], data, arrCol[1]);
 }
 function addTabPane(name) {
     const evaSubsys = document.querySelector('.eva-subsys'); 

@@ -1191,6 +1191,8 @@ async function showRefTable(refName, refType, refId) {
 
     arrReq = await getReqs(id);         
     arrCol = await getRefCol(refName, arrReq);
+
+    let col = arrCol[0];
     
     resOwner = await postOnServer({ownerId:refId}, '/getowner');    
     if (resOwner.length>0) col[resOwner[0].owner] = 'Owner';
@@ -1208,7 +1210,7 @@ async function showRefTable(refName, refType, refId) {
         hide.push('level','parent','isGroup')
     }
 
-    showTable(refTbl, hide, arrCol[0], data, arrCol[1]);
+    showTable(refTbl, hide, col, data, arrCol[1]);
 }
 async function showTabTable(refForm, refName) {
     console.log('>>showTabTable()...', refName);   

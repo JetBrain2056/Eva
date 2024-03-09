@@ -105,6 +105,26 @@ async function getColumns(textId) {
     }
     return arrCol;
 }
+async function getRefCol(refName, arrReq) {
+    console.log('>>getRefCol()...', refName);  
+
+    const res = await postOnServer({'textId':refName}, '/getrefcol');  
+    let col = {};   
+    let colType = {};           
+    for (elem of res) {
+        const colName  = elem.column_name;            
+        const dataType = elem.data_type;            
+        const reqs     = arrReq[colName];             
+        if (reqs&&reqs.synonum) {                         
+            col[colName] = reqs.synonum;  
+        } else {          
+            col[colName] = colName;            
+        } 
+        colType[colName] = dataType;
+    }
+    const arrCol = [col, colType];
+    return arrCol;
+}
 async function getReqs(id) {
     console.log('>>getReqs()...', id);
       
@@ -1113,43 +1133,25 @@ function buildTable(refName, refType) {
     refFormLabel.innerText = name+'s';
     
     const btnToolbar = refForm.querySelector(".btn-toolbar");     
-    const evaAdd  = btnToolbar.querySelector(".eva-add");
-    const evaEdit = btnToolbar.querySelector(".eva-edit");
-    const evaCopy = btnToolbar.querySelector(".eva-copy");
-    const evaDel  = btnToolbar.querySelector(".eva-del");
+    const evaAdd     = btnToolbar.querySelector(".eva-add");
+    const evaGroup   = btnToolbar.querySelector(".eva-group");
+    const evaEdit    = btnToolbar.querySelector(".eva-edit");
+    const evaCopy    = btnToolbar.querySelector(".eva-copy");
+    const evaDel     = btnToolbar.querySelector(".eva-del");
     const evaRefresh = btnToolbar.querySelector(".eva-refresh");
     evaRefresh.setAttribute("name", refName);  
     evaRefresh.setAttribute("id", "eva-link-"+refName);   
     if (refType==='Reference'||refType==='Document') {           
-        evaAdd .setAttribute("onclick","refModal()");
-        evaEdit.setAttribute("onclick","refEditModal(false)");
-        evaCopy.setAttribute("onclick","refEditModal(true)");
-        evaDel .setAttribute("onclick","refDelete()");
+        evaAdd    .setAttribute("onclick","refModal()");
+        evaGroup  .setAttribute("onclick","refModalGroup()");
+        evaEdit   .setAttribute("onclick","refEditModal(false)");
+        evaCopy   .setAttribute("onclick","refEditModal(true)");
+        evaDel    .setAttribute("onclick","refDelete()");
         evaRefresh.setAttribute("onclick","openTabRef(id,name)");
     }
 
     resTbl = buildTabpanel(refForm, "208");
     return resTbl;
-}
-async function getRefCol(refName, arrReq) {
-    console.log('>>getRefCol()...', refName);  
-
-    const res = await postOnServer({'textId':refName}, '/getrefcol');  
-    let col = {};   
-    let colType = {};           
-    for (elem of res) {
-        const colName  = elem.column_name;            
-        const dataType = elem.data_type;            
-        const reqs     = arrReq[colName];             
-        if (reqs&&reqs.synonum) {                         
-            col[colName] = reqs.synonum;  
-        } else {          
-            col[colName] = colName;            
-        } 
-        colType[colName] = dataType;
-    }
-    const arrCol = [col, colType];
-    return arrCol;
 }
 async function showConstTable() {
     console.log('>>showConstTable()...');     
@@ -1200,14 +1202,19 @@ async function showRefTable(refName, refType, refId) {
     let hide = [];  
     if (refType==='Document') hide = ['id'];
 
+    let evaGroup = evaForm.parentNode.querySelector('.eva-group');
+    console.log('evaGroup', evaGroup)
+    evaGroup.setAttribute("hidden", "hidden");
+
     if (refId) {
         res = await postOnServer({'id': refId}, '/getobject');        
         if (res) {
             const strJson  = res.data;          
             const Elements = await JSON.parse(strJson);                                         
             if (Elements.hideId===true) hide = ['id'];                 
+            if (Elements.hierarchical===true) evaGroup.removeAttribute("hidden");
         } 
-        hide.push('level','parent','isGroup')
+        hide.push('level','parent','isGroup');        
     }
 
     showTable(refTbl, hide, col, data, arrCol[1]);

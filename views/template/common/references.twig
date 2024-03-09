@@ -6,19 +6,23 @@
   <h5 class="title" id="refFormLabel">Reference*</h5>     
   <div class="btn-toolbar" role="toolbar" aria-label="toolbar group">    
     <div class="btn-group btn-group-sm" role="group">
-      <button type="button" class="btn btn-primary d-flex gap-2 align-items-center eva-add">
+      <button type="button" class="btn btn-primary gap-2 align-items-center eva-add">
           <i class="fa fa-plus-square"></i>
           <span>{{ button_add }}</span>
+      </button>   
+      <button type="button" class="btn btn-primary gap-2 align-items-center eva-group" hidden>
+          <i class="fa fa-plus-square"></i>
+          <span>Group</span>
       </button>
-      <button type="button" class="btn btn-primary d-flex gap-2 align-items-center eva-edit">
+      <button type="button" class="btn btn-primary gap-2 align-items-center eva-edit">
           <i class="fa fa-edit"></i>
           <span>{{ button_edit }}</span>
       </button>
-      <button type="button" class="btn btn-primary d-flex gap-2 align-items-center eva-copy">
-          <i class="fa fa-clone" aria-hidden="true"></i>
+      <button type="button" class="btn btn-primary gap-2 align-items-center eva-copy">
+          <i class="fa fa-clone"></i>
           <span>{{ button_copy }}</span>
       </button>
-      <button type="button" class="btn btn-primary d-flex gap-2 align-items-center eva-del">
+      <button type="button" class="btn btn-primary gap-2 align-items-center eva-del">
           <i class="fa fa-minus-square"></i>
           <span>{{ button_delete }}</span>
       </button>
@@ -30,7 +34,7 @@
             <li><a class="dropdown-item"><i class="fa fa-cog"></i><span> Сhange form...</span></a></li>
         </ul>
       </div>
-    </div>
+    </div>   
   </div>           
   <div class="eva-table" id="eva-ref-form"></div>       
 </div>  

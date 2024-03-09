@@ -1188,8 +1188,9 @@ async function showRefTable(refName, refType, refId) {
     const tmp = {'textId': refName}
     const data = await postOnServer(tmp, '/getrefs');
 
-    const evaForm = document.querySelector('#eva-ref-form');        
-    const id      = evaForm.getAttribute("eva-id");
+    const evaForm  = document.querySelector('#eva-ref-form');        
+    const id       = evaForm.getAttribute("eva-id");
+    const evaGroup = evaForm.parentNode.querySelector('.eva-group');        
 
     arrReq = await getReqs(id);         
     arrCol = await getRefCol(refName, arrReq);
@@ -1200,11 +1201,10 @@ async function showRefTable(refName, refType, refId) {
     if (resOwner.length>0) col[resOwner[0].owner] = 'Owner';
 
     let hide = [];  
-    if (refType==='Document') hide = ['id'];
-
-    let evaGroup = evaForm.parentNode.querySelector('.eva-group');
-    console.log('evaGroup', evaGroup)
-    evaGroup.setAttribute("hidden", "hidden");
+    if (refType==='Document') {
+        hide = ['id'];
+        evaGroup.setAttribute("hidden", "hidden");
+    }
 
     if (refId) {
         res = await postOnServer({'id': refId}, '/getobject');        

@@ -1,8 +1,8 @@
-let $app = {};
+n = 0;
 let a = [];
+let $app = {};
 selectRows = [];
 let elementsModal;
-n = 0;
 
 //Commands on client/////////////////////////////////////////////////////////
 function mask(val, length, accuracy) {    
@@ -470,7 +470,7 @@ async function refModal() {
     const id     = evaForm.getAttribute("eva-id");
 
     refModalLabel.innerText = $app.addElement+' ('+textId+'):';
-    
+
     refForm.setAttribute("eva-textId", textId);  
     refForm.setAttribute("eva-typeId", typeId);
     refForm.setAttribute("class","tab-content");
@@ -507,8 +507,7 @@ async function refModalGroup() {
     const ul = modalForm.querySelector("#eva-nav-tabs-ref"); 
     ul.innerHTML = '';  
 
-    const refModalLabel  = modalForm.querySelector('#refModalLabel');  
-    refModalLabel.innerText = 'Add an group';    
+    const refModalLabel  = modalForm.querySelector('#refModalLabel');        
 
     const createMode = true;
     const copyMode   = false;
@@ -528,7 +527,8 @@ async function refModalGroup() {
     const id     = evaForm.getAttribute("eva-id");
     refForm.setAttribute("eva-textId", textId);  
     refForm.setAttribute("eva-typeId", typeId);
-    refForm.setAttribute("eva-isGroup", true);
+
+    refModalLabel.innerText = $app.addGroup+' ('+textId+'):'; 
     
     arrCol = await getColumns(textId);    
     
@@ -984,15 +984,19 @@ async function tabOwner(refForm, textId, refName, ownerId) {
     await showOwnerTable(div,  'Reference.'+textId, refName, ownerId);      
 }
 async function refElement(refForm, col, arrCol, createMode, copyMode, typeId, arrReq) {
-    console.log('>>refElement()...', col);  
+    console.log('>>refElemen()...', col);  
+                
+    if  (refForm.getAttribute("role")==='tabpanel') {
+        textId = refForm.parentElement.getAttribute("eva-textId");         
+    } else {
+        textId = refForm.getAttribute("eva-textId");
+    }
 
-    const textId = refForm.parentElement.getAttribute("eva-textId");
-    
     if (col) {                  
         delete col['createdAt'];
         delete col['updatedAt'];
         for (req of Object.keys(col)) {  
-                                    
+                                                        
             const label  = document.createElement("label");
             label.setAttribute("for","input-ref-"+req);
                        
@@ -1016,13 +1020,19 @@ async function refElement(refForm, col, arrCol, createMode, copyMode, typeId, ar
                 const input  = document.createElement("input");       
                 const btn    = document.createElement("button");
                 let type = arrCol[req];                
-                if (req.split('.').length > 1) {
+                if (req.split('.').length > 1||req==='parent') {                    
                     input.setAttribute("type","text");
                     input.setAttribute("class","eva-req form-control"); 
                     input.setAttribute("disabled","disabled");   
                     // input.oninput = function() { input.value = input.value.replace(/[^]/g,'') }                 
                     input.setAttribute("data-type", req);
-                    const reqName = req.split('.')[1].toLowerCase();
+                    let reqName = '';
+                    if (req.split('.').length > 1) {
+                        reqName = req.split('.')[1].toLowerCase();
+                    } else {
+                        console.log(textId)
+                        reqName = textId.toLowerCase();
+                    }    
                     input.id    = "input-ref-"+reqName;
                     input.name  = req;
                     btn.setAttribute("class","btn btn-outline-secondary");
@@ -1073,6 +1083,7 @@ async function refElement(refForm, col, arrCol, createMode, copyMode, typeId, ar
                     label.setAttribute("hidden", "hidden");
                     input.setAttribute("hidden", "hidden");
                 }
+
                 if (req==='name'||req==='date'||validation===true) {
                     input.setAttribute("required", "required");                    
                 }
@@ -1112,11 +1123,16 @@ async function refElement(refForm, col, arrCol, createMode, copyMode, typeId, ar
                         const val = col[req]; 
                         if (val) input.value = new Intl.NumberFormat('ru', {minimumFractionDigits: type.numScale}).format(val); 
                     } else {
-                        if (req.split('.').length > 1) {
-                            const textIdArr = req.split('.');
-                            resRef = await postOnServer({'id': col[req], 'textId':textIdArr[1]}, '/getref');
+                        const textIdArr = req.split('.');
+                        if (textIdArr.length > 1||req==='parent') {
+                            if (textIdArr.length > 1) {
+                                resRef = await postOnServer({'id': col[req], 'textId':textIdArr[1]}, '/getref');
+                            } else {
+                                resRef = await postOnServer({'id': col[req], 'textId':textId}, '/getref');
+                            }
+                            console.log(resRef);
                             if (resRef.length===1) {
-                                if (textIdArr[0]==='Reference') {
+                                if (textIdArr[0]==='Reference'||req==='parent') {
                                     input.value = resRef[0].name;                                
                                 } else {
                                     const d = new Date(resRef[0].date);                                    
@@ -1137,7 +1153,7 @@ async function refElement(refForm, col, arrCol, createMode, copyMode, typeId, ar
                 }                
              
                 div.appendChild(input); 
-                if (req.split('.').length > 1) div.appendChild(btn);
+                if (req.split('.').length > 1||req==='parent') div.appendChild(btn);
         }        
     } 
 }

@@ -917,6 +917,7 @@ async function tabParts(refForm, ul, refName) {
         div.appendChild(div2);     
                 
         const evaAdd  = btnToolbar.querySelector(".eva-add");
+        const evaGroup= btnToolbar.querySelector(".eva-group");
         const evaEdit = btnToolbar.querySelector(".eva-edit");
         const evaCopy = btnToolbar.querySelector(".eva-copy");
         const evaDel  = btnToolbar.querySelector(".eva-del");
@@ -928,6 +929,7 @@ async function tabParts(refForm, ul, refName) {
         evaCopy.setAttribute("onclick","elemEditModal(true)");
         evaDel .setAttribute("onclick","elemDelete()");
         evaRefresh.setAttribute("onclick","");
+        evaGroup.setAttribute("hidden","hidden");
 
         await showTabTable(div, textId);      
     }

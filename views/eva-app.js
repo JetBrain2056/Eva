@@ -134,6 +134,8 @@ async function getReqs(id) {
     arrReq['name']   = {'synonum':'Name'};
     arrReq['date']   = {'synonum':'Date'};
     arrReq['number'] = {'synonum':'Number'};
+    arrReq['parent'] = {'synonum':'Parent'};
+    arrReq['isGroup']= {'synonum':''};
 
     resOwner = await postOnServer({ownerId:id}, '/getowner');    
     console.log(resOwner);
@@ -495,6 +497,55 @@ async function refModal() {
         }
     }
 }
+async function refModalGroup() {
+    console.log('>>refModalGroup()...');      
+
+    const modalForm  = document.getElementById('refModal');  
+
+    const ul = modalForm.querySelector("#eva-nav-tabs-ref"); 
+    ul.innerHTML = '';  
+
+    const refModalLabel  = modalForm.querySelector('#refModalLabel');  
+    refModalLabel.innerText = 'Add an group';    
+
+    const createMode = true;
+    const copyMode   = false;
+
+    const refForm        = modalForm.querySelector('#create-ref-form');  
+    refForm.innerHTML = '';
+    refForm.reset();   
+    refForm.setAttribute("create-mode", createMode);  
+    refForm.setAttribute("copy-mode", copyMode);   
+    refForm.setAttribute("eva-save", false);   
+
+    currentModal = getModal(modalForm);
+   
+    const evaForm = document.querySelector("#eva-ref-form"); 
+    const textId = evaForm.getAttribute("eva-textId");
+    const typeId = evaForm.getAttribute("eva-typeId");
+    const id     = evaForm.getAttribute("eva-id");
+    refForm.setAttribute("eva-textId", textId);  
+    refForm.setAttribute("eva-typeId", typeId);
+    refForm.setAttribute("eva-isGroup", true);
+    
+    arrCol = await getColumns(textId);    
+    
+    arr = ['id', 'name','parent','isGroup'];   
+    for (elem of Object.keys(arrCol)) {    
+        if (!arr.includes(elem)) delete arrCol[elem];
+    }        
+
+    arrReq = await getReqs(id); 
+    for (elem of Object.keys(arrReq)) {    
+        if (!arr.includes(elem)) delete arrReq[elem];
+    }            
+
+    await refElement(refForm, arrCol, arrCol, createMode, copyMode, typeId, arrReq);    
+
+    isGroup = refForm.querySelector("#input-ref-isGroup");          
+    isGroup.checked = true;
+    // console.log(isGroup);  
+}
 async function refEditModal(copyMode) {
     console.log('>>refEditModal()...'); 
   
@@ -504,11 +555,6 @@ async function refEditModal(copyMode) {
 
     const modalForm  = document.getElementById('refModal');  
 
-    const ul = modalForm.querySelector("#eva-nav-tabs-ref"); 
-    ul.innerHTML = '';  
-    
-    addTabs(ul, 'Main');
-
     const refModalLabel    = modalForm.querySelector('#refModalLabel');  
     if (copyMode) {
         refModalLabel.innerText = $app.$addElement;
@@ -517,6 +563,9 @@ async function refEditModal(copyMode) {
     }   
 
     const createMode = false;    
+
+    const ul = modalForm.querySelector("#eva-nav-tabs-ref"); 
+    ul.innerHTML = '';  
           
     const refForm    = modalForm.querySelector('#create-ref-form');    
     refForm.reset();  
@@ -532,32 +581,53 @@ async function refEditModal(copyMode) {
     const typeId = evaForm.getAttribute("eva-typeId");
     refForm.setAttribute("eva-textId", textId);
     refForm.setAttribute("eva-typeId", typeId);
-    refForm.setAttribute("class","tab-content");
-
-    const div = document.createElement("div");
-    div.setAttribute("class","tab-pane active show");    
-    div.setAttribute("id","nav-Main");
-    div.setAttribute("role","tabpanel");
-    refForm.appendChild(div);
 
     const id   = row.cells[0].innerText;    
     refForm.setAttribute("eva-id", id);
-        
+
     arrCol = await getColumns(textId);
     arrReq = await getReqs(evaForm.getAttribute("eva-id"));
 
     const data = {'textId': textId, 'id': id}
     res = await postOnServer(data, '/getref');  
-    await refElement(div, res[0], arrCol, createMode, copyMode, typeId, arrReq);     
-    await tabParts(refForm, ul, textId);
 
-    res = await postOnServer({owner:'Reference.'+textId}, '/getowner');      
-    if (res) { 
-        for (const row of res) {
-            const refName = row.refName;
-            const ownerId = row.ownerId;
-            addTabs(ul, refName);
-            await tabOwner(refForm, textId, refName, ownerId);
+    if (res[0].isGroup) {
+        arr = ['id', 'name','parent','isGroup'];   
+        for (elem of Object.keys(arrCol)) {    
+            if (!arr.includes(elem)) delete arrCol[elem];
+        }        
+        for (elem of Object.keys(arrReq)) {    
+            if (!arr.includes(elem)) delete arrReq[elem];
+        }       
+        for (elem of Object.keys(res[0])) {    
+            if (!arr.includes(elem)) delete res[0][elem];
+        }      
+    
+        await refElement(refForm, res[0], arrCol, createMode, copyMode, typeId, arrReq);    
+                            
+    } else {
+            
+        addTabs(ul, 'Main');
+
+        refForm.setAttribute("class","tab-content");
+
+        const div = document.createElement("div");
+        div.setAttribute("class","tab-pane active show");    
+        div.setAttribute("id","nav-Main");
+        div.setAttribute("role","tabpanel");
+        refForm.appendChild(div);
+        
+        await refElement(div, res[0], arrCol, createMode, copyMode, typeId, arrReq);     
+        await tabParts(refForm, ul, textId);
+
+        res = await postOnServer({owner:'Reference.'+textId}, '/getowner');      
+        if (res) { 
+            for (const row of res) {
+                const refName = row.refName;
+                const ownerId = row.ownerId;
+                addTabs(ul, refName);
+                await tabOwner(refForm, textId, refName, ownerId);
+            }
         }
     }
 }
@@ -889,10 +959,11 @@ async function tabOwner(refForm, textId, refName, ownerId) {
     div.appendChild(div2);     
             
     const evaAdd  = btnToolbar.querySelector(".eva-add");
+    const evaGroup= btnToolbar.querySelector(".eva-group");
     const evaEdit = btnToolbar.querySelector(".eva-edit");
     const evaCopy = btnToolbar.querySelector(".eva-copy");
     const evaDel  = btnToolbar.querySelector(".eva-del");
-    const evaRefresh = btnToolbar.querySelector(".eva-refresh");
+    const evaRefresh = btnToolbar.querySelector(".eva-refresh");    
     evaRefresh.setAttribute("name", refName);  
     evaRefresh.setAttribute("id", "eva-link-"+refName);              
     evaAdd .setAttribute("onclick","elemModal()");
@@ -900,6 +971,7 @@ async function tabOwner(refForm, textId, refName, ownerId) {
     evaCopy.setAttribute("onclick","elemEditModal(true)");
     evaDel .setAttribute("onclick","elemDelete()");
     evaRefresh.setAttribute("onclick","");
+    evaGroup.setAttribute("hidden", "hidden");
 
     await showOwnerTable(div,  'Reference.'+textId, refName, ownerId);      
 }
@@ -1212,7 +1284,11 @@ async function showRefTable(refName, refType, refId) {
             const strJson  = res.data;          
             const Elements = await JSON.parse(strJson);                                         
             if (Elements.hideId===true) hide = ['id'];                 
-            if (Elements.hierarchical===true) evaGroup.removeAttribute("hidden");
+            if (Elements.hierarchical===true) {
+                evaGroup.removeAttribute("hidden");
+            } else {
+                evaGroup.setAttribute("hidden", "hidden");
+            }    
         } 
         hide.push('level','parent','isGroup');        
     }

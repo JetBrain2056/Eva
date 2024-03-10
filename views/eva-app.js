@@ -450,8 +450,7 @@ async function refModal() {
     
     addTabs(ul, 'Main');
 
-    const refModalLabel  = modalForm.querySelector('#refModalLabel');  
-    refModalLabel.innerText = $app.$addElement;    
+    const refModalLabel  = modalForm.querySelector('#refModalLabel');       
 
     const createMode = true;
     const copyMode   = false;
@@ -469,6 +468,9 @@ async function refModal() {
     const textId = evaForm.getAttribute("eva-textId");
     const typeId = evaForm.getAttribute("eva-typeId");
     const id     = evaForm.getAttribute("eva-id");
+
+    refModalLabel.innerText = $app.addElement+' ('+textId+'):';
+    
     refForm.setAttribute("eva-textId", textId);  
     refForm.setAttribute("eva-typeId", typeId);
     refForm.setAttribute("class","tab-content");
@@ -543,8 +545,7 @@ async function refModalGroup() {
     await refElement(refForm, arrCol, arrCol, createMode, copyMode, typeId, arrReq);    
 
     isGroup = refForm.querySelector("#input-ref-isGroup");          
-    isGroup.checked = true;
-    // console.log(isGroup);  
+    isGroup.checked = true;     
 }
 async function refEditModal(copyMode) {
     console.log('>>refEditModal()...'); 
@@ -553,15 +554,9 @@ async function refEditModal(copyMode) {
 
     const row = selectRows[0];      
 
-    const modalForm  = document.getElementById('refModal');  
-
-    const refModalLabel    = modalForm.querySelector('#refModalLabel');  
-    if (copyMode) {
-        refModalLabel.innerText = $app.$addElement;
-    } else {
-        refModalLabel.innerText = $app.$editElement;
-    }   
-
+    const modalForm     = document.getElementById('refModal');  
+    const refModalLabel = modalForm.querySelector('#refModalLabel');  
+  
     const createMode = false;    
 
     const ul = modalForm.querySelector("#eva-nav-tabs-ref"); 
@@ -592,6 +587,12 @@ async function refEditModal(copyMode) {
     res = await postOnServer(data, '/getref');  
 
     if (res[0].isGroup) {
+        if (copyMode) {
+            refModalLabel.innerText = $app.addGroup+' ('+textId+'):';
+        } else {
+            refModalLabel.innerText = $app.editGroup+' ('+textId+'):';
+        } 
+
         arr = ['id', 'name','parent','isGroup'];   
         for (elem of Object.keys(arrCol)) {    
             if (!arr.includes(elem)) delete arrCol[elem];
@@ -606,6 +607,11 @@ async function refEditModal(copyMode) {
         await refElement(refForm, res[0], arrCol, createMode, copyMode, typeId, arrReq);    
                             
     } else {
+        if (copyMode) {
+            refModalLabel.innerText = $app.addElement+' ('+textId+'):';
+        } else {
+            refModalLabel.innerText = $app.editElement+' ('+textId+'):';
+        } 
             
         addTabs(ul, 'Main');
 
@@ -744,7 +750,7 @@ async function elemModal() {
     const ownerTextId   = ownerForm.getAttribute("eva-textId");
     const refModalLabel = modalForm.querySelector('#elemModalLabel');  
 
-    refModalLabel.innerText = $app.$addElement.slice(0,-1)+' ('+textId+'):'; 
+    refModalLabel.innerText = $app.addElement+' ('+textId+'):'; 
 
     const createMode = true;
     const copyMode   = false;
@@ -793,9 +799,9 @@ async function elemEditModal(copyMode) {
     const refModalLabel = modalForm.querySelector('#elemModalLabel');  
 
     if (copyMode) {
-        refModalLabel.innerText = $app.$addElement.slice(0,-1)+' ('+textId+'):';
+        refModalLabel.innerText = $app.addElement+' ('+textId+'):';
     } else {
-        refModalLabel.innerText = $app.$editElement.slice(0,-1)+' ('+textId+'):';
+        refModalLabel.innerText = $app.editElement+' ('+textId+'):';
     }   
 
     const createMode = false;    
@@ -1437,15 +1443,15 @@ async function tabDesk() {
     a.setAttribute("class","link icon-link");    
     a.setAttribute("style","color: #555555;font-size: 19px;");  
     a.href="#";  
-    a.innerText = $app.$constants;
+    a.innerText = $app.constants;
     a.setAttribute("id", "Constants");           
     a.setAttribute("eva-id", "Constants");  
     a.setAttribute("onclick", "openConst()");  
     div.appendChild(a);  
 
     let nav = [];
-    nav = collapseLink(div, nav, $app.$references, 0);
-    nav = collapseLink(div, nav, $app.$documents , 1);
+    nav = collapseLink(div, nav, $app.references, 0);
+    nav = collapseLink(div, nav, $app.documents , 1);
     
     let data = await getOnServer('/getconfig');
     for (const row of data) {
@@ -1507,9 +1513,9 @@ async function header() {
     navHiddenItem(navTab,'ref');  
           
     //MAIN
-    navItem(navTab, $app.$desktop); 
-    navItem(navTab, $app.$references);         
-    navItem(navTab, $app.$reports);    
+    navItem(navTab, $app.desktop); 
+    navItem(navTab, $app.references);         
+    navItem(navTab, $app.reports);    
 
     //DYNAMIC    
     data = await getOnServer('/subsystems');    
@@ -1535,7 +1541,7 @@ function appContent() {
     app.style="height:calc(100vh - 95.5px); border: 1px solid #00ff92";
     
     $app = JSON.parse(app.dataset.app);
-    console.log($app);
+    // console.log($app);
 
     setStatus('>Onload...');  
 }

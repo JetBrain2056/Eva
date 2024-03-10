@@ -214,12 +214,6 @@ async function showTable(showTbl, hide, col, data, colType) {
     thead.appendChild(tr);
     
     let keysCol = Object.keys(col);       
-    
-    // console.log(keysCol)
-    // keysCol.sort(function(a, b) {                                        
-    //     return keysCol.indexOf(a) - keysCol.indexOf(b);         
-    // });
-    // console.log(keysCol)
     for (const e of keysCol) {             
         const th = document.createElement('th');    
         th.setAttribute("sort-attr", "");    
@@ -236,6 +230,9 @@ async function showTable(showTbl, hide, col, data, colType) {
     if (data) {
         for (const rows of data) {                  
             const tr = document.createElement('tr');
+            if (rows.isGroup) {
+                tr.style.fontWeight = "bold";
+            }
             tbody.appendChild(tr);             
             for (const p of keysCol) {        
                 const td = document.createElement('td');    

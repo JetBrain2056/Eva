@@ -151,7 +151,7 @@ function rowSelect(e) {
         }
         e.target.style.color = 'aquamarine';
 
-    } else {
+    } else {    
         let text;
         if (e.ctrlKey) {
             text = 'The CTRL key was pressed!';
@@ -167,7 +167,7 @@ function rowSelect(e) {
             row.style.background = 'aquamarine';
             selectRows.push(row);
         }
-        console.log(text);
+        console.log(text);        
     }
 }
 function dblSelect(e) {
@@ -176,11 +176,16 @@ function dblSelect(e) {
     if (e.target.nodeName  === 'TH') {
         return;
     } else {
-        const currentForm = e.currentTarget.parentNode.parentNode;
-            
-        const btnTrigger = currentForm.querySelector('.eva-edit');
-        if (btnTrigger) {
-            // console.log('btnTrigger');
+        row = e.target.parentNode;        
+        for (cell of row.cells) {            
+            isGroup = cell.getAttribute("isgroup");
+            if (isGroup==='true') return;
+            //hierar sort
+        }
+
+        const currentForm = e.currentTarget.parentNode.parentNode;            
+        const btnTrigger  = currentForm.querySelector('.eva-edit');
+        if (btnTrigger) {            
             btnTrigger.onclick();         
         }            
     }
@@ -251,7 +256,9 @@ async function showTable(showTbl, hide, col, data, colType) {
                             }
                         }
                     }
-                } else {                                   
+                } else if (p==='isGroup') {
+                    td.setAttribute("isGroup", rows[p]); 
+                } else {                                                     
                     if (colType&&colType[p]==='timestamp with time zone') {     
                         if (rows[p]) {
                             const d = new Date(rows[p]);

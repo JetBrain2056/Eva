@@ -235,13 +235,24 @@ async function showTable(showTbl, hide, col, data, colType) {
     if (data) {
         for (const rows of data) {                  
             const tr = document.createElement('tr');
+            let isGroup = false;
+            let folder = undefined;
             if (rows.isGroup) {
-                tr.style.fontWeight = "bold";
-            }
+                tr.style.fontWeight = "bold"; 
+                isGroup = true;                             
+            }            
             tbody.appendChild(tr);             
             for (const p of keysCol) {        
                 const td = document.createElement('td');    
-                tr.appendChild(td);   
+                tr.appendChild(td);  
+
+                let display = true;
+                if (hide.includes(p)) {
+                    td.style.display = "none";  
+                    display = false;    
+                } else {  
+                    if (folder===undefined) folder = true;
+                }
                 if (p.split('.').length>1) {
                     ref = await postOnServer({'id':rows[p], 'textId':p.split('.')[1]}, '/getref');                      
                     if (rows[p]===0) {
@@ -257,7 +268,7 @@ async function showTable(showTbl, hide, col, data, colType) {
                         }
                     }
                 } else if (p==='isGroup') {
-                    td.setAttribute("isGroup", rows[p]); 
+                    td.setAttribute("isgroup", rows[p]); 
                 } else {                                                     
                     if (colType&&colType[p]==='timestamp with time zone') {     
                         if (rows[p]) {
@@ -272,13 +283,18 @@ async function showTable(showTbl, hide, col, data, colType) {
                             td.textContent = new Intl.NumberFormat('ru', {minimumFractionDigits: minFD}).format(rows[p]);
                             td.style.textAlign = 'end';
                         }
-                    } else {                        
-                        td.textContent = rows[p]; 
+                    } else {       
+                        if (isGroup&&display&&folder) {                                    
+                            const i = document.createElement("i");
+                            i.setAttribute("class", "fa fa-folder");                        
+                            td.appendChild(i);
+                            i.textContent = ' '+rows[p];  
+                            folder = false;                           
+                        } else {
+                            td.textContent = rows[p]; 
+                        }                        
                     }
-                }                                    
-                if (hide.includes(p)) {
-                    td.style.display = "none";        
-                }
+                }                                                   
             }
         } 
     } else {

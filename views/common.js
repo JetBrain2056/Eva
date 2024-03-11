@@ -173,14 +173,31 @@ function rowSelect(e) {
 function dblSelect(e) {
     console.log('>>dblSelect()...');
 
-    if (e.target.nodeName  === 'TH') {
+    if (e.target.nodeName==='TH') {
         return;
     } else {
-        row = e.target.parentNode;        
-        for (cell of row.cells) {            
-            isGroup = cell.getAttribute("isgroup");
-            if (isGroup==='true') return;
-            //hierar sort
+        tr = e.target.parentNode;       
+        
+        isGroup = tr.getAttribute("isgroup");
+        const tBody = e.currentTarget.tBodies[0];        
+        i = tr.querySelector(".fa");
+        if (isGroup==='true') {
+            if (i.getAttribute("data-folder")==="open") {
+                i.setAttribute("class", "fa fa-folder");  
+                i.setAttribute("data-folder", "close"); 
+                for (row of tBody.rows) {
+                    parent = row.getAttribute("parent")
+                    if (parent>0) row.setAttribute("hidden", "hidden");
+                } 
+            } else {
+                i.setAttribute("class", "fa fa-folder-open"); 
+                i.setAttribute("data-folder", "open"); 
+                for (row of tBody.rows) {
+                    parent = row.getAttribute("parent")
+                    if (parent>0) row.removeAttribute("hidden");
+                } 
+            }
+            return;       
         }
 
         const currentForm = e.currentTarget.parentNode.parentNode;            
@@ -268,7 +285,10 @@ async function showTable(showTbl, hide, col, data, colType) {
                         }
                     }
                 } else if (p==='isGroup') {
-                    td.setAttribute("isgroup", rows[p]); 
+                    tr.setAttribute("isgroup", rows[p]); 
+                } else if (p==='parent') {
+                    tr.setAttribute("parent", rows[p]);
+                    if (rows[p]>0) tr.setAttribute("hidden", "hidden");
                 } else {                                                     
                     if (colType&&colType[p]==='timestamp with time zone') {     
                         if (rows[p]) {

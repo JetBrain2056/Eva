@@ -1027,9 +1027,12 @@ exports.getReferences = async function(req, res) {
     console.log(dateNow(),'>>getReferences()...');
     if (!req.body) return res.sendStatus(400);
     
-    const {textId, owner} = req.body;  
+    const {textId, owner, isGroup} = req.body;  
     let query = `SELECT * FROM "`+textId+`s" Order by "id";`
     if (owner) { query = `SELECT * FROM "`+textId+`s" WHERE "owner"=`+owner+` Order by "id";`}
+    if (isGroup) { query = `SELECT * FROM "`+textId+`s" 
+                            WHERE "isGroup"=true
+                            Order by "id";`}
     
     try {
         const data = await sequelize.query(query);

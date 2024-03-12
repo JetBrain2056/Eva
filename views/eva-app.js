@@ -301,10 +301,9 @@ async function elementBtn(idBtn) {
     const modalForm      = document.getElementById("selectElemModal");
     const inputElemValue = document.querySelector("#"+idBtn.split('_')[0]);
     const inputElemType  = inputElemValue.getAttribute("data-type");
-
+    const isGroup        = inputElemValue.getAttribute("data-isgroup");
     modalForm.setAttribute("eva-id", idBtn.split('_')[0]);
 
-  
     if (inputElemType.split('.').length>1) {
         refType = inputElemType.split('.')[0];
         refName = inputElemType.split('.')[1];    
@@ -317,11 +316,12 @@ async function elementBtn(idBtn) {
 
     selectModal = getModal(modalForm);
 
-    refTbl = buildTabpanel(modalForm, "270");
+    refTbl = buildTabpanel(modalForm, "270");    
 
-    console.log(refName)
+    let tmp = {'textId': refName}
+    if (isGroup==='true') tmp = {'textId': refName, 'isGroup': true}
     
-    let data = await postOnServer({'textId': refName}, '/getrefs');   
+    let data = await postOnServer(tmp, '/getrefs');   
 
     let col = {};
     let hide = [];
@@ -1037,11 +1037,16 @@ async function refElement(refForm, col, arrCol, createMode, copyMode, typeId, ar
                         reqName = textId.toLowerCase();
                         input.setAttribute("data-type", "Reference."+textId);
                     }    
+                    if(req==='parent') {
+                        input.setAttribute("data-isgroup",true);      
+                    } else { 
+                        input.setAttribute("data-isgroup",false);                         
+                    }
                     input.id    = "input-ref-"+reqName;
                     input.name  = req;
                     btn.setAttribute("class","btn btn-outline-secondary");
                     btn.setAttribute("id","input-ref-"+reqName+"_btn");
-                    btn.setAttribute("type","button");
+                    btn.setAttribute("type","button");                                       
                     btn.setAttribute("onclick","elementBtn(id)");      
                     btn.innerText ="...";
                 } else {

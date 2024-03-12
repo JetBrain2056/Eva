@@ -296,7 +296,7 @@ async function constSave() {
 
 }
 async function elementBtn(idBtn) {
-    console.log('>>elementBtn()...');
+    console.log('>>elementBtn()...', idBtn);
   
     const modalForm      = document.getElementById("selectElemModal");
     const inputElemValue = document.querySelector("#"+idBtn.split('_')[0]);
@@ -304,8 +304,11 @@ async function elementBtn(idBtn) {
 
     modalForm.setAttribute("eva-id", idBtn.split('_')[0]);
 
-    const refType = inputElemType.split('.')[0];
-    const refName = inputElemType.split('.')[1];
+  
+    if (inputElemType.split('.').length>1) {
+        refType = inputElemType.split('.')[0];
+        refName = inputElemType.split('.')[1];    
+    }
 
     modalForm.setAttribute("eva-type", inputElemType);
 
@@ -316,8 +319,9 @@ async function elementBtn(idBtn) {
 
     refTbl = buildTabpanel(modalForm, "270");
 
-    let tmp = {'textId': refName};
-    let data = await postOnServer(tmp, '/getrefs');   
+    console.log(refName)
+    
+    let data = await postOnServer({'textId': refName}, '/getrefs');   
 
     let col = {};
     let hide = [];
@@ -1024,14 +1028,14 @@ async function refElement(refForm, col, arrCol, createMode, copyMode, typeId, ar
                     input.setAttribute("type","text");
                     input.setAttribute("class","eva-req form-control"); 
                     input.setAttribute("disabled","disabled");   
-                    // input.oninput = function() { input.value = input.value.replace(/[^]/g,'') }                 
-                    input.setAttribute("data-type", req);
+                    // input.oninput = function() { input.value = input.value.replace(/[^]/g,'') }                                     
                     let reqName = '';
                     if (req.split('.').length > 1) {
                         reqName = req.split('.')[1].toLowerCase();
-                    } else {
-                        console.log(textId)
+                        input.setAttribute("data-type", req);
+                    } else {                        
                         reqName = textId.toLowerCase();
+                        input.setAttribute("data-type", "Reference."+textId);
                     }    
                     input.id    = "input-ref-"+reqName;
                     input.name  = req;

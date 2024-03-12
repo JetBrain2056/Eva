@@ -177,24 +177,34 @@ function dblSelect(e) {
         return;
     } else {
         tr = e.target.parentNode;       
-        
-        isGroup = tr.getAttribute("isgroup");
+                
         const tBody = e.currentTarget.tBodies[0];        
-        i = tr.querySelector(".fa");
+        i  = tr.querySelector(".fa");
+        id = tr.getAttribute("id");
+        isGroup = tr.getAttribute("isgroup");
         if (isGroup==='true') {
             if (i.getAttribute("data-folder")==="open") {
                 i.setAttribute("class", "fa fa-folder");  
                 i.setAttribute("data-folder", "close"); 
-                for (row of tBody.rows) {
-                    parent = row.getAttribute("parent")
-                    if (parent>0) row.setAttribute("hidden", "hidden");
+                for (row of tBody.rows) {                    
+                    parent = row.getAttribute("parent");                                        
+                    if (parent===id||parent>0) {
+                        row.setAttribute("hidden", "hidden");
+                    } else {                        
+                        row.removeAttribute("hidden");
+                    }
                 } 
             } else {
                 i.setAttribute("class", "fa fa-folder-open"); 
                 i.setAttribute("data-folder", "open"); 
                 for (row of tBody.rows) {
-                    parent = row.getAttribute("parent")
-                    if (parent>0) row.removeAttribute("hidden");
+                    elemId = row.getAttribute("id");   
+                    parent = row.getAttribute("parent");                                      
+                    if (parent===id||elemId===id) {
+                        row.removeAttribute("hidden");
+                    } else { 
+                        row.setAttribute("hidden", "hidden");
+                    }
                 } 
             }
             return;       
@@ -289,7 +299,8 @@ async function showTable(showTbl, hide, col, data, colType) {
                 } else if (p==='parent') {
                     tr.setAttribute("parent", rows[p]);
                     if (rows[p]>0) tr.setAttribute("hidden", "hidden");
-                } else {                                                     
+                } else {       
+                    if (p==='id') tr.setAttribute("id", rows[p]);                                             
                     if (colType&&colType[p]==='timestamp with time zone') {     
                         if (rows[p]) {
                             const d = new Date(rows[p]);

@@ -184,7 +184,7 @@ function dblSelect(e) {
         isGroup = tr.getAttribute("isgroup");
         if (isGroup==='true') {
             if (i.getAttribute("data-folder")==="open") {
-                i.setAttribute("class", "fa fa-folder");  
+                i.setAttribute("class", "fa fa-folder-o");  
                 i.setAttribute("data-folder", "close"); 
                 for (row of tBody.rows) {                    
                     parent = row.getAttribute("parent");                                        
@@ -195,7 +195,7 @@ function dblSelect(e) {
                     }
                 } 
             } else {
-                i.setAttribute("class", "fa fa-folder-open"); 
+                i.setAttribute("class", "fa fa-folder-open-o"); 
                 i.setAttribute("data-folder", "open"); 
                 for (row of tBody.rows) {
                     elemId = row.getAttribute("id");   
@@ -265,7 +265,7 @@ async function showTable(showTbl, hide, col, data, colType) {
             let isGroup = false;
             let folder = undefined;
             if (rows.isGroup) {
-                tr.style.fontWeight = "bold"; 
+                // tr.style.fontWeight = "bold"; 
                 isGroup = true;                             
             }            
             tbody.appendChild(tr);             
@@ -317,7 +317,7 @@ async function showTable(showTbl, hide, col, data, colType) {
                     } else {       
                         if (isGroup&&display&&folder) {                                    
                             const i = document.createElement("i");
-                            i.setAttribute("class", "fa fa-folder");                        
+                            i.setAttribute("class", "fa fa-folder-o");                        
                             td.appendChild(i);
                             i.textContent = ' '+rows[p];  
                             folder = false;                           

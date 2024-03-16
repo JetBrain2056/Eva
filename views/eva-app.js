@@ -666,27 +666,43 @@ async function copyTabPart(ownerForm, ownerId) {
     console.log('>>copyTabPart()...', ownerId);
 
     const currentOwnerId = ownerForm.getAttribute("eva-id");
+    const currentOwnerTextId = ownerForm.getAttribute("eva-textId");
+    console.log(currentOwnerTextId);
     
     let res = ownerForm.getElementsByClassName("tab-pane");      
     for (const tabPane of res) {
                     
         if (tabPane.id==="nav-Main") continue;              
 
-        const tabId  = tabPane.getAttribute("eva-tabId");   
-        if (Number(tabId)===0) continue;  
-        
         const textId = tabPane.getAttribute("eva-id"); 
-        const data = {'textId': textId, 'owner': currentOwnerId}
+        const tabId  = tabPane.getAttribute("eva-tabId");   
+        if (Number(tabId)===0) {
+                    
+            const tmp = {'textId':textId, 'id':currentOwnerId, 'owner':'Reference.'+currentOwnerTextId }     
 
-        const result = await postOnServer(data, '/getrefs');           
-        for (const row of result) {             
-            delete row['id'];
-            delete row['createdAt'];
-            delete row['updatedAt'];
-            row['owner'] = ownerId;
-            row['textId'] = textId;
-                  
-            await postOnServer(row, '/createref');   
+            const result = await postOnServer(tmp, '/getownerrefs');                    
+            for (const row of result) {  
+                delete row['id'];
+                delete row['createdAt'];
+                delete row['updatedAt'];
+                row['Reference.'+currentOwnerTextId]  = ownerId;
+                row['textId'] = textId;
+                await postOnServer(row, '/createref');   
+            }
+        } else {
+            
+            const data = {'textId': textId, 'owner': currentOwnerId}
+
+            const result = await postOnServer(data, '/getrefs');           
+            for (const row of result) {             
+                delete row['id'];
+                delete row['createdAt'];
+                delete row['updatedAt'];
+                row['owner'] = ownerId;
+                row['textId'] = textId;
+                    
+                await postOnServer(row, '/createref');   
+            }
         }
     }
 }

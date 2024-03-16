@@ -364,8 +364,9 @@ async function createReq(refForm, textId, createMode, copyMode) {
     let data =  { 'textId' : textId }
 
     const evaReqs   = refForm.getElementsByClassName('eva-req');     
-    for(let elem of evaReqs) {      
-        if ((createMode==='true'||copyMode==='true')&&elem.name==="id") {            
+    for (let elem of evaReqs) {      
+        if ((createMode==='true'||copyMode==='true')&&elem.name==="id") {     
+            continue;       
         } else {
             const type     = elem.getAttribute("type");
             const dataType = elem.getAttribute("data-type");
@@ -373,7 +374,7 @@ async function createReq(refForm, textId, createMode, copyMode) {
                 data[elem.name] = elem.checked; 
             } else if (type === 'date') {
                 if (elem.value === '') {
-                    if (createMode==='false') data[elem.name] = null;                       
+                    if (createMode==='false'&&copyMode==='false') data[elem.name] = null;                       
                 } else {                    
                     data[elem.name] = new Date(elem.value);                           
                 }
@@ -666,13 +667,17 @@ async function copyTabPart(ownerForm, ownerId) {
 
     const currentOwnerId = ownerForm.getAttribute("eva-id");
     
-    let res = ownerForm.getElementsByClassName("tab-pane");  
-    
+    let res = ownerForm.getElementsByClassName("tab-pane");      
     for (const tabPane of res) {
-        if (tabPane.id==="nav-Main") continue;
+                    
+        if (tabPane.id==="nav-Main") continue;              
+
+        const tabId  = tabPane.getAttribute("eva-tabId");   
+        if (Number(tabId)===0) continue;  
         
-        const textId  = tabPane.getAttribute("eva-id");                                 
+        const textId = tabPane.getAttribute("eva-id"); 
         const data = {'textId': textId, 'owner': currentOwnerId}
+
         const result = await postOnServer(data, '/getrefs');           
         for (const row of result) {             
             delete row['id'];

@@ -401,13 +401,6 @@ exports.updateConfig = async function(req, res) {
     console.log(dateNow(), '>>updateConfig()...');
     if (!req.body) return res.sendStatus(400);
 
-    let refColumns = {
-        id     : {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-        name   : {type: DataTypes.STRING(150)},
-        number : {type: DataTypes.STRING(9)},
-        date   : {type: DataTypes.DATE}
-    }
-
     let data;
     try {                          
         data = await Config.findAll({ where: { state: [1,2,3] }});                        
@@ -417,6 +410,7 @@ exports.updateConfig = async function(req, res) {
     }
     
     for (const row of data) {    
+
         const strJson  = row.data;          
         const Elements = await JSON.parse(strJson);      
         const objectId = Elements.textId;                        
@@ -424,6 +418,13 @@ exports.updateConfig = async function(req, res) {
         const owner    = Elements.owner;
         const ownerId  = row.id;
         const hierar   = Elements.hierarchical;
+
+        let refColumns = {
+            id     : {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+            name   : {type: DataTypes.STRING(150)},
+            number : {type: DataTypes.STRING(9)},
+            date   : {type: DataTypes.DATE}
+        }
 
         if (typeId==='Document') { 
             delete refColumns['name'];            

@@ -691,12 +691,9 @@ exports.updateConfig = async function(req, res) {
 
     for (const row of data) {    
         const strJson  = row.data;          
-        const Elements = await JSON.parse(strJson);      
-        //const owner    = Elements.owner; 
-        const objectId = Elements.owner+'.'+Elements.textId;                        
-        // const synonum  = Elements.synonum;
-        
-        const reqlist = await TabPartReq.findAll({ where: { owner: row.id } });                            
+        const Elements = await JSON.parse(strJson);              
+        const objectId = Elements.owner+'.'+Elements.textId;                                        
+        const reqlist  = await TabPartReq.findAll({ where: { owner: row.id } });                            
         for (const row of reqlist) { 
             const strJson  = row.data; 
             const Elements = await JSON.parse(strJson);  

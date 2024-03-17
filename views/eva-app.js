@@ -1159,8 +1159,7 @@ async function refElement(refForm, col, arrCol, createMode, copyMode, typeId, ar
                                 resRef = await postOnServer({'id': col[req], 'textId':textIdArr[1]}, '/getref');
                             } else {
                                 resRef = await postOnServer({'id': col[req], 'textId':textId}, '/getref');
-                            }
-                            console.log(resRef);
+                            }                            
                             if (resRef.length===1) {
                                 if (textIdArr[0]==='Reference'||req==='parent') {
                                     input.value = resRef[0].name;                                
@@ -1174,7 +1173,13 @@ async function refElement(refForm, col, arrCol, createMode, copyMode, typeId, ar
                                 input.setAttribute("eva-id", 0);
                             }
                         } else {
-                            input.value = col[req];
+                            if (copyMode===true&&req==='number') {
+                                const number = await postOnServer({owner:textId},'/getnumber');
+                                const textNumber = '00000000'+String(number);
+                                input.value = textNumber.slice(-9);
+                            } else {
+                                input.value = col[req];
+                            }                            
                         }
                     }                    
                     if (copyMode===true&&input.name==="id") {

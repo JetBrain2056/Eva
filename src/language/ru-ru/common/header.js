@@ -13,7 +13,8 @@ let header = {
     $_text_administration : 'Администрирование',
     $_text_about    : 'О программе...',
     $_text_roles    : 'Роли',
-    $_text_log      : 'Лог'
+    $_text_log      : 'Лог',
+    $_text_users    : 'Пользователи'
 }
 
 module.exports =  { header }

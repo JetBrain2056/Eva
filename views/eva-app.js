@@ -1048,8 +1048,8 @@ async function refElement(refForm, col, arrCol, createMode, copyMode, typeId, ar
                 if (req.split('.').length > 1||req==='parent') {                    
                     input.setAttribute("type","text");
                     input.setAttribute("class","eva-req form-control"); 
-                    input.setAttribute("disabled","disabled");   
-                    // input.oninput = function() { input.value = input.value.replace(/[^]/g,'') }                                     
+                    //input.setAttribute("disabled","disabled");   
+                    input.oninput = function() { input.value = '' }                                     
                     let reqName = '';
                     if (req.split('.').length > 1) {
                         reqName = req.split('.')[1].toLowerCase();
@@ -1114,7 +1114,7 @@ async function refElement(refForm, col, arrCol, createMode, copyMode, typeId, ar
                     input.setAttribute("hidden", "hidden");
                 }
 
-                if (req==='name'||req==='date'||validation===true) {
+                if (req==='name'||req==='date'||req==='number'||arrReq[req].synonum==='Owner'||validation===true) {
                     input.setAttribute("required", "required");                    
                 }
                 

@@ -14,7 +14,7 @@ let header = {
     $_about_program : 'About program...',
     $_text_roles    : 'Roles',
     $_text_log      : 'Log',
-    $_text_users      : 'Users',
+    $_text_users    : 'Users'
 }
 
 module.exports =  { header }

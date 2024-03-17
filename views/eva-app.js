@@ -1048,7 +1048,9 @@ async function refElement(refForm, col, arrCol, createMode, copyMode, typeId, ar
                 if (req.split('.').length > 1||req==='parent') {                    
                     input.setAttribute("type","text");
                     input.setAttribute("class","eva-req form-control"); 
-                    //input.setAttribute("disabled","disabled");   
+                    if (reqs.synonum==='Owner') {
+                        input.setAttribute("required", "required");                    
+                    }  
                     input.oninput = function() { input.value = '' }                                     
                     let reqName = '';
                     if (req.split('.').length > 1) {
@@ -1114,7 +1116,7 @@ async function refElement(refForm, col, arrCol, createMode, copyMode, typeId, ar
                     input.setAttribute("hidden", "hidden");
                 }
 
-                if (req==='name'||req==='date'||req==='number'||arrReq[req].synonum==='Owner'||validation===true) {
+                if (req==='name'||req==='date'||req==='number'||validation===true) {
                     input.setAttribute("required", "required");                    
                 }
                 
@@ -1127,7 +1129,7 @@ async function refElement(refForm, col, arrCol, createMode, copyMode, typeId, ar
                         }
                     } else {                             
                         if (arrReq[req].synonum==='Owner'&&req.split('.').length>1 && typeof(col[req])==='number') { 
-                            const id = col[req];                                                    
+                            const id = col[req];                                                                                  
                             resRef = await postOnServer({'id': id, 'textId':req.split('.')[1]}, '/getref');                            
                             if (resRef.length===1) {
                                 input.value = resRef[0].name;                                        

@@ -1018,12 +1018,15 @@ async function tabOwner(refForm, textId, refName, ownerId) {
 async function refElement(refForm, col, arrCol, createMode, copyMode, typeId, arrReq) {
     console.log('>>refElemen()...', col);  
                 
-    if  (refForm.getAttribute("role")==='tabpanel') {
-        refForm = refForm.parentElement;           
+    if  (refForm.getAttribute("role")==='tabpanel') {        
+        textId   = refForm.parentElement.getAttribute("eva-textId");
+        level    = refForm.parentElement.getAttribute("eva-level");
+        parentId = refForm.parentElement.getAttribute("eva-parent");        
+    } else {
+        textId   = refForm.getAttribute("eva-textId");
+        level    = refForm.getAttribute("eva-level");
+        parentId = refForm.getAttribute("eva-parent");
     }
-    textId   = refForm.getAttribute("eva-textId");
-    level    = refForm.getAttribute("eva-level");
-    parentId = refForm.getAttribute("eva-parent");
 
     if (col) {                  
         delete col['createdAt'];

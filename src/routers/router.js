@@ -49,6 +49,7 @@ router.post('/getrefs', controller.getReferences);
 router.post('/getownerrefs', controller.getOwnerReferences);
 router.post('/getref', controller.getReference);
 router.post('/getrefcol', controller.getRefColumns);
+router.post('/getreflevel', controller.getRefLevel);
 router.post('/createref', controller.createReference);
 router.post('/updateref', controller.updateReference);
 router.post('/delref', controller.deleteReference);

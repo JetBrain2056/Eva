@@ -1087,6 +1087,23 @@ exports.getRefColumns = async function(req, res) {
         console.log(err);
     }
 }
+exports.getRefLevel = async function(req, res) {
+    console.log(dateNow(),'>>getRefLevel()...');
+    if (!req.body) return res.sendStatus(400);
+    
+    const {textId, id, level} = req.body;    
+    try {
+        const data = await sequelize.query(
+            `SELECT *
+             FROM "`+textId+`s"              
+             WHERE ("level"=`+level+` and "parent" =`+id+`) or "id"=`+id+` 
+             ORDER BY "isGroup","id";`         
+        );
+        return await res.send(data[0]);        
+    } catch(err) {
+        console.log(err);
+    }
+}
 exports.createReference = async function(req, res) {
     console.log(dateNow(),'>>createReference()...');
     if (!req.body) return res.sendStatus(400);

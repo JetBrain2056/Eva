@@ -537,8 +537,12 @@ async function refModalGroup() {
     const textId = evaForm.getAttribute("eva-textId");
     const typeId = evaForm.getAttribute("eva-typeId");
     const id     = evaForm.getAttribute("eva-id");
+    level        = evaForm.getAttribute("eva-level");
+    parentId     = evaForm.getAttribute("eva-parent");
     refForm.setAttribute("eva-textId", textId);  
     refForm.setAttribute("eva-typeId", typeId);
+    refForm.setAttribute("eva-level", level);
+    refForm.setAttribute("eva-parent", parentId);
 
     refModalLabel.innerText = $app.addGroup+' ('+textId+'):'; 
     
@@ -1148,7 +1152,10 @@ async function refElement(refForm, col, arrCol, createMode, copyMode, typeId, ar
                             }
                         } else if (req==='parent'&&level>0) {
                             resRef = await postOnServer({'id': parentId, 'textId':textId}, '/getref');                                                   
-                            if (resRef.length===1) input.value = resRef[0].name;
+                            if (resRef.length===1) input.value = resRef[0].name;   
+                            input.setAttribute("eva-id", parentId);                         
+                        } else if (req==='level') {
+                            input.value = level;
                         } else {
                             if (req==='number') {
                                 const number = await postOnServer({owner:textId},'/getnumber');

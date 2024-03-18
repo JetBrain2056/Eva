@@ -476,11 +476,15 @@ async function refModal() {
     const textId = evaForm.getAttribute("eva-textId");
     const typeId = evaForm.getAttribute("eva-typeId");
     const id     = evaForm.getAttribute("eva-id");
+    level        = evaForm.getAttribute("eva-level");
+    parentId     = evaForm.getAttribute("eva-parent");
 
     refModalLabel.innerText = $app.addElement+' ('+textId+'):';
 
     refForm.setAttribute("eva-textId", textId);  
     refForm.setAttribute("eva-typeId", typeId);
+    refForm.setAttribute("eva-level", level);
+    refForm.setAttribute("eva-parent", parentId);
     refForm.setAttribute("class","tab-content");
 
     const div = document.createElement("div");
@@ -1015,10 +1019,11 @@ async function refElement(refForm, col, arrCol, createMode, copyMode, typeId, ar
     console.log('>>refElemen()...', col);  
                 
     if  (refForm.getAttribute("role")==='tabpanel') {
-        textId = refForm.parentElement.getAttribute("eva-textId");         
-    } else {
-        textId = refForm.getAttribute("eva-textId");
+        refForm = refForm.parentElement;           
     }
+    textId   = refForm.getAttribute("eva-textId");
+    level    = refForm.getAttribute("eva-level");
+    parentId = refForm.getAttribute("eva-parent");
 
     if (col) {                  
         delete col['createdAt'];
@@ -1138,6 +1143,9 @@ async function refElement(refForm, col, arrCol, createMode, copyMode, typeId, ar
                                 input.value = resRef[0].name;                                        
                                 input.setAttribute("eva-id", resRef[0].id);
                             }
+                        } else if (req==='parent'&&level>0) {
+                            resRef = await postOnServer({'id': parentId, 'textId':textId}, '/getref');                                                   
+                            if (resRef.length===1) input.value = resRef[0].name;
                         } else {
                             if (req==='number') {
                                 const number = await postOnServer({owner:textId},'/getnumber');

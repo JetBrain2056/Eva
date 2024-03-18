@@ -343,8 +343,8 @@ async function showTable(showTbl, hide, col, data, colType) {
                     } else {       
                         if (isGroup&&display&&folder) {                                    
                             const i = document.createElement("i");      
-                            console.log(rows.id)                                              
-                            console.log(parentId)    
+                            // console.log(rows.id)                                              
+                            // console.log(parentId)    
                             if (rows.id === Number(parentId)) {
                                 i.setAttribute("class", "fa fa-folder-open-o"); 
                                 i.setAttribute("data-folder", "open"); 

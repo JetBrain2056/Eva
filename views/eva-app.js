@@ -136,6 +136,7 @@ async function getReqs(id) {
     arrReq['number'] = {'synonum':'Number'};
     arrReq['parent'] = {'synonum':'Parent'};
     arrReq['isGroup']= {'synonum':''};
+    arrReq['level']  = {'synonum':''};
 
     resOwner = await postOnServer({ownerId:id}, '/getowner');    
     console.log(resOwner);
@@ -537,7 +538,7 @@ async function refModalGroup() {
     
     arrCol = await getColumns(textId);    
     
-    arr = ['id', 'name','parent','isGroup'];   
+    arr = ['id', 'name','parent','isGroup','level'];   
     for (elem of Object.keys(arrCol)) {    
         if (!arr.includes(elem)) delete arrCol[elem];
     }        
@@ -1317,9 +1318,8 @@ async function showRefTable(refName, refType, refId) {
     console.log('>>showRefTable()...', refName, refType, refId);   
 
     refTbl = buildTable(refName, refType);
-    
-    const tmp = {'textId': refName}
-    const data = await postOnServer(tmp, '/getrefs');
+
+    console.log(refTbl.parentNode);
 
     const evaForm  = document.querySelector('#eva-ref-form');        
     const id       = evaForm.getAttribute("eva-id");
@@ -1346,12 +1346,22 @@ async function showRefTable(refName, refType, refId) {
             const Elements = await JSON.parse(strJson);                                         
             if (Elements.hideId===true) hide = ['id'];                 
             if (Elements.hierarchical===true) {
+                hierarchical = true;
                 evaGroup.removeAttribute("hidden");
             } else {
                 evaGroup.setAttribute("hidden", "hidden");
+                hierarchical = false;
             }    
         } 
         hide.push('level','parent','isGroup');        
+    }    
+    
+    if (hierarchical) {
+        const tmp = {'textId': refName, 'level':0, 'id':0}            
+        data = await postOnServer(tmp, '/getreflevel');
+    } else {
+        const tmp = {'textId': refName}    
+        data = await postOnServer(tmp, '/getrefs');
     }
 
     showTable(refTbl, hide, col, data, arrCol[1]);

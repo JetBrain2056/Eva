@@ -1097,7 +1097,7 @@ exports.getRefLevel = async function(req, res) {
             `SELECT *
              FROM "`+textId+`s"              
              WHERE ("level"=`+level+` and "parent" =`+id+`) or "id"=`+id+` 
-             ORDER BY "isGroup" DESC, "id";`         
+             ORDER BY "isGroup" DESC, "level", "id";`         
         );
         return await res.send(data[0]);        
     } catch(err) {

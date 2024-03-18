@@ -79,6 +79,8 @@ async function openRef(refName, name) {
     evaForm.setAttribute("eva-textId", refName);
     evaForm.setAttribute("eva-typeId", refType);
     evaForm.setAttribute("name", name);
+    evaForm.setAttribute("eva-level", 0);
+    evaForm.setAttribute("eva-parent", 0);
 
     let tab = new bootstrap.Tab(tabForm);
     tab.show();    

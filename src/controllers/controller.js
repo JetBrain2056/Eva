@@ -1091,13 +1091,13 @@ exports.getRefLevel = async function(req, res) {
     console.log(dateNow(),'>>getRefLevel()...');
     if (!req.body) return res.sendStatus(400);
     
-    const {textId, id, level} = req.body;    
+    const {textId, id} = req.body;    
     try {
         const data = await sequelize.query(
             `SELECT *
              FROM "`+textId+`s"              
-             WHERE ("level"=`+level+` and "parent" =`+id+`) or "id"=`+id+` 
-             ORDER BY "isGroup" DESC, "level", "id";`         
+             WHERE "parent" =`+id+` or "id"=`+id+` 
+             ORDER BY "isGroup" DESC, "id";`         
         );
         return await res.send(data[0]);        
     } catch(err) {

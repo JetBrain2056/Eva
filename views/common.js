@@ -197,8 +197,8 @@ async function updateTable(refTbl, id) {
         } 
         hide.push('level','parent','isGroup');        
     }
-
-    await showTable(refTbl, hide, arrCol[0], data, arrCol[1]);
+    
+    await showTable(refTbl, hide, arrCol[0], data, arrCol[1]);    
 }
 function dblSelect(e) {
     console.log('>>dblSelect()...');
@@ -208,20 +208,15 @@ function dblSelect(e) {
     } else {                                           
         const currentTab = e.currentTarget;  
         level = currentTab.parentNode.getAttribute("eva-level");
-        tr = e.target.parentNode;   
-        i  = tr.querySelector(".fa");
-        id = tr.getAttribute("id");
+        tr    = e.target.parentNode;          
+        id      = tr.getAttribute("id");
         isGroup = tr.getAttribute("isgroup");
         if (isGroup==='true') {                        
-            if (i.getAttribute("data-folder")==="open") {
-                i.setAttribute("class", "fa fa-folder-o");  
-                i.setAttribute("data-folder", "close");       
-                currentTab.parentNode.setAttribute("eva-level", Number(level)-1);   
+            if (tr.getAttribute("data-folder")==="open") {                          
                 id = tr.getAttribute("parent");             
+                currentTab.parentNode.setAttribute("eva-level", Number(level)-1);                             
                 currentTab.parentNode.setAttribute("eva-parent", id); 
-            } else {
-                i.setAttribute("class", "fa fa-folder-open-o"); 
-                i.setAttribute("data-folder", "open");        
+            } else {                                
                 currentTab.parentNode.setAttribute("eva-level", Number(level)+1);
                 currentTab.parentNode.setAttribute("eva-parent", id); 
             }                                 
@@ -244,12 +239,86 @@ function addListeners(showTbl) {
         showTbl.addEventListener('dblclick', dblSelect,{once:false});                        
     }
 }
+async function tblBody(data, tbody, keysCol, hide, colType) {
+    console.log('>>tblBody()...'); 
+    for (const rows of data) {                  
+        const tr = document.createElement('tr');
+        let isGroup = false;
+        let folder  = undefined;
+        if (rows.isGroup) {                
+            isGroup = true;                             
+        }            
+        tbody.appendChild(tr);             
+        for (const p of keysCol) {        
+            const td = document.createElement('td');    
+            tr.appendChild(td);  
+
+            let display = true;
+            if (hide.includes(p)) {
+                td.style.display = "none";  
+                display = false;    
+            } else {  
+                if (folder===undefined) folder = true;
+            }
+            if (p.split('.').length>1) {
+                ref = await postOnServer({'id':rows[p], 'textId':p.split('.')[1]}, '/getref');                      
+                if (rows[p]===0) {
+                    td.textContent = ''; 
+                } else {        
+                    if (p.split('.')[0]==='Reference') {
+                        if (ref.length>0) td.textContent = ref[0].name;                        
+                    } else {
+                        if (ref.length>0) {
+                            const d = new Date(ref[0].date);
+                            td.textContent = p.split('.')[1]+' №'+ref[0].number+' from '+new Intl.DateTimeFormat('ru').format(d);  
+                        }
+                    }
+                }
+            } else if (p==='isGroup') {                    
+                tr.setAttribute("isgroup", rows[p]);                                       
+            } else if (p==='parent') {
+                tr.setAttribute("parent", rows[p]);                    
+            } else {       
+                if (p==='id') tr.setAttribute("id", rows[p]);                                             
+                if (colType&&colType[p]==='timestamp with time zone') {     
+                    if (rows[p]) {
+                        const d = new Date(rows[p]);
+                        td.textContent = new Intl.DateTimeFormat('ru').format(d);  
+                    } else {
+                        td.textContent = '';
+                    }                         
+                } else if (colType&&colType[p]==='numeric') {
+                    if (rows[p]) { 
+                        const minFD = rows[p].split('.')[1].length;
+                        td.textContent = new Intl.NumberFormat('ru', {minimumFractionDigits: minFD}).format(rows[p]);
+                        td.style.textAlign = 'end';
+                    }
+                } else {                        
+                    if (isGroup&&display&&folder) {                                    
+                        const i = document.createElement("i");                                                                                                                
+                        if (rows.id === Number(parentId)) {
+                            i.setAttribute("class", "fa fa-folder-open-o"); 
+                            tr.setAttribute("data-folder", "open");                                 
+                        } else {
+                            i.setAttribute("class", "fa fa-folder-o");   
+                            tr.setAttribute("data-folder", "close"); 
+                        }                     
+                        td.appendChild(i);
+                        i.textContent = ' '+rows[p];  
+                        folder = false;                           
+                    } else {
+                        td.textContent = rows[p]; 
+                    }                        
+                }
+            }                                                   
+        }
+    }
+}
 async function showTable(showTbl, hide, col, data, colType) {
-    console.log('>>showTable()...',data); 
+    console.log('>>showTable()...'); 
 
     showTbl.innerHTML='';
 
-    // level    = showTbl.parentNode.getAttribute("eva-level");
     parentId = showTbl.parentNode.getAttribute("eva-parent");
    
     addListeners(showTbl);
@@ -259,13 +328,9 @@ async function showTable(showTbl, hide, col, data, colType) {
     thead.style.top      = '0px';
     thead.style.border   = '#00ff92';
     thead.style.background = 'White';  
-    showTbl.appendChild(thead);
   
     const tbody = document.createElement('tbody');
-    showTbl.appendChild(tbody);
-  
-    const tr = document.createElement('tr'); 
-    thead.appendChild(tr);
+    const tr    = document.createElement('tr'); 
     
     let keysCol = Object.keys(col);       
     for (const e of keysCol) {             
@@ -277,83 +342,15 @@ async function showTable(showTbl, hide, col, data, colType) {
             if (colType) th.setAttribute("type-attr", colType[e]);  
         }
         if (hide.includes(e)) { th.style.display = "none" }
-        tr.appendChild(th);        
-        th.textContent = col[e];              
+        th.textContent = col[e];  
+        tr.appendChild(th);                            
     }       
+    thead.appendChild(tr);
+    showTbl.appendChild(thead);
   
     if (data) {
-        for (const rows of data) {                  
-            const tr = document.createElement('tr');
-            let isGroup = false;
-            let folder  = undefined;
-            if (rows.isGroup) {                
-                isGroup = true;                             
-            }            
-            tbody.appendChild(tr);             
-            for (const p of keysCol) {        
-                const td = document.createElement('td');    
-                tr.appendChild(td);  
-
-                let display = true;
-                if (hide.includes(p)) {
-                    td.style.display = "none";  
-                    display = false;    
-                } else {  
-                    if (folder===undefined) folder = true;
-                }
-                if (p.split('.').length>1) {
-                    ref = await postOnServer({'id':rows[p], 'textId':p.split('.')[1]}, '/getref');                      
-                    if (rows[p]===0) {
-                        td.textContent = ''; 
-                    } else {        
-                        if (p.split('.')[0]==='Reference') {
-                            if (ref.length>0) td.textContent = ref[0].name;                        
-                        } else {
-                            if (ref.length>0) {
-                                const d = new Date(ref[0].date);
-                                td.textContent = p.split('.')[1]+' №'+ref[0].number+' from '+new Intl.DateTimeFormat('ru').format(d);  
-                            }
-                        }
-                    }
-                } else if (p==='isGroup') {                    
-                    tr.setAttribute("isgroup", rows[p]);                                       
-                } else if (p==='parent') {
-                    tr.setAttribute("parent", rows[p]);                    
-                } else {       
-                    if (p==='id') tr.setAttribute("id", rows[p]);                                             
-                    if (colType&&colType[p]==='timestamp with time zone') {     
-                        if (rows[p]) {
-                            const d = new Date(rows[p]);
-                            td.textContent = new Intl.DateTimeFormat('ru').format(d);  
-                        } else {
-                            td.textContent = '';
-                        }                         
-                    } else if (colType&&colType[p]==='numeric') {
-                        if (rows[p]) { 
-                            const minFD = rows[p].split('.')[1].length;
-                            td.textContent = new Intl.NumberFormat('ru', {minimumFractionDigits: minFD}).format(rows[p]);
-                            td.style.textAlign = 'end';
-                        }
-                    } else {                        
-                        if (isGroup&&display&&folder) {                                    
-                            const i = document.createElement("i");                                                                                                                
-                            if (rows.id === Number(parentId)) {
-                                i.setAttribute("class", "fa fa-folder-open-o"); 
-                                i.setAttribute("data-folder", "open");                                 
-                            } else {
-                                i.setAttribute("class", "fa fa-folder-o");   
-                                i.setAttribute("data-folder", "close"); 
-                            }                     
-                            td.appendChild(i);
-                            i.textContent = ' '+rows[p];  
-                            folder = false;                           
-                        } else {
-                            td.textContent = rows[p]; 
-                        }                        
-                    }
-                }                                                   
-            }
-        } 
+        await tblBody(data, tbody, keysCol, hide, colType);
+        showTbl.appendChild(tbody);
     } else {
         console.log('data:', data);
         return;   

@@ -79,7 +79,6 @@ async function openRef(refName, name) {
     evaForm.setAttribute("eva-textId", refName);
     evaForm.setAttribute("eva-typeId", refType);
     evaForm.setAttribute("name", name);
-    evaForm.setAttribute("eva-level", 0);
     evaForm.setAttribute("eva-parent", 0);
 
     let tab = new bootstrap.Tab(tabForm);
@@ -472,18 +471,16 @@ async function refModal() {
 
     currentModal = getModal(modalForm);
    
-    const evaForm = document.querySelector('#eva-ref-form'); 
-    const textId = evaForm.getAttribute("eva-textId");
-    const typeId = evaForm.getAttribute("eva-typeId");
-    const id     = evaForm.getAttribute("eva-id");
-    level        = evaForm.getAttribute("eva-level");
-    parentId     = evaForm.getAttribute("eva-parent");
+    evaForm  = document.querySelector('#eva-ref-form'); 
+    textId   = evaForm.getAttribute("eva-textId");
+    typeId   = evaForm.getAttribute("eva-typeId");
+    id       = evaForm.getAttribute("eva-id");    
+    parentId = evaForm.getAttribute("eva-parent");
 
     refModalLabel.innerText = $app.addElement+' ('+textId+'):';
 
     refForm.setAttribute("eva-textId", textId);  
-    refForm.setAttribute("eva-typeId", typeId);
-    refForm.setAttribute("eva-level", level);
+    refForm.setAttribute("eva-typeId", typeId);    
     refForm.setAttribute("eva-parent", parentId);
     refForm.setAttribute("class","tab-content");
 
@@ -533,15 +530,13 @@ async function refModalGroup() {
 
     currentModal = getModal(modalForm);
    
-    const evaForm = document.querySelector("#eva-ref-form"); 
-    const textId = evaForm.getAttribute("eva-textId");
-    const typeId = evaForm.getAttribute("eva-typeId");
-    const id     = evaForm.getAttribute("eva-id");
-    level        = evaForm.getAttribute("eva-level");
-    parentId     = evaForm.getAttribute("eva-parent");
+    evaForm  = document.querySelector("#eva-ref-form"); 
+    textId   = evaForm.getAttribute("eva-textId");
+    typeId   = evaForm.getAttribute("eva-typeId");
+    id       = evaForm.getAttribute("eva-id");    
+    parentId = evaForm.getAttribute("eva-parent");
     refForm.setAttribute("eva-textId", textId);  
-    refForm.setAttribute("eva-typeId", typeId);
-    refForm.setAttribute("eva-level", level);
+    refForm.setAttribute("eva-typeId", typeId);    
     refForm.setAttribute("eva-parent", parentId);
 
     refModalLabel.innerText = $app.addGroup+' ('+textId+'):'; 
@@ -1023,12 +1018,10 @@ async function refElement(refForm, col, arrCol, createMode, copyMode, typeId, ar
     console.log('>>refElemen()...', col);  
                 
     if  (refForm.getAttribute("role")==='tabpanel') {        
-        textId   = refForm.parentElement.getAttribute("eva-textId");
-        level    = refForm.parentElement.getAttribute("eva-level");
+        textId   = refForm.parentElement.getAttribute("eva-textId");        
         parentId = refForm.parentElement.getAttribute("eva-parent");        
     } else {
-        textId   = refForm.getAttribute("eva-textId");
-        level    = refForm.getAttribute("eva-level");
+        textId   = refForm.getAttribute("eva-textId");        
         parentId = refForm.getAttribute("eva-parent");
     }
 
@@ -1150,12 +1143,10 @@ async function refElement(refForm, col, arrCol, createMode, copyMode, typeId, ar
                                 input.value = resRef[0].name;                                        
                                 input.setAttribute("eva-id", resRef[0].id);
                             }
-                        } else if (req==='parent'&&level>0) {
+                        } else if (req==='parent'&&parentId>0) {
                             resRef = await postOnServer({'id': parentId, 'textId':textId}, '/getref');                                                   
                             if (resRef.length===1) input.value = resRef[0].name;   
-                            input.setAttribute("eva-id", parentId);                         
-                        } else if (req==='level') {
-                            input.value = level;
+                            input.setAttribute("eva-id", parentId);                                            
                         } else {
                             if (req==='number') {
                                 const number = await postOnServer({owner:textId},'/getnumber');
@@ -1339,7 +1330,7 @@ async function showRefTable(refName, refType, refId) {
 
     refTbl = buildTable(refName, refType);
 
-    console.log(refTbl.parentNode);
+    
 
     const evaForm  = document.querySelector('#eva-ref-form');        
     const id       = evaForm.getAttribute("eva-id");
@@ -1377,7 +1368,8 @@ async function showRefTable(refName, refType, refId) {
     }    
     
     if (hierarchical) {
-        const tmp = {'textId': refName, 'level':0, 'id':0}            
+        parentId = evaForm.getAttribute("eva-parent");
+        const tmp = {'textId': refName, 'id':parentId}            
         data = await postOnServer(tmp, '/getreflevel');
     } else {
         const tmp = {'textId': refName}    

@@ -175,16 +175,12 @@ async function updateTable(refTbl, id) {
 
     evaForm = refTbl.parentNode;
     refName = evaForm.getAttribute("eva-textid");
-    refType = evaForm.getAttribute("eva-typeid");
-    level   = evaForm.getAttribute("eva-level");    
+    refType = evaForm.getAttribute("eva-typeid");  
     refId   = evaForm.getAttribute("eva-id");    
-    console.log('level', level);
-    console.log('refId', refId);
-
-    const tmp = {'textId': refName, 'level':level, 'id': id}
+    
+    const tmp = {'textId': refName, 'id': id}
     const data = await postOnServer(tmp, '/getreflevel');    
-    console.log('data', data);       
-
+    
     arrReq = await getReqs(refId);         
     arrCol = await getRefCol(refName, arrReq);
         
@@ -253,7 +249,7 @@ async function showTable(showTbl, hide, col, data, colType) {
 
     showTbl.innerHTML='';
 
-    level    = showTbl.parentNode.getAttribute("eva-level");
+    // level    = showTbl.parentNode.getAttribute("eva-level");
     parentId = showTbl.parentNode.getAttribute("eva-parent");
    
     addListeners(showTbl);
@@ -320,9 +316,7 @@ async function showTable(showTbl, hide, col, data, colType) {
                         }
                     }
                 } else if (p==='isGroup') {                    
-                    tr.setAttribute("isgroup", rows[p]);                  
-                } else if (p==='level') {
-                    tr.setAttribute("level", rows[p]);              
+                    tr.setAttribute("isgroup", rows[p]);                                       
                 } else if (p==='parent') {
                     tr.setAttribute("parent", rows[p]);                    
                 } else {       
@@ -340,14 +334,12 @@ async function showTable(showTbl, hide, col, data, colType) {
                             td.textContent = new Intl.NumberFormat('ru', {minimumFractionDigits: minFD}).format(rows[p]);
                             td.style.textAlign = 'end';
                         }
-                    } else {       
+                    } else {                        
                         if (isGroup&&display&&folder) {                                    
-                            const i = document.createElement("i");      
-                            // console.log(rows.id)                                              
-                            // console.log(parentId)    
+                            const i = document.createElement("i");                                                                                                                
                             if (rows.id === Number(parentId)) {
                                 i.setAttribute("class", "fa fa-folder-open-o"); 
-                                i.setAttribute("data-folder", "open"); 
+                                i.setAttribute("data-folder", "open");                                 
                             } else {
                                 i.setAttribute("class", "fa fa-folder-o");   
                                 i.setAttribute("data-folder", "close"); 

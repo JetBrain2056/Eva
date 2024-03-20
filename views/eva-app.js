@@ -426,7 +426,7 @@ async function refCreate(e) {
             result = await postOnServer(data, '/createref');                  
         } else if (createMode==='false'&&copyMode==='true') {             
             result = await postOnServer(data, '/createref'); 
-            await copyTabPart(refForm, result);                             
+            //await copyTabPart(refForm, result);                             
         } else {    
             result = await postOnServer(data, '/updateref');
         }         
@@ -634,18 +634,19 @@ async function refEditModal(copyMode) {
         div.setAttribute("role","tabpanel");
         refForm.appendChild(div);
         
-        await refElement(div, res[0], arrCol, createMode, copyMode, typeId, arrReq);     
-        await tabParts(refForm, ul, textId);
+        await refElement(div, res[0], arrCol, createMode, copyMode, typeId, arrReq);   
 
+        await tabParts(refForm, ul, textId);
         res = await postOnServer({owner:'Reference.'+textId}, '/getowner');      
         if (res) { 
             for (const row of res) {
                 const refName = row.refName;
-                const ownerId = row.ownerId;
+                let ownerId = row.ownerId;
                 addTabs(ul, refName);
+                if (copyMode) ownerId=0;
                 await tabOwner(refForm, textId, refName, ownerId);
             }
-        }
+        }        
     }
 }
 async function refDelete() {
@@ -1399,7 +1400,7 @@ async function showTabTable(refForm, refName) {
     showTable(resTbl, hide, arrCol[0], data, arrCol[1]);
 }
 async function showOwnerTable(refForm, owner, refName, ownerId) {
-    console.log('>>showOwnerTable()...', owner, refName);   
+    console.log('>>showOwnerTable()...', owner, refName, ownerId);   
 
     resTbl = buildTabpanel(refForm, "295");
 
@@ -1407,7 +1408,12 @@ async function showOwnerTable(refForm, owner, refName, ownerId) {
     const id = ownerForm.getAttribute("eva-id");        
 
     const tmp = {'textId':refName, 'id':id, 'owner':owner}     
-    const data = await postOnServer(tmp, '/getownerrefs');
+    let data = {};
+    if (Number(ownerId)===0) {        
+        data = {};
+    } else {        
+        data = await postOnServer(tmp, '/getownerrefs');
+    }
           
     arrReq = await getReqs(ownerId);    
     arrCol = await getRefCol(refName, arrReq);

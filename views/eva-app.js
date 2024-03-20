@@ -584,7 +584,7 @@ async function refEditModal(copyMode) {
 
     const evaForm    = document.querySelector('#eva-ref-form');   
     const textId = evaForm.getAttribute("eva-textId");
-    const typeId = evaForm.getAttribute("eva-typeId");
+    const typeId = evaForm.getAttribute("eva-typeId");    
     refForm.setAttribute("eva-textId", textId);
     refForm.setAttribute("eva-typeId", typeId);
 
@@ -1384,16 +1384,17 @@ async function showTabTable(refForm, refName) {
 
     resTbl = buildTabpanel(refForm, "295");
 
-    const ownerForm = document.querySelector("#create-ref-form")
-    const id        = ownerForm.getAttribute("eva-id");        
-    const copyMode  = ownerForm.getAttribute("copy-mode");  
+    ownerForm = document.querySelector("#create-ref-form")
+    id        = ownerForm.getAttribute("eva-id");        
+    copyMode  = ownerForm.getAttribute("copy-mode");  
+    typeId    = refForm.parentNode.getAttribute("eva-typeId");
 
     let data = [];
-    if (copyMode==='false') {        
+    if (copyMode==='false'||typeId==='Document') {        
         const tmp = {'textId': refName, 'owner': id}    
         data = await postOnServer(tmp, '/getrefs');        
     }
-    const tabId = refForm.getAttribute("eva-tabId");
+    tabId = refForm.getAttribute("eva-tabId");
     arrReq = await getTabPartSyns(tabId);     
     arrCol = await getRefCol(refName, arrReq) 
 

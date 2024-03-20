@@ -1385,13 +1385,15 @@ async function showTabTable(refForm, refName) {
     resTbl = buildTabpanel(refForm, "295");
 
     const ownerForm = document.querySelector("#create-ref-form")
-    const id = ownerForm.getAttribute("eva-id");        
+    const id        = ownerForm.getAttribute("eva-id");        
+    const copyMode  = ownerForm.getAttribute("copy-mode");  
 
-    const tmp = {'textId': refName, 'owner': id}
-    const data = await postOnServer(tmp, '/getrefs');
-
+    let data = [];
+    if (copyMode==='false') {        
+        const tmp = {'textId': refName, 'owner': id}    
+        data = await postOnServer(tmp, '/getrefs');        
+    }
     const tabId = refForm.getAttribute("eva-tabId");
-    
     arrReq = await getTabPartSyns(tabId);     
     arrCol = await getRefCol(refName, arrReq) 
 
@@ -1405,13 +1407,12 @@ async function showOwnerTable(refForm, owner, refName, ownerId) {
     resTbl = buildTabpanel(refForm, "295");
 
     const ownerForm = document.querySelector("#create-ref-form")
-    const id = ownerForm.getAttribute("eva-id");        
-
-    const tmp = {'textId':refName, 'id':id, 'owner':owner}     
-    let data = {};
-    if (Number(ownerId)===0) {        
-        data = {};
-    } else {        
+    const id        = ownerForm.getAttribute("eva-id");  
+    const copyMode  = ownerForm.getAttribute("copy-mode");        
+       
+    let data = [];
+    if (copyMode==='false') {
+        const tmp = {'textId':refName, 'id':id, 'owner':owner}  
         data = await postOnServer(tmp, '/getownerrefs');
     }
           

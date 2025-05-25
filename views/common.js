@@ -319,7 +319,7 @@ async function showTable(showTbl, hide, col, data, colType) {
 
     showTbl.innerHTML='';
 
-    parentId = showTbl.parentNode.getAttribute("eva-parent");
+    // parentId = showTbl.parentNode.getAttribute("eva-parent");
    
     addListeners(showTbl);
 
@@ -463,7 +463,7 @@ async function userCreate(e) {
     console.log('>>userCreate()...');
     
     const input_form        = document.getElementById('create-user-form');  
-    const createMode = input_form.getAttribute("create-mode");  
+    const createMode        = input_form.getAttribute("create-mode");  
     const input_username    = input_form.querySelector('#input-user-name');
     const input_password    = input_form.querySelector('#input-password');
     const input_confirmpass = input_form.querySelector('#input-confirmpass');
@@ -552,6 +552,7 @@ async function userEditModal() {
     let result = await postOnServer(data, '/getuser');    
     if (result) {       
         let elem = result[0];
+        
         input_form.setAttribute("eva-id", elem.id);
         input_name.value        = elem.Name;
         input_descr.value       = elem.Descr;   

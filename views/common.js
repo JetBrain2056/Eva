@@ -211,7 +211,8 @@ function dblSelect(e) {
         tr    = e.target.parentNode;          
         id      = tr.getAttribute("id");
         isGroup = tr.getAttribute("isgroup");
-        if (isGroup==='true') {                        
+        if (isGroup==='true') {    
+            console.log(tr.getAttribute("data-folder"));                    
             if (tr.getAttribute("data-folder")==="open") {                          
                 id = tr.getAttribute("parent");             
                 currentTab.parentNode.setAttribute("eva-level", Number(level)-1);                             
@@ -295,7 +296,7 @@ async function tblBody(data, tbody, keysCol, hide, colType) {
                     }
                 } else {                        
                     if (isGroup&&display&&folder) {                                    
-                        const i = document.createElement("i");                                                                                                                
+                        const i = document.createElement("i");       
                         if (rows.id === Number(parentId)) {
                             i.setAttribute("class", "fa fa-folder-open-o"); 
                             tr.setAttribute("data-folder", "open");                                 
@@ -319,7 +320,7 @@ async function showTable(showTbl, hide, col, data, colType) {
 
     showTbl.innerHTML='';
 
-    // parentId = showTbl.parentNode.getAttribute("eva-parent");
+    parentId = showTbl.parentNode.getAttribute("eva-parent");
    
     addListeners(showTbl);
 
@@ -456,7 +457,7 @@ async function showUserTable() {
     const col  = { 'id':'Id', 'Name':'Name', 'Descr':'Descr', 'Role':'Role', 'email':'E-mail', 'Show':'Show', 'EAuth':'EAuth' };  
     const hide = ['id'];  
 
-    showTable(resTbl, hide, col, data);
+    await showTable(resTbl, hide, col, data);
 
 }
 async function userCreate(e) {
